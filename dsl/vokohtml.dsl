@@ -165,7 +165,7 @@
         #\n #\o #\p #\q #\r #\s #\t #\u #\v #\w #\x #\y #\z)) 
 
 (define (EQUIVLOWER c a1 a2)
-  (cond ((null? a1) '())
+  (cond ((null? a1) c)
         ((char=? c (car a1)) (car a2))
         ((char=? c (car a2)) c)
         (else (EQUIVLOWER c (cdr a1) (cdr a2)))))
@@ -230,7 +230,8 @@
 	  (make sequence
 	    (*meta-encoding*)
 	    (*link-style-sheet*)
-	    (process-children))))
+	    (process-matching-children 'TITOLO)
+	    (process-matching-children 'AUTORO))))
 
   (element titolo (make element gi: "title"))
   (element autoro (make empty-element gi: "meta" attributes: 
@@ -249,6 +250,9 @@
   (element titolo (make element gi: "h1"))
   (element autoro (make element gi: "p" attributes:
 			(list (list "align" "center"))))
+  (element alineo (make element gi: "p"))
+  (element url (make element gi: "a" attributes:
+		     (list (list "href" (attribute-string "ref")))))
 			
   (element precipa-parto (make sequence))
   (element epilogo (make sequence 
@@ -509,6 +513,9 @@
   (element titolo (make element gi: "h1"))
   (element autoro (make element gi: "p" attributes:
 			(list (list "align" "center"))))
+  (element alineo (make element gi: "p"))
+  (element url (make element gi: "a" attributes:
+		     (list (list "href" (attribute-string "ref")))))
 			
   (element precipa-parto (make sequence))
   (element epilogo (make sequence 

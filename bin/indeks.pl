@@ -29,9 +29,12 @@ $inxfn=shift @ARGV;
 # kelkaj konstantoj
 $pluraj = ($refdir !~ /#$/);
 $inxref = "<i><a href=\"indeksoj$html\">".
-    "indeksoj</a></i>";
+	   "indeksoj</a></i>";
 $inxstl = "<link titel=\"indekso-stilo\" type=\"text/css\" ".
-    "rel=stylesheet href=\"../stl/indeksoj.css\">\n";
+	   "rel=stylesheet href=\"../stl/indeksoj.css\">\n";
+$cntdecl = "<meta http-equiv=\"Content-Type\" content=\"text/html; ".
+	   "charset=ISO-8859-3\">";
+
 
 %faknomoj=('2MAN'=>'komunuza senco',
 	'AGR'=>'agrikulturo',
@@ -126,7 +129,6 @@ close INX;
 
 print "Analizi la indekserojn...\n";
 $inx =~ s/<art\s+mrk="([^"]*)"\s*>(.*?)<\/art\s*>/ARTIKOLO($1,$2)/sieg;
-#"
 
 # kreu la html-dosierojn
 
@@ -271,7 +273,7 @@ sub FAKINX {
     select OUT;
 
     print "<html><head><title>fakindekso por ".$faknomoj{$fak}."</title>\n";
-    print "$inxstl</head>\n";
+    print "$inxstl\n$cntdecl</head>\n";
     print "<body>\n$inxref\n<h1>".$faknomoj{$fak}."</h1>\n";
 
     foreach $ref (sort { LIT($a->[1]) cmp LIT($b->[1]) } @$refs) {
@@ -304,7 +306,7 @@ sub LINGVINX {
 
     $lng =~ s/[oe]$/a/;
     print "<html><head><title>$lng indekso</title>\n";
-    print "$inxstl</head>\n<body>\n";    
+    print "$inxstl\n$cntdecl</head>\n<body>\n";    
     print "$inxref\n<h1>$lng indekso</h1>\n";
 
     foreach $ref (sort { LIT($a->[2]) cmp LIT($b->[2]) } @$refs) {
@@ -333,7 +335,7 @@ sub KAPVORTINX {
     select OUT;
 
     print "<html><head><title>kapvortoindekso sekcio $lit</title>\n";
-    print "$inxstl</head><body>\n";
+    print "$inxstl\n$cntdecl</head><body>\n";
     print "$inxref\n";
     for $a (@literoj) { 
 	if ($a ne $lit) {
@@ -383,7 +385,7 @@ sub SIMPLKAPVORTINX {
     select OUT;
 
     print "<html><head><title>kapvortoindekso</title>\n";
-    print "$inxstl</head><body>\n";
+    print "$inxstl\n$cntdecl</head><body>\n";
     print "$inxref\n";
     print "<h1>kapvortoj</h1>\n";
 
@@ -421,7 +423,7 @@ sub INVKAPVORTINX {
     select OUT;
 
     print "<html><head><title>inversa kapvortoindekso sekcio $lit</title>\n";
-    print "$inxstl</head><body>\n";
+    print "$inxstl\n$cntdecl</head><body>\n";
     print "$inxref\n";
     for $a (@invliteroj) { 
 	if ($a ne $lit) {
@@ -472,7 +474,7 @@ sub SIMPLINVKAPVORTINX {
     select OUT;
 
     print "<html><head><title>inversa kapvortoindekso</title>\n";
-    print "$inxstl</head><body>\n";
+    print "$inxstl\n$cntdecl</head><body>\n";
     print "$inxref\n";
     print "<h1>inversa indekso</h1>\n";
 
@@ -508,7 +510,7 @@ sub INXLIST {
     select OUT;
 
     print "<html><head><title>indekslisto</title>\n";
-    print "$inxstl</head><body>\n";
+    print "$inxstl\n$cntdecl</head><body>\n";
     print "<h2><a href=\"../titolo$html\" target=\"precipa\">";
     print "titolpaøo</a></h2>\n";
     print "<h2><a href=\"../sercxo$html\" target=\"precipa\">seræo</a></h2>\n";
@@ -669,11 +671,14 @@ sub REFERENCO {
 	# chiuj artikoloj estas en unuopaj
 	# dosieroj, parto de la referenco
 	# povus montri en tian dosieron
-	$ref =~ /^([^\.]*)\.(.*)$/;
-	my $r1=$1; my $r2=$2;
-	$rez="$refdir".lc($r1).".htm";
-	if ($r2) { $rez .= "#".uc($r2); };
+	if ($ref =~ /^([^\.]*)\.(.*)$/) {
+	    my $r1=$1; my $r2=$2;
+	    $rez="$refdir".lc($r1).".htm#".uc($r2);
+	} else {
+	    $rez="$refdir".lc($ref).".htm";
+	};
     };
+    return $rez;
 };
 
 sub enmetu_x {

@@ -1,8 +1,20 @@
+Instali vokon
+-------------
+
 Prefere legu la informojn en docu/ se vi volas
 krei proprajn vortarojn aý kunevoluigi en VoKo-
 projekto.
 
+Por konfiguri vokon en via sistemo vi devas difini
+la mediovariablon VOKO, ekz.:
+
+  export $VOKO = /pado/al/voko
+
+kaj adapti la dosieron $VOKO/dsl/catalog. Tie la
+padoj devas montri al la øustaj DTDoj de 'jade'.
+
 Por rapidemaj:
+-------------
 
 Vi kreas propran HTML-vortaron laý la sekva skemo:
 
@@ -27,5 +39,14 @@ la vortaro. La strukturo konvenu al dtd/vokosgml.dtd
     vokofaru.pl
 
 - Faru postlaborojn, ekz. kopiu bildojn al mia_vort/bld k.a.
+
+
+
+
+
+
+
+
+
 
 

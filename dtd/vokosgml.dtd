@@ -14,12 +14,12 @@ eltiroj aý simpla listo de unuopaj artikoloj.-->
 <!-- [prologo] Prologo de la vortaro. Øi povas enteni la titolo(j)n 
 kaj aýtoro(j)n de la vortaro kaj aliajn tekstojn.-->
 
-<!ELEMENT prologo - - (#PCDATA|titolo|autoro)*>
+<!ELEMENT prologo - - (#PCDATA|titolo|autoro|alineo)*>
 
 <!-- [epilogo] Epilogo de la vortaro. Øia strukturo momente ne estas
 specifita. Øi povas enhavi iun tekston.-->
 
-<!ELEMENT epilogo - - (#PCDATA)>
+<!ELEMENT epilogo - - (#PCDATA|alineo)*>
 
 <!-- [titolo] Titolo de la vortaro. Øi estas entenata en la 
 prologo. Pluraj titoloj estas permesitaj.-->
@@ -30,6 +30,17 @@ prologo. Pluraj titoloj estas permesitaj.-->
 povas okazi tie plurfoje.-->
 
 <!ELEMENT autoro - - (#PCDATA)>
+
+<!-- [alineo] unuopa alineo en la prologo-teksto -->
+
+<!ELEMENT alineo - - (#PCDATA|url)*>
+
+<!-- [url] Referenco al iu dosiero. En la HTML-versio de vortaro
+tio fariøas &lt;a href=...&gt; -->
+
+<!ELEMENT url - - (#PCDATA)>
+<!ATTLIST url 
+          ref CDATA #IMPLIED>
 
 <!-- [precipa-parto] Precipa parto de la vortaro. Øi enhavas rekte æiujn
 artikolojn aý sekciojn aý partojn. 
