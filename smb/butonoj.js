@@ -18,8 +18,10 @@
 
   function highlight(inx) {
     window.document.images[inx].src = imgs[inx].high.src;
+    window.document.images[inx].className = "btn_hover";
   }
 
-  function normalize(inx) {
+  function normal(inx) {
     window.document.images[inx].src = imgs[inx].norm.src;
+    window.document.images[inx].className = "btn";
   }

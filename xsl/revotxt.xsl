@@ -349,6 +349,10 @@
     <xsl:with-param name="lingvo">greke (klasike)</xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="lingvo">
+    <xsl:with-param name="lng">he</xsl:with-param>
+    <xsl:with-param name="lingvo">hebree</xsl:with-param>
+  </xsl:call-template>
+  <xsl:call-template name="lingvo">
     <xsl:with-param name="lng">es</xsl:with-param>
     <xsl:with-param name="lingvo">hispane</xsl:with-param>
   </xsl:call-template>

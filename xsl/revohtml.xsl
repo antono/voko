@@ -145,6 +145,9 @@ pluevoluigita de Wolfram Diestel
     <xsl:with-param name="lng">es</xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="flago">
+    <xsl:with-param name="lng">he</xsl:with-param>
+  </xsl:call-template>
+  <xsl:call-template name="flago">
     <xsl:with-param name="lng">hu</xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="flago">
@@ -699,6 +702,10 @@ pluevoluigita de Wolfram Diestel
   <xsl:call-template name="lingvo">
     <xsl:with-param name="lng">el</xsl:with-param>
     <xsl:with-param name="lingvo">greke</xsl:with-param>
+  </xsl:call-template>
+  <xsl:call-template name="lingvo">
+    <xsl:with-param name="lng">he</xsl:with-param>
+    <xsl:with-param name="lingvo">hebree</xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="lingvo">
     <xsl:with-param name="lng">es</xsl:with-param>
