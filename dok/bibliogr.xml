@@ -136,7 +136,7 @@
   </vrk>
 
   <vrk mll="Fab1">
-    <url>http://www.uni-leipzig.de/esperanto/texte/bibl/fabeloj_andersen/</url>
+    <url>http://www.uni-leipzig.de/esperanto/texte/bibl/fabeloj1/</url>
     <aut>H. C. Andersen</aut>
     <trd>L. L. Zamenhof</trd>
     <tit>Fabeloj, vol. 1</tit>
@@ -148,7 +148,7 @@
   </vrk>
 
   <vrk mll="Fab2">
-    <url>http://www.uni-leipzig.de/esperanto/texte/bibl/fabeloj_andersen/</url>
+    <url>http://www.uni-leipzig.de/esperanto/texte/bibl/fabeloj2/</url>
     <aut>H. C. Andersen</aut>
     <trd>L. L. Zamenhof</trd>
     <tit>Fabeloj, vol. 2</tit>
@@ -160,7 +160,7 @@
   </vrk>
 
   <vrk mll="Fab3">
-    <url>http://www.uni-leipzig.de/esperanto/texte/bibl/fabeloj_andersen/</url>
+    <url>http://www.uni-leipzig.de/esperanto/texte/bibl/fabeloj3/</url>
     <aut>H. C. Andersen</aut>
     <trd>L. L. Zamenhof</trd>
     <tit>Fabeloj, vol. 3</tit>
@@ -172,10 +172,14 @@
   </vrk>
 
   <vrk mll="Fab4">
-    <url>http://www.uni-leipzig.de/esperanto/texte/bibl/fabeloj_andersen/tria_vol/</url>
+    <url>http://www.uni-leipzig.de/esperanto/texte/bibl/fabeloj4/</url>
     <aut>H. C. Andersen</aut>
     <trd>L. L. Zamenhof</trd>
     <tit>Fabeloj, vol. 4</tit>
+    <eld>
+      <nom>Heroldo de Esperanto</nom>
+      <dat>1963</dat>
+    </eld>
   </vrk>
 
   <vrk mll="HejmVort">
