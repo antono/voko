@@ -38,7 +38,7 @@ $attachments  = $tmp.'/atchmnt';
 $vokomail_url = 'http://www.uni-leipzig.de/cgi-bin/vokomail.pl';
 
 # programoj
-$xmlcheck     = '/usr/bin/rxp -V';
+$xmlcheck     = '/usr/bin/rxp -V -s -x';
 $cvs          = '/usr/bin/cvs';
 $sendmail     = '/usr/lib/sendmail -t -i';
 
@@ -171,6 +171,8 @@ sub process_ent {
     my $parttxt;
     my $komando = '';
     my $xmltxt = '';
+    my $first_line;
+    my $IO;
 
     # kontrolu, chu temas pri redaktoro au helpkrio
     unless ($editor = is_editor($entity->head->get('from'))) { 
@@ -178,7 +180,8 @@ sub process_ent {
 	# chu temas pri helpkrio?
 	# tia helppeto validas nur en simplaj mesaghoj
 	if ($entity->mime_type =~ m|^text/plain|) {
-	    my $first_line = $entity->bodyhandle->getline;
+	    $IO = $entity->bodyhandle->open("r"); 
+	    $first_line = $IO->getline(); $IO->close;
 	    if ($first_line =~ /^\s*help/) {
 
 		cmd_help($entity->head->get('reply-to') 
@@ -191,9 +194,9 @@ sub process_ent {
 	};
 	    
 	print "!!! ".$entity->head->get('from')." ne estas redaktoro "
-	    ."nek petas pri helpo !!!\n"
-	    ."\tsubject: ".$entity->head->get('subject')."\n"
-	    ."\tstart of mail: $first_line\n---\n";
+	     ."nek petas pri helpo !!!\n"
+	     ."\tsubject: ".$entity->head->get('subject')."\n";
+	print "\tstart of mail: $first_line\n---\n" if ($first_line);
 	save_errmail();
 	return; # ne respondu al SPAMo
     }
@@ -203,15 +206,23 @@ sub process_ent {
     # unuparta mesagho
     if (! $entity->is_multipart) {
 	print "single part message\n" if ($debug);
-	# TTT-formularo
-	if ($entity->mime_type =~ m|application/x-www-form-urlencoded|) {
+
+        # elprenu la tekston
+        $parttxt = $entity->bodyhandle->as_string;   
+
+	# TTT-formularo?
+        if (($entity->head->get('subject')
+                 =~ /Internet\s+Explorer/)
+                and ($parttxt =~ /^\s*komando=redakto&/)
+                or ($entity->mime_type
+                    =~ m|application/x-www-form-urlencoded|)) { 
 	    print "URL encoded form\n" if ($debug);
-	    urlencoded_form($entity->bodyhandle->as_string);
+	    urlencoded_form($parttxt);
 	    return;
 	# normala mesagho
 	} else {
 	    print "normala mesagho\n" if ($debug);
-	    normal_message($entity->bodyhandle->as_string);
+	    normal_message($parttxt);
 	    return;
 	}
 	
@@ -290,7 +301,7 @@ sub is_editor {
     while (<EDI>) {
 	chomp;
 	unless (/^#/) {
-		if (index($_,$email_addr) >= 0) {
+		if (index(lc($_),lc($email_addr)) >= 0) {
 		    print "retadreso trovita en: $_\n" if ($debug);
 		    /([a-z\s]*<[a-z\@0-9\._]*>)/i;
 		    $res_addr = $1;
@@ -586,6 +597,9 @@ sub checkxml {
     my $err;
 
     # enmetu $Log$
+    # enmetu Revision 1.8  1999/12/07 20:20:15  revo
+    # enmetu uskleco che retposhtaj adresoj ne rolas; rekonu IE-mesaghon ankau che unuparta mesagho
+    # enmetu
     # enmetu Revision 1.7  1999/11/24 17:05:33  revo
     # enmetu *** empty log message ***
     # enmetu
