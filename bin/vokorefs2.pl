@@ -30,6 +30,7 @@ unless ($cfg_file) { $cfg_file = "cfg/vortaro.cfg" };
 
 %config = read_cfg($cfg_file);
 %fakoj = read_cfg($config{'fakoj'});
+delete $fakoj{'KOMUNE'}; # ne estas vera fako
 
 $revo_baz=$config{"vortaro_pado"};
 $fx_prefix = "$revo_baz/inx/fxs_";

@@ -20,7 +20,7 @@ $xsl = "/home/revo/voko/xsl/revotxt.xsl";
 $tmp = "/home/revo/tmp";
 $datfile = "/home/revo/dict/revo.dat";
 $inxpref = "/home/revo/dict/revo";
-$indekso = "/home/revo/revo/sgm/indekso.xml~";
+$indekso = "/home/revo/revo/sgm/indekso.xml";
 
 $b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
