@@ -176,9 +176,15 @@ modifita de Wolfram Diestel
 </xsl:template>  
 	
 <xsl:template match="subdrv">
-  <dt><xsl:number format="A"/></dt>
+  <dt><xsl:number format="A."/></dt>
   <dd>
-  <xsl:apply-templates/>
+    <xsl:apply-templates select="dif|gra|uzo|fnt"/>
+    <dl>
+      <xsl:attribute name="compact"/>
+      <xsl:apply-templates select="snc"/>
+    </dl>
+    <xsl:apply-templates
+      select="*[not(self::snc|self::gra|self::uzo|self::fnt|self::dif)]"/>    
   </dd>
 </xsl:template>
 
@@ -188,6 +194,14 @@ modifita de Wolfram Diestel
 
 <!-- sencoj -->
 
+<xsl:template match="snc" mode="number-of-ref-snc">
+  <xsl:number from="drv|subart" level="any" count="snc"/>
+</xsl:template>
+
+<xsl:template match="sncref">
+  <i><xsl:apply-templates mode="number-of-ref-snc" select="id(@ref)"/></i>
+</xsl:template>
+
 <xsl:template match="snc">
   <xsl:if test="@mrk">
     <a>
@@ -196,8 +210,16 @@ modifita de Wolfram Diestel
     </xsl:attribute>
     </a>
   </xsl:if>
-  <dt><xsl:value-of select="@num"/>
-    <xsl:if test="@num">.</xsl:if></dt>
+  <dt>
+    <xsl:choose>
+      <xsl:when test="@ref">
+        <xsl:apply-templates mode="number-of-ref-snc" select="id(@ref)"/>:
+      </xsl:when>
+      <xsl:when test="count(ancestor::node()[self::drv or self::subart][1]//snc)>1">
+        <xsl:number from="drv|subart" level="any" count="snc" format="1."/>
+      </xsl:when>
+    </xsl:choose>
+  </dt>
   <dd>
   <xsl:choose>
     <xsl:when test="subsnc">
@@ -275,8 +297,8 @@ modifita de Wolfram Diestel
 
 <xsl:template
   match="art/rim|subart/rim|drv/rim|subdrv/rim|snc/rim|subsnc/rim">
-  <xsl:call-template name="rim"/>
   <br/>
+  <xsl:call-template name="rim"/>
 </xsl:template>
 
 <xsl:template match="refgrp">
@@ -416,7 +438,7 @@ modifita de Wolfram Diestel
   <xsl:if test="//trd[@lng=$lng]|//trdgrp[@lng=$lng]">
     <a name="lng_{$lng}"></a>
     <h3>
-      <img src="{$smbdir}/{$lng}.jpg" width="24" height="16" />
+      <img src="{$smbdir}/{$lng}.jpg" width="24" height="16" alt="[{lng}]"/>
       <xsl:text> </xsl:text>
       <xsl:value-of select="$lingvo"/>
     </h3>
@@ -597,13 +619,14 @@ modifita de Wolfram Diestel
 <!-- administraj notoj -->
 
 <xsl:template match="adm" mode="admin">
-  <pre>
   <b>pri <xsl:apply-templates 
     select="ancestor::node()[self::drv or self::snc or self::subsnc or
       self::subdrv or self::subart or self::art][1]"
-    mode="admin"/></b>
+    mode="admin"/>
   <xsl:text>:
 </xsl:text>
+  </b>
+  <pre>
   <xsl:apply-templates/>
   </pre>
 </xsl:template>
