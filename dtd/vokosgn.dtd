@@ -186,6 +186,10 @@
 <!ENTITY c_Shch "&#x0429;">
 <!ENTITY c_Ch "&#x0427;">
 
+<!ENTITY c_W "&#1038;">
+<!ENTITY c_Ib "&#1030;">
+
+
 <!ENTITY c_ju "&#x044e;">
 <!ENTITY c_a "&#x0430;">
 <!ENTITY c_b "&#x0431;">
@@ -218,6 +222,10 @@
 <!ENTITY c_shch "&#x0449;">
 <!ENTITY c_ch "&#x0447;">
 <!ENTITY c_malmol "&#x044a;">
+
+<!ENTITY c_w "&#1118;">
+<!ENTITY c_ib "&#1110;">
+
 
 <!-- chehhaj kaj polaj -->
 <!ENTITY Ccaron "&#x010c;">
