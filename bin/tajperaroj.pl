@@ -12,6 +12,9 @@ while (@ARGV) {
     if ($ARGV[0] eq '-v') {
 	$verbose = 1;
 	shift @ARGV;
+    } elsif ($ARGV[0] eq '-H') {
+	$html = 1;
+	shift @ARGV;
     } else {
 	$dos = shift @ARGV;
     };
@@ -19,6 +22,18 @@ while (@ARGV) {
 
 die "Ne ekzistas dosiero \"$dos\""
   unless -d $dos;
+
+
+# HTML-kapo
+if (html) {
+    print
+	"<html>\n<head>\n<meta http-equiv=\"Content-Type\" ".
+	"content=\"text/html; charset=UTF-8\">\n".
+	"<title>eraro-raporto</title>\n".
+	"<link title=\"indekso-stilo\" type=\"text/css\" ".
+	"rel=stylesheet href=\"../stl/indeksoj.css\">\n".
+	"</head>\n<body><h1>Eraroraporto</h1>\n<dl>\n";
+}
 
 my $parser = new XML::Parser(ParseParamEnt => 1,
 			     ErrorContext => 2,
@@ -41,6 +56,13 @@ for $file (sort readdir(DIR)) {
     }
 };
 closedir DIR;
+
+if (html) {
+    print 
+	"</dl><hr>\n<span class=dato>",
+	`date +\"%Y/%m/%d %H:%M %Z\"`,
+	"</span>\n</body>\n</html>\n";
+}
 
 #################### fino de la programo ####################
 
@@ -113,11 +135,11 @@ sub start_handler {
 		       "\"$cel\"");
 	    } else {
 		unless (open IN,"$dos/".$prt[0].".xml" ) {
-		    avertu("Dosiero ".$prt[0].".xml (lau $cel) ne trovighis");
+		    avertu("Dosiero ".$prt[0].".xml (laŭ $cel) ne troviĝis");
 		} elsif ($#prt > 0) {
 		    my $buf = join('',<IN>);
 		    my @mrk;
-		    while ($buf =~ /mrk\s*=\s*\"(.*?)\"/g) {
+		    while ($buf =~ /mrk\s*=\s*\"([a-z].*?)\"/g) {
 			push @mrk, ($1);
 		    }
 		    unless (map { ($_ eq $cel)? 1 : (); } @mrk) {
@@ -134,9 +156,6 @@ sub start_handler {
 
 sub end_handler {
     my ($xp, $el) = @_;
-
-
-
 }
 
 # faras signovicojn el atributolisto
@@ -170,8 +189,21 @@ sub get_attr {
 
 sub avertu {
     $msg = shift;
-    warn "$file (".$xp->current_line.":".
-	$xp->current_column.",$el):\n\t$msg\n";
+    my $fn = $file;
+    $fn =~ s/\.xml$//;
+
+    if (html) {
+	$msg =~ s/\n/<br>/g;
+	print 
+	    "<dt><a href=\"../art/$fn.html\" target=\"precipa\">",
+	    "<b>$fn</b></a>\n",
+	    "<span class=dato>(".$xp->current_line.":",
+	    $xp->current_column.",$el)</span>\n",
+	    "<dd>$msg\n";
+    } else {
+	warn "$file (".$xp->current_line.":".
+	    $xp->current_column.",$el):\n\t$msg\n";
+    }
 }
 
 

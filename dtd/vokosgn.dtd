@@ -186,6 +186,7 @@
 <!ENTITY c_Shch "&#x0429;">
 <!ENTITY c_Ch "&#x0427;">
 
+<!ENTITY c_Jo "&#x0401;">
 <!ENTITY c_W "&#x040E;">
 <!ENTITY c_Ib "&#x0406;">
 
@@ -223,6 +224,7 @@
 <!ENTITY c_ch "&#x0447;">
 <!ENTITY c_malmol "&#x044a;">
 
+<!ENTITY c_jo "&#x0451;">
 <!ENTITY c_w "&#x045E;">
 <!ENTITY c_ib "&#x0456;">
 

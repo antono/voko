@@ -324,9 +324,13 @@ sub bildo {
     my $ind;
 
     $kap =~ s/\///;
-    push @bildoj, [$mrk,$kap,$tekst,$rad];
+    my $bldpriskr = $tekst;
+    $bldpriskr =~ s/<trd.*?<\/trd\s*>//sg;
+    $bldpriskr =~ s/<uzo.*?<\/uzo\s*>//sg;
 
-    # tio, kio estas radukita
+    push @bildoj, [$mrk,$kap,$bldpriskr,$rad];
+
+    # tio, kio estas tradukita
     if ($tekst =~ s/<ind\s*>(.*?)<\/ind\s*>//si) { 
 	$ind = $1; 
     } else { 
@@ -338,6 +342,7 @@ sub bildo {
     # analizu la tradukojn
     $tekst =~ s/<trd\s+lng="([^\"]*)"\s*>(.*?)<\/trd\s*>/
 	traduko($2,$1,$mrk,$ind)/siegx;
+
     
     return '';
 };
@@ -921,11 +926,11 @@ sub INX_KTP {
 	if ($inx=~/bildoj/) {
 	    print "<a href=\"bildoj.html\">";
 	    print "bildoj</a><br>\n";
-	};
+	}
 	if ($inx=~/inversa/) {
 	    print "<a href=\"inv_$unua_litero{'inv'}.html\">";
 	    print "inversa indekso</a><br>\n";
-	};
+	}
 	if ($inx=~/novaj/) {
 	    print "<a href=\"novaj.html\">novaj ",
 	    "artikoloj</a><br>\n";
@@ -933,6 +938,9 @@ sub INX_KTP {
 	if ($inx=~/shanghitaj/) {
 	    print "<a href=\"shanghitaj.html\">ŝanĝitaj ",
 	    "artikoloj</a><br>\n";
+	}
+	if ($inx=~/eraroj/) {
+	    print "<a href=\"eraroj.html\">eraro-raporto</a><br>\n";
 	}
 	if ($inx=~/statistiko/) {
 	    print "<a href=\"statistiko.html\">statistiko</a><br>\n";
@@ -1234,7 +1242,10 @@ sub index_letters {
 
 # skribas la suban parton de html-ajho
 sub index_footer {
-    print "</body>\n</html>\n";
+    print 
+	"<hr>\n<span class=dato>",
+	`date +\"%Y/%m/%d %H:%M %Z\"`,
+	"</span>\n</body>\n</html>\n";
 }
 
 

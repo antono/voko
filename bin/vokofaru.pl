@@ -92,6 +92,10 @@ $command="indeks.pl $verbose $agord_dosiero";
 print "$command\n" if ($verbose);
 open LOG, "$command|"; while (<LOG>) { print }; close LOG;
 
+$command="tajperaroj.pl $verbose -H $xml_pado > $vortaro_pado/inx";
+print "$command\n" if ($verbose);
+open LOG, "$command|"; while (<LOG>) { print }; close LOG;
+
 # se pasis manpleno da tagoj, shovu la indeks-dosieron, por
 # ke ghi atingu la TTT-servilon (sed ja ne tro ofte)
 if ($indekso ne $inxtmp_dos) {
