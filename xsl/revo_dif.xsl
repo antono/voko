@@ -19,7 +19,7 @@ kaj stiloj (em,ctl,sup...)
 </xsl:template>
 
 <xsl:template match="ekz">
-  <cite class="ekz"><xsl:apply-templates/></cite>
+  <i class="ekz"><xsl:apply-templates/></i>
 </xsl:template>
 
 <xsl:template match="ekz/tld|ind/tld">
@@ -204,6 +204,11 @@ kaj stiloj (em,ctl,sup...)
   <xsl:text>&#x201e;</xsl:text>
   <xsl:apply-templates/>
   <xsl:text>&#x201c;</xsl:text>
+</xsl:template>
+
+
+<xsl:template match="frm">
+  <span class="frm"><xsl:apply-templates/></span>
 </xsl:template>
 
 

@@ -5,4 +5,5 @@ A {text-decoration: none}
 A:link {color: blue}
 A:visited {color: blue}
 .dato {color: #666666; font-size: small}
- 
+
+.flago {  border-color: #CCCCCC; border-width: 1px;  border-style: outset} 

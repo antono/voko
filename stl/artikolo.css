@@ -76,4 +76,8 @@ A.redakto:active {text-decoration: underline; color: gray}
 .flago {  border-color: #CCCCCC; border-width: 1px;  border-style: outset}
 IMG.bld {  border-color: #cccccc; border-width: 2px; border-style: outset} 
 
+/* formuloj */
+.frm { font-style: normal }
+
+
 
