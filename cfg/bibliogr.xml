@@ -175,6 +175,17 @@
     </eld>
   </vrk>
 
+  <vrk mll="&Ccirc;uk&ccirc;oj">
+     <url>http://www.ikso.net/~bertilo-tekstaro</url>
+     <aut><a>Vasilij</a> <n>Ero&scirc;enko</n></aut>
+     <tit>El vivo de &ccirc;uk&ccirc;oj</tit>
+     <eld>
+       <nom>Universala Asocio de Blindul-Organizoj</nom>
+       <dat>1933</dat>
+       <nro>Esperanta Ligilo, 4</nro>
+     </eld>
+   </vrk>
+
   <vrk mll="&ccirc;uSn">
     <aut><a>E.</a> <n>Lanti</n></aut>
     <tit>&Ccirc;u ili estas sennaciistoj?</tit>
@@ -322,6 +333,31 @@
     </eld>
   </vrk>
 
+  <vrk mll="ElektFab">
+     <url>http://www.uni-leipzig.de/esperanto/texte/bibl/gfabeloj/index.html</url>
+     <aut><a>Jakob</a> <n>Grimm</n></aut>
+     <aut><a>Wilhelm</a> <n>Grimm</n></aut>
+     <trd><a>Kazimierz</a> <n>Bein</n></trd>
+     <tit>Elektitaj Fabeloj de Fratoj Grimm</tit>
+     <eld>
+       <nom>M&ouml;ller kaj Borel</nom>
+       <lok>Berlino</lok>
+       <dat>1906</dat>
+       <nro>1a eldono</nro>
+     </eld>
+     <eld>
+       <nom>Artur E. Iltis</nom>
+       <lok>Sarbruko</lok>
+       <dat>1981</dat>
+       <nro>represo de la 1a eldono</nro>
+     </eld>
+     <eld>
+       <nom>Inko</nom>
+       <lok>Tyres&ouml;, Svedio</lok>
+       <dat>2002</dat>
+     </eld>
+   </vrk>
+
   <vrk mll="EncCxi">
     <aut><a>Li</a> <n>Qiang</n></aut>
     <aut><a>Zhang</a> <n>Meizhi</n></aut>
@@ -463,6 +499,17 @@
        <dat>1923</dat>
     </eld>
   </vrk>
+
+  <vrk mll="FK">
+     <url>http://www.ikso.net/~bertilo-tekstaro</url>
+     <aut><a>Ludoviko Lazaro</a> <n>Zamenhof</n></aut>
+     <tit>Fundamenta Krestomatio de la lingvo Esperanto</tit>
+     <eld>
+       <nom>Hachette et Compagnie</nom>
+       <lok>Parizo</lok>
+       <dat>1904</dat>
+     </eld>
+   </vrk>
 
   <vrk mll="FT">
     <tit>Fervoja Terminaro</tit>
@@ -635,6 +682,18 @@
 
   <vrk mll="KelS">
     <tit>Kajeroj el la Sudo</tit>
+  </vrk>
+
+  <vrk mll="Kiso">
+     <url>http://www.ikso.net/~bertilo-tekstaro</url>
+     <aut><a>Hjalmar</a> <n>S&ouml;derberg</n></aut>
+     <trd><a>Sten</a> <n>Johansson</n></trd>
+     <tit>La Kiso kaj dek tri aliaj noveloj</tit>
+     <eld>
+       <nom>Al-fab-et-o</nom>
+       <lok>Sk&ouml;vde</lok>
+       <dat>1995</dat>
+     </eld>
   </vrk>
 
   <vrk mll="KompLeks">
@@ -1023,7 +1082,7 @@
   </vrk>
 
   <vrk mll="PGl">
-    <aut><n>Kalocyay</n></aut>
+    <aut><n>Kalocsay</n></aut>
     <aut><n>Waringhien</n></aut>
     <aut><n>Bernard</n></aut>
     <tit>Parnasa Gvidlibro</tit>
@@ -1143,6 +1202,15 @@
     <aut><a>Karel</a> <n>&Ccaron;apek</n></aut>
     <trd><a>J.</a> <n>Vondrou&scaron;ek</n></trd>
     <tit>Milito kontra&ubreve; salamandroj</tit>
+  </vrk>
+
+  <vrk mll="SatirRak">
+     <url>http://www.ikso.net/~bertilo-tekstaro</url>
+     <aut><a>S&aacute;ndor</a> <n>Szathm&aacute;ri</n></aut>
+     <tit>Satiraj rakontoj</tit>
+     <eld>
+       <dat>1957-1972</dat>
+     </eld>
   </vrk>
 
   <vrk mll="SPIV">
