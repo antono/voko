@@ -8,7 +8,7 @@
 
 # konstantoj
 
-# l' argumentojn analizu
+# la argumentojn analizu
 
 $VOKO=$ENV{'VOKO'};
 $ARTIK="$VOKO/red";
@@ -36,7 +36,7 @@ if (open IN,"$ARTIK/_vortaro.sgm") {
     close IN;
 };
 
-# skribu iom al prologon en la vortaron
+# skribu la prologon en la vortaron
 if ($kadro =~ m/(<prologo\s*>.*?<\/prologo\s*>)/si) {
     print OUT "$1\n";
 } else {
@@ -75,7 +75,7 @@ closedir DIR;
 
 print OUT "</precipa-parto>\n\n";
 
-# skribu iom da epilogo en la vortaron
+# skribu la epilogon en la vortaron
 if ($kadro =~ m/(<epilogo\s*>.*?<\/epilogo\s*>)/si) {
     print OUT "$1\n";
 } else {

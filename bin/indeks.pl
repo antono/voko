@@ -99,7 +99,7 @@ $cntdecl = "<meta http-equiv=\"Content-Type\" content=\"text/html; ".
 	'PRA'=>'prahistorio',
 	'PSI'=>'psikologio, psikiatrio',
 	'RAD'=>'radiofonio',
-	'REL'=>'religioj ne kristanaj',
+	'REL'=>'religioj',
 	'SCI'=>'sciencoj',
 	'SPO'=>'sporto, ludoj',
 	'STA'=>'statistiko',
@@ -178,7 +178,7 @@ $cntdecl = "<meta http-equiv=\"Content-Type\" content=\"text/html; ".
 	    'ks'=>'kaþmira',
 	    'ku'=>'kurda',
 	    'ky'=>'kirgiza',
-	    'la'=>'latino',
+	    'la'=>'latina',
 	    'ln'=>'lingala',
 	    'lo'=>'laýa',
 	    'lt'=>'litova',
@@ -336,7 +336,7 @@ sub ARTIKOLO {
     $tekst =~ /^\s*<kap\s*>(.*?)<\/kap\s*>/si;
     my $kap = $1; $kap =~ s/\s+/ /sg;
     $kap =~ s/\*//g;
-    $kap =~ s/[1-9\/]([aeio])Z?$/\/$1/;
+    $kap =~ s/[1-9\/]([aeio])\s*[ZCBYDV]?\s*$/\/$1/s;
     $kap =~ s/\/$//;
     # aldonu al kapvortlisto
     push @kapvortoj, [$mrk,$kap];
@@ -766,7 +766,7 @@ sub LIT {
     $vort =~ s/\376/sx/g; 
     $vort =~ s/\375/ux/g;
     # forigi finajxon
-    $vort =~ s/^[\/1-9](?:[aeio]|oj)//;
+    $vort =~ s/[\/1-9](?:[aeio]|oj)$//;
     # forigi cxiujn ne-literojn
     $vort =~ s/[^a-z]//g;
     return $vort;

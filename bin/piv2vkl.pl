@@ -216,8 +216,8 @@ sub DIFINOJ {
     $fakoj = '(?:\s*(?:'.$fako.')\s+)+';
     $ntr = '\(n?tr\)';
     $radikfonto = '(\/|<\+>[1-9l]<P>)?';
-    $fino = '(oj|[oaie]|!)?';
-    $zamenhof = '(?:<\+>\s?([ZBGKXN])\s?(?:<P>)?)?';
+    $fino = '(aj|oj|[oaie]|!)?';
+    $zamenhof = '(?:<\+>\s?([ZBGKXNVC])\s?(?:<P>)?)?';
     # kapvorto konsistas el radiko+fontindiko+finajho
     # $1 = radiko, $2 = radikfonto, $3 = $finajho, $4 = Zamenhof
     # (?:...) estas grupo ne ligota al variablo $n
