@@ -117,18 +117,6 @@
 
 ; redonas tekstan reprezenton por referenctipo
 
-(define (*refsmb-teksto* tipo)
-  (case tipo
-    (("VID") (string-append "-&" "gt; "))	
-    (("SIN") (string-append "=&" "gt; "))
-    (("DIF") "= ")
-    (("ANT") (string-append "x&" "gt; "))
-    (("SUPER") (string-append "/&" "gt; "))
-    (("SUB") (string-append "\\&" "gt; "))
-    (("PRT") (string-append "c&" "gt; "))
-    (("MALPRT") (string-append "e&" "gt; "))
-    (else "> ")))
-
 (define (*refsmb-teksto2* tipo)
   (case tipo
     (("VID") (make sequence 
@@ -160,9 +148,7 @@
 		  (literal "e") 
 		  (make entity-ref name: "gt") 
 		  (literal " ")))
-    (else (make sequence 
-	    (make entity-ref name: "gt") 
-	    (literal " ")))))
+    (else (literal " "))))
 
 
 ; Meta/Link-elementoj por HTML-kapo
@@ -173,13 +159,13 @@
 	(list (list "http-equiv" "Content-Type")
 	      (list "content" "text/html; charset=iso-8859-3"))))
 
-(define (*link-style-sheet*)
+(define (*link-style-sheet* #!optional (stldos *stl-dosiero*))
   ; CCS-dosiero
   (make empty-element gi: "link" attributes: 
 	(list	(list "titel" "artikolo-stilo")
 		(list "type" "text/css")
 		(list "rel" "stylesheet")
-		(list "href" (string-append *stl-dosiero* "artikolo.css")))))
+		(list "href" (string-append stldos "artikolo.css")))))
 
 ; donas la pozicion de la unua okazo de singo en signaro
 
@@ -272,7 +258,7 @@
     (make element gi: "head"
 	  (make sequence
 	    (*meta-encoding*)
-	    (*link-style-sheet*)
+	    (*link-style-sheet* "stl/")
 	    (process-matching-children 'TITOLO)
 	    (process-matching-children 'AUTORO))))
 
@@ -284,6 +270,19 @@
 
 
 ; ************************************************************
+;        transformreguloj lau modo KAP
+;             (por la kapvortoj foje necesas aparta trakto)
+; ************************************************************
+
+(mode KAP
+  (root (empty-sosofo))
+  (element (drv kap) (make element gi: "h3"))
+  (element fnt (make element gi: "sup" (process-children-trim)))
+  (element tld (*radiko* (attribute-string "LIT")))
+)
+
+
+; ************************************************************
 ;                transformreguloj lau modo NORMALA
 ; ************************************************************
 
@@ -291,8 +290,8 @@
 
   (element prologo (make sequence (process-children-trim)))
   (element titolo (make element gi: "h1" (process-children-trim)))
-  (element autoro (make element gi: "p" attributes:
-			(list (list "align" "center")) 
+  (element autoro (make element gi: "p" ;attributes:
+;			(list (list "align" "center")) 
 			(process-children-trim)))
   (element alineo (make element gi: "p" (process-children-trim)))
   (element url (make element gi: "a" attributes:
@@ -369,6 +368,8 @@
 			   (list (list "name" (attribute-string "mrk"))) 
 			   (empty-sosofo))
 		     (empty-sosofo))
+                 ; la kapvorto estu ekster la senclisto
+		 (with-mode KAP (process-matching-children 'KAP))
 		 ; numerigu la sencojn nur se estas pli ol unu
 		 (if (> (*children-count* '(SNCGRP)) 0)
 		     (make element gi: "ol" attributes: 
@@ -381,7 +382,7 @@
 
   ; KAPVORTO de DERIVAJHO
 
-  (element (drv kap) (make element gi: "h3"))
+  (element (drv kap) (empty-sosofo))
 
   ; SENCGRUPO - se vorto havas tre multajn sencojn, tiuj 
   ; estas grupigitaj
@@ -557,8 +558,8 @@
 
   (element prologo (make sequence (process-children-trim)))
   (element titolo (make element gi: "h1" (process-children-trim)))
-  (element autoro (make element gi: "p" attributes:
-			(list (list "align" "center")) 
+  (element autoro (make element gi: "p" ;attributes:
+;			(list (list "align" "center")) 
 			(process-children-trim)))
   (element alineo (make element gi: "p" (process-children-trim)))
   (element url (make element gi: "a" attributes:
@@ -637,6 +638,8 @@
 			   (list (list "name" (attribute-string "mrk"))) 
 			   (empty-sosofo))
 		     (empty-sosofo))
+                 ; la kapvorto estu ekster la senclisto
+		 (with-mode KAP (process-matching-children 'KAP))
 		 ; numerigu la sencojn nur se estas pli ol unu
 		 (if (> (*children-count* '(SNCGRP)) 0)
 		     (make element gi: "ol" attributes: 
@@ -649,7 +652,7 @@
 
   ; KAPVORTO de DERIVAJHO
 
-  (element (drv kap) (make element gi: "h3"))
+  (element (drv kap) (empty-sosofo))
 
   ; SENCGRUPO - se vorto havas tre multajn sencojn, tiuj 
   ; estas grupigitaj
@@ -799,7 +802,7 @@
       (if *ref-simboloj* 
 	  (make empty-element gi: "img" attributes: 
 		(list (list "src" (*refsmb-dosiero* (attribute-string "tip")))
-		      (list "alt" (*refsmb-teksto* (attribute-string "tip")))))
+		      (list "alt" (attribute-string "tip"))))
 		(*refsmb-teksto2* (attribute-string "tip")))
       (process-children)))
 
@@ -809,7 +812,7 @@
       (if (and *ref-simboloj* (attribute-string "tip"))
 	  (make empty-element gi: "img" attributes: 
 		(list (list "src" (*refsmb-dosiero* (attribute-string "tip")))
-		      (list "alt" (*refsmb-teksto* (attribute-string "tip")))))
+		      (list "alt" (attribute-string "tip"))))
 	  (*refsmb-teksto2* (attribute-string "tip")))
       (if (attribute-string "cel") 
 	  (if *pluraj-dosieroj*
