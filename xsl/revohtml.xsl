@@ -221,7 +221,7 @@ pluevoluigita de Wolfram Diestel
   <xsl:apply-templates select="subdrv|snc"/>
   </dl>
   <xsl:apply-templates
-    select="*[not(self::subdrv|self::snc|self::gra|self::uzo|self::fnt|self::kap|self::dif)]"/>
+    select="*[not(self::subdrv|self::snc|self::gra|self::uzo|self::fnt|self::kap|self::dif|self::mlg)]"/>
 </xsl:template>  
 	
 <xsl:template match="subdrv">
@@ -238,13 +238,14 @@ pluevoluigita de Wolfram Diestel
     <xsl:apply-templates select="snc"/>
     </dl>
     <xsl:apply-templates
-      select="*[not(self::snc|self::gra|self::uzo|self::fnt|self::dif)]"/>    
+      select="*[not(self::snc|self::gra|self::uzo|self::fnt|self::dif|self::mlg)]"/>    
   </dd>
 </xsl:template>
 
 <xsl:template match="drv/kap">
   <h2>
     <xsl:apply-templates/>
+    <xsl:apply-templates select="..//mlg"/>
     <xsl:comment>[[
       ref="<xsl:value-of select="ancestor::drv/@mrk"/>"
     ]]</xsl:comment>
@@ -557,6 +558,10 @@ pluevoluigita de Wolfram Diestel
   <xsl:if test="drv/uzo">
     <br />
   </xsl:if>
+</xsl:template>
+
+<xsl:template match="mlg">
+  [<xsl:apply-templates/>]
 </xsl:template>
 
 <xsl:template match="url">
