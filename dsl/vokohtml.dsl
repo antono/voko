@@ -136,20 +136,46 @@
 ;                           transformreguloj 
 ;*********************************************************************
 
-; VORTARO - skribu la kadron html kaj la kapinformojn por
-; la dosiero kaj la kadron por la korpo
-
-
+; VORTARO - kreas vortaro.html kaj indekso.sgml
 ; transformas la vortaron lau la supre donita modo
-(element vortaro (make sequence 
-	(make document-type name: "HTML" 
-		public-id: "-//W3C//DTD HTML 3.2//EN")
-	(make element gi: "html"
-	(case *modo*
-		(("KOLORA") 
-			(with-mode KOLORA (process-children)))
-		(else 
-			(with-mode NORMALA (Process-children)))))))
+
+(element vortaro 
+  ; La titolpaøo kaj la artikoloj
+  (make sequence 
+    (make document-type name: "HTML" 
+	  public-id: "-//W3C//DTD HTML 3.2//EN")
+    (make element gi: "html"
+	  (with-mode HEAD (process-matching-children 'PROLOGO))
+	  (make element gi: "body"
+		(case *modo*
+		  (("KOLORA") (with-mode KOLORA (process-children)))
+		  (else       (with-mode NORMALA (Process-children))))))
+  
+    ; La indekso estas eltira¼o el vortaro.sgml kaj uzas la saman DTD
+    (make entity system-id: "indekso.sgml"
+	  (make sequence
+	    (make document-type name: "vortaro" 
+		  public-id: "-//VoKo//DTD vortaro//EO")
+	    (make element gi: "vortaro"
+		  (with-mode INDEKSO (process-children)))))))
+
+; ************************************************************
+;      transformreguloj lau modo HEAD (por HTML-elemento HEAD)
+; *************************************************************
+
+(mode HEAD
+  (element prologo 
+    (make element gi: "head"
+	  (make sequence
+	    (*meta-encoding*)
+	    (*link-style-sheet*)
+	    (process-children))))
+
+  (element titolo (make element gi: "title"))
+  (element autoro (make empty-element gi: "meta" attributes: 
+			(list (list "name" "author")
+			      (list "content" (data (children (current-node)))))))
+) ; fino de modo HEAD
 
 
 ; ************************************************************
@@ -158,18 +184,15 @@
 
 (mode NORMALA 
 
-  (element prologo (make element gi: "head"
-			 (make sequence
-			   (*meta-encoding*)
-			   (*link-style-sheet*)
-			   (process-children))))
-
-  (element titolo (make element gi: "title"))
-  (element autoro (make empty-element gi: "meta" attributes: 
-			(list (list "name" "author")
-			      (list "content" (process-children)))))
-
-  (element precipa-parto (make element gi: "body"))
+  (element prologo (make sequence))
+  (element titolo (make element gi: "h1"))
+  (element autoro (make element gi: "p" attributes:
+			(list (list "align" "center"))))
+			
+  (element precipa-parto (make sequence))
+  (element epilogo (make sequence 
+		     (make empty-element gi: "hr")
+		     (process-children)))
 
   (element sekcio (make sequence
 		    (make empty-element gi: "hr") 
@@ -182,14 +205,35 @@
   ; ARTIKOLO - skribu markon kiel referenccelo kaj poste la
   ; tutan enhavon de la artikolo
 
-  (element art (make sequence
+  (element art 
+    (if *pluraj-dosieroj*
+	(make sequence
+	  ; enmetu ligon al la artikolo
+	  ;(make sequence
+	  ;  (make element gi: "a" attributes:
+	  ;	  (list (list "href" (string-append 
+	  ;			      (attribute-string "mrk") ".html")))
+	  ;	  (literal (*titolo*)))
+	  ;  (make empty-element gi: "br"))
+          ; kreu novan dosieron por la artikolo
+	  (make entity system-id: 
+		(string-append (attribute-string "mrk") ".html")
+		(make element gi: "html"
+		      (make element gi: "head"
+			    (*meta-encoding*)
+			    (*link-style-sheet*)
+			    (make element gi: "title" (literal (*kapvorto*))))
+		      (make element gi: "body"))))
+
+        ; nur unu dosiero - normale traktu la artikolon
+	(make sequence
 		 (make empty-element gi:  "hr")
 		 (if (attribute-string "mrk")
 		     (make element gi: "a" attributes: 
 			   (list (list "name" (attribute-string "mrk"))) 
 			   (empty-sosofo))
 		     (empty-sosofo))
-		 (process-children)))
+		 (process-children))))
 		
   ; KAPVORTO 
 
@@ -396,21 +440,15 @@
 
 (mode KOLORA
 
-  (element prologo 
-    (make element gi: "head" (make sequence
-			       (*meta-encoding*)
-			       (*link-style-sheet*)
-			       (process-children))))
-; (element prologo (make element gi: "head"))
-  (element titolo (make element gi: "title"))
-  (element autoro (make element gi: "meta" attributes: (list 
-			(list "name" "author")
-			(list "content" (data (current-node)))
-		) (empty-sosofo)))
-
-  (element precipa-parto (make element gi: "body"))
-;		(make element gi: "font" attributes: (list 
-;			(list "face" *tiparnomo*))
+  (element prologo (make sequence))
+  (element titolo (make element gi: "h1"))
+  (element autoro (make element gi: "p" attributes:
+			(list (list "align" "center"))))
+			
+  (element precipa-parto (make sequence))
+  (element epilogo (make sequence 
+		     (make empty-element gi: "hr")
+		     (process-children)))
 
   (element sekcio	(make sequence
 		(make empty-element gi: "hr")  
@@ -711,6 +749,86 @@
 			(list (list "src" (attribute-string "lok"))))))
 
 ) ; fino de modo KOLORA
+
+; ************************************************************
+;                transformreguloj lau modo INDEKSO
+; ************************************************************
+
+  ; du helpfunkcioj, kiuj formas liston el
+  ; cxiuj traktendaj struktureroj
+
+  (define (*indekseroj1* nd)
+    (let ((dc (children nd))) 
+      (node-list
+       (select-elements dc '(KAP))
+       (select-elements dc '(DRV))
+       (select-elements dc '(UZO))
+       (select-elements dc '(TRD))
+       (select-elements dc '(DIF))
+       (select-elements dc '(REF)))))
+;  (select-elements dc 'REFGRP))))
+
+  (define (*indekseroj2* nd)
+    (let ((dc (descendants nd))) 
+      (node-list
+       (select-elements dc '(KAP))
+       (select-elements dc '(UZO))
+       (select-elements dc '(TRD))
+       (select-elements dc '(REF)))))
+;  (select-elements dc 'REFGRP))))
+				
+(mode INDEKSO
+   ; VORTARO - skribu la kadron vortaro 
+
+;  (element vortaro (make sequence
+;		     (make document-type name: "vortaro" 
+;			   public-id: "-//VoKo//DTD vortaro//EO")
+;		     (make element gi: "vortaro")))
+
+  (element prologo (empty-sosofo))
+  (element epilogo (empty-sosofo))
+  	
+  ; ARTIKOLO - transprenu la markon kaj traktu cxiujn
+  ; strukturerojn laux *indekseroj1*
+
+  (element art (make element gi: "art" attributes: 
+		     (list (list "mrk" (attribute-string "mrk")))
+		     (process-node-list (*indekseroj1* (current-node)))))
+
+  (element (kap) (make element gi: "kap"))
+
+  (element (drv) (make element gi: "drv" attributes: 
+		       (list (list "mrk" (attribute-string "mrk")))
+		       (process-node-list (*indekseroj2* (current-node)))))
+
+  (element (dif) (make sequence (process-node-list
+				 (*indekseroj2* (current-node)))))
+
+  (element trd (make element gi: "trd" attributes: 
+		     (list (list "lng" (attribute-string "LNG")))))
+
+  (element uzo (if (string=? (attribute-string "TIP") "FAK")
+		   (make element gi: "uzo" (process-children))
+		   (empty-sosofo)))
+
+  (element tld (make sequence 
+		 (*radiko* (attribute-string "MAJ"))))
+
+  (element ref (make element gi: "ref"))
+
+;  (element refgrp (make element gi: "refgrp"))	
+
+) ; fino de modo INDEKSO
+
+
+
+
+
+
+
+
+
+
 
 
 
