@@ -332,6 +332,71 @@ membri en la dissendlisto "revuloj" aparte por povi aliri la dokumenton.)
     kiel mita giganto unue, kiel maparo due.</li>
 </ol>
 
+%ortografio%<h2>Ortografio</h2>
+
+<h3>Citiloj</h3>
+<ul>
+  <li>Ne skribu <em>"ajno"</em>.</li>
+  <li>Ne skribu <em>&amp;quot;ajno&amp;quot;</em>.</li>
+  <li>Skribu <em>&lt;ctl&gt;ajno&lt;/ctl&gt;</em> kie tio eblas
+    (se tio ne rompas la XML-strukturon).</li>
+  <li>Skribu <em>&amp;leftquot;ajno&amp;rightquot;</em> aliloke.</li>
+</ul>
+
+<h3>Homnomoj</h3>
+<ol>
+  <li>Por nomoj kun familia kaj persona parto konservu la nacian ordon,
+    famili-nomo unue en japana nomo, laste en germana nomo.
+    Ekzemple: <em>Tanizaki Junichiro</em> (<em>Tanizaki</em> estas la familia nomo);
+    <em>Martin Luther</em> (<em>Luther</em> estas la familia nomo).</li>
+  <li>Indiku vivo-daton interkrampe kun mez-longa interstreko, la&#365;kode &amp;ndash;.
+    Ekzemple <em>tianomulo (1886&ndash;1965</em>).</li>
+  <li>Regnordon indiku per postmetita orda nombro kun artikolo.
+    Ekzemple: <em>Ludoviko la 14a</em>.</li>
+</ol>
+
+<h3>Datoj</h3>
+<ol>
+  <li>Skribu per e&#365;ropaj ciferoj.
+    Ekzemple: <em>5a jc</em>.</li>
+  <li>Minusigu daton per a.K. (anta&#365; Kristo).
+    Ekzemple: <em>5a jc a.K.</em>.</li>
+</ol>
+
+<h3>Nombroj kaj mezurindikoj</h3>
+<ol>
+  <li>Uzu e&#365;ropajn, ne romiajn ciferojn.
+    Ekzemple: <em>12</em>.</li>
+  <li>Uzu komon kiel dekuman signon.
+    Ekzemple: <em>3,14</em>.</li>
+  <li>Skribu ordan nombron sen streketo.
+    Ekzemple: <em>3a kongreso</em>.</li>
+  <li>Skribu kunmeton de cifero kaj vorto kun intera streketo.
+    Ekzemple: <em>50-jarulo</em>.</li>
+  <li>Skribu proksimuman kvanton per literoj.
+    Ekzemple: <em>dudeko da homoj</em>.</li>
+</ol>
+
+<h3>Mallongigoj</h3>
+<p>Konsultu la liston de 
+<a href="mallongigoj.html" target="indekso">mallongigoj</a>.
+  Atentu la sekvajn regulojn:</p>
+<ol>  
+  <li>Vi povas uzi mallongigojn de mezur-unuoj el la SI (internacia sistemo).
+    Ekzemple: <em>km</em> por <em>kilometro</em>.</li>
+  <li>SI-mallongigoj obeas proprajn regulojn:
+    ili ne havas punktojn kaj ne havas fleksiojn.
+    Ekzemple: <em>10 km longa</em>.</li>
+  <li>Aliaj mallongigoj akceptas fleksiojn post streketo.
+    Ekzemple: <em>simb.</em>, <em>simb-on</em>.</li>
+  <li>Mallongigoj nur konsonantaj ne enhavas punktojn.
+    Ekzemple: <em>ktp</em>.
+    Mallongigoj kun almena&#365; unu vokalo enhavas punktojn.
+    Ekzemple: <em>t.e.</em>.</li>
+  <li>Plurvortaj mallongigoj ne enhavas spacojn.
+    Ekzemple: <em>i.a.</em> por <em>inter aliaj</em>.</li>
+</ol>
+
 <hr>
 <address>$Date$</adress>
 

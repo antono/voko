@@ -15,6 +15,10 @@
 <!ELEMENT lok (#PCDATA)>
 <!ELEMENT dat (#PCDATA)>
 
+<!ENTITY % signoj SYSTEM "../dtd/vokosgn.dtd">
+%signoj;
+
+<!--
 <!ENTITY Ccirc "&#x0108;">
 <!ENTITY ccirc "&#x0109;">
 <!ENTITY Gcirc "&#x011c;">
@@ -31,6 +35,8 @@
 <!ENTITY eacute "&#x00e9;"> 
 <!ENTITY iacute "&#x00ed;">
 <!ENTITY Ccaron "&#x010c;">
+-->
+
 ]>
  
 <bibliografio>
@@ -173,6 +179,15 @@
     </eld>
   </vrk>
 
+  <vrk mll="FT">
+    <tit>Fervoja Terminaro</tit>
+    <ald>UIC Railway Dictionary</ald>
+    <eld>
+      <nom>EFE - Terminara Komisiono</nom>
+      <dat>1997</dat>
+    </eld>
+  </vrk>
+
   <vrk mll="Gerda">
     <url>http://www.worldnet.fr/~mjb/revo/gerda1.txt</url>
     <aut>Claude Piron</aut>
@@ -182,7 +197,7 @@
     </eld>
   </vrk>
 
- <vrk mll="HejmVort">
+  <vrk mll="HejmVort">
     <url>http://www.helsinki.fi/~jslindst/hejmvort.html</url>
     <aut>Jouko Lindstedt k.a.</aut>
     <tit>Hejma Vortaro</tit>
@@ -234,6 +249,16 @@
     </eld>
   </vrk>
 
+  <vrk mll="JuanReg">
+    <aut>Albault, Ariste, Auld, k.a.</aut>
+    <tit>Serta gratulatoria in honorem Juan R&eacute;gulo</tit>
+    <eld>
+      <nom>Universitato de La Laguna</nom>
+      <lok>Kanariaj Insuloj</lok>
+      <dat>1987</dat>  
+    </eld>
+  </vrk> 
+
   <vrk mll="KompLeks">
     <url>http://purl.oclc.org/NET/voko/URL/KompLeks/</url>
     <aut>Sergio Pokrovskij</aut>
@@ -247,6 +272,26 @@
       <nom>Flandra Esperanto-Ligo</nom>
       <lok>Antverpeno</lok>
       <dat>2001</dat>
+    </eld>
+  </vrk>
+
+  <vrk mll="KrED">
+    <aut>Erich Dieter Krause</aut>
+    <tit>Gro&szlig;es W&ouml;rterbuch Esperanto-Deutsch</tit>
+    <eld>
+      <nom>Langenscheidt</nom>
+      <lok>Hamburg</lok>
+      <dat>1999</dat>
+    </eld>
+  </vrk>
+
+  <vrk mll="KrDE">
+    <aut>Erich Dieter Krause</aut>
+    <tit>W&ouml;rterbuch Deutsch-Esperanto</tit>
+    <eld>
+      <nom>Langenscheidt</nom>
+      <lok>Leipzig k.a.</lok>
+      <dat>1993</dat>
     </eld>
   </vrk>
 
@@ -319,6 +364,28 @@
     <eld>
       <lok>Brno</lok>
       <dat>1990</dat>
+    </eld>
+  </vrk>
+
+  <vrk mll="MB">
+    <tit>Malbabelo</tit>
+    <ald>Gazeto de la Frankfurtmajna Esperanto-Societo</ald>
+    <eld>
+      <nom>ESF</nom>
+      <lok>Frankfurto &ccirc;e Majno</lok>
+      <dat>1994-</dat>
+    </eld>
+  </vrk>
+
+  <vrk mll="MemLapenna">
+    <aut>Birthe Lapenna</aut>
+    <tit>Memore al Ivo Lapenna</tit>
+    <ald>La kreinto de la moderna Esperanto-Movado</ald>
+    <url>http://www.geocities.com/CapitolHill/Senate/1240/memore.html</url>
+    <eld>
+      <nom>Fonda&jcirc;o Ivo Lapenna</nom>
+      <lok>Interreto</lok>
+      <dat>1998</dat>
     </eld>
   </vrk>
 
