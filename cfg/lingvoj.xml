@@ -24,7 +24,7 @@
   <lingvo kodo="bn">bengala</lingvo>
   <lingvo kodo="bo">tibeta</lingvo>
   <lingvo kodo="br" flago="../smb/br.png">bretona</lingvo>
-  <lingvo kodo="ca">kataluna</lingvo>
+  <lingvo kodo="ca" flago="../smb/ca.png">kataluna</lingvo>
   <lingvo kodo="co">korsika</lingvo>
   <lingvo kodo="cs" flago="../smb/cs.png">ĉeĥa</lingvo>
   <lingvo kodo="cy" flago="../smb/cy.png">kimra</lingvo>
