@@ -49,15 +49,16 @@ unless ($nur_indeksoj) {
 	if (-f "$dir/$file" and $file =~ /\.xml$/) {
 	    
 	    print ($n++)."$file: " if ($verbose);
+	    $file =~ s/\.xml$//;
 
 	    # konvertu XML->TXT kaj alpendigu al datumdosiero
-	    `$xslbin $dir/$file $xsl | lynx -nolist -dump $tmp/$file.html >> $datfile`;
+#	    `$xslbin $dir/$file.xml $xsl | lynx -nolist -dump -stdin >> $datfile`;
+	    `xsltproc $xsl $dir/$file.xml | lynx -nolist -dump -stdin >> $datfile`;
 	    $len = (-s "$datfile") - $pos;
 	    	
 	    print "[$pos\t$len]\n" if ($verbose);
-	    $file =~ s/\.xml$//;
+
 	    print INX $file,"\t",b64_encode($pos),"\t",b64_encode($len),"\n";
-	
 	    $pos += $len;
 	}
     }
