@@ -4,7 +4,8 @@ require Exporter;
 @ISA = qw(Exporter);
 
 @EXPORT = qw(read_nls_cfg pop_utf8char first_utf8char last_utf8char 
-	     cmp_nls reverse_utf8 letter_nls letter_asci_nls); 
+	     defined_nls cmp_nls reverse_utf8 letter_nls letter_asci_nls
+             convert_non_ascii replace to_utf8 utf8_hex); 
 
 
 
@@ -220,7 +221,11 @@ sub dump_nls_info {
     foreach $ali (keys %{"aliases_$lng"}) {
         print "$ali=".${"aliases_$lng"}{$ali}."\n";
     }
-    foreach $lit (keys %{"letters_$lng"}) {
+#    foreach $lit (keys %{"letters_$lng"}) {
+  foreach $lit (sort
+      {cmp_nls($a,$b,$lng)}
+      keys %{"letters_$lng"}) {
+
         print "$lit: ".join(',',@{${"letters_$lng"}{$lit}})."\n";
     }
     print "\n";
@@ -370,3 +375,11 @@ sub int_utf8 {
 sub hex_utf8 {
     int_utf8(hex($_[0]));
 }
+
+# kontrolas cxu nls por $lng difinitas
+sub defined_nls {
+  my $lng = shift;
+  my $letters = \%{"letters_$lng"};
+  return (defined %$letters);
+}
+
