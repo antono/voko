@@ -15,13 +15,11 @@ BEGIN {
   $pado = $0;
   $pado =~ s|\\|/|g; # sub Windows anstatauigu \ per /
   $pado =~ s/indeks.pl$//;
-  # shargu la funkcio-bibliotekon
-#  require $pado."nls_sort.pm";
-#  import nls_sort qw(cmp_nls);
 
   push @INC, ($pado); #print join(':',@INC);
-  require nls_sort;
-  nls_sort->import();
+  require nls;
+  nls->import();
+  nls::read_nls_cfg("$pado/../cfg/nls.cfg");
 }         
 
 ################### agordejo ##############################
@@ -171,10 +169,11 @@ sub artikolo {
     unless ($kap) {
 	warn "kapvorto ne trovighis en $tekst\n";
     }
+
+    print "kap: $kap\n" if ($debug);
+
     # normigu la kapvorton
     $kap =~ s/\s+/ /sg;
-    #$kap =~ s/\*//g;
-    #$kap =~ s/[1-9\/]([aeio])\s*[ZCBYDV]?\s*$/\/$1/s;
     $kap =~ s/\s+$//s;
     $kap =~ s/\/$//;
     $kap =~ s/^\s+//;
@@ -187,6 +186,8 @@ sub artikolo {
     # unua kaj lasta litero
     $first_lit = letter_nls(first_utf8char($rad),'eo');
     $last_lit  = letter_nls(last_utf8char($rad),'eo');
+
+    print "1a: $first_lit; l-a: $last_lit\n" if ($debug);
 
     unless ($first_lit) {
 	die "$rad ne komencighas je e-a litero\n";
@@ -267,6 +268,8 @@ sub traduko {
 
     # sub kiu litero aperu la vorto?
     $letter = letter_nls($trd,$lng);
+
+    print "trd: $trd ($letter)\n" if ($debug);
 
     # enmetu la vorton sub $tradukoj{$lng}->{$letter}
     push @{$tradukoj{$lng}->{$letter}}, [$mrk,$kap,$trd];
