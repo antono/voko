@@ -11,6 +11,7 @@
 # konstantoj
 
 $html = '.html'; # dosierfinajho
+$tmp_file = "/tmp/$$voko.inx";
 
 $|=1;
 
@@ -278,7 +279,7 @@ close INX;
 # traktu cxiujn unuopajn indekserojn
 
 print "Analizi la indekserojn...\n" if ($verbose);
-$inx =~ s/<art\s+mrk="([^"]*)"\s*>(.*?)<\/art\s*>/ARTIKOLO($1,$2)/sieg;
+$inx =~ s/<art\s+mrk="([^\"]*)"\s*>(.*?)<\/art\s*>/ARTIKOLO($1,$2)/sieg;
 
 # kreu la html-dosierojn
 
@@ -331,6 +332,10 @@ if ($pluraj) {
 
 
 INXLIST();
+
+unlink($tmp_file);
+
+#############################################################
 
 # analizas la indeks-tekston de artikolo
 
@@ -406,6 +411,21 @@ sub TRADUKO {
     return '';
 };
 
+# komparas novan dosieron kun ekzistanta,
+# kaj nur che shanghoj au neekzisto alshovas
+# la novan dosieron
+
+sub diff_mv {
+    my ($newfile,$oldfile) = @_;
+
+    if ((! -e $oldfile) or (`diff -q $newfile $oldfile`)) {
+	print "farite\n" if ($verbose);
+	`mv $newfile $oldfile`;
+    } else {
+	print "(senshanghe)\n" if ($verbose);
+    }
+};
+
 # kreas fakindekson por unuopa fako
 
 sub FAKINX {
@@ -416,10 +436,11 @@ sub FAKINX {
     my $r;
     my $last0, $last1;
 
-    open OUT,">$dir/fx_$fk$html" or die "Ne povis krei $dir/fx_$fk$html\n";
+#    open OUT,">$dir/fx_$fk$html" or die "Ne povis krei $dir/fx_$fk$html\n";
+    open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
 
     select STDOUT;
-    print "Skribi $dir/fx_$fk$html\n" if ($verbose);
+    print "$dir/fx_$fk$html..." if ($verbose);
     select OUT;
 
     print "<html><head><title>fakindekso por ".$faknomoj{$fak}."</title>\n";
@@ -438,6 +459,9 @@ sub FAKINX {
 
     print "<p>$inxref</body></html>\n";
     close OUT;
+
+    select STDOUT;
+    diff_mv($tmp_file,"$dir/fx_$fk$html");
 }
 
 # kreas lingvoindekson por unuopa lingvo
@@ -450,10 +474,11 @@ sub LINGVINX {
     my $ln = substr($lng,0,5);
     my $lingvo = $lingvoj{$lng};  
  
-    open OUT,">$dir/lx_$ln$html" or die "Ne povis krei $dir/lx_$ln$html\n";
+#    open OUT,">$dir/lx_$ln$html" or die "Ne povis krei $dir/lx_$ln$html\n";
+    open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
 
     select STDOUT;
-    print "Skribi $dir/lx_$ln$html\n" if ($verbose);
+    print "$dir/lx_$ln$html..." if ($verbose);
     select OUT;
 
     $lingvo =~ s/[oe]$/a/;
@@ -469,6 +494,9 @@ sub LINGVINX {
 
     print "<p>$inxref</body></html>\n";
     close OUT;
+
+    select STDOUT;
+    diff_mv($tmp_file,"$dir/lx_$ln$html");
 }
 
 # kreas la indekson de la kapvortoj
@@ -479,11 +507,12 @@ sub KAPVORTINX {
     my $vrt;
     my $r,$a,$n=0;
 
-    open OUT,">$dir/ix_kap$lit1$html" or 
-	die "Ne povis krei $dir/ix_kap$lit1$html\n";
+#    open OUT,">$dir/ix_kap$lit1$html" or 
+#	die "Ne povis krei $dir/ix_kap$lit1$html\n";
+    open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
 
     select STDOUT;
-    print "Skribi $dir/ix_kap$lit1$html\n" if ($verbose);
+    print "$dir/ix_kap$lit1$html..." if ($verbose);
     select OUT;
 
     print "<html><head><title>kapvortoindekso sekcio $lit1</title>\n";
@@ -526,16 +555,20 @@ sub KAPVORTINX {
 
     print "</body></html>\n";
     close OUT;
+
+    select STDOUT;
+    diff_mv($tmp_file,"$dir/ix_kap$lit1$html");
 }
 
 sub SIMPLKAPVORTINX {
     my $ref,$r,$n=0,$last0,$last1;
 
-    open OUT,">$dir/ix_kap$html" or 
-	die "Ne povis krei $dir/ix_kap$html\n";
+#    open OUT,">$dir/ix_kap$html" or 
+#	die "Ne povis krei $dir/ix_kap$html\n";
+    open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
 
     select STDOUT;
-    print "Skribi $dir/ix_kap$html\n" if ($verbose);
+    print "$dir/ix_kap$html..." if ($verbose);
     select OUT;
 
     print "<html><head><title>kapvortoindekso</title>\n";
@@ -560,6 +593,9 @@ sub SIMPLKAPVORTINX {
     print "<p>$inxref\n";
     print "</body></html>\n";
     close OUT;
+
+    select STDOUT;
+    diff_mv($tmp_file,"$dir/ix_kap$html");
 }
 
 # kreas la inversan indekson de la kapvortoj
@@ -569,11 +605,14 @@ sub INVKAPVORTINX {
     my $lit1 = enmetu_x($lit);
     my $r,$n=0;
     my $last0,$last1;
-    open OUT,">$dir/ix_inv$lit1$html" or 
-	die "Ne povis krei $dir/ix_inv$lit1$html\n";
+
+#    open OUT,">$dir/ix_inv$lit1$html" or 
+#	die "Ne povis krei $dir/ix_inv$lit1$html\n";
+    open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
+
 
     select STDOUT;
-    print "Skribi $dir/ix_inv$lit1$html\n" if ($verbose);
+    print "$dir/ix_inv$lit1$html..." if ($verbose);
     select OUT;
 
     print "<html><head><title>inversa kapvortoindekso sekcio $lit1</title>\n";
@@ -616,17 +655,21 @@ sub INVKAPVORTINX {
 
     print "</body></html>\n";
     close OUT;
+
+    select STDOUT;
+    diff_mv($tmp_file,"$dir/ix_inv$lit1$html");
 }
 
 sub SIMPLINVKAPVORTINX {
     my $ref,$r,$n=0;
     my $last0,$last1;
  
-   open OUT,">$dir/ix_inv$html" or 
-	die "Ne povis krei $dir/ix_inv$html\n";
+#   open OUT,">$dir/ix_inv$html" or 
+#	die "Ne povis krei $dir/ix_inv$html\n";
+    open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
 
     select STDOUT;
-    print "Skribi $dir/ix_inv$html\n" if ($verbose);
+    print "$dir/ix_inv$html..." if ($verbose);
     select OUT;
 
     print "<html><head><title>inversa kapvortoindekso</title>\n";
@@ -652,6 +695,9 @@ sub SIMPLINVKAPVORTINX {
     print "<p>$inxref\n";
     print "</body></html>\n";
     close OUT;
+
+    select STDOUT;
+    diff_mv($tmp_file,"$dir/ix_inv$html");
 }
 
 # kreas la indekson de la indeksoj
@@ -659,10 +705,11 @@ sub SIMPLINVKAPVORTINX {
 sub INXLIST {
     my $lit,$lit1;
     
-    open OUT,">$dir/indeksoj$html" or die "Ne povis krei $dir/indeksoj$html\n";
+#    open OUT,">$dir/indeksoj$html" or die "Ne povis krei $dir/indeksoj$html\n";
+    open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
 
     select STDOUT;
-    print "Skribi $dir/indeksoj$html\n" if ($verbose);
+    print "$dir/indeksoj$html..." if ($verbose);
     select OUT;
 
     print "<html><head><title>indekslisto</title>\n";
@@ -724,6 +771,9 @@ sub INXLIST {
 
     print "</body></html>\n";
     close OUT;
+
+    select STDOUT;
+    diff_mv($tmp_file,"$dir/indeksoj$html");
 }
 
 # funkcio por trovi vorton, komencigxantan je litero $lit
