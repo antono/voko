@@ -531,7 +531,13 @@ sub LINGVINX {
 	    $trd = $ref->[3];
 	    $trd =~ s/(<\/?)ind>/$1u>/sg;
 
-	    print "$trd = <a href=\"$r\" ";
+# iom post ion sxangxu = al :
+	    if ($lng =~ /ru|de|en|af|be|bg|br|fr|ca|cs|da|el|es|gd|grc|he|hr|hu|ia|ie|is|it|ja|la/) {
+		print "$trd: <a href=\"$r\" ";
+	    } else {
+		print "$trd = <a href=\"$r\" ";
+	    }
+
 	    print "target=\"precipa\">$ref->[1]</a><br>\n";
 	    $last1 = $ref->[1];
 	    $last2 = $ref->[3];

@@ -65,7 +65,7 @@ $art_pado="$vortaro_pado/art";
 # kreu indeksdosieron
 
 $command = "xml2inx.pl $verbose -c $agord_dosiero $xml_pado";
-print "$command\n" if ($verbose);
+print "$command\nTIME:",`date`,"\n" if ($verbose);
 `$command`;
 
 # cd ..
@@ -74,26 +74,27 @@ print "$command\n" if ($verbose);
 
 # kreu HTML-indeksojn
 $command="rilatoj.pl $verbose $xml_pado > $rilato_dos";
-print "$command\n" if ($verbose);
+print "$command\nTIME:",`date`,"\n" if ($verbose);
 open LOG, "$command|"; while (<LOG>) { print }; close LOG;
 
 $command="tezauro.pl $verbose $agord_dosiero";
-print "$command\n" if ($verbose);
+print "$command\nTIME:",`date`,"\n" if ($verbose);
 open LOG, "$command|"; while (<LOG>) { print }; close LOG;
 
 $command="indeks.pl $verbose $agord_dosiero";
-print "$command\n" if ($verbose);
+print "$command\nTIME:",`date`,"\n" if ($verbose);
 open LOG, "$command|"; while (<LOG>) { print }; close LOG;
 
 $command="tajperaroj.pl $verbose -H $xml_pado -c $agord_dosiero > $vortaro_pado/inx/eraroj.html";
-print "$command\n" if ($verbose);
+print "$command\nTIME:",`date`,"\n" if ($verbose);
 open LOG, "$command|"; while (<LOG>) { print }; close LOG;
 
 $command = "xml2html_all.pl $verbose -m -c $agord_dosiero";
-print "$command\n" if ($verbose);
+print "$command\nTIME:",`date`,"\n" if ($verbose);
 open LOG, "$command |" || die "Ne povis dukti\n";
 while (<LOG>) { print };
 close LOG;
+print "\nTIME:",`date`,"\n" if ($verbose);
 
 # se pasis manpleno da tagoj, shovu la indeks-dosieron, por
 # ke ghi atingu la TTT-servilon (sed ja ne tro ofte)

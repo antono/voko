@@ -46,9 +46,9 @@ unless ($agord_dosiero) { $agord_dosiero = "cfg/vortaro.cfg" };
 %stiloj = read_xml_cfg($config{"stiloj"},'stilo','kodo');
 
 # HTML-kapo
-if (html) {
+if ($html) {
     index_header('eraro-raporto');
-    linkbuttons();
+    index_buttons();
     print "<h1>Eraroraporto</h1>\n<dl>\n";
 }
 
@@ -75,7 +75,7 @@ for $file (sort readdir(DIR)) {
 };
 closedir DIR;
 
-if (html) {
+if ($html) {
     print 
 	"</dl>",
 #<hr>\n<span class=dato>",

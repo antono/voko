@@ -240,8 +240,8 @@ foreach $lng (@nls_lingvoj) {
 	my $nomo;
 	if (length(pack("U*",unpack("U*",$lit))) > 1) { #supozu litergrupon
 	    $nomo="litergrupo $lit";
-	    $unuo="&nbsp;";
-	    $kodo="&nbsp;";
+	    $unuo="";
+	    $kodo="";
 	} elsif ($lit =~ /^[a-z]$/) {
 	    $nomo="minuskla $lit";
 	} elsif ($lit =~ /^[A-Z]$/){

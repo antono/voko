@@ -509,12 +509,12 @@ sub root {
 
     foreach $node (@$list) {
 
-	if (not @{$node->{'super'}} and # vorto ne havas supernociojn
+	if ((not @{$node->{'super'}} and # vorto ne havas supernociojn
 	    not @{$node->{'malprt'}} and
 		( @{$node->{'sub'}} or # vorto havas subnociojn, do ne izolita
 		  @{$node->{'prt'}}
 		  )
-	    ) 
+	    ) or $node->{'tezrad'}) 
 	{
 	    push @root,($node);
 	};

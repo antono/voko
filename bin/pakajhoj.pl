@@ -132,7 +132,7 @@ EOS
 
 <hr>
   Ĉiuj iloj de VoKo estas publikigataj sub la
-  <a href="../revo/dok/copying.txt">GNUa Ĝenerala Publika Licenco</a>. 
+  <a href="../revo/dok/copying.txt">GNUa Ĝenerala Publika Permesilo</a>. 
 </BODY>
 </HTML>
 EOS

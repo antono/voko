@@ -76,7 +76,7 @@ for $dos (@files) {
 	
 	# anstatauigu CVS-Id per dosiernomo (= marko)
 	$teksto =~ s/\044Id:\s+(.*?)\.xml,v\s+[^\044]+\044/$1/si
-	    or warn "Ne trovis \$Id$ en $dos\n";
+	    or warn "Ne trovis \044Id\044 en $dos\n";
 
 	# skribu la tekston en la vortaron
 	print OUT "$teksto\n\n";
