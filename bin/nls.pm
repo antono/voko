@@ -314,9 +314,9 @@ sub read_nls_cfg {
 
 		    # plenigu la literotabelon
 		    $minusklo = int_utf8($from);
-		    for ($i = $from; $i<=$to; $i++) {
-			${"letters_$lng"}{int_utf8($i)}=
-			    [1000*$a+($i-$from),1000*$a+($i-$from),
+		    for ($j = $from; $j<=$to; $j++) {
+			${"letters_$lng"}{int_utf8($j)}=
+			    [1000*$a+($j-$from),1000*$a+($j-$from),
 			     $minusklo,$ascii];
 	            }
 		} else {

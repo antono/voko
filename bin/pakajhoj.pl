@@ -27,7 +27,7 @@ $inxfile = "$pakoj/index.html";
 $parta = 4*24*60*60; # post 4 tagoj faru novan parton
 $kompleta = 7*$parta; # post 28 tagoj faru novan kompleton
 
-$vokoajhoj = "bin dok div dtd stl cgi tst smb cfg xsl LEGUMIN PROGRAMOJ";
+$vokoajhoj = "bin dok div dtd stl cgi tst smb cfg xsl ana LEGUMIN PROGRAMOJ";
 $xmlajhoj = "xml dtd stl cfg smb";
 $bldajhoj = "bld";
 $htmlajhoj= "art dok inx tez index.html sercxo.html titolo.html revo.ico ".
@@ -57,7 +57,7 @@ if (not $config{'lasta_kompleta'} or
     `$cmd`;
 
     # xml-ajhoj
-    $cmd = "$tar -C $revo -czf $pakoj/revoxml_$nunstr.tgz $xmlajhoj";
+    $cmd = "$tar -C $revo -chzf $pakoj/revoxml_$nunstr.tgz $xmlajhoj";
     print "$cmd\n" if ($verbose);
     `$cmd`;
 

@@ -218,6 +218,9 @@ sub start_handler {
 	# aldonu la referencon al la nuna nodo (variablonomo = nuna XML-strukturilo)
 	push @{${$xp->current_element()}->{$tip}}, (get_attr('cel',@attrs));
     }
+    elsif ($el eq 'tezrad') {
+	${$xp->current_element()}->{'tezrad'} = 1;
+    }
     elsif ($el eq 'uzo') 
     {
 	$uzo = '';
@@ -423,7 +426,8 @@ sub cnt_and_depth {
 	    for $n (@prnts1) {
 		# ekskludu cirklojn
 		if ($n == $node) {
-		    warn "FIIII! Estas cirklo inter \"$mrk\" kaj "
+		    warn "FIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII"
+			."! Estas cirklo inter \"$mrk\" kaj "
 			.$n->{'mrk'}."\"\n";
 		    #next;
 		    die; # provizore mortu, char en unu okazo la programo
@@ -518,7 +522,6 @@ sub root {
 
     return @root;
 }
-
 
 sub in_list {
     my $what=shift;
@@ -811,9 +814,15 @@ sub create_tz {
 
     foreach $word (@root) {
 	my $word_mrk = $word->{'mrk'};
-	$word_mrk =~ tr/./_/;
-	print "../tez/tz_".$word_mrk.".html;".$word->{'kap'}.";"
-	    .($word->{'h'}*$word->{'c'})." \n";
+
+	unless ($word->{'tezrad'}) {
+	    warn "AVERTO: $word_mrk estas radiko, sed ne havas ".
+		 "indikon <tezrad/>\n";
+	} else {
+	    $word_mrk =~ tr/./_/;
+	    print "../tez/tz_".$word_mrk.".html;".$word->{'kap'}.";"
+		.($word->{'h'}*$word->{'c'})." \n";
+	}
     }
     close OUT;
     select STDOUT;

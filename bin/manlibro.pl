@@ -37,7 +37,7 @@ s/hx/\304\245/g; #hx
 s/jx/\304\265/g; #jx
 s/sx/\305\235/g; #sx
 s/ux/\305\255/g; #ux
-
+s/\\x/x/g;
 
 # elprenu la titolon
 m/<h1>(.*)<\/h1>/si;

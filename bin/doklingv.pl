@@ -17,7 +17,7 @@ use nls; read_nls_cfg("$ENV{'VOKO'}/cfg/nls.cfg");
 
 ################### agordejo ##############################
 
-$debug = 1;
+$debug = 0;
 
 $tmp_file = '/tmp/'.$$.'voko.dok';
 
@@ -185,9 +185,9 @@ foreach $lng (sort keys %lingvoj) {
     print "</TD>\n";
     print " <TD ALIGN=\"LEFT\">";
     if (-f "$smb_dir/$lng.$smbtype") {
-	print "<img src=\"$smb_ref/$lng.$smbtype\" width=\"24\" height=\"16\" alt=\"$lng\">";
+	print "<img src=\"$smb_ref/$lng.$smbtype\" width=\"24\" height=\"16\" alt=\"$lng\" class=\"flago\">";
     } elsif (-f "$smb_dir/$lng.png") {
-	print "<img src=\"$smb_ref/$lng.$smbtype\" width=\"24\" height=\"16\" alt=\"$lng\">";
+	print "<img src=\"$smb_ref/$lng.$smbtype\" width=\"24\" height=\"16\" alt=\"$lng\" class=\"flago\">";
     }
     print "</TD>\n";
     print " <TD ALIGN=\"LEFT\">$lingvoj{$lng}</TD>\n</TR>\n";
