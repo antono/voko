@@ -10,8 +10,11 @@
 #     por tio necesas: ekzemplaj mesaghoj, 
 #       shaltilo por malhelpi sendadon de mesaghoj, sed
 #       anstataua savo en dosieroj
+#   sendu unu raporton al redaktantoj anstatau plurajn mesaghojn
+#
 
 use MIME::Parser;
+use MIME::Entity;
 
 ######################### agorda parto ##################
 
@@ -23,6 +26,7 @@ $debug        = 0;
 $parts_dir    = '/home/revo/tmp';
 $mail_folder  = '/var/spool/mail/revo';
 $mail_error   = '/home/revo/tmp/mailerr';
+$mail_send    = '/home/revo/tmp/mailsend';
 $old_mail     = '/home/revo/oldmail';
 $err_mail     = '/home/revo/errmail';
 $tmp          = '/home/revo/tmp';
@@ -30,19 +34,24 @@ $xml_dir      = '/home/revo/revo/cvs/revo';
 
 $mail_local   = '/home/revo/tmp/mail';
 $editor_file  = '/home/revo/etc/redaktoroj';
+$attachments  = $tmp.'/atchmnt';
 $vokomail_url = 'http://www.uni-leipzig.de/cgi-bin/vokomail.pl';
 
 # programoj
 $xmlcheck     = '/usr/bin/rxp -V';
 $cvs          = '/usr/bin/cvs';
+$sendmail     = '/usr/lib/sendmail -t -i';
 
 # diversaj
 $mail_begin   = '^From[^:]';
 $possible_keys= 'komando|teksto|shangho';
 $commands     = 'redakt[oui]|help[oui]'; # .'|dokumento|artikolo|historio|propono'
 $revoservo    = '[Revo-Servo]';
-$signature    = "--\nRevo-Servo <revo\@steloj.de>\n"
+$revo_mailaddr= 'revo@steloj.de';
+$revo_from    = "Reta Vortaro <$revo_mailaddr>";
+$signature    = "--\nRevo-Servo $revo_mailaddr\n"
     ."retposhta servo por redaktantoj de Reta Vortaro.\n";
+$separator    = "-" x 50 . "\n";
 
 ################ la precipa masho de la programo ##############
 
@@ -50,6 +59,8 @@ $the_mail   = '';
 $editor     = '';
 $article_id = '';
 $mail_date  = '';
+$shangho    = '';
+$file_no    = 0;
 
 if ($ARGV[0]) {
     $mail_file = shift @ARGV;
@@ -76,6 +87,7 @@ while ($file = readmail()) {
 
     # preparu por la nova mesagho
     $editor = '';
+    $shangho = '';
     $parser = new MIME::Parser;
     $parser->output_dir($parts_dir);
     $parser->output_prefix("part");
@@ -106,6 +118,8 @@ while ($file = readmail()) {
 
 close MAIL;
 
+# sendu raportojn
+send_reports();
 
 # arkivigu la poshtdosieron
 if ($mail_file eq $mail_local) {
@@ -374,72 +388,157 @@ sub komando {
     }
 }
 
-
-sub send_error {
-    my $errmsg = shift;
-    
-    print "ERARO: $errmsg\n" if ($verbose);
-
-    # poste resendu mesaghon al la sendinto, provizore nur avertu
-  
-    my $mail_addr = $editor;
-    $mail_addr =~ s/.*<([a-z\.\_\-@]+)>.*/$1/;
-
-    my $mail = 
-       "Saluton!\n\nKoncerne vian mesaghon de: $mail_date,\n";
-    $mail .=
-        "artikolo: $article_id\n" if ($article_id);
-    $mail .=
-        "okazis la sekva eraro:\n\n"
-       ."$errmsg\n\n"
-       ."Bonvolu provi korekti la eraron kaj resendi la mesaghon.\n"
-       ."Se vi ne scias solvi la problemon, vi povas turni vin al\n"
-       ."<revo\@onelist.com> au <diestel\@steloj.de> por peti helpon.\n"
-       .$signature;
-
-    print ">sendas erar-mesaghon al: $mail_addr\n" if ($debug);
-    print $mail if ($debug);
-
-    open SMAIL, "|mail -s\"$revoservo - eraro\" $mail_addr" 
-	or die "Ne povas dukti al mail: $!\n";
-    print SMAIL $mail;
-    close SMAIL;
-    
-}
-
-sub send_confirm {
-    my $msg = shift;
-
-    print "KONFIRMO: $msg\n" if ($verbose);
-
-    # poste resendu mesaghon al la sendinto, provizore nur avertu
-  
-    my $mail_addr = $editor;
-    $mail_addr =~ s/.*<([a-z\.\_\-@]+)>.*/$1/;
-
-    my $mail =
-        "Saluton!\n\nVia mesagho de: $mail_date,\n";
-    $mail .=
-        "artikolo: $article_id\n" if ($article_id);
-    $mail .=
-	"sukcese traktighis:\n\n"
-       ."$msg\n\n"
-       .$signature;
-
-    print ">sendas konfirm-mesaghon al: $mail_addr\n" if ($debug);
-    print $mail if ($debug);
-
-    open SMAIL, "|mail -s \"$revoservo - konfirmo\" $mail_addr" 
-	or die "Ne povas dukti al mail: $!\n";
-    print SMAIL $mail;
-    close SMAIL;
-}
-
 sub save_errmail {
     open ERRMAIL, ">>$mail_error" or die "Ne povis malfermi $mail_error: $!\n";
     print ERRMAIL $the_mail;
     close ERRMAIL;
     print "erara mesagho sekurigita al $mail_error\n" if ($verbose);
+}
+
+
+######################### respondoj al sendintoj ###################
+
+sub send_error {
+    my ($errmsg,$file,$attachment,$text) = @_;
+    
+    print "ERARO   : $errmsg\n" if ($verbose);
+
+    # donu provizoran nomon al kunsendajho
+    if ($file) {
+
+	# enmetu "redakto: $shanghoj" komence
+	if ($file =~ /\.xml$/) {
+	    open FILE, $file or die "Ne povis malfermi $file: $!\n";
+	    $text = join('',<FILE>);
+	    close FILE;
+	    open FILE, ">$file" or die "Ne povis malfermi $file: $!\n";
+	    print FILE "redakto: $shangho\n\n";
+	    print FILE $text;
+	    close FILE;
+	}
+	
+	# donu provizoran nomon al la dosiero
+	$file_no++;
+	$attachment = "$attachments$file_no";
+	`mv $file $attachment`;
+    }
+
+    # skribu informon en $mail_send por poste sendi raporton al $editor
+    open SMAIL, ">>$mail_send" or die "Ne povis malfermi $mail_send: $!\n";
+
+    print SMAIL "sendinto: $editor\n";
+    print SMAIL "dosieroj: $attachment\n" if ($file);
+    print SMAIL "senddato: $mail_date\n";
+    print SMAIL "artikolo: $article_id\n";
+    print SMAIL "shanghoj: $shangho\n" if ($shangho);
+    print SMAIL "ERARO   : $errmsg\n";
+    print SMAIL $separator;
+
+    close SMAIL;
+}
+
+sub send_confirm {
+    my ($msg,$file,$attachment) = @_;
+
+    print "KONFIRMO: $msg\n" if ($verbose);
+
+    # donu provizoran nomon al kunsendajho
+    if ($file) {
+	$file_no++;
+	$attachment = "$attachments$file_no";
+	`mv $file $attachment`;
+    }
+
+    # skribu informon en $mail_send por poste sendi raporton al $editor
+    open SMAIL, ">>$mail_send" or die "Ne povis malfermi $mail_send: $!\n";
+
+    print SMAIL "sendinto: $editor\n";
+    print SMAIL "dosieroj: $attachment\n" if ($file);
+    print SMAIL "senddato: $mail_date\n";
+    print SMAIL "artikolo: $article_id\n";
+    print SMAIL "shanghoj: $shangho\n" if ($shangho);
+    print SMAIL "KONFIRMO: $msg\n";
+    print SMAIL $separator;
+
+    close SMAIL;
+}
+
+sub send_reports {
+    my $newline = $/;
+    my %reports = ();
+    my %dosieroj = ();
+    my ($mail_addr,$message,$mail_handle,$file,$art_id,$marko,$dos);
+
+    # legu la respondojn el $mail_send
+    $/ = $separator;
+    open SMAIL, $mail_send or die "Ne povis malfermi $mail_send: $!\n";
+    while (<SMAIL>) {
+	# elprenu la sendinton
+	if (s/^sendinto:\s*([^\n]+)\n//) {
+	    $mail_addr = $1;
+	    # chu dosierojn sendu?
+	    if (s/^dosieroj:\s*([^\n\s]+)\n//) {
+		$dos = $1;
+		$_ =~ /artikolo:\s*([^\n]+)\n/s; $art_id = $1;
+		
+		$dosieroj{$mail_addr} .= "$dos $art_id|";
+	    }
+	    $reports{$mail_addr} .= $_;
+	} else {
+	    die "Ne povis elpreni sendinton el $_\n";
+	}
+    }
+    close SMAIL;
+    $/ = $newline;
+
+    # forsendu la raportojn
+    while (($mail_addr,$message) = each %reports) {
+	$dos = $dosieroj{$mail_addr};
+	$mail_addr =~ s/.*<([a-z\.\_\-@]+)>.*/$1/;
+
+	# preparu mesaghon
+	$message = "Saluton!\n"
+	    ."Jen raporto pri via(j) sendita(j) artikolo(j).\n\n"
+	    .$separator.$message."\n".$signature;
+
+	$mail_handle = build MIME::Entity(Type=>"multipart/mixed",
+					  From=>$revo_from,
+					  To=>"$mail_addr",
+					  Subject=>"$revoservo - raporto");
+	
+	$mail_handle->attach(Type=>"text/plain",
+			     Encoding=>"quoted-printable",
+			     Data=>$message);
+
+	# alpendigu dosierojn
+	if ($dos) {
+	    for $file (split (/\|/,$dos)) {
+		$file =~ s/^\s*([^\044]+)\s*\044([^\044]+)\044\s*$/$1/;
+		$art_id = $2;
+		$art_id =~ /^Id: ([^ ,\.]+\.xml),v/;
+		$marko = $1;
+
+		print "attach: $file\n" if ($debug);
+		if ($file) {
+		    $mail_handle->attach(Path=>$file,
+					Type=>'text/plain',
+					Encoding=>'quoted-printable',
+					Disposition=>'attachment',
+					Filename=>$marko,
+					Description=>$art_id);
+		}
+	    }
+	}
+
+	# forsendu
+	open SENDMAIL, "|$sendmail" 
+	    or die "Ne povas dukti al $sendmail: $!\n";
+	$mail_handle->print(\*SENDMAIL);
+	close SENDMAIL;
+    }
+
+    # forigu $mail_send
+    unlink($mail_send);
 }
 
 
@@ -452,8 +551,9 @@ sub cmd_help {
 }
 
 sub cmd_redakt {
-    my ($shangho,$teksto) = @_;
+    my ($shangh,$teksto) = @_;
     my $id,$art,$err;
+    $shangho = $shangh; # memoru por poste
 
     # uniksajn linirompojn!
     $teksto =~ s/\r\n/\n/sg;
@@ -477,7 +577,7 @@ sub cmd_redakt {
     }
 
     if (checkxml($teksto)) {
-	checkin($art,$id,$shangho);
+	checkin($art,$id);
     }
 }
 
@@ -486,8 +586,8 @@ sub checkxml {
     my $err;
 
     # enmetu $Log$
-    # enmetu Revision 1.5  1999/11/11 20:21:29  revo
-    # enmetu profunde prilaboris
+    # enmetu Revision 1.6  1999/11/22 17:18:25  revo
+    # enmetu sendu raportojn anstatau unuopajn respondojn
     # enmetu en la tekston, se ankorau ne estas
     unless ($teksto =~ /<!--\s+\044Log\044/) {
 	$teksto =~ s/(<\/vortaro>)/\n<!--\n\044Log\044\n-->\n$1/s;
@@ -511,7 +611,7 @@ sub checkxml {
 	print "XML-eraroj:\n$err" if ($verbose);
 
 	send_error("La sendita XML-dosiero enhavas la sekvajn "
-	      ."sintakserarojn:\n$err");
+	      ."sintakserarojn:\n$err","$tmp/xml.xml");
 	return;
     } else {
 	print "XML: en ordo\n" if ($debug);
@@ -520,13 +620,13 @@ sub checkxml {
 }
 
 sub checkin {
-    my ($art,$id,$shangho) = @_;
+    my ($art,$id) = @_;
     my ($log,$err,$edtr);
 
     # kontrolu chu ekzistas shangh-priskribo
     unless ($shangho) {
 	send_error ("Vi fogesis indiki, kiujn shanghojn vi faris "
-	    ."en la dosiero.\n");
+	    ."en la dosiero.\n","$tmp/xml.xml");
         return;
     } 
     print "shanghoj: $shangho\n" if ($verbose);
@@ -543,11 +643,11 @@ sub checkin {
     # de la artikolo, se necese faru "diff"
     my $old_id = get_old_version($art);
     if ($old_id ne $id) {
-	send_error ("La de vi sendita artikolo ($id)\n"
-	       ."ne havas la saman version kiel la aktuala\n"
-               ."arkiva ($old_id)!\n"
+	send_error ("La de vi sendita artikolo\n"
+	       ."ne havas la saman version kiel la aktuala arkiva\n"
+	       ."($old_id)\n"
 	       ."Bonvolu preni aktualan version el la TTTejo\n"
-	       ."($vokomail_url?art=$art)\n");
+	       ."($vokomail_url?art=$art)\n","$tmp/xml.xml");
 	return;
     }
 
@@ -582,7 +682,7 @@ sub checkin {
     } elsif (($log =~ /aborting\s*$/s) 
 	     or ($err !~ /^\s*$/s)) {
 	send_error("Eraro dum arkivado de la nova artikolversio:\n"
-	      ."$log\n$err");
+	      ."$log\n$err","$tmp/xml.xml");
 	return;
     }
 
