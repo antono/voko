@@ -67,6 +67,8 @@ reguloj por prezentado de la administraj notoj
       <xsl:variable name="xml"
         select="substring-before(substring-after(@mrk,'$Id: '),',v')"/>
 
+	[^<a class="redakto" 
+	     href="../index.html" target="_top">Revo</a>] 
         [<a class="redakto" 
             href="{$xmldir}/{$xml}"><xsl:value-of select="$xml"/></a>]
         [<a class="redakto" 
