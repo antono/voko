@@ -93,12 +93,12 @@
 <!-- derivajhoj -->
 
 <xsl:template match="drv">
-  <xsl:apply-templates select="kap|gra|uzo|fnt|dif"/>
+  <xsl:apply-templates select="kap|gra|uzo|fnt|dif|ref[@tip='dif']"/>
   <dl compact="">
   <xsl:apply-templates select="subdrv|snc"/>
   </dl>
   <xsl:apply-templates
-    select="*[not(self::subdrv|self::snc|self::gra|self::uzo|self::fnt|self::kap|self::dif|self::mlg)]"/>
+    select="*[not(self::subdrv|self::snc|self::gra|self::uzo|self::fnt|self::kap|self::dif|self::mlg|self::ref[@tip='dif'])]"/>
 </xsl:template>  
 	
 <xsl:template match="subdrv">
@@ -134,14 +134,14 @@
     </xsl:choose>
   </dt>
   <dd>
-    <xsl:apply-templates select="gra|uzo|fnt|dif"/>
+    <xsl:apply-templates select="gra|uzo|fnt|dif|ref[@tip='dif']"/>
     <xsl:if test="subsnc">
       <dl compact="">
         <xsl:apply-templates select="subsnc"/>
       </dl>
     </xsl:if>
     <xsl:apply-templates
-        select="*[not(self::gra|self::uzo|self::fnt|self::dif|self::subsnc)]"/>
+        select="*[not(self::gra|self::uzo|self::fnt|self::dif|self::subsnc|self::ref[@tip='dif'])]"/>
   </dd>
 </xsl:template>  
 

@@ -218,13 +218,14 @@ pluevoluigita de Wolfram Diestel
 <!-- derivajhoj -->
 
 <xsl:template match="drv">
-  <a name="{@mrk}"></a>
-  <xsl:apply-templates select="kap|gra|uzo|fnt|dif"/>
+  <a name="{@mrk}"/>
+  <xsl:apply-templates select="tez" mode="ref"/>
+  <xsl:apply-templates select="kap|gra|uzo|fnt|dif|ref[@tip='dif']"/>
   <dl>
   <xsl:apply-templates select="subdrv|snc"/>
   </dl>
   <xsl:apply-templates
-    select="node()[not(self::subdrv|self::snc|self::gra|self::uzo|self::fnt|self::kap|self::dif|self::mlg)]"/>
+    select="node()[not(self::subdrv|self::snc|self::gra|self::uzo|self::fnt|self::kap|self::dif|self::mlg|self::ref[@tip='dif'])]"/>
 </xsl:template>  
 	
 <xsl:template match="subdrv">
@@ -236,12 +237,12 @@ pluevoluigita de Wolfram Diestel
 
   </dt>
   <dd>
-    <xsl:apply-templates select="dif|gra|uzo|fnt"/>
+    <xsl:apply-templates select="dif|gra|uzo|fnt|ref[@tip='dif']"/>
     <dl>
     <xsl:apply-templates select="snc"/>
     </dl>
     <xsl:apply-templates
-      select="node()[not(self::snc|self::gra|self::uzo|self::fnt|self::dif)]"/>    
+      select="node()[not(self::snc|self::gra|self::uzo|self::fnt|self::dif|self::ref[@tip='dif'])]"/>    
   </dd>
 </xsl:template>
 
@@ -262,7 +263,13 @@ pluevoluigita de Wolfram Diestel
 </xsl:template>
 
 <xsl:template match="subsnc" mode="number-of-ref-snc">
-  <xsl:number format="a"/> 
+  <xsl:number from="drv|subart" level="multiple" count="snc|subsnc"
+    format="1 a"/>
+
+<!-- ne funkcias - xt eterene laboradas 
+ <xsl:number from="drv|subart" level="any" count="snc"/>
+  <xsl:text></xsl:text>
+ <xsl:number from="snc" level="single" format="a"/> -->
 </xsl:template>
 
 <xsl:template match="sncref">
@@ -273,6 +280,7 @@ pluevoluigita de Wolfram Diestel
   <xsl:if test="@mrk">
     <a name="{@mrk}"></a>
   </xsl:if>
+  <xsl:apply-templates select="tez" mode="ref"/>
   <dt>
     <xsl:choose>
       <xsl:when test="@ref">
@@ -295,21 +303,22 @@ pluevoluigita de Wolfram Diestel
     </xsl:choose>
   </dt>
   <dd>
-    <xsl:apply-templates select="gra|uzo|fnt|dif"/>
+    <xsl:apply-templates select="gra|uzo|fnt|dif|ref[@tip='dif']"/>
     <xsl:if test="subsnc">
       <dl>
         <xsl:apply-templates select="subsnc"/>
       </dl>
     </xsl:if>
     <xsl:apply-templates
-        select="node()[not(self::gra|self::uzo|self::fnt|self::dif|self::subsnc)]"/>
+        select="node()[not(self::gra|self::uzo|self::fnt|self::dif|self::subsnc|self::ref[@tip='dif'])]"/>
   </dd>
 </xsl:template>  
 
 <xsl:template match="subsnc">
   <xsl:if test="@mrk">
-    <a name="{@mrk}"></a>
+    <a name="{@mrk}"/>
   </xsl:if>
+  <xsl:apply-templates select="tez" mode="ref"/>
   <dt>
     <xsl:number format="a)"/>
     <xsl:choose>
@@ -453,13 +462,17 @@ pluevoluigita de Wolfram Diestel
 
 <xsl:template match="tez">
   <br/>
-  <a name="{@mrk}"/>
+ <!-- <a name="{@mrk}"/> -->
   <xsl:comment>[[
       ref="<xsl:value-of select="@mrk"/>"
     ]]</xsl:comment>
   <span class="tez">
     <xsl:apply-templates/>
   </span>
+</xsl:template>
+
+<xsl:template match="tez" mode="ref">
+  <a name="{@mrk}"/>
 </xsl:template>
 
 <xsl:template match="dif/ref|dif/refgrp/ref|rim/ref|rim/refgrp/ref|ekz/ref|ekz/refgrp/ref|klr/ref|klr/refgrp/ref">
