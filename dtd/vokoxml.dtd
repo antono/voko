@@ -186,7 +186,7 @@ au aliajn informojn.-->
 <!-- [gra] kiel grammatikaj informoj momente estas permesataj
 nur indiko de la vortspeco.-->
 
-<!ELEMENT gra (vspec)+>
+<!ELEMENT gra (#PCDATA|vspec)*>
 
 <!-- [vspec] Vortspeco. Ekz. subst. por substantivo; tr./ntr.
 por transitivaj kaj netransitivaj verboj ktp.-->
@@ -218,6 +218,9 @@ klarigoj kaj fonto.
 -->
 
 <!ELEMENT ekz (#PCDATA|fnt|uzo|ref|refgrp|ind|trd|trdgrp|%tekst-stiloj;)*>
+<!ATTLIST ekz
+	mrk ID #IMPLIED
+>
 
 <!-- [rim] Rimarko povas enhavi iujn indikojn pri la vorto aŭ
 senco, krome referencojn, ekzemplojn, emfazitajn partojn.
@@ -275,9 +278,14 @@ kaj klarigoj, poste povos sekvi aliaj elementoj.
 <!-- [ind] Parto de traduko, kiu liveras la kapvorton en la
 indekso, do &lt;trd&gt;sich &lt;ind&gt;bem&uuml;hen&lt;/ind&gt;&lt;/trd&gt;
 aperas sub bem&uuml;hen. Aŭ parto de ekzemplo aŭ bildpriskribo, al
-kiu rilatas internaj tradukoj ktp.
+kiu rilatas internaj tradukoj ktp. Vi povas aldoni tipon kom, mez, fin,
+se tio estas nur la komenco, mezo aŭ fino de la ekzemplo kaj tio
+estu signata per punktoj en la indekso.
 -->
 <!ELEMENT ind (#PCDATA|tld)*>
+<!ATTLIST ind
+        tip (kom|mez|fin) #IMPLIED
+>
 
 <!-- [bld] Bildo povas ilustri iun vorton aŭ sencon. Per la
 atributo <dfn>lok</dfn> ĝi
@@ -286,6 +294,7 @@ referencas al ekstera dosiero, kiu entenas la bildon.
 <!ELEMENT bld (#PCDATA|tld|ind|trd|trdgrp)*>
 <!ATTLIST bld
 	lok CDATA #REQUIRED
+	mrk ID #IMPLIED
 >
 
 <!-- [adm] Administraj informoj estu por redaktado. Ili povus
