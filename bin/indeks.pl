@@ -693,9 +693,12 @@ sub INXLIST {
 	print "<dt>lingvoindeksoj\n<dd>";
 	for $lng (sort keys %tradukoj) 
 	{
-	    $lng=lc($lng);
-	    my $ln=substr($lng,0,5);
-	    print "<a href=\"lx_${ln}_$unua_litero{$ln}.html\">";
+	    if (-f "$dir/../smb/$lng.jpg") {
+		print "<img src=\"../smb/$lng.jpg\" alt=\"$lng\"> ";
+	    } else {
+		print "<img src=\"../smb/xx.jpg\" alt = \"$lng\"> ";
+	    }
+	    print "<a href=\"lx_${lng}_$unua_litero{$lng}.html\">";
 	    print "$lingvoj{$lng}</a><br>\n";
 	};
     };

@@ -71,12 +71,15 @@ for $dos (@files) {
 	$teksto = join('',<IN>);
 	
 	# elprenu la artikolan strukturon (chion antauan kaj postan ignoru)
-	if ($teksto =~ /(<art[^>]*>.*<\/art\s*>)/si) {
-	    #$art = $1;
+	$teksto =~ s/^.*(<art[^>]*>.*<\/art\s*>).*$/$1/si
+	    or warn "Ne trovis artikolan parton en $dos\n";
 	
-	    # skribu ghin en la vortaron
-	    print OUT "$1\n\n";
-	};
+	# anstatauigu CVS-Id per dosiernomo (= marko)
+	$teksto =~ s/\044Id:\s+(.*?)\.xml,v\s+[^\044]+\044/$1/si
+	    or warn "Ne trovis \$Id$ en $dos\n";
+
+	# skribu la tekston en la vortaron
+	print OUT "$teksto\n\n";
 
 	# fermu
 	close IN;

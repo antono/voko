@@ -1,6 +1,8 @@
 #!/usr/bin/perl -w
 #
-
+# voku ekz.
+#   xml2inx.pl [-v] xml > sgm/indekso.xml
+#
 ################# komenco de la programo ################
 
 use XML::Parser;
@@ -19,6 +21,7 @@ die "Ne ekzistas dosierujo \"$dos\""
 
 $radiko='';
 $fako=0;
+$lingvo='';
 
 # indeks-komencon skribu
 print '<?xml version="1.0" encoding="UTF-8"?>';
@@ -35,7 +38,7 @@ my $parser = new XML::Parser(ParseParamEnt => 1,
 opendir DIR,$dos;
 $letter = '';
 for $file (sort readdir(DIR)) {
-    if (-f "$dos/$file") {
+    if ((-f "$dos/$file") and ("$dos/$file" =~ /\.xml$/)) {
 	# montru progreson...
 	if ($verbose and (substr($file,0,1) ne $letter)) {
 	    $letter = substr($file,0,1);
@@ -83,13 +86,12 @@ sub start_handler {
 	$el eq 'art' or
 	$el eq 'kap' or
 	$el eq 'drv' or
-	$el eq 'trd' or
 	$el eq 'ref' 
 	)
     {
 	$attr = attr_str(@attrs);
 	print "<$el$attr>";
-    } 
+    }
     elsif ( $el eq 'tld' and 
 	    ($xp->in_element('kap') or
 	     $xp->in_element('ref'))
@@ -111,6 +113,19 @@ sub start_handler {
     {
 	$fako = 1;
 	print "<uzo>";
+    }
+    elsif ( $el eq 'trdgrp' )
+    {
+	$lingvo = get_attr('lng',@attrs); # memoru lingvon
+    }
+    elsif ( $el eq 'trd' ) 
+    {
+	if ($xp->in_element('trdgrp')) {
+	    $attr = " lng=\"$lingvo\""; # la lingvo venas de trdgrp 
+	} else {
+	    $attr = attr_str(@attrs);   # la lingvo estas en atributo
+	}
+	print "<$el$attr>";	
     };
 
     $radiko = '' if ($el eq 'rad');
@@ -133,6 +148,10 @@ sub end_handler {
     {
 	print "</uzo>\n";
 	$fako=0;
+    }
+    elsif ($el eq 'trdgrp') 
+    {
+	$lingvo = '';
     }
 
 }

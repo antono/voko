@@ -360,6 +360,34 @@ sub rim_ { print "</span>"};
 sub klr  { print "<span class=klr>" };
 sub klr_ { print "</span>" };
 
+sub trdgrp {
+    my $xp = shift;
+    shift; # ignoru el
+    my $lng = get_attr('lng',@_);
+    my $class;
+
+    if ($xp->in_element('rim')) {
+	$class = 'rimtrd';
+    } elsif ($xp->in_element('dif')) {
+	$class = 'diftrd';
+    } elsif ($xp->in_element('klr')) {
+	$class = 'klrtrd';
+    } else {
+	$class = 'trd';
+    };
+
+    if ($class eq 'trd') {
+	print "<br><span class=$class>";
+	if ($lng_simboloj) {
+	    print "<img src=\"$smb_dosierujo/$lng.jpg\" alt=\"$lng:\"> ";
+	} else {
+	    print "<i>$lng:</i> ";
+	};
+    } else {
+	print "<span class=$class>";
+    };
+};
+sub trdgrp_ { print "</span>" };
 
 sub trd  { 
     my $xp = shift;
@@ -367,7 +395,9 @@ sub trd  {
     my $lng = get_attr('lng',@_);
     my $class;
 
-    if ($xp->in_element('rim')) {
+    if ($xp->in_element('trdgrp')) {
+	$class = 'trdgrptrd';
+    } elsif ($xp->in_element('rim')) {
 	$class = 'rimtrd';
     } elsif ($xp->in_element('dif')) {
 	$class = 'diftrd';
