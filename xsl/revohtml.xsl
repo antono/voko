@@ -351,7 +351,7 @@ modifita de Wolfram Diestel
   </xsl:choose>
 </xsl:template>
 
-<xsl:template match="dif/refgrp|dif/ref">
+<xsl:template match="dif/refgrp|dif/ref|rim/refgrp|rim/ref">
   <xsl:if test="@tip='dif'">
     <img src="{$smbdir}/{@tip}.gif">
       <xsl:attribute name="alt">
@@ -632,7 +632,7 @@ modifita de Wolfram Diestel
 
 <xsl:template match="aut" mode="fontoj">
   <xsl:apply-templates mode="fontoj"/>
-  <xsl:if test="following-sibling::vrk">
+  <xsl:if test="following-sibling::vrk|following-sibling::lok">
     <xsl:text>: </xsl:text>
   </xsl:if>
 </xsl:template>
