@@ -91,7 +91,7 @@ $/ = "\n";
 #$inx =~ s/<art\s+mrk="([^\"]*)"\s*>(.*?)<\/art\s*>/artikolo($1,$2)/sieg;
 
 # kreu la Javaskripto-dosierojn
-&javaskriptoDosieroj();
+# &javaskriptoDosieroj();
 
 # kreu la html-dosierojn
 
@@ -523,7 +523,7 @@ sub LINGVINX {
     select OUT;
     index_header("lingvoindekso: $lingvoj{$lng}");
     index_buttons();
-    print "<a href=\"lx_${lng}.html\">Ser&#x0109;o</a> ";
+    if ($indeksoj=~/jx/) { print "<a href=\"lx_${lng}.html\">Ser&#x0109;o</a> "};
     index_letters($lingvoj{$lng},"lx_${lng}_",$lit,$literoj,
 		 [map {letter_asci_nls($_,$lng)} @$literoj]);
 #    print "<h1>$lingvoj{$lng} $lit...</h1>\n";
@@ -1503,9 +1503,11 @@ sub jx_lng_js {
   select OUT;
   &lx_unua_parto($lng,\@literoj);
   close OUT;
+
   open IN,"<$tmp_file" or die "Ne povis legi $tmp_file: $!\n";
   while (<IN>) { $unuaParto .= $_; }
   close IN;
+
   $unuaParto =~ s/[\r\n\f]/ /g;
   $unuaParto =~ s/'/\\'/g;
   #select STDOUT; print $unuaParto;
@@ -1517,6 +1519,7 @@ sub jx_lng_js {
   $listoNomo = 'Eo';
   print "$listoNomo=new Array();";
   close OUT;
+
   select STDOUT;
   diff_mv($tmp_file,$target_file,$verbose);
 
@@ -1610,7 +1613,7 @@ sub lx_unua_parto {
   my ($lng,$literoj) = @_;
   index_header("lingvoindekso: $lingvoj{$lng}");
   index_buttons();
-  print "<b>Ser&#x0109;o</b> ";
+  if ($indeksoj=~/jx/) { print "<b>Ser&#x0109;o</b> "};
   index_letters($lingvoj{$lng},"lx_${lng}_",'',$literoj,
     [map {letter_asci_nls($_,$lng)} @$literoj]);
   #referencoj al Javaskripto-dosieroj.
@@ -1663,3 +1666,9 @@ sub lx_lng_html {
   select STDOUT;
   diff_mv($tmp_file,$target_file,$verbose);
 }
+
+
+
+
+
+

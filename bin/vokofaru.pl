@@ -89,6 +89,10 @@ $command="indeks.pl $verbose $agord_dosiero";
 print "$command\nTIME:",`date`,"\n" if ($verbose);
 open LOG, "$command|"; while (<LOG>) { print }; close LOG;
 
+#$command="indeks_js.pl $verbose $agord_dosiero";
+#print "$command\nTIME:",`date`,"\n" if ($verbose);
+#open LOG, "$command|"; while (<LOG>) { print }; close LOG;
+
 $command="tajperaroj.pl $verbose -H $xml_pado -c $agord_dosiero > $vortaro_pado/inx/eraroj.html";
 print "$command\nTIME:",`date`,"\n" if ($verbose);
 open LOG, "$command|"; while (<LOG>) { print }; close LOG;
