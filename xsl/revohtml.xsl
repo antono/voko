@@ -99,6 +99,9 @@ modifita de Wolfram Diestel
 
 <xsl:template name="flagoj">
   <xsl:call-template name="flago">
+    <xsl:with-param name="lng">bg</xsl:with-param>
+  </xsl:call-template>
+  <xsl:call-template name="flago">
     <xsl:with-param name="lng">cs</xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="flago">
@@ -244,15 +247,23 @@ modifita de Wolfram Diestel
   <cite class="rimekz"><xsl:apply-templates/></cite>
 </xsl:template>
 
-<xsl:template match="rim">
+<xsl:template match="rim" name="rim">
   <span class="rim">
-    <xsl:text>RIM.</xsl:text>
+    <b>
+    <xsl:text>Rim.</xsl:text>
     <xsl:if test="@num"> 
       <xsl:text> </xsl:text>
       <xsl:value-of select="@num"/>
     </xsl:if>
     <xsl:text>:</xsl:text>
+    </b>
     <xsl:apply-templates/></span>
+</xsl:template>
+
+<xsl:template
+  match="art/rim|subart/rim|drv/rim|subdrv/rim|snc/rim|subsnc/rim">
+  <xsl:call-template name="rim"/>
+  <br/>
 </xsl:template>
 
 <xsl:template match="refgrp">
@@ -280,7 +291,19 @@ modifita de Wolfram Diestel
 </xsl:template>
 
 <xsl:template match="dif/refgrp|dif/ref">
-  <xsl:apply-templates/>
+  <xsl:variable name="file" select="substring-before(@cel,'.')"/>
+  <xsl:choose>
+    <xsl:when test="$file">
+      <a href="{$file}.html#{$file}.{substring-after(@cel,'.')}">
+      <xsl:apply-templates/>
+      </a>
+    </xsl:when>
+    <xsl:otherwise>
+      <a href="{@cel}.html">
+      <xsl:apply-templates/>
+      </a>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <xsl:template match="sup|fnt|ofc">
@@ -371,6 +394,10 @@ modifita de Wolfram Diestel
 </xsl:template>  
 
 <xsl:template match="art" mode="tradukoj">
+  <xsl:call-template name="lingvo">
+    <xsl:with-param name="lng">bg</xsl:with-param>
+    <xsl:with-param name="lingvo">bulgare</xsl:with-param>
+  </xsl:call-template>
   <xsl:call-template name="lingvo">
     <xsl:with-param name="lng">cs</xsl:with-param>
     <xsl:with-param name="lingvo">&#x0109;e&#x0125;e</xsl:with-param>
@@ -473,6 +500,8 @@ modifita de Wolfram Diestel
   <xsl:text>~</xsl:text>
 </xsl:template>
 
+<xsl:template match="klr[@tip='ind']" mode="tradukoj"/>
+
 <!-- fontoj -->
 
 <xsl:template match="fnt" mode="fontoj">
@@ -494,7 +523,7 @@ modifita de Wolfram Diestel
     </xsl:otherwise>
   </xsl:choose>
   <xsl:apply-templates
-    select="*[not (self::text() and (position()=1 or position=last()))]"/>
+    select="node()[not (self::text() and (position()=1 or position()=last()))]"/>
   <xsl:variable name="fnt"
     select="normalize-space(text()[position()=last()])"/>
   <xsl:choose>

@@ -252,6 +252,10 @@
 
 <xsl:template match="art" mode="tradukoj">
   <xsl:call-template name="lingvo">
+    <xsl:with-param name="lng">bg</xsl:with-param>
+    <xsl:with-param name="lingvo">bulgare</xsl:with-param>
+  </xsl:call-template>
+  <xsl:call-template name="lingvo">
     <xsl:with-param name="lng">cs</xsl:with-param>
     <xsl:with-param name="lingvo">&#x0109;e&#x0125;e</xsl:with-param>
   </xsl:call-template>
