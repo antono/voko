@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl 
 #
 # Programm zum Spiegeln von Verzeichnissen via FTP
 #
@@ -180,7 +180,13 @@ unlink ($mirrordat);
 rename ($mirrortmp,$mirrordat);
 
 # und Batch-Datei vorsichtshalber sichern
-rename ($batchfile, "$logdir/mirror.batch.".`date +%Y%m%d_%H%M%S`);
+if (-s $batchfile) {
+	my $date=`date +%Y%m%d_%H%M%S`;
+	$date =~ s/\s*$//;
+	rename ($batchfile,"$logdir/mirror.batch.$date");
+} else {
+	unlink $batchfile;
+}
 
 ################################################################
 
@@ -218,10 +224,7 @@ sub ToDo_Liste
     my $eintrag = "$dir$config{'slash'}$dir_eintrag";
     my ($size,$mtime) = (stat($eintrag))[7,9];
 
-    unless ($laenge{$eintrag}) {
-	warn "Laenge von \"$eintrag\" nicht gefunden.\n";
-    }
-
+    # Wenn Datei verändert oder neu
     if ((-f _) && ( ($laenge{$eintrag} ne $size) 
 		    || ($datum{$eintrag} != $mtime) )) {
       push (@mirror, "$eintrag");
