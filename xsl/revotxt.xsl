@@ -33,7 +33,7 @@ transform-reguloj
 <!-- xsl:variable name="cssdir">../stl</xsl:variable -->
 <!-- xsl:variable
 name="redcgi">/cgi-bin/vokomail.pl?art=</xsl:variable -->
-<xsl:variable name="bibliografio">../dok/bibliogr.xml</xsl:variable>
+<xsl:variable name="bibliografio">../cfg/bibliogr.xml</xsl:variable>
 <xsl:variable name="bibliogrhtml">../dok/bibliogr.xml</xsl:variable>
 <xsl:variable name="revo">/home/revo/revo</xsl:variable>
 
