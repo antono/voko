@@ -3,3 +3,5 @@
 <!ENTITY KompLeks "http://purl.org/NET/vokoURL/KompLeks">
 <!ENTITY Bib "../dok/bibliogr.html#">
 <!ENTITY Monato "http://purl.org/NET/vokoURL/Monato">
+<!ENTITY Viki "http://eo.wikipedia.org/wiki">
+

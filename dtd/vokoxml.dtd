@@ -120,7 +120,7 @@ kaj ekzemplojn, sed ĝi ne havas propran difinon. Ĝi aperas ene
 de kapvorto, ĉar ĝi ja estas ĝia variaĵo.
 -->
 
-<!ELEMENT var (kap,(uzo,klr,ekz,rim)*)>
+<!ELEMENT var (kap,(uzo|klr|ekz|rim)*)>
 
 <!-- [subdrv] Subderivaĵo. Ĝi grupigas plurajn proksimajn sencojn, se la
 priskribita vorto havas tre multajn sencojn. Tio povas
@@ -149,6 +149,7 @@ Ili estas nombrataj per a), b), ... -->
 <!ELEMENT subsnc (%priskribaj-elementoj;)*>
 <!ATTLIST subsnc
 	mrk ID #IMPLIED
+        ref CDATA #IMPLIED
 >
 
 <!-- [sncref] Referenco al alia senco. Tiu elemento estas anstatauigata

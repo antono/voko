@@ -460,7 +460,9 @@
 <!ENTITY c_Jo "&#x0401;">
 <!ENTITY c_W "&#x040E;">
 <!ENTITY c_Ib "&#x0406;">
-
+<!ENTITY c_Gu "&#x0490;">
+<!ENTITY c_Jeu "&#x0404;">
+<!ENTITY c_Ji "&#x0407;">
 
 <!ENTITY c_ju "&#x044e;">
 <!ENTITY c_a "&#x0430;">
@@ -498,7 +500,9 @@
 <!ENTITY c_jo "&#x0451;">
 <!ENTITY c_w "&#x045E;">
 <!ENTITY c_ib "&#x0456;">
-
+<!ENTITY c_gu "&#x0491;">
+<!ENTITY c_jeu "&#x0454;">
+<!ENTITY c_ji "&#x0457;">
 
 <!-- chehhaj, slovakaj kaj polaj -->
 <!ENTITY Ccaron "&#x010c;">
@@ -629,4 +633,57 @@
 <!ENTITY wcirc  "&#x0175;">
 <!ENTITY Yuml   "&#x0178;">
 <!ENTITY yuml   "&#x00ff;">
+
+<!-- arabaj -->
+
+<!ENTITY &alif;     "&#x627;"> <!-- AØ§ -->
+<!ENTITY &ba;       "&#x628;"> <!-- AØ¨ -->
+<!ENTITY &ta;       "&#x62A;"> <!-- AØª -->
+<!ENTITY &tha;      "&#x62B;"> <!-- AØ« -->
+<!ENTITY &jim;      "&#x62C;"> <!-- AØ¬ -->
+<!ENTITY &Ha;       "&#x62D;"> <!-- AØ­ -->
+<!ENTITY &hha;      "&#x62E;"> <!-- AØ¬ -->
+<!ENTITY &dal;      "&#x62F;"> <!-- AØ¯ -->
+<!ENTITY &dhal;     "&#x630;"> <!-- AØ° -->
+<!ENTITY &ra;       "&#x631;"> <!-- AØ± -->
+<!ENTITY &zin;      "&#x632;"> <!-- AØ² -->
+<!ENTITY &sin;      "&#x633;"> <!-- AØ³ -->
+<!ENTITY &shin1;    "&#x634;"> <!-- AØ´ -->
+<!ENTITY &Sad;      "&#x635;"> <!-- AØµ -->
+<!ENTITY &Dad;      "&#x636;"> <!-- AØ¶ -->
+<!ENTITY &Ta;       "&#x637;"> <!-- AØ· -->
+<!ENTITY &Za;       "&#x638;"> <!-- AØ¸ -->
+<!ENTITY &ayn;      "&#x639;"> <!-- AØ¹ -->
+<!ENTITY &ghayn;    "&#x63A;"> <!-- AØº -->
+<!ENTITY &fa;       "&#x641;"> <!-- AÙ201 -->
+<!ENTITY &qaf;      "&#x642;"> <!-- AÙ202 -->
+<!ENTITY &kaf1;     "&#x643;"> <!-- AÙ203 -->
+<!ENTITY &lam;      "&#x644;"> <!-- AÙ204 -->
+<!ENTITY &mim;      "&#x645;"> <!-- AÙ205 -->
+<!ENTITY &nun1;     "&#x646;"> <!-- AÙ206 -->
+<!ENTITY &ha;       "&#x647;"> <!-- AÙ207 -->
+<!ENTITY &waw;      "&#x648;"> <!-- AÙ210 -->
+<!ENTITY &ya;       "&#x64A;"> <!-- AÙ212 -->
+
+<!ENTITY &fatha;    "&#x64E;"> <!-- AÙ -->
+<!ENTITY &kasra;    "&#x650;"> <!-- AÙ220 -->
+<!ENTITY &damma;    "&#x64F;"> <!-- AÙ -->
+<!ENTITY &fatha_alif; "&#x64E;&#x627;"> <!-- AÙ330A§ -->
+<!ENTITY &kasra_ya; "&#x650;&#x64A;"> <!-- AÙ220AÙ212 -->
+<!ENTITY &damma_waw; "&#x64F;&#x648;"> <!-- AÙ331210 -->
+<!ENTITY &fathatan; "&#x64B;"> <!-- AÙ213 -->
+<!ENTITY &kasratan; "&#x64D;"> <!-- AÙ215 -->
+<!ENTITY &dammatan; "&#x64C;"> <!-- AÙ214 -->
+<!ENTITY &sukun;    "&#x652;"> <!-- AÙ222 -->
+<!ENTITY &shadda;   "&#x651;"> <!-- AÙ221 -->
+
+<!ENTITY &alif_maqsura; "&#x649;"> <!-- AÙ211 -->
+<!ENTITY &ta_marbuta; "&#x629;"> <!-- AØ© -->
+<!ENTITY &alif_hamza_sure; "&#x623;"> <!-- AØ£ -->
+<!ENTITY &alif_hamza_sube; "&#x625;"> <!-- AØ? -->
+<!ENTITY &alif_madda; "&#x622;"> <!-- AØ¢ -->
+<!ENTITY &alif_wasla; "&#x671;"> <!-- AÙ± -->
+<!ENTITY &ya_hamza; "&#x626;"> <!-- AØ¦ -->
+<!ENTITY &waw_hamza; "&#x624;"> <!-- AØ¤ -->
+<!ENTITY &hamza;    "&#x621;"> <!-- AØ¡ -->
 
