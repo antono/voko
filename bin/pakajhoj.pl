@@ -39,7 +39,7 @@ unless ($config{'lasta_parta'}) {
 }
 
 @nun = gmtime(time());
-$nunstr = sprintf('%4d-%02d-%02d',$nun[5]+1900,$nun[4],$nun[3]);
+$nunstr = sprintf('%4d-%02d-%02d',$nun[5]+1900,$nun[4]+1,$nun[3]);
 
 if (not $config{'lasta_kompleta'} or 
     (time() - $config{'lasta_kompleta'}) > $kompleta) {
@@ -77,8 +77,8 @@ if (not $config{'lasta_kompleta'} or
 
 
     @tiam = gmtime( $config{'lasta_parta'} );
-    $tiamstr = sprintf('%4d-%02d-%02d',$tiam[5]+1900,$tiam[4],$tiam[3]);
-    $dato = sprintf('%4d-%02d-%02d %02d:%02d:%02d',$tiam[5]+1900,$tiam[4],
+    $tiamstr = sprintf('%4d-%02d-%02d',$tiam[5]+1900,$tiam[4]+1,$tiam[3]);
+    $dato = sprintf('%4d-%02d-%02d %02d:%02d:%02d',$tiam[5]+1900,$tiam[4]+1,
 		    $tiam[3],$tiam[2],$tiam[1],$tiam[0]);
     $config{'lasta_parta'} = time();
 
