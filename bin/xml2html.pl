@@ -119,7 +119,7 @@ sub vortaro {
     print "<html>\n<head>\n";
     print "<meta http-equiv=\"Content-Type\""
 	." content=\"text/html; charset=UTF-8\">\n";
-    print "<link titel=\"artikolo-stilo\" type=\"text/css\""
+    print "<link title=\"artikolo-stilo\" type=\"text/css\""
 	." rel=stylesheet href=\"$stl_dosiero\">\n";
     print "<title>$title</title>\n</head>\n";
     print "<body>\n";
@@ -151,13 +151,18 @@ sub art {
 	$marko = $1;
     }
 
+    $art_finished=0;
     $snc_cnt=0;
     $subdrv_cnt=0;
     $subart_cnt=0;
     $head_level=2;
 };
 sub art_ {
-    if ($subart_cnt) { print "</dl>" };
+    if ($subart_cnt || $snc_cnt) { 
+	print "</dl>" unless ($art_finished);
+	$subart_cnt=0;	
+	$snc_cnt=0; 
+    };
 };
 
 sub kap {
@@ -209,13 +214,15 @@ sub tld {
 sub subart {
     $subart_cnt++;
     $snc_cnt=0;
+    $subart_finished=0;
 
     if ($subart_cnt == 1) { print "<dl compact>\n"; };
     print "<dt>$romanaj_nombroj[$subart_cnt].\n<dd>";
 }
 sub subart_ {
  if ($snc_cnt) {
-	print "</dl>";
+	print "</dl>" unless ($subart_finished);
+	$snc_cnt=0;
     };
 }
 
@@ -237,6 +244,8 @@ sub drv_ {
     $head_level--;
     if ($subdrv_cnt || $snc_cnt) {
 	print "</dl>" unless ($drv_finished);
+	$subdrv_cnt=0;
+	$snc_cnt=0;
     };
 }
 
@@ -251,6 +260,7 @@ sub subdrv {
 sub subdrv_ {
     if ($snc_cnt) {
 	print "</dl>";
+	$snc_cnt=0;
     };
 };
 
@@ -273,6 +283,7 @@ sub snc {
 sub snc_ {
     if ($subsnc_cnt) {
 	print "</dl>";
+	$subsnc_cnt=0;
     };
 };
 
@@ -376,13 +387,23 @@ sub trdgrp {
     my $lng = get_attr('lng',@_);
     my $class;
 
-    # se la traduko rilatas al drv, jam metz </dl>
+    # se la traduko rilatas al drv, art, subart jam metu </dl>
     # atentu, ke tio nur funkcias, se la tradukoj
     # chiam venas fine
     if ($xp->in_element('drv')) {
 	if (($subdrv_cnt || $snc_cnt) && !($drv_finished)) {
 	    print "</dl>\n";
 	    $drv_finished = 1;
+	}
+    } elsif ($xp->in_element('subart')) {
+	if (($drv_cnt || $snc_cnt) && !($subart_finished)) {
+	    print "</dl>\n";
+            $subart_finished = 1;
+	}
+    } elsif ($xp_>in_element('art')) {
+        if (($drv_cnt || $snc_cnt || $subart_cnt) && !($art_finished)) {
+            print "</dl>\n";
+            $art_finished = 1;
 	}
     }
 
@@ -423,7 +444,17 @@ sub trd  {
 	    print "</dl>\n";
 	    $drv_finished = 1;
 	}
-    }
+    }  elsif ($xp->in_element('subart')) {
+        if (($drv_cnt || $snc_cnt) && !($subart_finished)) {
+            print "</dl>\n";
+            $subart_finished = 1;
+	}
+    } elsif ($xp_>in_element('art')) {
+        if (($drv_cnt || $snc_cnt || $subart_cnt) && !($art_finished)) {
+            print "</dl>\n";
+            $art_finished = 1;
+	}
+    }    
 
     if ($xp->in_element('trdgrp')) {
 	$class = 'trdgrptrd';
