@@ -998,9 +998,7 @@ sub INX_KTP {
 	    my $href=shift @paghoj;
 	    my $title=shift @paghoj;
 	    print 
-		"<a href=\"$href\" target=\"",
-		($href=~/^http:/)? "_new" : "precipa",
-		"\">$title</a><br>\n";
+		"<a href=\"$href\">$title</a><br>\n";
 	}
     }
     

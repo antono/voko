@@ -40,7 +40,7 @@ $vokomail_url = "http://www.uni-leipzig.de/cgi-bin/vokomail.pl";
 $revo_url     = "http://purl.oclc.org/NET/voko/revo";
 
 # programoj
-$xmlcheck     = '/usr/bin/rxp -V -s -e';
+$xmlcheck     = '/usr/bin/rxp -V -s';
 $cvs          = '/usr/bin/cvs';
 $sendmail     = '/usr/lib/sendmail -t -i';
 $patch        = '/usr/bin/patch';
@@ -134,10 +134,10 @@ close MAIL;
 send_reports();
 send_newarts_report();
 
+$filename = `date +%Y%m%d_%H%M%S`;    
+
 # arkivigu la poshtdosieron
 if ($mail_file eq $mail_local) {
-
-    $filename = `date +%Y%m%d_%H%M%S`;  
     print "\nshovas $mail_local al $old_mail/$filename\n" if ($verbose);
     `mv $mail_local $old_mail/$filename`;
 }
@@ -230,7 +230,9 @@ sub process_ent {
         if ((($entity->head->get('subject')
                  =~ /Microsoft.*Internet.*lorer/s) 
                 or ($entity->head->get('content-type')
-		 =~  /POSTDATA\.ATT/s))
+		 =~  /POSTDATA\.ATT/s)
+		or ($entity->head->get('subject')
+		 =~ /Form\s+posted\s+from\s+Opera/s))
                 and ($parttxt =~ /^\s*komando=redakto&/)
                 or ($entity->mime_type
                     =~ m|application/x-www-form-urlencoded|)) { 
@@ -251,7 +253,7 @@ sub process_ent {
 
 	# trairu chiujn partojn
 	for ($i = 0; $i < $num_parts; $i++) {
-	    my $part = $entity->part($i);
+	    my $part = $entity->parts($i);
 	    print $part->mime_type, "\n" if ($debug);
 
 	    # elprenu la tekston
