@@ -803,13 +803,11 @@ pluevoluigita de Wolfram Diestel
 
 <xsl:template match="trd[@lng]|trdgrp" mode="tradukoj">
   <span class="trdeo">
-  <!-- rigardu, al kiu subarbo apartenas la traduko,
-    KOREKTU: se la traduko apartenas rekte al art okazas
-             reeniro de la antaua sxablono -->
+  <!-- rigardu, al kiu subarbo apartenas la traduko -->
   <a class="trdeo" href="#{ancestor::node()[@mrk][1]/@mrk}">
   <xsl:apply-templates 
     select="ancestor::node()[self::drv or self::snc or self::subsnc or
-      self::subdrv or self::subart or self::art or self::ekz or self::bld][1]" mode="tradukoj"/>:</a>
+      self::subdrv or self::subart or self::art or self::ekz or self::bld][1]" mode="trdkap"/>:</a>
   </span>
   <xsl:text> </xsl:text>
   <span class="trdnac">
@@ -825,19 +823,25 @@ pluevoluigita de Wolfram Diestel
   </xsl:choose>
 </xsl:template>
 
-<xsl:template match="drv" mode="tradukoj">
-  <xsl:apply-templates select="kap" mode="tradukoj"/>
+<xsl:template match="trdgrp/trd" mode="tradukoj">
+  <xsl:apply-templates mode="tradukoj"/>
 </xsl:template>
 
-<xsl:template match="subdrv" mode="tradukoj">
-  <xsl:apply-templates select="ancestor::drv/kap" mode="tradukoj"/>
+<xsl:template match="klr[@tip='ind']" mode="tradukoj"/>
+
+<xsl:template match="art|drv" mode="trdkap">
+  <xsl:apply-templates select="kap" mode="trdkap"/>
+</xsl:template>
+
+<xsl:template match="subdrv" mode="trdkap">
+  <xsl:apply-templates select="ancestor::drv/kap" mode="trdkap"/>
   <xsl:text> </xsl:text>
   <xsl:number format="A"/>
 </xsl:template>
 
-<xsl:template match="snc" mode="tradukoj">
+<xsl:template match="snc" mode="trdkap">
   <xsl:apply-templates select="ancestor::node()[self::drv or
-    self::art][1]/kap" mode="tradukoj"/>
+    self::art][1]/kap" mode="trdkap"/>
     <xsl:choose>
       <xsl:when test="@ref">
         <xsl:text> </xsl:text>
@@ -854,8 +858,8 @@ pluevoluigita de Wolfram Diestel
     </xsl:choose>
 </xsl:template>
 
-<xsl:template match="subsnc" mode="tradukoj">
-  <xsl:apply-templates select="ancestor::snc" mode="tradukoj"/>
+<xsl:template match="subsnc" mode="trdkap">
+  <xsl:apply-templates select="ancestor::snc" mode="trdkap"/>
   <xsl:choose>
     <xsl:when test="@num">
       <xsl:value-of select="@num"/>
@@ -866,51 +870,47 @@ pluevoluigita de Wolfram Diestel
   </xsl:choose>
 </xsl:template>
 
-<xsl:template match="subart" mode="tradukoj">
-  <xsl:apply-templates select="ancestor::art/kap" mode="tradukoj"/>
+<xsl:template match="subart" mode="trdkap">
+  <xsl:apply-templates select="ancestor::art/kap" mode="trdkap"/>
   <xsl:text> </xsl:text>
   <xsl:number format="I"/>
 </xsl:template>
 
-<xsl:template match="ekz|bld" mode="tradukoj">
-  <xsl:apply-templates select="ind" mode="tradukoj"/>
+<xsl:template match="ekz|bld" mode="trdkap">
+  <xsl:apply-templates select="ind" mode="trdkap"/>
 </xsl:template>
 
-<xsl:template match="kap" mode="tradukoj">
-  <xsl:apply-templates select="tld|rad|text()" mode="tradukoj"/>
+<xsl:template match="kap" mode="trdkap">
+  <xsl:apply-templates select="tld|rad|text()" mode="trdkap"/>
 </xsl:template>
 
-<xsl:template match="ind" mode="tradukoj">
+<xsl:template match="ind" mode="trdkap">
   <xsl:choose>
     <xsl:when test="mll">
-      <xsl:apply-templates select="mll" mode="tradukoj"/>	
+      <xsl:apply-templates select="mll" mode="trdkap"/>	
     </xsl:when>
     <xsl:otherwise>
-      <xsl:apply-templates mode="tradukoj"/>
+      <xsl:apply-templates mode="trdkap"/>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
 
-<xsl:template match="ind/mll" mode="tradukoj">
+<xsl:template match="ind/mll" mode="trdkap">
   <xsl:if test="@tip='fin' or @tip='mez'">
     <xsl:text>...</xsl:text>
   </xsl:if>
-  <xsl:apply-templates mode="tradukoj"/>
+  <xsl:apply-templates mode="trdkap"/>
   <xsl:if test="@tip='kom' or @tip='mez'">
     <xsl:text>...</xsl:text>
   </xsl:if>
 </xsl:template>
 
-<xsl:template match="trdgrp/trd" mode="tradukoj">
-  <xsl:apply-templates mode="tradukoj"/>
-</xsl:template>
 
-<xsl:template match="tld" mode="tradukoj">
+<xsl:template match="tld" mode="trdkap">
   <xsl:value-of select="@lit"/>
   <xsl:text>~</xsl:text>
 </xsl:template>
 
-<xsl:template match="klr[@tip='ind']" mode="tradukoj"/>
 
 <!-- ######################### fontoj ########################## -->
 

@@ -83,6 +83,9 @@ kreita de Wolfram Diestel
 <xsl:template match="aut">
   <xsl:apply-templates/>
   <xsl:choose>
+    <xsl:when test="following-sibling::*[1][self::aut]">
+      <xsl:text>; </xsl:text>
+    </xsl:when>
     <xsl:when test="following-sibling::*[1][self::trd]">
       <xsl:text>, </xsl:text><br/>
     </xsl:when>

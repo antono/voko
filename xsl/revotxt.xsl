@@ -119,6 +119,7 @@
 </xsl:template>
 
 <xsl:template match="sncref">
+  <xsl:variable name="ref" select="(@ref|ancestor::ref/@cel)[last()]"/>
   /<xsl:apply-templates mode="number-of-ref-snc" select=
     "document(concat(substring-before($ref,'.'),'.xml'),/)//node()[@mrk=$ref]"/>/
 </xsl:template>
@@ -356,7 +357,7 @@
   <xsl:call-template name="lingvo">
     <xsl:with-param name="lng">es</xsl:with-param>
     <xsl:with-param name="lingvo">hispane</xsl:with-param>
-  </xsl:call-template>
+  </xsl:call-template> 
   <xsl:call-template name="lingvo">
     <xsl:with-param name="lng">fr</xsl:with-param>
     <xsl:with-param name="lingvo">france</xsl:with-param>
@@ -428,14 +429,14 @@
   <xsl:call-template name="lingvo">
     <xsl:with-param name="lng">tr</xsl:with-param>
     <xsl:with-param name="lingvo">turke</xsl:with-param>
-  </xsl:call-template>
+  </xsl:call-template> 
 </xsl:template>
 
 <xsl:template match="trd[@lng]|trdgrp" mode="tradukoj">
   <strong>
   <xsl:apply-templates 
     select="ancestor::node()[self::drv or self::snc or self::subsnc or
-      self::subdrv or self::subart or self::art or self::ekz][1]" mode="tradukoj"/>:
+      self::subdrv or self::subart or self::art or self::ekz][1]" mode="trdkap"/>:
   </strong>
   <xsl:text> </xsl:text>
   <xsl:apply-templates mode="tradukoj"/>
@@ -449,13 +450,13 @@
   </xsl:choose>
 </xsl:template>
 
-<xsl:template match="drv" mode="tradukoj">
-  <xsl:apply-templates select="kap" mode="tradukoj"/>
+<xsl:template match="art|drv" mode="trdkap">
+  <xsl:apply-templates select="kap" mode="trdkap"/>
 </xsl:template>
 
-<xsl:template match="snc" mode="tradukoj">
+<xsl:template match="snc" mode="trdkap">
   <xsl:apply-templates select="ancestor::node()[self::drv or
-    self::art][1]/kap" mode="tradukoj"/>
+    self::art][1]/kap" mode="trdkap"/>
 
     <xsl:choose>
       <xsl:when test="@ref">
@@ -473,37 +474,37 @@
     </xsl:choose>
 </xsl:template>
 
-<xsl:template match="subsnc" mode="tradukoj">
-  <xsl:apply-templates select="ancestor::snc" mode="tradukoj"/>
+<xsl:template match="subsnc" mode="trdkap">
+  <xsl:apply-templates select="ancestor::snc" mode="trdkap"/>
   <xsl:if test="@num">
     <xsl:value-of select="@num"/>
   </xsl:if>
   <xsl:number format="a"/>
 </xsl:template>
 
-<xsl:template match="subart" mode="tradukoj">
-  <xsl:apply-templates select="ancestor::art/kap" mode="tradukoj"/>
+<xsl:template match="subart" mode="trdkap">
+  <xsl:apply-templates select="ancestor::art/kap" mode="trdkap"/>
   <xsl:text> </xsl:text>
   <xsl:number format="I"/>
 </xsl:template>
 
-<xsl:template match="ekz" mode="tradukoj">
-  <xsl:apply-templates select="ind" mode="tradukoj"/>
+<xsl:template match="ekz" mode="trdkap">
+  <xsl:apply-templates select="ind" mode="trdkap"/>
 </xsl:template>        
 
-<xsl:template match="kap" mode="tradukoj">
-  <xsl:apply-templates select="tld|rad|text()" mode="tradukoj"/>
+<xsl:template match="kap" mode="trdkap">
+  <xsl:apply-templates select="tld|rad|text()" mode="trdkap"/>
 </xsl:template>
 
-<xsl:template match="ind" mode="tradukoj">
-  <xsl:apply-templates mode="tradukoj"/>
+<xsl:template match="ind" mode="trdkap">
+  <xsl:apply-templates mode="trdkap"/>
 </xsl:template>  
 
 <xsl:template match="trdgrp/trd" mode="tradukoj">
   <xsl:apply-templates mode="tradukoj"/>
 </xsl:template>
 
-<xsl:template match="tld" mode="tradukoj">
+<xsl:template match="tld" mode="trdkap">
   <xsl:value-of select="@lit"/>
   <xsl:text>~</xsl:text>
 </xsl:template> 
