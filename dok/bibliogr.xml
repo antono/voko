@@ -30,11 +30,16 @@
 
 <!ENTITY eacute "&#x00e9;"> 
 <!ENTITY iacute "&#x00ed;">
- 
+<!ENTITY Ccaron "&#x010c;">
 ]>
  
 <bibliografio>
 
+  <vrk mll="BazRad">
+    <url>http://www.xs4all.nl/~pilger/breo-al3.htm</url>
+    <aut>Wouter F. Pilger</aut>
+    <tit>Bazaj Radikoj Esperanto-Esperanto</tit>
+  </vrk>
 
   <vrk mll="Bird">
     <aut>Mészáros Béla</aut>
@@ -68,6 +73,11 @@
     <url>ftp://ftp.esperanto.org/publika/tekstoj/</url>
     <aut>L. L. Zamenhof</aut>
     <tit>Esenco kaj Estonteco</tit>
+  </vrk>
+
+  <vrk mll="Ekolud">
+    <url>http://www.uni-leipzig.de/esperanto/texte/bibl/ludoj/ekoludo.html</url>
+    <tit>Ekoludo</tit>
   </vrk>
 
   <vrk mll="F">
@@ -128,7 +138,7 @@
   </vrk>
   
   <vrk mll="Far1">
-    <url>http://www.uni-leipzig.de/esperanto/texte/bibl/faraono/vol1/</url>
+    <url>http://www.uni-leipzig.de/esperanto/texte/bibl/faraono1/</url>
     <aut>B. Prus</aut>
     <trd>K. Bein</trd>
     <tit>La Faraono, vol. 1</tit>
@@ -140,7 +150,7 @@
   </vrk>
 
   <vrk mll="Far2">
-    <url>http://www.uni-leipzig.de/esperanto/texte/bibl/faraono/vol2/</url>
+    <url>http://www.uni-leipzig.de/esperanto/texte/bibl/faraono2/</url>
     <aut>B. Prus</aut>
     <trd>K. Bein</trd>
     <tit>La Faraono, vol. 2</tit>
@@ -152,14 +162,14 @@
   </vrk>
 
   <vrk mll="Far3">
-    <url>http://www.uni-leipzig.de/esperanto/texte/bibl/faraono/vol3/</url>
+    <url>http://www.uni-leipzig.de/esperanto/texte/bibl/faraono3/</url>
     <aut>B. Prus</aut>
     <trd>K. Bein</trd>
     <tit>La Faraono, vol. 3</tit>
     <eld>
       <nom>Esp. Centra Librejo</nom>
       <lok>Parizo</lok>
-      <dat>1927</dat>
+      <dat>1926</dat>
     </eld>
   </vrk>
 
@@ -240,6 +250,17 @@
     </eld>
   </vrk>
 
+  <vrk mll="Kukobak">
+    <url>http://www.uni-leipzig.de/esperanto/texte/bakado.html</url>
+    <aut>Cornelia Rau k.a.</aut>
+    <tit>Kukobakado</tit>
+    <eld>
+      <nom>Wolfram Diestel</nom>
+      <lok>Lepsiko</lok>
+      <dat>1993</dat>
+    </eld>
+  </vrk>
+
   <vrk mll="Lanti">
     <aut>E. Lanti</aut>
     <tit>Vortoj de k-do Lanti</tit>
@@ -271,6 +292,16 @@
     <ald>Fori&gcirc;os - uzu NT anstata&ubreve;e!</ald>   
   </vrk>
 
+  <vrk mll="Malben">
+    <url>http://www.books-reborn.org/broadribb/malbeno/MalbenoKara.pdf</url>
+    <aut>Mary Webb</aut>
+    <trd>Grace Kirkwood</trd>
+    <eld>
+      <nom>Books Reborn</nom>
+      <dat>2000</dat>
+    </eld>
+  </vrk>
+
   <vrk mll="ManPol">
     <aut>Stefan Maul k. a.</aut>
     <tit>Deklingva manlibro pri politiko</tit>
@@ -288,6 +319,17 @@
     <eld>
       <lok>Brno</lok>
       <dat>1990</dat>
+    </eld>
+  </vrk>
+
+  <vrk mll="MkM">
+    <aut>Mihail Bulgakov</aut>
+    <trd>S. Pokrovskij</trd>
+    <tit>La majstro kaj Margarita</tit>
+    <eld>
+      <nom>Sezonoj</nom>
+      <lok>Jekaterinburg</lok>
+      <dat>1991</dat>
     </eld>
   </vrk>
 
@@ -335,6 +377,12 @@
     </eld>
   </vrk>
 
+  <vrk mll="PMEG">
+    <url>http://purl.oclc.org/net/pmeg/</url>
+    <aut>Bertilo Wennergren</aut>
+    <tit>Plena Manlibro de Esperanta Gramatiko</tit>
+  </vrk>
+
   <vrk mll="PV">
     <aut>E. Grosjean-Maupin</aut>
     <tit>Plena Vortaro de Esperanto</tit>
@@ -351,13 +399,19 @@
     <tit>Proverbaro</tit>
   </vrk>
 
+  <vrk mll="RabistFab">
+    <url>http://mujweb.atlas.cz/Kultura/malovec/RABISTA1.HTM</url>
+    <aut>Josef &Ccaron;apek</aut>
+    <tit>La unua rabista fabelo</tit>
+  </vrk>
+
   <vrk mll="Revadoj">
     <aut>Jean-Jacques Rousseau</aut>
     <trd>Andr&eacute; Gilles</trd>
     <tit>La revadoj de soleca promenanto</tit>
     <ald>Franca Esperantisto, kaj. 414 (09/1990) kaj 420 (04/1991)</ald>
     <eld>
-      <nom>Unuigxo Franca por Esperanto, cxe Flandra Esperanto-Ligo</nom>
+      <nom>Unui&gcirc;o Franca por Esperanto, &ccirc;e Flandra Esperanto-Ligo</nom>
     </eld>
   </vrk>
 

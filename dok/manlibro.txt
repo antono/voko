@@ -360,6 +360,16 @@ al aliaj vortoj. Ekzistas diversaj eblaj rilatoj.
  vortojn. (Monata¼o estas samsenca vorto kiel menstruo. Malo de
  konstrui estas detrui.)
 
+<dt>difina
+<dd>Tiu rilato estas uzata, se vorto sinonima al alia, sed
+pli malofta aý evitinda estas difinita per referenco al la 
+pli uzinda vorto, sub kiu troviøas la tuta difino. (En la tezaýro
+difina kaj sinonima referencoj estas traktitaj kiel ekvivalentaj)
+
+<dt>homonima
+<dd>Tiu rilato estas uzata por atentigi pri samforma sed
+alisignifa vorto. (ekz. ero (parteto) kaj ero (tempodaýro)). 
+
 <dt>nespecifita
 <dd>Ofte oni volas referenci al simila aý komparinda vorto, sed
   la rilato ne estas tre strikta (Fari, komparu al krei, konstrui.)
@@ -383,6 +393,12 @@ al aliaj vortoj. Ekzistas diversaj eblaj rilatoj.
 
 <!-- en la artikolo pri konstrui -->
 <ref tip="ant" cel="detru.0i">detrui</ref>
+
+<!-- en la artikolo pri Germanio -->
+<ref tip="dif" cel="german1.0ujo">Germanujo</ref>
+
+<!-- en la artikolo pri "er" -->
+<ref tip="hom" cel="er1.0o">ero <klr>(tempolkalkulo)</klr></ref>
 
 <!-- en la artikolo pri fari -->
 <ref tip="vid" cel="kre.0i">krei</ref>
