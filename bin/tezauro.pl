@@ -219,7 +219,11 @@ sub start_handler {
 	push @{${$xp->current_element()}->{$tip}}, (get_attr('cel',@attrs));
     }
     elsif ($el eq 'tezrad') {
-	${$xp->current_element()}->{'tezrad'} = 1;
+	if ($fak = get_attr('fak',@attrs)) {
+	    ${$xp->current_element()}->{'tezrad'} = $fak;
+        } else {
+	    ${$xp->current_element()}->{'tezrad'} = 1;
+        }
     }
     elsif ($el eq 'uzo') 
     {
@@ -298,8 +302,10 @@ sub merge_nodes {
 
     # kopiu chion krom "mrk" kaj "kap"
     foreach $a (keys %$from) {
-	unless ($a =~ /^mrk|kap$/) {
+	unless ($a =~ /^mrk|kap|tezrad$/) {
 	    push @{$to->{$a}}, @{$from->{$a}};
+	} elsif ($a eq "tezrad") {
+	    $to->{$a} = $from->{$a};
 	}
     }
 
@@ -485,7 +491,7 @@ sub fakroot {
 
     foreach $node (@$list) {
 
-	if (in_list($fako,$node->{'uzo'}) and # vorto apartenas al fako
+	if ((in_list($fako,$node->{'uzo'}) and # vorto apartenas al fako
 	    not (map {  # ne trovighas supernocio de l' fako
 		in_list($fako,$_->{'uzo'})?1:()
 		} @{$node->{'super'}}) and
@@ -494,6 +500,8 @@ sub fakroot {
 		} @{$node->{'malprt'}}) and
 	    ( @{$node->{'sub'}} or # vorto havas subnociojn, do ne estas izolita
 	      @{$node->{'prt'}} )) 
+	    # au la vorto estas markita kiel radiko
+	    or ($node->{'tezrad'} and ($node->{'tezrad'} eq $fako))) 
 	{
 	    push @root,($node);
 	};
@@ -514,7 +522,8 @@ sub root {
 		( @{$node->{'sub'}} or # vorto havas subnociojn, do ne izolita
 		  @{$node->{'prt'}}
 		  )
-	    ) or $node->{'tezrad'}) 
+	     # au la vorto estas markita kiel radiko
+	    ) or ($node->{'tezrad'} and ($node->{'tezrad'} == 1))) 
 	{
 	    push @root,($node);
 	};
@@ -819,9 +828,11 @@ sub create_tz {
 	    warn "AVERTO: $word_mrk estas radiko, sed ne havas ".
 		 "indikon <tezrad/>\n";
 	} else {
-	    $word_mrk =~ tr/./_/;
-	    print "../tez/tz_".$word_mrk.".html;".$word->{'kap'}.";"
-		.($word->{'h'}*$word->{'c'})." \n";
+	    if ($word->{'tezrad'} == 1) {
+		$word_mrk =~ tr/./_/;
+		print "../tez/tz_".$word_mrk.".html;".$word->{'kap'}.";"
+		    .($word->{'h'}*$word->{'c'})." \n";
+	    }
 	}
     }
     close OUT;
