@@ -51,11 +51,9 @@ unless ($nur_indeksoj) {
 	    print ($n++)."$file: " if ($verbose);
 
 	    # konvertu XML->TXT kaj alpendigu al datumdosiero
-	    `$xslbin $dir/$file $xsl > $tmp/$file.html`;
-	    `lynx -dump $tmp/$file.html >> $datfile`;
+	    `$xslbin $dir/$file $xsl | lynx -nolist -dump $tmp/$file.html >> $datfile`;
 	    $len = (-s "$datfile") - $pos;
-	    unlink "$tmp/$file.html";
-	
+	    	
 	    print "[$pos\t$len]\n" if ($verbose);
 	    $file =~ s/\.xml$//;
 	    print INX $file,"\t",b64_encode($pos),"\t",b64_encode($len),"\n";
