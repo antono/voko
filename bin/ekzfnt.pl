@@ -2,7 +2,7 @@
 #
 # voku ekz.
 #   trovufontojn.pl [-v] [-x art.xml | -e "citajho serchenda"] 
-#       [-m ea345] [-c agordodosiero]
+#       [-m ea345] [-c agordodosiero] [-n trovnombro]
 #
 #   metodoj e: ekzakte
 #           a: per String::Approx (per Levenshtein-distanco)
@@ -67,6 +67,9 @@ while (@ARGV) {
     } elsif ($ARGV[0] eq '-c') {
         shift @ARGV;
         $agordo_dosiero = shift @ARGV;
+    } elsif ($ARGV[0] eq '-n') {
+        shift @ARGV;
+        $ekz_trov_max = shift @ARGV;
     } else {
         die "Nevalida komandlinia argumento.\n";
     }
@@ -326,6 +329,8 @@ sub preparu_dos {
        $txt = lat3_cx($txt);
     } elsif ($enc eq 'ch') {
        $txt = ch_cx($txt);
+    } elsif ($enc eq 'cx') {
+       # jam en ordo
     } elsif ($enc eq 'c^') {
        $txt = cteg_cx($txt);
     } elsif ($enc eq '^c') {
@@ -646,6 +651,13 @@ sub lat3_ccirc {
     $vort =~ s/\274/&jcirc;/g;
     $vort =~ s/\376/&scirc;/g;
     $vort =~ s/\375/&ubreve;/g;      
+    return $vort;
+}
+
+sub cx_ccirc {
+    $vort = shift;
+    $vort =~ s/[CcGgHhJjSs]x/&$1circ;/g;
+    $vort =~ s/[Uu]/&$1breve;/g;
     return $vort;
 }
 
