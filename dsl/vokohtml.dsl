@@ -138,9 +138,47 @@
 (define (*ref->url* ref)
   (let ((pos (*string-pos* #\. ref)))
     (if pos
-	(string-append (substring ref 0 pos) ".html#" ref) 
-	(string-append ref ".html"))))
+	(string-append (string-downcase (substring ref 0 pos)) ".html#" ref) 
+	(string-append (string-downcase ref) ".html"))))
   
+; minuskligi signaron
+
+(define upperalpha
+  (list #\A #\B #\C #\D #\E #\F #\G #\H #\I #\J #\K #\L #\M
+        #\N #\O #\P #\Q #\R #\S #\T #\U #\V #\W #\X #\Y #\Z))  
+
+(define loweralpha
+  (list #\a #\b #\c #\d #\e #\f #\g #\h #\i #\j #\k #\l #\m
+        #\n #\o #\p #\q #\r #\s #\t #\u #\v #\w #\x #\y #\z)) 
+
+(define (EQUIVLOWER c a1 a2)
+  (cond ((null? a1) '())
+        ((char=? c (car a1)) (car a2))
+        ((char=? c (car a2)) c)
+        (else (EQUIVLOWER c (cdr a1) (cdr a2)))))
+
+(define (char-downcase c)
+  (EQUIVLOWER c upperalpha loweralpha))     
+
+(define (LOCASE slist)
+  (if (null? slist)
+      '()
+      (cons (char-downcase (car slist)) (LOCASE (cdr slist)))))
+    
+(define (string->list s)
+  (let ((start 0)
+        (len (string-length s)))
+    (let loop ((i start) (l len))
+         (if (= i len)
+             '()
+              (cons (string-ref s i) (loop (+ i 1) l))))))  
+
+(define (list->string x)
+  (apply string x))
+
+(define (string-downcase s)
+  (list->string (LOCASE (string->list s))))     
+
 
 ;*********************************************************************
 ;                           transformreguloj 
@@ -227,7 +265,7 @@
 	  ;  (make empty-element gi: "br"))
           ; kreu novan dosieron por la artikolo
 	  (make entity system-id: 
-		(string-append (attribute-string "mrk") ".html")
+		(string-append (string-downcase (attribute-string "mrk")) ".html")
 		(make element gi: "html"
 		      (make element gi: "head"
 			    (*meta-encoding*)
@@ -487,7 +525,7 @@
 	  ;  (make empty-element gi: "br"))
           ; kreu novan dosieron por la artikolo
 	  (make entity system-id: 
-		(string-append (attribute-string "mrk") ".html")
+		(string-append (string-downcase (attribute-string "mrk")) ".html")
 		(make element gi: "html"
 		      (make element gi: "head"
 			    (*meta-encoding*)
