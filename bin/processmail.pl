@@ -33,6 +33,7 @@ $revoservo = '[Revo-Servo]';
 $signature ="--\nRevo-Servo <revo\@steloj.de>\n"
     ."retposhta servo por redaktantoj de Reta Vortaro.\n";
 
+$vokomail_url = 'http://www.uni-leipzig.de/cgi-bin/vokomail.pl';
 
 ####### start
 
@@ -338,7 +339,7 @@ sub cmd_redakt {
 
     # pri kiu artikolo temas, trovighas en <art mrk="...">
     $teksto =~ /(<art[^>]*>)/s;
-    $1 =~ /mrk="([^\"]*)"/s; #"
+    $1 =~ /mrk="([^\"]*)"/s; 
     my $id = $1;
     print "artikolo: $id\n" if ($verbose);
     $senditajho{'artikolo'} = $id;
@@ -394,8 +395,15 @@ sub cmd_redakt {
 
     # kontrolu, chu la artikolo bazighas sur la aktuala versio
     # de la artikolo, se necese faru "diff"
-
-    # ...
+    my $old_id = get_old_version($art);
+    if ($old_id ne $id) {
+	print "konflikto: nova kaj malnova Id diferencas!\n" if ($verbose);
+	error ("La de vi sendita artikolo ($id) ne havas la saman\n"
+	       ."version kiel la aktuala arkiva ($old_id)!\n"
+	       ."Bonvolu preni aktualan version el la TTTejo\n"
+	       ."($vokomail_url?art=$art)\n");
+	return;
+    }
 
     # checkin
     my $xmlfile="$art.xml";
@@ -486,3 +494,23 @@ sub xml_context {
 
     return '';
 }
+
+get_old_version {
+    my ($art) = @_;
+    my $xmlfile = "$xml_dir/$art.xml";
+
+    # legu la ghisnunan artikolon
+    open XMLFILE, $xmlfile or die "Ne povis legi $xmlfile: $!\n";
+    my $txt = join('',XMLFILE);
+    close XMLFILE;
+
+    # pri kiu artikolo temas, trovighas en <art mrk="...">
+    $txt =~ /(<art[^>]*>)/s;
+    $1 =~ /mrk="([^\"]*)"/s; 
+    my $id = $1;
+    print "malnova artikolo: $id\n" if ($verbose);  
+
+    return $id;
+}
+
+
