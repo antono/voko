@@ -1,9 +1,13 @@
-/* literoj, kiuj povas
-esti ene de vorto */
+/************ literoj, kiuj povas 
+ * esti ene de vorto 
+************/
 c('o','subst').
 c('a','adj').
-/* finajxoj de radikoj, prefere ordigu la
-vortaron law la ofteco de la vortoj */
+
+/********** finajxoj de radikoj, prefere ordigu la
+ * vortaron law la ofteco de la vortoj 
+***********/
+
 f('ojn','subst').
 f('oj','subst').
 f('on','subst').
@@ -21,7 +25,11 @@ f('i','verb').
 f('u','verb').
 f('en','adv').
 f('e','adv').
-/* radikoj */
+
+/*************
+ *  radikoj 
+*************/
+
 r('abel','best').
 r('abi','subst').
 r('abomen','tr').
@@ -487,7 +495,6 @@ r('enu','ntr').
 r('envi','tr').
 r('epidemi','subst').
 r('epok','subst').
-r('eq','subst').
 r('erar','ntr').
 r('escept','tr').
 r('esenc','subst').
@@ -796,6 +803,7 @@ r('impres','tr').
 r('impuls','subst').
 r('imun','adj').
 r('incit','tr').
+r('ind','adj').
 r('indiferent','adj').
 r('indign','tr').
 r('indik','tr').
@@ -1390,6 +1398,7 @@ r('nud','adj').
 r('nuk','subst').
 r('nuks','subst').
 r('numer','subst').
+r('nun','adv').
 r('nutr','tr').
 r('obe','tr').
 r('objekt','subst').
@@ -2091,6 +2100,7 @@ r('tig','subst').
 r('tigr','best').
 r('tikl','tr').
 r('tim','tr').
+r('tim','ntr').
 r('tinktur','subst').
 r('tint','ntr').
 r('tip','subst').
@@ -2265,7 +2275,11 @@ r('zon','subst').
 r('zoologi','subst').
 r('zorg','ntr').
 r('zum','ntr').
-/* personaj pronomoj kiel rad. */
+
+/*****************
+  personaj pronomoj kiel rad. 
+*****************/
+
 r('mi','adj').
 r('ci','adj').
 r('li','adj').
@@ -2276,7 +2290,10 @@ r('ni','adj').
 r('vi','adj').
 r('ili','adj').
 r('si','adj').
-/* nombroj kiel radiko */
+
+/**************
+ * nombroj kiel radiko 
+**************/
 r('unu','nombr').
 r('du','nombr').
 r('tri','nombr').
@@ -2289,8 +2306,12 @@ r('naw','nombr').
 r('dek','nombr').
 r('cent','nombr').
 r('mil','nombr').
-/* kelkaj prepozicioj kaj prim. adv, 
-kiuj estas uzeblaj radike */
+
+/*****************
+ * kelkaj prepozicioj kaj prim. adv, 
+   kiuj estas uzeblaj radike 
+******************/
+
 r('cxirkaw','adv').
 r('anstataw','adv').
 r('al','adv').
@@ -2317,7 +2338,48 @@ r('for','adj').
 r('hodiauw','adj').
 r('hieraw','adj').
 r('morgaw','adj').
-/* pretaj vortoj */
+
+/**********
+ * afiksoj kiel radikoj
+**********/
+
+r('acx','adj').
+r('ajx','subst').
+r('an','best').
+r('ar','subst').
+r('dis','adv').
+r('ebl','adv').
+r('ec','subst').
+r('eg','adj').
+r('ej','subst').
+r('ek','intj').
+r('eks','adj').
+r('em','adj').
+r('er','subst').
+r('estr','best').
+r('et','adj').
+r('id','best').
+r('ig','tr').
+r('igx','ntr').
+r('il','subst').
+r('in','best').
+r('ing','subst').
+r('mal','subst').
+r('re','adv').
+r('uj','subst').
+r('ul','best').
+r('um','ntr').
+
+/***********
+ * aliaj radikoj elprenitaj el Revo
+ **********/
+
+:- include('radikoj.prolog').
+
+/*************
+   pretaj vortoj 
+*************/
+
 v('adiaw','intj').
 v('ajn','advpart').
 v('al','prep').
@@ -2449,9 +2511,11 @@ v('tro','adv').
 v('tuj','adv').
 v('unu','nombr').
 v('ve','intj').
-/* sufiksoj
-(2)=rezulto de derivado,
-(3)=radikspeco, al kiu gxi estas aplikebla*/
+
+/************** sufiksoj
+ * (2)=rezulto de derivado,
+ * (3)=radikspeco, al kiu gxi estas aplikebla
+**************/
 s('ant','best','verb').
 s('int','best','verb').
 s('ont','best','verb').
@@ -2476,11 +2540,12 @@ s('er','subst','subst').
 s('estr','best','subst').
 s('et',_,_).
 s('id','best','best').
-s('ig','tr','adj').
+s('ig','tr','subst').
 s('ig','tr','ntr').
-s('ig','tr','adv').
-s('igx','ntr','adj').
+s('ig','tr','adj').
+s('igx','ntr','subst').
 s('igx','ntr','tr').
+s('igx','ntr','adj').
 s('il','subst','verb').
 s('in',_,'best').
 s('ind','adj','tr').
@@ -2493,7 +2558,11 @@ s('op','subst','nombr').
 s('uj','subst','subst').
 s('ul','best','adj').
 s('um',_,_).
-/* prefiksoj */
+
+/************ prefiksoj 
+ (2) vortspeco, al kiu ghi estas aplikebla,
+     (prefiskoj ne shanghas la vortspecon)
+************/
 p('bo','parc').
 p('dis','verb').
 p('ek','verb').
@@ -2504,7 +2573,10 @@ p('mis','verb').
 p('pra','subst').
 p('psewdo',_).
 p('re','verb').
-/*prepozicioj kiel prefiksoj*/
+
+/*************** 
+ * prepozicioj kiel prefiksoj
+****************/
 p('al','verb').
 p('antaw','verb').
 p('apud','verb').
@@ -2522,35 +2594,50 @@ p('kun','verb').
 p('law','verb').
 p('post','verb').
 p('preter','verb').
-p('pri','verb').
+% p('pri','verb').
 p('sub','verb').
 p('super','verb').
 p('sur','verb').
 p('tra','verb').
 p('trans','verb').
-/* adverboj kiel prefiksoj*/
+
+/*************
+ * adverboj kiel prefiksoj
+**************/
 p('pli','adj').
 p('for','verb').
-/* la sekvaj fakte ne estas prefiksoj,
-sed uzataj en kunderivado (ekz. sen-dom-a, sed ne
-sen-dom-o...
-provizore ili ne estas permesitaj...
-p('sen','adj').
-p('pri','subst').
-p('law','adv').
-p('sen','subst').
-p('law','adj').
-p('super','adj').
-p('super','adv').
-p('kontraw','subst').
-p('en','subst').
-p('ekster','subst').
-p('antaw','subst').
-p('apud','subst').
-p('cxe','subst').
-p('cxirkaw','subst').
-*/
-/* j-pronomoj */
+p('ne','adj').
+p('ne','subst').
+p('tiel','adj'). %???
+
+/**************
+ * la sekvaj fakte ne estas prefiksoj,
+ * sed uzataj en kunderivado (ekz. sen-dom-a, sed ne
+ * sen-dom-o; internacia, internacieco, sed ne internacio
+ * ...)  
+**************/
+
+p('sen','adj',_).
+p('pri','adj','subst').
+p('law','adj','adv').
+p('sen','adj','subst').
+p('law','adj','adj').
+p('super','adj','adj').
+p('super','adj','adv').
+p('kontraw','adj','subst').
+p('en','adj','subst').
+p('ekster','adj','subst').
+p('inter','adj','subst').
+p('antaw','adj','subst').
+p('apud','adj','subst').
+p('cxe','adj','subst').
+p('cxirkaw','adj','subst').
+
+p('pri','tr','verb').
+
+/**************
+ *  j-pronomoj 
+***************/
 u('kiu','pron').
 u('tiu','pron').
 u('iu','pron').
@@ -2561,11 +2648,17 @@ u('tia','adj').
 u('ia','adj').
 u('nenia','adj').
 u('cxia','adj').
-/* finajxoj de j-pronomoj */
+
+/**************
+ *  finajxoj de j-pronomoj 
+**************/
 fu('jn',_).
 fu('j',_).
 fu('n',_).
-/* n-pronomoj, la personaj pronomoj ekz. ankaux kiel adj. rad. */
+
+/**************
+ *  n-pronomoj, la personaj pronomoj ekz. ankaux kiel adj. rad. 
+**************/
 i('mi','perspron').
 i('ci','perspron').
 i('li','perspron').
@@ -2586,7 +2679,10 @@ i('kie','adv').
 i('nenie','adv').
 i('ie','adv').
 i('tie','adv').
-/* finajxo de n-pronomoj */
+
+/****************
+ *  finajxo de n-pronomoj 
+*****************/
 fi('n',_).
 
 

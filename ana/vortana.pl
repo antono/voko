@@ -10,15 +10,25 @@ $Expect::Exp_Internal = ($debug > 1);
 # chu ricevi unu au plurajn solvojn
 # de Prologo?
 $nur_unu_solvo = 0;
+#$verbose = 0;
 
 $prompt = 'vorto:';
 $neniu_rezulto = '?';
 
-if (@ARGV and $ARGV[0] eq '-p') {
-    $prompt = '';
-    shift @ARGV;
+while (@ARGV) {
+    if ($ARGV[0] eq '-p') {
+	$prompt = '';
+	shift @ARGV;
+    } elsif ($ARGV[0] eq '-n') {
+	$nur_unu_solvo = 1;
+	shift @ARGV;
+#    } elsif ($ARGV[0] eq '-v') {
+#	$verbose = 1;
+#	shift @ARGV;
+    } else {
+	die "stranga argumento \"$ARGV[0]\"\n";
+    }
 }
-
 
 # lanæu Prologon kaj þargu la analizilon
 $pl = Expect->spawn("pl");
@@ -65,7 +75,15 @@ sub vortanalizo {
 
     print $pl "vortanalizo_markita('$vorto',VVV).\n";
     while ($pl->expect(3,'###','Yes','No')) {
-    	
+
+#	if ($verbose) {
+#	    print '.';
+#	    if ($n++ > 78) {
+#		print "\n";
+#		$n = 0;
+#	    }
+#	}
+
 	if ($pl->exp_match() =~ /Yes|No/) {
 	    last;
 	} else {
@@ -77,6 +95,7 @@ sub vortanalizo {
 		$v =~ s/^\\\'//; # citiloj
 		$v =~ s/\\\'$//;
 		$v =~ s/\\{3}'/'/g; # envorta apostrofo
+		$v =~ s/w/ux/g; # litero ux
 		$r = "[$v|$s]";
 		push @rezultoj, $r;
 		print "{XXX>".$r."<XXX}\n" if ($debug);

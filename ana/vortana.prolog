@@ -66,12 +66,16 @@ sub('perspron','pron').
 % ekz. jun'ul+in+best -> [jun'ul'in,best]
 
 kunigi(Vortero1,Vortero2,Speco,[Vorto,Speco]) :-
-	concat(Vortero1,',',V),
-	concat(V,Vortero2,Vorto).
+	atom_concat(Vortero1,',',V),
+	atom_concat(V,Vortero2,Vorto).
+
+kunigi__(Vortero1,Vortero2,Speco,[Vorto,Speco]) :-
+	atom_concat(Vortero1,'_',V),
+	atom_concat(V,Vortero2,Vorto).
 
 kunigi_(Vortero1,Vortero2,Speco,[Vorto,Speco]) :-
-	concat(Vortero1,'_',V),
-	concat(V,Vortero2,Vorto).
+	atom_concat(Vortero1,'-',V),
+	atom_concat(V,Vortero2,Vorto).
 
 % derivi vorteron per sufikso.
 % ekz. [jun,adj] + [ul,best,adj] -> [jun'ul,best]
@@ -104,6 +108,12 @@ derivado_per_prefikso([Prefikso,DeSpeco],[Vorto,Speco],Rezulto) :-
 	sub(Speco,DeSpeco),!,
 	kunigi(Prefikso,Vorto,Speco,Rezulto).
 
+% kunderivado, simila al prefikso, sed la rezulto
+% estas adektiva, ekz. [sen,adj,subst] + [hom,subst] ->[sen'hom,adj]
+kunderivado([Prefikso,AlSpeco,DeSpeco],[Vorto,Speco],Rezulto) :-
+	sub(Speco,DeSpeco),!,
+	kunigi__(Prefikso,Vorto,AlSpeco,Rezulto).
+
 % derivi vorteron per finajxo:
 % ekz. [jun,adj] + [e,adv] -> [jun'e,adv]
 
@@ -125,42 +135,49 @@ rad(Sercxajxo,[Sercxajxo,Speco]) :-
 
 suf(Sercxajxo,Resto,[Sufikso,AlSpeco,DeSpeco]) :-
 	s(Sufikso,AlSpeco,DeSpeco),
-	concat(Resto,Sufikso,Sercxajxo).
+	atom_concat(Resto,Sufikso,Sercxajxo).
 
 % sercxas konvenan finajxon en la vortaro
 % ekz. arbon -> arb + [on, subst]
 
 fin(Sercxajxo,Resto,[Finajxo,Speco]) :-
 	f(Finajxo,Speco),
-	concat(Resto,Finajxo,Sercxajxo).
+	atom_concat(Resto,Finajxo,Sercxajxo).
 
 % sercxas konvenan prefikson en la vortaro
 % ekz. maljuna -> juna + [mal,_]
 
 pre(Sercxajxo,Resto,[Prefikso,DeSpeco]) :-
 	p(Prefikso,DeSpeco),
-	concat(Prefikso,Resto,Sercxajxo).
+	atom_concat(Prefikso,Resto,Sercxajxo).
+
+% sercxas konvenan psewdoprefiskon por kunderivado
+% ekz. internacia -> nacia + [inter,adj,subst]
+
+pre2(Sercxajxo,Resto,[Prefikso,AlSpeco,DeSpeco]) :-
+	p(Prefikso,AlSpeco,DeSpeco),
+	atom_concat(Prefikso,Resto,Sercxajxo).
 
 % sercxas konvenan j-pronomojn (cxiu, kia,...) en la vortaro
 % ekz. cxiujn -> jn + [cxiu,pron]
 
 j_pro(Sercxajxo,Resto,[Pronomo,Speco]) :-
 	u(Pronomo,Speco),
-	concat(Pronomo,Resto,Sercxajxo).
+	atom_concat(Pronomo,Resto,Sercxajxo).
 
 % sercxas konvenan n-pronomon (io, mi,...) en la vortaro
 % ekz. min -> n + [mi,perspron]
 
 n_pro(Sercxajxo,Resto,[Pronomo,Speco]) :-
 	i(Pronomo,Speco),
-	concat(Pronomo,Resto,Sercxajxo).
+	atom_concat(Pronomo,Resto,Sercxajxo).
 
 % sercxas konvenan inter-literon (o, a) en la vortaro
 % ekz. pago -> pag + [o,subst]
 
 int(Sercxajxo,Resto,[Litero,Speco]) :-
 	c(Litero,Speco),
-	concat(Resto,Litero,Sercxajxo).
+	atom_concat(Resto,Litero,Sercxajxo).
 
 /******************** malstrikta vortanalizo ******
  * analizas vorton sen konsideri
@@ -176,14 +193,23 @@ vort_sen_fin_malstrikta(Vorto,Rezulto) :-
 % prefikso
 vort_sen_fin_malstrikta(Vorto,Rezulto) :-               
 	pre(Vorto,Resto,[Prefikso,_]),
+	atom_length(Resto,L), L>1,
 	vort_sen_fin_malstrikta(Resto,[Vsf,Speco]),
 	kunigi(Prefikso,Vsf,Speco,Rezulto).
 
 % sufikso
 vort_sen_fin_malstrikta(Vorto,Rezulto) :-             
 	suf(Vorto,Resto,[Sufikso,AlSpeco,_]),
+	atom_length(Resto,L), L>1,
 	vort_sen_fin_malstrikta(Resto,[Vsf,_]),
 	kunigi(Vsf,Sufikso,AlSpeco,Rezulto).
+
+% kunderivajho
+vort_sen_fin_malstrikta(Vorto,Rezulto) :-             
+	pre2(Vorto,Resto,[Prefikso,AlSpeco,_]),
+	atom_length(Resto,L), L>1,
+	vort_sen_fin_malstrikta(Resto,[Vsf,_]),
+	kunigi(Prefikso,Vsf,AlSpeco,Rezulto).
 
 % vorteto
 vorto_malstrikta(Vorto,[Vorto,Speco]) :-             
@@ -208,6 +234,7 @@ vorto_malstrikta(Vorto,Rezulto) :-
 % iu vorto derivita el radiko kaj kun finajxo
 vorto_malstrikta(Vorto,Rezulto) :-               
 	fin(Vorto,Resto,Finajxo),
+	atom_length(Resto,L), L>1,
 	vort_sen_fin_malstrikta(Resto,Vsf),
 	derivado_per_finajxo(Vsf,Finajxo,Rezulto).
 
@@ -225,6 +252,7 @@ unua_vortparto_malstrikta(Vorto,Rezulto) :-
 % iu vorto derivita el radiko kaj kun inter-litero (o,a)
 unua_vortparto_malstrikta(Vorto,Rezulto) :-            
 	int(Vorto,Resto,Litero),
+	atom_length(Resto,L), L>1,
 	vort_sen_fin_malstrikta(Resto,Vsf),
 	derivado_per_finajxo(Vsf,Litero,Rezulto).
 
@@ -266,14 +294,23 @@ vort_sen_fin(Vorto,Rezulto) :-
 % prefikso
 vort_sen_fin(Vorto,Rezulto) :-            
 	pre(Vorto,Resto,Prefikso),
+	atom_length(Resto,L), L>1,
 	vort_sen_fin(Resto,Vsf),
 	derivado_per_prefikso(Prefikso,Vsf,Rezulto).
 
 % sufikso
 vort_sen_fin(Vorto,Rezulto) :-            
-	suf(Vorto,Resto,Sufikso),    
+	suf(Vorto,Resto,Sufikso), 
+   	atom_length(Resto,L), L>1,
 	vort_sen_fin(Resto,Vsf),
 	derivado_per_sufikso(Vsf,Sufikso,Rezulto).
+
+% kunderivajho
+vort_sen_fin(Vorto,Rezulto) :-            
+	pre2(Vorto,Resto,Prefikso), 
+   	atom_length(Resto,L), L>1,
+	vort_sen_fin(Resto,Vsf),
+	kunderivado(Prefikso,Vsf,Rezulto).
 
 % vorteto
 vorto(Vorto,[Vorto,Speco]) :-              
@@ -295,9 +332,18 @@ vorto(Vorto,Rezulto) :-
 	    fi(Resto,_), kunigi(Pronomo,Resto,Speco,Rezulto)
 	).
 
+% mal+prep, mal+adv
+vorto(Vorto,Rezulto) :-
+	atom_concat('mal',Resto,Vorto),
+	atom_length(Resto,L), L>1,
+	v(Resto,Speco),
+	(Speco='adv'; Speco='prep'),
+	derivado_per_prefikso(['mal',_],[Resto,Speco],Rezulto).
+
 % vorto derivita el radiko kaj kun finajxo
 vorto(Vorto,Rezulto) :-              
 	fin(Vorto,Resto,Finajxo),
+	atom_length(Resto,L), L>1,
 	vort_sen_fin(Resto,Vsf),
 	derivado_per_finajxo(Vsf,Finajxo,Rezulto).
 
@@ -316,6 +362,7 @@ unua_vortparto(Vorto,Rezulto) :-
 % vorto derivita el radiko kaj inter-litero (o,a)
 unua_vortparto(Vorto,Rezulto) :-          
 	int(Vorto,Resto,Litero),
+	atom_length(Resto,L), L>1,
 	vort_sen_fin(Resto,Vsf),
 	derivado_per_finajxo(Vsf,Litero,Rezulto).
 
@@ -361,13 +408,13 @@ vortanalizo(Vorto,Rezulto) :-
 	Rezulto=R;
 	% se ne ekzistas strikta ebleco, trovu malstriktajn
 	vortanalizo_malstrikta(Vorto,[V,S]),
-	concat('!',V,R), Rezulto=[R,S].
+	atom_concat('!',V,R), Rezulto=[R,S].
 
 % por neinteraga moduso kun fina marko
 vortanalizo_markita(Vorto,Rezulto) :-
 	vortanalizo(Vorto,Rez),
 	term_to_atom(Rez,Str),
-	concat(Str,'###',Rezulto).
+	atom_concat(Str,'###',Rezulto).
 
 /**************** helpfunkcioj por legi el dosiero *************/
 

@@ -230,6 +230,10 @@ pluevoluigita de Wolfram Diestel
   <xsl:number from="drv|subart" level="any" count="snc"/>
 </xsl:template>
 
+<xsl:template match="subsnc" mode="number-of-ref-snc">
+  <xsl:number format="a"/> 
+</xsl:template>
+
 <xsl:template match="sncref">
   <i><xsl:apply-templates mode="number-of-ref-snc" select="id(@ref)"/></i>
 </xsl:template>
@@ -277,10 +281,17 @@ pluevoluigita de Wolfram Diestel
   </xsl:if>
   <dt>
     <xsl:number format="a)"/>
-    <xsl:comment>[[
-      ref="<xsl:value-of select="ancestor::drv/@mrk"/>
-      <xsl:number format="a"/>"
-    ]]</xsl:comment>
+    <xsl:choose>
+      <xsl:when test="@mrk">			       
+        <xsl:comment>[[ref="<xsl:value-of select="@mrk"/>"]]</xsl:comment>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:comment>[[
+          ref="<xsl:value-of select="ancestor::drv/@mrk"/>
+          <xsl:number format="a"/>"
+        ]]</xsl:comment>
+      </xsl:otherwise>
+    </xsl:choose>
   </dt>
   <dd>
   <xsl:apply-templates/>

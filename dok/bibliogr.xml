@@ -193,6 +193,16 @@
     </eld>
   </vrk>
 
+  <vrk mll="Homaranismo">
+    <url>ftp://ftp.esperanto.org/publika/tekstoj/</url> 
+    <aut>L. L. Zamenhof</aut>
+    <tit>Homaranismo</tit>
+    <eld>
+      <lok>Peterburgo</lok>
+      <dat>1906</dat>
+    </eld>
+  </vrk>  
+
   <vrk mll="Monato">
     <url>http://www.esperanto.be/monato/</url>
     <tit>Monato</tit>
@@ -222,6 +232,12 @@
       <lok>Antverpeno</lok>
       <dat>1994</dat>
     </eld>
+  </vrk>
+
+  <vrk mll="Paroloj">
+    <url>http://www.uni-leipzig.de/esperanto/texte/bibl/paroloj/</url>
+    <aut>L. L. Zamenhof</aut>
+    <tit>Paroloj</tit>
   </vrk>
 
 
