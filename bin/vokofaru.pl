@@ -56,15 +56,16 @@ chdir("$vortaro_pado/dtd");
 $xml_pado="$vortaro_pado/xml";
 $art_pado="$vortaro_pado/art";
 
-print $command = "xml2html_all.pl $verbose $xml_html_cxiujn $xml_pado $art_pado", "\n" if ($verbose);
+$command = "xml2html_all.pl $verbose $xml_html_cxiujn $xml_pado $art_pado";
+print "$command\n" if ($verbose);
 open LOG, "$command |" || die "Ne povis dukti\n";
 while (<LOG>) { print };
 close LOG;
 
 # kreu indeksdosieron
 $indekso = $config{"indeks_dosiero"} || "$vortaro_pado/sgm/indekso.xml";
-
-print $command = "xml2inx.pl $verbose $xml_pado > $indekso", "\n" if ($verbose);
+$command = "xml2inx.pl $verbose $xml_pado > $indekso";
+print "$command\n" if ($verbose);
 `$command`;
 
 # cd ..
@@ -72,10 +73,17 @@ print "cd $vortaro_pado\n" if ($verbose);
 chdir("$vortaro_pado");
 
 # kreu HTML-indeksojn
-print $command="indeks.pl $verbose $agord_dosiero", "\n" if ($verbose);
-open LOG, "$command|";
-while (<LOG>) { print };
-close LOG;
+$command="vokorefs.pl $verbose $xml_pado > sgm/rilatoj.xml~";
+print "$command\n" if ($verbose);
+open LOG, "$command|"; while (<LOG>) { print }; close LOG;
+
+$command="vokorefs2.pl $verbose sgm/rilatoj.xml~";
+print "$command\n" if ($verbose);
+open LOG, "$command|"; while (<LOG>) { print }; close LOG;
+
+$command="indeks.pl $verbose $agord_dosiero";
+print "$command\n" if ($verbose);
+open LOG, "$command|"; while (<LOG>) { print }; close LOG;
 
 # se pasis manpleno da tagoj, shovu la indeks-dosieron, por
 # ke ghi atingu la TTT-servilon (sed ja ne tro ofte)

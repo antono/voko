@@ -6,7 +6,7 @@
 
 # voku ekz: 
 #   cd revo
-#   indeks.pl -v -dinx -r../art/ sgm/indekso.xml 
+#   indeks.pl -v cfg/vortaro.cfg
 
 ##########################################################
 
@@ -95,8 +95,17 @@ $/ = "\n";
 if ($indeksoj=~/fakoj/) {
     # legu la fakojn
     %faknomoj = read_cfg($config{"fakoj"});
+
+    # kiu fakoj havas strukturajn indeksojn?
+    foreach $fak (sort keys %fakoj) {
+	if (-f "$dir/fxs_".lc($fak).".html") {
+	    push @strukt_fakoj, ($fak);
+	}
+    }
+
     # kreu fakindeksojn
     foreach $fako (sort keys %fakoj) { FAKINX($fako,$fakoj{$fako}) }
+    FAKINXLIST() if (%fakoj);
 }
 
 # lingvoindeksoj
@@ -337,7 +346,20 @@ sub FAKINX {
 	warn "Fako \"$fako\" ne difinita\n";
 	$faknomo='';
     }
-    index_header($faknomo,'','','');
+
+    if (grep /^$fako$/, @strukt_fakoj) {
+	index_header($faknomo,'fx','alfabete',
+		     ['alfabete','strukture'],
+		     ['_'.lc($fako),'s_'.lc($fako)]);
+    } else {
+	index_header($faknomo,'','');
+    }
+    
+#    if (grep /^$fako$/, @strukt_fakoj) {
+#	print 
+#	    "<b>alfabete</b> <a href=\"fxs_".lc($fako).
+#	    ".html\">strukture</a><p>\n";
+#    }
     
     # ordigu la vortliston
     @vortoj = sort { cmp_nls($a->[2],$b->[2],'eo') } @$refs;
@@ -376,7 +398,8 @@ sub LINGVINX {
     print "$target_file..." if ($verbose);
     open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
     select OUT;
-    index_header($lingvoj{$lng},"lx_${lng}_",$lng,$lit,@$literoj);
+    index_header($lingvoj{$lng},"lx_${lng}_",$lit,$literoj,
+		 [map {letter_asci_nls($_,$lng)} @$literoj]);
 
     foreach $ref (@$refs) {
 	if (($last1 ne $ref->[1]) or ($last2 ne $ref->[3])) {
@@ -414,7 +437,8 @@ sub KAPVORTINX {
     print "$target_file..." if ($verbose);
     open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
     select OUT;
-    index_header('kapvortoj ','ix_kap','eo',$lit,@$literoj);
+    index_header('kapvortoj ','ix_kap',$lit,$literoj,
+		 [map {letter_asci_nls($_,'eo')} @$literoj]);
 
     foreach $ref (@$refs) {
 	if (($last0 ne $ref->[0]) or ($last1 ne $ref->[1])) {
@@ -451,7 +475,8 @@ sub INVVORTINX {
     print "$target_file..." if ($verbose);
     open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
     select OUT;
-    index_header('inversa','ix_inv','eo',$lit,@$literoj);
+    index_header('inversa','ix_inv',$lit,$literoj,
+		[map {letter_asci_nls($_,'eo')} @$literoj] );
 
     foreach $ref (@$refs) {
 	if (($last0 ne $ref->[0]) or ($last1 ne $ref->[1])) {
@@ -485,7 +510,7 @@ sub INXSHANGHITAJ {
     print "$target_file..." if ($verbose);
     open OUT, ">$tmp_file" or die "Ne povis malfermi $tmp_file: $!\n";
     select OUT;
-    index_header("laste ŝanĝitaj",'','','');
+    index_header("laste ŝanĝitaj",'','');
 
     # malfermu kaj trakribru xml-dosierujon
     opendir DIR, $xml_dir or die "Ne povis malfermi $xml_dir: $!\n";
@@ -531,7 +556,7 @@ sub INXBILDOJ {
     print "$target_file..." if ($verbose);
     open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
     select OUT;
-    index_header('bildoj','','','');
+    index_header('bildoj','','');
     
     # ordigu la vortliston
     @vortoj = sort { cmp_nls($a->[3],$b->[3],'eo') } @$refs;
@@ -566,7 +591,7 @@ sub INXSTATISTIKO {
     print "$target_file..." if ($verbose);
     open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
     select OUT;
-    index_header('statistiko','','','');
+    index_header('statistiko','','');
     
     # ordigu la vortliston
 #    @vortoj = sort { cmp_nls($a->[3],$b->[3],'eo') } @$refs;
@@ -607,6 +632,50 @@ sub INXSTATISTIKO {
 
     # malek
     index_footer($n > 20);
+    close OUT;
+    select STDOUT;
+    diff_mv($tmp_file,$target_file);
+}
+
+# kreas liston de fakindeksoj (alfabetaj kaj strukturaj)
+
+sub FAKINXLIST {
+    my $target_file = "$dir/ix_fakoj.html";
+
+    print "$target_file..." if ($verbose);
+    open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
+    select OUT;
+
+    index_header('fakindeksoj','','');
+
+    # fakoj alfabete
+    print "<a name=\"alfabetaj\"></a><h2>alfabetaj</h2>\n";
+
+    foreach $fak (sort keys %fakoj) 
+    {
+	my $faknomo=$faknomoj{uc($fak)};
+	unless ($faknomo) {
+	    warn "Faknomo \"$fak\" ne difinita!\n";
+	    $faknomo = '';
+	}
+	print 
+	    "<a href=\"fx_", lc($fak), ".html\">",
+	    "<img src=\"../smb/", uc($fak), ".gif\" border=0></a> ",
+	    "<a href=\"fx_", lc($fak), ".html\">$faknomo</a><br>\n";
+    };
+
+    # fakoj strukture
+    print "<a name=\"strukturaj\"></a><h2>strukturaj</h2>\n";
+
+    foreach $fak (@strukt_fakoj) {
+	print 
+	    "<a href=\"fxs_", lc($fak), ".html\">",
+	    "<img src=\"../smb/", uc($fak), ".gif\" border=0></a> ",
+	    "<a href=\"fxs_", lc($fak), ".html\">".
+		$faknomoj{uc($fak)}."</a><br>\n";  
+    }
+
+    index_footer(1);
     close OUT;
     select STDOUT;
     diff_mv($tmp_file,$target_file);
@@ -662,7 +731,10 @@ sub INXLIST {
 
     #fakoj
     if ($indeksoj=~/fakoj/ && %fakoj) {
-	print "<dt>fakindeksoj\n<dd>";
+	print 
+	    "<dt>fakindeksoj\n<dd>",
+	    "<a href=\"ix_fakoj.html#alfabetaj\">alfabetaj</a><br>\n";
+	
 	for $fak (sort keys %fakoj) 
 	{
 	    my $faknomo=$faknomoj{uc($fak)};
@@ -672,6 +744,21 @@ sub INXLIST {
 	    }
 	    print 
 		"<a href=\"fx_", lc($fak), ".html\">",
+		"<img src=\"../smb/", uc($fak), ".gif\"",
+		"alt=\"", $faknomo, "\" border=0></a>\n";
+	};
+	
+	print "<a href=\"ix_fakoj.html#strukturaj\">strukturaj</a><br>\n";
+	
+	for $fak (@strukt_fakoj) 
+	{
+	    my $faknomo=$faknomoj{uc($fak)};
+	    unless ($faknomo) {
+		warn "Faknomo \"$fak\" ne difinita!\n";
+		$faknomo = '';
+	    }
+	    print 
+		"<a href=\"fxs_", lc($fak), ".html\">",
 		"<img src=\"../smb/", uc($fak), ".gif\"",
 		"alt=\"", $faknomo, "\" border=0></a>\n";
 	};
@@ -750,8 +837,8 @@ sub utf8_cx {
 
 # skribas la supran parton de html-ajho
 sub index_header {
-    my ($title_base,$file_base,$lng,$letter,@letters) = @_;
-    my ($l_utf8, $l_x);
+    my ($title_base,$file_base,$letter,$letters,$files) = @_;
+    my ($l_utf8, $l_x, $file);
 
     print 
 	"<html>\n<head>\n<meta http-equiv=\"Content-Type\" ",
@@ -762,11 +849,12 @@ sub index_header {
 	"</head>\n<body>\n",
 	"<i><a href=\"indeksoj.html\">indeksoj</a></i>\n";
 
-    for $l (@letters) {
-	$l_x    = letter_asci_nls($l,$lng);
+    for $l (@$letters) {
+#	$l_x    = letter_asci_nls($l,$lng);
+	$file = shift @$files;
 
 	if ($l ne $letter) {
-	    print "<a href=\"$file_base$l_x.html\">$l</a>\n"; 
+	    print "<a href=\"$file_base$file.html\">$l</a>\n"; 
 	} else { 
 	    print "<b>$l</b>\n"; 
 	};

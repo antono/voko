@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl 
 #
 # voku ekz.
 #   vokorefs2.pl [-v] rilatoj.xml 
@@ -8,23 +8,26 @@
 use XML::Parser;
 
 $debug = 0;
+$show_progress = 0;
 $| = 1;
 
-$ref_pref='../revo/art';
-$header="<html>\n<head>\n<meta http-equiv=\"Content-Type\" ".
-	"content=\"text/html; charset=UTF-8\">\n".
-	"<title>strukturita indekso</title>\n",
-	"<link title=\"indekso-stilo\" type=\"text/css\" ",
-	"rel=stylesheet href=\"../revo/stl/indeksoj.css\">\n",
-	"</head>\n<body>\n",
-        "<i><a href=\"indeksoj.html\">indeksoj</a></i>\n";
-        "<h1>strukturita indekso</h1>\n";
-$footer = "</body>\n</html>\n";
-$fakcfg = '/home/revo/revo/cfg/fakoj.cfg'; 
-$fx_prefix = '/home/revo/tmp/fxs_';
-$smb_dos = '../revo/smb';
+$ref_pref='../art';
+$revo_baz='/home/revo/revo';
+$fakcfg = "$revo_baz/cfg/fakoj.cfg"; 
+$fx_prefix = "$revo_baz/inx/fxs_";
+#$fx_alfabetaj = "$revo_baz/inx/fx_";
+$smb_dos = '../smb';
+$tmp_file = '/tmp/'.$$.'voko.inx';
 
 %fakoj = read_cfg($fakcfg);
+
+%smb = ('vid' => '&#x2192;',
+	'sin' => '&#x21d2;',
+	'ant' => '&#x21cf;',
+	'sub' => '&#x2283;',
+	'super' => '&#x2282;',
+	'prt' => '&#x220b;',
+	'malprt' => '&#2208;');
 
 
 # analizi la argumentojn
@@ -84,8 +87,8 @@ sub start_handler {
     if ($el eq 'art') 
     {
 
-	print '.' if ($verbose);
-	print "\n" if ($verbose and ($art_no++ % 80 == 0));
+	print '.' if ($show_progress);
+	print "\n" if ($show_progress and ($art_no++ % 80 == 0));
 
 	$art_mrk = get_attr('mrk',@attrs);
 	$art_kap = ();
@@ -264,8 +267,8 @@ sub complete_refs {
     #  en la alia direkto.
 
     while (($mrk,$entry) = each %wordlist) {
-	print '+' if ($verbose);
-	print "\n" if ($verbose and ($art_no++ % 80 == 0));
+	print '+' if ($show_progress);
+	print "\n" if ($show_progress and ($art_no++ % 80 == 0));
 
 	print "$mrk\n" if ($debug);
 
@@ -277,7 +280,7 @@ sub complete_refs {
 	cmpl_refs_aux($entry,'prt',$entry->{'malprt'});
 	cmpl_refs_aux($entry,'malprt',$entry->{'prt'});
     }
-    print "\n";
+    print "\n" if ($show_progress);
 }
 
 sub cmpl_refs_aux {
@@ -418,11 +421,10 @@ sub html_tree {
 
     foreach $entry (sort {$a->{'mrk'} cmp $b->{'mrk'}} @$list) {
 
-#	my $entry = $wordlist{$word};
+#	next unless (in_list($fako,$entry->{'uzo'}));
 	
 	# la vorto
 	print "<dt>";
-#	print "<u>" if ($depth < 1);
 	print "<b>" if ($depth < 1);
 	print "<img src=\"$smb_dos/$symbol.gif\" alt=\"$symbol\"> " 
 	    if ($symbol);
@@ -430,14 +432,12 @@ sub html_tree {
 	print $entry->{'kap'};
 	print "</a>";
 	print "</b>" if ($depth < 1);
-#	print "</u>" if ($depth < 1);
 
 	# la sinonimoj
 	my @sinonimoj = map {
 	    "<img src=\"$smb_dos/sin.gif\" alt=\"sin\"><a href=\"".
 		word_ref($_)."\"><i>".$_->{'kap'}."</i></a>";
 	} @{$entry->{'sin'}}; 
-#	if (@sinonimoj) { print " (", join(', ',@sinonimoj), ")" };
 
 	# la antonimoj
 	my @antonimoj = map {
@@ -466,6 +466,65 @@ sub html_tree {
 
     }
     print "</dl>";
+}
+
+sub html_tree2 {
+    my $list = shift;
+    my $fako = shift;
+    my $max_depth = shift;
+    my $depth = shift || 0;
+    my $symbol = shift || '';
+
+    return unless (@$list);
+
+    print STDERR join(' ',@$list), "\n" if ($debug);
+
+    print "<pre>\n" if ($depth == 0);
+
+    foreach $entry (sort {$a->{'mrk'} cmp $b->{'mrk'}} @$list) {
+
+#	next unless (in_list($fako,$entry->{'uzo'}));
+
+	# la vorto
+	print " " x (2*$depth);
+	print "<b>" if ($depth < 1);
+	print "$smb{$symbol} " if ($symbol);
+	print "<a href=\"".word_ref($entry)."\" target=\"precipa\">";
+	print $entry->{'kap'};
+	print "</a>";
+	print "</b>" if ($depth < 1);
+
+	# la sinonimoj
+	my @sinonimoj = map {
+	    $smb{'sin'}.
+	    " <a href=\"".word_ref($_)."\" target=\"precipa\"><i>"
+	    .$_->{'kap'}."</i></a>";
+	} @{$entry->{'sin'}}; 
+
+	# la antonimoj
+	my @antonimoj = map {
+	    $smb{'ant'}.
+	    " <a href=\"".word_ref($_)."\" target=\"precipa\"><i>"
+	    .$_->{'kap'}."</i></a>";
+	} @{$entry->{'ant'}};
+	
+	push @sinonimoj, @antonimoj;
+	if (@sinonimoj) { print " (", join(', ',@sinonimoj), ")" };
+
+	print "\n";
+
+	# la subvortoj
+	if ($depth < $max_depth -1) {
+	    html_tree2($entry->{'sub'},$fako,$max_depth,$depth+1,'sub');
+	}
+
+        # la partoj
+	if ($depth < $max_depth -1) {
+	    html_tree2($entry->{'prt'},$fako,$max_depth,$depth+1,'prt');
+	}
+
+    }
+    print "</pre>" if ($depth == 0);
 }
 
 sub word_ref {
@@ -499,22 +558,66 @@ sub read_cfg {
 
 sub create_fx {
     foreach $fako (keys %fakoj) {
-#    foreach $fako ('BOT','ZOO') {
-	print "$fx_prefix".lc($fako).".html...\n" if ($verbose);
+
+	my $target_file = "$fx_prefix".lc($fako).".html";
+
+	print "$target_file..." if ($verbose);
+
+
 	my @root = root([values %wordlist],$fako);
 	unless (@root) {
-	    print "Neniuj radikaj nocioj\n";
+	    print "neniuj radikaj nocioj\n"
+		if ($verbose);
+	    unlink "$target_file";
 	    next;
 	}
 	print STDERR join(' ',map {$_->{'mrk'}} @root), "\n" if ($debug);
 
-	open OUT, ">$fx_prefix".lc($fako).".html";
+	open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
 	select OUT;
-	print "$header";
-	html_tree(\@root,$fako,10);
-	print "$footer";
-	select STDOUT;
+
+	print header($fako);
+	html_tree2(\@root,$fako,10);
+	print footer();
+
 	close OUT;
+	select STDOUT;
+	diff_mv($tmp_file,$target_file);
     }
 }
+
+sub diff_mv {
+    my ($newfile,$oldfile) = @_;
+
+    if ((! -e $oldfile) or (`diff -q $newfile $oldfile`)) {
+	print "farite\n" if ($verbose);
+	`mv $newfile $oldfile`;
+    } else {
+	print "(senshanghe)\n" if ($verbose);
+	unlink($newfile);
+    }
+};
+
+sub header {
+    my $fako=shift;
+    my $titolo = "$fakoj{$fako} strukture";
+
+    return
+	"<html>\n<head>\n<meta http-equiv=\"Content-Type\" ".
+	"content=\"text/html; charset=UTF-8\">\n".
+	"<title>$titolo</title>\n".
+	"<link title=\"indekso-stilo\" type=\"text/css\" ".
+	"rel=stylesheet href=\"../stl/indeksoj.css\">\n".
+	"</head>\n<body>\n".
+        "<i><a href=\"indeksoj.html\">indeksoj</a></i>\n".
+        "<a href=\"fx_".lc($fako).".html\">alfabete</a> ".
+	"<b>strukture</b>\n<h1>$titolo...</h1>\n";
+}
+
+sub footer {
+    return 
+	"<i><a href=\"indeksoj.html\">indeksoj</a></i>\n".
+        "</body>\n</html>\n";
+}
+
 
