@@ -17,7 +17,7 @@ use nls; read_nls_cfg("$ENV{'VOKO'}/cfg/nls.cfg");
 
 ################### agordejo ##############################
 
-$debug = 0;
+$debug = 1;
 
 $tmp_file = '/tmp/'.$$.'voko.dok';
 
@@ -54,8 +54,75 @@ $bgcol = "bgcolor=\"#EEEECC\""; # fonkoloro de tabeloj
 	       "c_malmol" => "cirila minuskla malmolsigno",
 	       "c_Malmol" => "cirila majuskla malmolsigno",
 	       "c_mol" => "cirila minuskla molsigno",
-	       "c_Mol" => "cirila majuskla molsigno"
-	       
+	       "c_Mol" => "cirila majuskla molsigno",
+               "alfa" => "greka minuskla alfa",
+               "alfa_ton" => "greka minuskla alfa akcentita",
+               "beta" => "greka minuskla beta",
+               "gamma" => "greka minuskla gama",
+               "delta" => "greka minuskla delta",
+               "epsilon" => "greka minuskla epsilon",
+               "epsilon_ton" => "greka minuskla epsilon akcentita",
+               "zeta" => "greka minuskla zeta",
+               "eta" => "greka minuskla eta",
+               "eta_ton" => "greka minuskla eta akcentita",
+               "jota" => "greka minuskla jota",
+               "jota_ton" => "greka minuskla jota akcentita",
+               "jota_trema" => "greka minuskla jota tremao",
+               "jota_trema_ton" => "greka minuskla jota tremao akcentita",
+               "kappa" => "greka minuskla kapa",
+               "lambda" => "greka minuskla lambda",
+               "my" => "greka minuskla mu",
+               "ny" => "greka minuskla nu",
+               "xi" => "greka minuskla ksi",
+               "omikron" => "greka minuskla omikron",
+               "omikron_ton" => "greka minuskla omikron akcentita",
+               "pi" => "greka minuskla pi",
+               "rho" => "greka minuskla rota",
+               "sigma" => "greka minuskla sigma",
+               "sigma_fina" => "greka minuskla fina sigma",
+               "tau" => "greka minuskla taŭ",
+               "ypsilon" => "greka minuskla ypsilon",
+               "ypsilon_ton" => "greka minuskla ypsilon akcentita",
+               "ypsilon_trema" => "greka minuskla ypsilon tremao",
+               "ypsilon_trema_ton" => "greka minuskla ypsilon tremao akcentita",
+               "phi" => "greka minuskla fi",
+               "chi" => "greka minuskla ĥi",
+               "psi" => "greka minuskla psi",
+               "omega" => "greka minuskla omega",
+               "omega_ton" => "greka minuskla omega akcentita",
+               "Alfa" => "greka majuskla alfa",
+               "Alfa_ton" => "greka majuskla alfa akcentita",
+               "Beta" => "greka majuskla beta",
+               "Gamma" => "greka majuskla gama",
+               "Delta" => "greka majuskla delta",
+               "Epsilon" => "greka majuskla epsilon",
+               "Epsilon_ton" => "greka majuskla epsilon akcentita",
+               "Zeta" => "greka majuskla zeta",
+               "Eta" => "greka majuskla eta",
+               "Eta_ton" => "greka majuskla eta akcentita",
+               "Jota" => "greka majuskla jota",
+               "Jota_ton" => "greka majuskla jota akcentita",
+               "Jota_trema" => "greka majuskla jota tremao",
+               "Kappa" => "greka majuskla kapa",
+               "Lambda" => "greka majuskla lambda",
+               "My" => "greka majuskla mu",
+               "Ny" => "greka majuskla nu",
+               "Xi" => "greka majuskla ksi",
+               "Omikron" => "greka majuskla omikron",
+               "Omikron_ton" => "greka majuskla omikron akcentita",
+               "Pi" => "greka majuskla pi",
+               "Rho" => "greka majuskla rota",
+               "Sigma" => "greka majuskla sigma",
+               "Tau" => "greka majuskla taŭ",
+               "Ypsilon" => "greka majuskla ypsilon",
+               "Ypsilon_ton" => "greka majuskla ypsilon akcentita",
+               "Ypsilon_trema" => "greka majuskla ypsilon tremao",
+               "Phi" => "greka majuskla fi",
+               "Chi" => "greka majuskla ĥi",
+               "Psi" => "greka majuskla psi",
+               "Omega" => "greka majuskla omega",
+               "Omega_ton" => "greka majuskla omega akcentita"
+
 	       );
 
 ################## precipa programparto ###################
@@ -79,7 +146,7 @@ unless ($agord_dosiero) { $agord_dosiero = "cfg/vortaro.cfg" };
 
 $vortaro_pado=$config{"vortaro_pado"};
 $lingvoj=$config{"lingvoj"};
-$cfg_dir = "$vortaro_pado/cfg";
+#$cfg_dir = "$vortaro_pado/cfg";
 $dtd_dir = "$vortaro_pado/dtd";
 $smb_dir = "$vortaro_pado/smb";
 $out_dir = "$vortaro_pado/$dok_dir"; 
@@ -87,7 +154,7 @@ $out_dir = "$vortaro_pado/$dok_dir";
 # legu la informojn
 %lingvoj=read_cfg("$lingvoj");
 %unuoj=read_entities("$dtd_dir/vokosgn.dtd");
-read_nls_cfg("$nls_cfg");
+#read_nls_cfg("$nls_cfg");
 
 # skribu dosieron kun lingvotabelo
 @nls_lingvoj =();
@@ -161,7 +228,7 @@ foreach $lng (@nls_lingvoj) {
 	
 	$desc = $letters{$lit};
 	
-	my $kodo = kodo($lit);
+	my $kodo = kodo($lit); $kodo =~ s/^0+//;
 	
 	my $unuo='';
 	if (defined $unuoj{$kodo}) {
@@ -257,18 +324,19 @@ sub read_entities {
 
 	    # por unuopaj literoj e-a nomo povas aperi
 	    # kiel komento
-	    $nomo=$3;
-	    if ($nomo =~ /^\s*<!--(.+)-->\s*$/ ){
-		$nomo=$1;
+#	    $nomo=$3;
+#	    if ($nomo =~ /^\s*<!--(.+)-->\s*$/ ){
+#		$nomo=$1;
                 #anstatauxigu e-literojn
-		$nomo=~s/&jcirc;/ĵ/g;
-	    } else {
-		$nomo='';
-	    }
+#		$nomo=~s/&jcirc;/ĵ/g;
+#	    } else {
+#		$nomo='';
+#	    }
 
 	    # unuopa deksesuma kodo
 	    if ($kodo =~ /^&\#x([\da-f]+);$/i ) { 
 		$kodo = $1;
+		$kodo =~ s/^0+//;
 
 	    # kombinita litero?
 	    } elsif ($kodo =~ /^(\w|&\#x[\da-f]+;)(\w|&\#x[\da-f]+;)$/i ) {
@@ -283,7 +351,7 @@ sub read_entities {
 	    }
 	    $hash{$kodo}=[$ento,$nomo];  
 
-	    #print ">>>$kodo:$ento\n" if ($debug);
+	    print ">>>$kodo:$ento\n" if ($debug);
 	} #if ($line
     } # while
     close DTD;
@@ -309,8 +377,10 @@ sub priskribo {
     my ($lit)=@_;
     my $pri='';
 
-    my $kodo=kodo($lit);
+    my $kodo=kodo($lit); $kodo =~ s/^0+//;
     my $unuo=$unuoj{$kodo};
+
+#    print STDERR ".... $lit ....\n" if ($debug);
 
     if ($kodo and $unuo) {
 
