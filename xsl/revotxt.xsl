@@ -229,6 +229,8 @@
   <xsl:apply-templates/>
 </xsl:template>
 
+<xsl:template match="tez"/>
+
 <xsl:template match="sup|ofc">
   <sup><xsl:value-of select="."/></sup>
 </xsl:template>
