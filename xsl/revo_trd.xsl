@@ -37,6 +37,8 @@ montru tie, cxar ili estas esenca parto de tiuj -->
       <xsl:for-each select="(//trdgrp[@lng]|//trd[@lng])
            [count(.|key('lingvoj',@lng)[1])=1]">
 
+	<xsl:sort select="@lng"/>
+
         <!-- montru la flagon de la lingvo -->
         <xsl:call-template name="flago">
           <xsl:with-param name="lng">
