@@ -1242,10 +1242,7 @@ sub index_letters {
 
 # skribas la suban parton de html-ajho
 sub index_footer {
-    print 
-	"<hr>\n<span class=dato>",
-	`date +\"%Y/%m/%d %H:%M %Z\"`,
-	"</span>\n</body>\n</html>\n";
+    print "\n</body>\n</html>\n";
 }
 
 

@@ -243,7 +243,7 @@
 </xsl:template>
 
 <xsl:template match="uzo">
-  <xsl:apply-templates/>
+  <xsl:apply-templates/><xsl:text> </xsl:text>
   <xsl:if test="drv/uzo">
     <br />
   </xsl:if>

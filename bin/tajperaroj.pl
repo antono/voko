@@ -59,9 +59,11 @@ closedir DIR;
 
 if (html) {
     print 
-	"</dl><hr>\n<span class=dato>",
-	`date +\"%Y/%m/%d %H:%M %Z\"`,
-	"</span>\n</body>\n</html>\n";
+	"</dl>",
+#<hr>\n<span class=dato>",
+#	`date +\"%Y/%m/%d %H:%M %Z\"`,
+#	"</span>";
+	"\n</body>\n</html>\n";
 }
 
 #################### fino de la programo ####################
