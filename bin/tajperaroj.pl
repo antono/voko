@@ -161,7 +161,7 @@ sub start_handler {
 
 	    my @prt = split(/\./,$cel);
 	    unless ((not $prt[1]) or ($prt[1] =~ /0/)) {
-		avertu("Dua parto de atributo mrk ne enhavas \"0\": ".
+		avertu("Dua parto de atributo cel ne enhavas \"0\": ".
 		       "\"$cel\"");
 	    } else {
 		unless (open IN,"$dos/".$prt[0].".xml" ) {

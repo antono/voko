@@ -239,6 +239,8 @@ foreach $lng (@nls_lingvoj) {
 	my $nomo;
 	if (first_utf8char($lit) ne $lit) { #supozu litergrupon
 	    $nomo="litergrupo $lit";
+	    $unuo="&nbsp;";
+	    $kodo="&nbsp;";
 	} elsif ($lit =~ /^[a-z]$/) {
 	    $nomo="minuskla $lit";
 	} elsif ($lit =~ /^[A-Z]$/){
@@ -247,7 +249,7 @@ foreach $lng (@nls_lingvoj) {
 	    $nomo=priskribo($lit);
 	}
 
-	# kiom da linioj en unue kolumno?
+	# kiom da linioj en unua kolumno?
 	if ($c != $desc->[0]) {
 	    $rowcnt = "ROWSPAN = \"$cnts{$desc->[0]}\"";
 	    $c = $desc->[0];
@@ -317,6 +319,8 @@ sub read_entities {
 	|| die "Ne povis malfermi dosieron \"$dtdfile\": $!\n";
 
     while ($line = <DTD>) {
+	print "XXX $line" if ($debug);
+
 	if ($line =~ /^<!ENTITY\s+(\w+)\s+\"(\S+)\">(.*)$/ ) {
 	    $ento=$1;
 	    print "&$ento;" if $debug;

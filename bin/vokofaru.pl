@@ -52,6 +52,7 @@ $rilato_dos=$config{"rilato_dosiero"} ||
     die "rilato_dosiero ne trovighis en la agordodosiero.\n";
 
 $indekso = $config{"indeks_dosiero"} || "$vortaro_pado/sgm/indekso.xml";
+$inxtmp_dos = $config{"inxtmp_dosiero"} || $indekso;
 
 # iru al dtd, por ke la dtd estu je ../dtd/vokoxml.dtd
 #print "cd $vortaro_pado/dtd\n" if ($verbose);
