@@ -35,6 +35,8 @@ $nmax    = 300;      # maksimume tiom da shanghitajn artikolojn indiku
 $cvs_log = '/usr/bin/cvs log';
 $neliteroj = '0-9\/\s,;\(\)\.\-!:';
 
+$tez_lim1 = 5; # nodoj kun malpli da subnodoj -> grizaj 
+$tez_lim2 = 25; # nodoj kun pli da subnodoj -> grasaj
 
 ################## precipa programparto ###################
 
@@ -808,8 +810,15 @@ sub INX_EO {
 	open TEZ, $config{"tezauro_radikoj"};
 	while (<TEZ>) {
 	    chomp;
-	    my ($file,$kap) = split(';');
-	    print "<a href=\"$file\">$kap</a><br>\n";
+	    s/\s+$//;
+	    my ($file,$kap,$cnt) = split(';'); $cnt = 0 unless ($cnt);
+
+	    if ($cnt > $tez_lim1) { 
+		if ($cnt >= $tez_lim2) { print "<b>"; }
+		print "<a href=\"$file\">$kap</a>";
+		if ($cnt >= $tez_lim2) { print "</b>"; }
+		print "<br>\n";
+	    }
 	}
     }
 
@@ -1151,7 +1160,7 @@ sub INX_PLENA {
 	print "TEZAŬRO:\n";
 	open TEZ, $config{"tezauro_radikoj"};
 	while (<TEZ>) {
-	    my ($file,$kap) = split(';');
+	    my ($file,$kap,$cnt) = split(';');
 	    print "<a href=\"$file\">$kap</a>\n";
 	}
     }
