@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- e-aj literoj -->
+<!ENTITY Ccirc "&#x0108;">
+<!ENTITY ccirc "&#x0109;">
+<!ENTITY Gcirc "&#x011c;">
+<!ENTITY gcirc "&#x011d;">
+<!ENTITY Hcirc "&#x0124;">
+<!ENTITY hcirc "&#x0125;">
+<!ENTITY Jcirc "&#x0134;">
+<!ENTITY jcirc "&#x0135;">
+<!ENTITY Scirc "&#x015c;">
+<!ENTITY scirc "&#x015d;">
+<!ENTITY Ubreve "&#x016c;">
+<!ENTITY ubreve "&#x016d;">
+
+<!-- francaj k.a. -->
+<!ENTITY OElig "&#x0152;">
+<!ENTITY oelig "&#x0153;">
+<!ENTITY Aacute "&#x00c1;">
+<!ENTITY aacute "&#x00e1;">
+<!ENTITY Eacute "&#x00c9;">
+<!ENTITY eacute "&#x00e9;">
+<!ENTITY Iacute "&#x00cd;">
+<!ENTITY iacute "&#x00ed;">
+<!ENTITY Oacute "&#x00d3;">
+<!ENTITY oacute "&#x00f3;">
+<!ENTITY Uacute "&#x00da;">
+<!ENTITY uacute "&#x00fa;">
+
+<!ENTITY Agrave "&#x00c0;">
+<!ENTITY agrave "&#x00e0;">
+<!ENTITY Egrave "&#x00c8;">
+<!ENTITY egrave "&#x00e8;">
+<!ENTITY Igrave "&#x00cc;">
+<!ENTITY igrave "&#x00ec;">
+<!ENTITY Ograve "&#x00d2;">
+<!ENTITY ograve "&#x00f2;">
+<!ENTITY Ugrave "&#x00d9;">
+<!ENTITY ugrave "&#x00f9;">
+
+<!ENTITY Acirc "&#x00c2;">
+<!ENTITY acirc "&#x00e2;">
+<!ENTITY Ecirc "&#x00ca;">
+<!ENTITY ecirc "&#x00ea;">
+<!ENTITY Icirc "&#x00ce;">
+<!ENTITY icirc "&#x00ee;">
+<!ENTITY Ocirc "&#x00d4;">
+<!ENTITY ocirc "&#x00f4;">
+<!ENTITY Ucirc "&#x00db;">
+<!ENTITY ucirc "&#x00fb;">
+
+<!-- germanaj -->
+
+<!ENTITY szlig "&#x00df;">
+<!ENTITY Auml "&#x00c4;">
+<!ENTITY auml "&#x00e4;">
+<!ENTITY Ouml "&#x00d6;">
+<!ENTITY ouml "&#x00f6;">
+<!ENTITY Uuml "&#x00dc;">
+<!ENTITY uuml "&#x00fc;">
+
+<!-- turkaj ne jam menciitaj -->
+
+<!ENTITY Gbreve "&#x011e;">
+<!ENTITY gbreve "&#x011f;">
+<!ENTITY inodot "&#x0131;">
+<!ENTITY Idot "&#x0130;">
+<!ENTITY Scedil "&#x015e;">
+<!ENTITY scedil "&#x015f;">
+<!ENTITY Ccedil "&#x00c7;">
+<!ENTITY ccedil "&#x00e7;">
+
+<!-- diversaj -->
+
+<!ENTITY amp "&#38;#38;">
+<!ENTITY lt "&#38;#60;">
+<!ENTITY gt "&#62;">
+<!ENTITY apos "&#39;">
+<!ENTITY quot "&#34;">
+<!ENTITY ring "&#x00b0;">
+<!ENTITY quadrat "&#x00b2;">
+<!ENTITY cubic "&#x00b3;">
+<!ENTITY para "&#x00a7;">
+
+<!ENTITY Euml "&#x00cb;">
+<!ENTITY euml "&#x00eb;">
+<!ENTITY iuml "&#x00ef;">
+<!ENTITY Ntilde "&#x00d1;">
+<!ENTITY ntilde "&#x00f1;">   
+
+<!-- grekaj -->
+
+<!ENTITY Alfa "&#x0391;">
+<!ENTITY Beta "&#x0392;">
+<!ENTITY Gamma "&#x0393;">
+<!ENTITY Delta "&#x0394;">
+<!ENTITY Epsilon "&#x0395;">
+<!ENTITY Zeta "&#x0396;">
+<!ENTITY Eta "&#x0397;">
+<!ENTITY Theta "&#x0398;">
+<!ENTITY Jota "&#x0399;">
+<!ENTITY Kappa "&#x039a;">
+<!ENTITY Lambda "&#x039b;">
+<!ENTITY My "&#x039c;">
+<!ENTITY Ny "&#x039d;">
+<!ENTITY Xi "&#x039e;">
+<!ENTITY Omikron "&#x039f;">
+<!ENTITY Pi "&#x03a0;">
+<!ENTITY Rho "&#x03a1;">
+<!ENTITY Sigma "&#x03a3;">
+<!ENTITY Tau "&#x03a4;">
+<!ENTITY Ypsilon "&#x03a5;">
+<!ENTITY Phi "&#x03a6;">
+<!ENTITY Chi "&#x03a7;">
+<!ENTITY Psi "&#x03a8;">
+<!ENTITY Omega "&#x03a9;">
+
+<!ENTITY alfa "&#x03b1;">
+<!ENTITY beta "&#x03b2;">
+<!ENTITY gamma "&#x03b3;">
+<!ENTITY delta "&#x03b4;">
+<!ENTITY epsilon "&#x03b5;">
+<!ENTITY zeta "&#x03b6;">
+<!ENTITY eta "&#x03b7;">
+<!ENTITY theta "&#x03b8;">
+<!ENTITY jota "&#x03b9;">
+<!ENTITY kappa "&#x03ba;">
+<!ENTITY lambda "&#x03bb;">
+<!ENTITY my "&#x03bc;">
+<!ENTITY ny "&#x03bd;">
+<!ENTITY xi "&#x03be;">
+<!ENTITY omikron "&#x03bf;">
+<!ENTITY pi "&#x03c0;">
+<!ENTITY rho "&#x03c1;">
+<!ENTITY sigma "&#x03c2;">
+<!ENTITY tau "&#x03c4;">
+<!ENTITY ypsilon "&#x03c5;">
+<!ENTITY phi "&#x03c6;">
+<!ENTITY chi "&#x03c7;">
+<!ENTITY psi "&#x03c8;">
+<!ENTITY omega "&#x03c9;">
+
+<!-- cirilaj -->
+
+<!ENTITY c_Ju "&#x042e;">
+<!ENTITY c_A "&#x0410;">
+<!ENTITY c_B "&#x0411;">
+<!ENTITY c_C "&#x0426;">
+<!ENTITY c_D "&#x0414;">
+<!ENTITY c_Je "&#x0415;">
+<!ENTITY c_F "&#x0424;">
+<!ENTITY c_G "&#x0413;">
+<!ENTITY c_H "&#x0425;">
+<!ENTITY c_I "&#x0418;">
+<!ENTITY c_J "&#x0419;">
+<!ENTITY c_K "&#x041a;">
+<!ENTITY c_L "&#x041b;">
+<!ENTITY c_M "&#x041c;">
+<!ENTITY c_N "&#x041d;">
+<!ENTITY c_O "&#x041e;">
+<!ENTITY c_P "&#x041f;">
+<!ENTITY c_Ja "&#x042f;">
+<!ENTITY c_R "&#x0420;">
+<!ENTITY c_S "&#x0421;">
+<!ENTITY c_T "&#x0422;">
+<!ENTITY c_U "&#x0423;">
+<!ENTITY c_Zh "&#x0416;">
+<!ENTITY c_V "&#x0412;">
+<!ENTITY c_Mol "&#x042c;">
+<!ENTITY c_Y "&#x042b;">
+<!ENTITY c_Z "&#x0417;">
+<!ENTITY c_Sh "&#x0428;">
+<!ENTITY c_E "&#x042d;">
+<!ENTITY c_Shch "&#x0429;">
+<!ENTITY c_Ch "&#x0427;">
+
+<!ENTITY c_ju "&#x044e;">
+<!ENTITY c_a "&#x0430;">
+<!ENTITY c_b "&#x0431;">
+<!ENTITY c_c "&#x0446;">
+<!ENTITY c_d "&#x0434;">
+<!ENTITY c_je "&#x0435;">
+<!ENTITY c_f "&#x0444;">
+<!ENTITY c_g "&#x0433;">
+<!ENTITY c_h "&#x0445;">
+<!ENTITY c_i "&#x0438;">
+<!ENTITY c_j "&#x0439;">
+<!ENTITY c_k "&#x043a;">
+<!ENTITY c_l "&#x043b;">
+<!ENTITY c_m "&#x043c;">
+<!ENTITY c_n "&#x043d;">
+<!ENTITY c_o "&#x043e;">
+<!ENTITY c_p "&#x043f;">
+<!ENTITY c_ja "&#x044f;">
+<!ENTITY c_r "&#x0440;">
+<!ENTITY c_s "&#x0441;">
+<!ENTITY c_t "&#x0442;">
+<!ENTITY c_u "&#x0443;">
+<!ENTITY c_zh "&#x0436;">
+<!ENTITY c_v "&#x0432;">
+<!ENTITY c_mol "&#x044c;">
+<!ENTITY c_y "&#x044b;">
+<!ENTITY c_z "&#x0437;">
+<!ENTITY c_sh "&#x0448;">
+<!ENTITY c_e "&#x044d;">
+<!ENTITY c_shch "&#x0449;">
+<!ENTITY c_ch "&#x0447;">
+<!ENTITY c_malmol "&#x044a;">
+
+<!-- chehhaj kaj polaj -->
+<!ENTITY Ccaron "&#x010c;">
+<!ENTITY ccaron "&#x010d;">
+<!ENTITY Scaron "&#x0160;">
+<!ENTITY scaron "&#x0161;">
+<!ENTITY Rcaron "&#x0158;">
+<!ENTITY rcaron "&#x0159;">
+<!ENTITY Yacute "&#x00dd;">
+<!ENTITY yacute "&#x00fd;">
+<!ENTITY Zcaron "&#x017d;">
+<!ENTITY zcaron "&#x017e;">
+<!ENTITY Zdot   "&#x017b;">
+<!ENTITY zdot   "&#x017c;">
+<!ENTITY Ncaron "&#x0147;">
+<!ENTITY ncaron "&#x0148;">
+<!ENTITY Ecaron "&#x011a;">
+<!ENTITY ecaron "&#x011b;">
+<!ENTITY Dcaron "&#x010e;">
+<!ENTITY dcaron "&#x010f;">
+<!ENTITY Tcaron "&#x0164;">
+<!ENTITY tcaron "&#x0165;">    
+
+<!ENTITY Aogonek "&#x0104;">
+<!ENTITY aogonek "&#x0105;">
+<!ENTITY Lstroke "&#x0141;">
+<!ENTITY lstroke "&#x0142;">
+<!ENTITY Eogonek "&#x0118;">
+<!ENTITY eogonek "&#x0119;">
+<!ENTITY Cacute "&#x0106;">
+<!ENTITY cacute "&#x0107;">
+<!ENTITY Nacute "&#x0143;">
+<!ENTITY nacute "&#x0144;">
+<!ENTITY Sacute "&#x015a;">
+<!ENTITY sacute "&#x015b;">
+<!ENTITY Zacute "&#x0179;">
+<!ENTITY zacute "&#x017a;">
+
+<!-- hungaraj -->
+
+<!ENTITY Odacute "&#x0150;">
+<!ENTITY odacute "&#x0151;">
+<!ENTITY Udacute "&#x0170;">
+<!ENTITY udacute "&#x0171;">
+
