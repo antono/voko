@@ -351,7 +351,7 @@ modifita de Wolfram Diestel
   </xsl:choose>
 </xsl:template>
 
-<xsl:template match="dif/refgrp|dif/ref|rim/refgrp|rim/ref">
+<xsl:template match="dif/refgrp|dif/ref|rim/refgrp|rim/ref|ekz/refgrp|ekz/ref|klr/refgrp|klr/ref">
   <xsl:if test="@tip='dif'">
     <img src="{$smbdir}/{@tip}.gif">
       <xsl:attribute name="alt">
@@ -573,12 +573,14 @@ modifita de Wolfram Diestel
 <xsl:template match="snc" mode="tradukoj">
   <xsl:apply-templates select="ancestor::node()[self::drv or
     self::art][1]/kap" mode="tradukoj"/>
-    <xsl:text> </xsl:text>
     <xsl:choose>
       <xsl:when test="@ref">
+        <xsl:text> </xsl:text>
         <xsl:apply-templates mode="number-of-ref-snc" select="id(@ref)"/>
       </xsl:when>
-      <xsl:when test="count(ancestor::node()[self::drv or self::subart][1]//snc)>1">
+      <xsl:when test="count(ancestor::node()[self::drv or
+        self::subart][1]//snc)>1">
+        <xsl:text> </xsl:text>
         <xsl:number from="drv|subart" level="any" count="snc" format="1"/>
       </xsl:when>
     </xsl:choose>

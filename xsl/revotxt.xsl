@@ -93,12 +93,12 @@
 <!-- derivajhoj -->
 
 <xsl:template match="drv">
-  <xsl:apply-templates
-    select="*[not(self::subdrv|self::snc|self::trd|self::trdgrp|self::url)]"/>
-  <dl>
+  <xsl:apply-templates select="kap|gra|uzo|fnt|dif"/>
+  <dl compact="">
   <xsl:apply-templates select="subdrv|snc"/>
   </dl>
-  <xsl:apply-templates select="trd|trdgrp|url"/>
+  <xsl:apply-templates
+    select="*[not(self::subdrv|self::snc|self::gra|self::uzo|self::fnt|self::kap|self::dif)]"/>
 </xsl:template>  
 	
 <xsl:template match="subdrv">
@@ -114,15 +114,31 @@
 
 <!-- sencoj -->
 
+<xsl:template match="snc" mode="number-of-ref-snc">
+  <xsl:number from="drv|subart" level="any" count="snc"/>
+</xsl:template>
+
+<xsl:template match="sncref">
+  <i><xsl:apply-templates mode="number-of-ref-snc" select="id(@ref)"/></i>
+</xsl:template>
+
 <xsl:template match="snc">
-  <dt><xsl:value-of select="@num"/>
-    <xsl:if test="@num">.</xsl:if></dt>
+  <dt>
+    <xsl:choose>
+      <xsl:when test="@ref">
+        <xsl:apply-templates mode="number-of-ref-snc" select="id(@ref)"/>:
+      </xsl:when>
+      <xsl:when test="count(ancestor::node()[self::drv or self::subart][1]//snc)>1">
+        <xsl:number from="drv|subart" level="any" count="snc" format="1."/>
+      </xsl:when>
+    </xsl:choose>
+  </dt>
   <dd>
   <xsl:choose>
     <xsl:when test="subsnc">
       <xsl:apply-templates 
-        select="*[not(self::subsnc|self::trd|self::trdgrp|url)]"/>   
-      <dl>
+        select="*[not(self::subsnc|self::trd|self::trdgrp|self::url)]"/>   
+      <dl compact="">
       <xsl:apply-templates select="subsnc"/>
       </dl>
     </xsl:when>
@@ -172,28 +188,28 @@
 <xsl:template name="reftip">
   <xsl:choose>
     <xsl:when test="@tip='vid'">
-      <xsl:text>VD:</xsl:text>
+      <xsl:text>VD: </xsl:text>
     </xsl:when>
     <xsl:when test="@tip='dif'">
-      <xsl:text>=</xsl:text>
+      <xsl:text>= </xsl:text>
     </xsl:when>
     <xsl:when test="@tip='sin'">
-      <xsl:text>SIN:</xsl:text>
+      <xsl:text>SIN: </xsl:text>
     </xsl:when>
     <xsl:when test="@tip='ant'">
-      <xsl:text>ANT:</xsl:text>
+      <xsl:text>ANT: </xsl:text>
     </xsl:when>
     <xsl:when test="@tip='super'">
-      <xsl:text>SUP:</xsl:text>
+      <xsl:text>SUP: </xsl:text>
     </xsl:when>
     <xsl:when test="@tip='sub'">
-      <xsl:text>SUB:</xsl:text>
+      <xsl:text>SUB: </xsl:text>
     </xsl:when>
     <xsl:when test="@tip='prt'">
-      <xsl:text>ERO:</xsl:text>
+      <xsl:text>ERO: </xsl:text>
     </xsl:when>
     <xsl:when test="@tip='malprt'">
-      <xsl:text>UJO:</xsl:text>
+      <xsl:text>UJO: </xsl:text>
     </xsl:when>
   </xsl:choose>
 </xsl:template>
@@ -208,9 +224,9 @@
   <xsl:apply-templates/>
 </xsl:template>
 
-<xsl:template match="dif/refgrp|dif/ref">
+<xsl:template match="dif/refgrp|dif/ref|rim/refgrp|rim/ref|ekz/refgrp|ekz/ref|klr/refgrp|klr/ref">
   <xsl:if test="@tip='dif'">
-    <xsl:text>=</xsl:text>
+    <xsl:text>= </xsl:text>
   </xsl:if>
   <xsl:apply-templates/>
 </xsl:template>
@@ -360,10 +376,18 @@
 <xsl:template match="snc" mode="tradukoj">
   <xsl:apply-templates select="ancestor::node()[self::drv or
     self::art][1]/kap" mode="tradukoj"/>
-  <xsl:if test="@num">
-    <xsl:text> </xsl:text>
-    <xsl:value-of select="@num"/>
-  </xsl:if>
+
+    <xsl:choose>
+      <xsl:when test="@ref">
+        <xsl:text> </xsl:text>
+        <xsl:apply-templates mode="number-of-ref-snc" select="id(@ref)"/>
+      </xsl:when>
+      <xsl:when test="count(ancestor::node()[self::drv or
+      self::subart][1]//snc)>1">
+        <xsl:text> </xsl:text>
+        <xsl:number from="drv|subart" level="any" count="snc" format="1"/>
+      </xsl:when>
+    </xsl:choose>
 </xsl:template>
 
 <xsl:template match="subart" mode="tradukoj">
