@@ -193,14 +193,14 @@ por transitivaj kaj netransitivaj verboj ktp.-->
 
 <!ELEMENT vspec (#PCDATA)>
 
-<!-- [uzo] La uzo povas esti fako aŭ regiono, en kiu estas uzata
-la vorto au termino. Ĝi povas ankaŭ enhavi klarigon, kiam kaj kiel
-uzi iun vorton.
+<!-- [uzo] La uzo povas esti stilo, fako, regiono aŭ alia klarigo,
+kiel estas uzata la vorto au termino. Por la fakoj kaj stiloj uzu
+unu el la aliloke listigitaj mallongigoj.
 -->
 
 <!ELEMENT uzo (#PCDATA|tld)*>
 <!ATTLIST uzo
-	tip (fak|reg|klr) #IMPLIED
+	tip (fak|reg|klr|stl) #IMPLIED
 >
 
 <!-- [dif] Difino estas la frazo difinanta la vorton, sencon aŭ
