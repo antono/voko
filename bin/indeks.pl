@@ -189,7 +189,7 @@ sub ARTIKOLO {
     my $tekst = shift @_;
 
     # trovu la kapvorton
-    $tekst =~ s/^\s*<kap\s*>(.*?)<\/kap\s*>//si;
+    $tekst =~ /^\s*<kap\s*>(.*?)<\/kap\s*>/si;
     my $kap = $1; $kap =~ s/\s+/ /sg;
     $kap =~ s/\*//g;
     $kap =~ s/[1-9\/]([aeio])Z?$/\/$1/;
