@@ -309,7 +309,7 @@ sub indeksero {
 	traduko($2,$1,$mrk,$kap)/siegx;
 
     # analizu mallongigojn
-    $tekst =~s/<mlg\s*>(.*?)><\/mlg\s*>/mallongigo($mrk,$kap,$1)/sieg;
+    $tekst =~s/<mlg\s*>(.*?)<\/mlg\s*>/mallongigo($mrk,$kap,$1)/sieg;
 
     return '';
 }
@@ -342,7 +342,7 @@ sub ekzemplo {
 	traduko($2,$1,$mrk,$ind)/siegx;
 
     # analizu mallongigojn
-    $tekst =~s/<mlg\s*>(.*?)><\/mlg\s*>/mallongigo($mrk,$ind,$1)/sieg;
+    $tekst =~s/<mlg\s*>(.*?)<\/mlg\s*>/mallongigo($mrk,$ind,$1)/sieg;
 
     return '';
 }
@@ -391,7 +391,7 @@ sub bildo {
 	traduko($2,$1,$mrk,$ind)/siegx;
 
     # analizu mallongigojn
-    $tekst =~s/<mlg\s*>(.*?)><\/mlg\s*>/mallongigo($mrk,$ind,$1)/sieg;
+    $tekst =~s/<mlg\s*>(.*?)<\/mlg\s*>/mallongigo($mrk,$ind,$1)/sieg;
     
     return '';
 };
@@ -576,7 +576,10 @@ sub KAPVORTINX {
 	    $r=referenco($ref->[0]);
 
 	    print "<a href=\"$r\" target=\"precipa\">";
-	    print "$ref->[1]</a><br>\n";
+	    print "<b>" unless ($r =~ /\#/);
+	    print "$ref->[1]";
+	    print "</b>" unless ($r =~ /\#/);
+	    print "</a><br>\n";
 	
 	    $last0 = $ref->[0];
 	    $last1 = $ref->[1];
@@ -775,8 +778,8 @@ sub INXBILDOJ {
 sub INXMALLONGIGOJ {
     my ($refs) = @_;
     my $r;
-    #my $last0 = '';
-    #my $last1 = '';
+    my $last0 = '';
+    my $last1 = '';
     my $n = 0;
     my @vortoj;
     my $target_file = "$dir/mallong.html";

@@ -263,7 +263,7 @@ sub process_ent {
 	    # chu temas pri TTT-formularo?
 	    if ((($entity->head->get('subject') 
 		 =~ /Microsoft.*Internet.*lorer/s) 
-                or ($entity->head->get('content-type')
+                or ($part->head->get('content-type')
 		    =~  /POSTDATA\.ATT/s))
 		and ($parttxt =~ /^\s*komando=redakto&/)
 		or ($part->mime_type 

@@ -97,7 +97,7 @@ open LOG, "$command|"; while (<LOG>) { print }; close LOG;
 #    `$command`;
 #}
 
-$command = "xml2html_all.pl $verbose -c $agord_dosiero";
+$command = "xml2html_all.pl $verbose -m -c $agord_dosiero";
 print "$command\n" if ($verbose);
 open LOG, "$command |" || die "Ne povis dukti\n";
 while (<LOG>) { print };
