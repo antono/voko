@@ -1,0 +1,113 @@
+#!/usr/bin/perl
+###############################################################
+# Respondas lau CGI al demando de la serchpagho
+# trovante en la terminaro grimpad.xmlla serchatajn artikolojn.
+#
+# la serchindikojn ghi ricevas per CGI, do el la variablo
+# QUERY_STRING
+#############################################################
+
+# shargu la funkcio-bibliotekon
+
+push (@INC,'pwd');
+use  xmlpack;
+
+# kelkaj informoj pri la terminaro
+
+$dokumento = '../vortaro/grimpad.xml';
+$titolo = "Terminareto pri Grimpado kaj Montmigrado";
+$stiloj = "<style type=\"text/css\">"
+	."H1 {color:#008080;font-family:sans-serif}"
+	."H2 {color:#007000;font-family:sans-serif}</style>\n";
+
+# referencitaj artikoloj estas ricevebla same per CGI
+
+$referenco = 'serchcgi.pl?signaro=%5E%REF%24&strukt=kapvorto&rezulto=artikolo';
+
+############# komenco de la programeto #####################
+
+# esploru la parametrojn:
+
+foreach $pair (split ('&',$ENV{'QUERY_STRING'})) {
+	if ($pair =~ /(.*)=(.*)/) {
+		($key,$value) = ($1,$2);
+		$value =~ s/\+/ /g; # anstatauigu '+' kontrau ' '
+		$value =~ s/%(..)/pack('c',hex($1))/eg;
+		$params{$key} = $value;
+	}
+};
+
+# skribu la kapon de la dosiero
+
+print "Content-type: text/html\n\n";
+print "<html><head><title>$titolo - serchrezulto</title>$stiloj</head><body>\n";
+print "<h1>$titolo - serchrezulto</h1>\n";
+
+# parametroj por la konverto-objekto
+%parametroj = (
+   'dosiernomo' => $dokumento,
+   'simbolpado' => '../simboloj/',
+   'bildopado'  => '../bildoj/',
+   'referenco' => $referenco);
+
+# se necese anstatauigu Cx -> &Ccirc; ...
+
+$params{'signaro'} =~ s/([CcGgHhJjSs])x/\&$1circ;/sg;
+$params{'signaro'} =~ s/([Uu])x/\&$1breve;/sg;
+
+# malfermu la XML-vortaron kaj serchu en ghi
+
+$artikolaro = nova xmlpack(%parametroj);
+$artikolaro -> malfermu;
+
+while ($artikolaro -> legu_artikolon) {
+  my @rez;
+
+  @rez = $artikolaro -> traserchu_artikolon(
+                    $params{'signaro'},
+                    $params{'strukt'},
+                    $params{'rezulto'});
+ 
+  if (@rez) {
+
+    # se redoni tutajn artikolojn...
+
+    if ($params{'rezulto'} eq 'artikolo') { 
+      print $artikolaro -> transformu_artikolon_al_HTML;
+      print "<hr>\n\n";
+
+    # se redoni nur kapvortojn...
+
+    } elsif ($params{'rezulto'} eq 'kapvorto') {
+      $vorto = $rez[0]; 
+      $vorto =~ s|<kapvorto[^>]*>(.*?)</kapvorto>|$1|i;
+	my $ref = $referenco;
+      my $refvort = $vorto;
+      $refvort =~ s|\&|\%26|g;
+      $ref =~ s|\%REF|$refvort|;
+
+      # traktu la E-signojn &Ccirc; -> Ch ... &ubreve -> u
+      $vorto =~ s/\&([CcGgHhJjSs])circ;/$1h/sg;
+      $vorto =~ s/\&([Uu])breve;/$1/sg;
+      print "<a href=\"$ref\">$vorto</a><br>\n";
+
+    # se redoni nur tradukojn... (ne uzata momente)
+
+    } elsif ($params{'rezulto'} eq 'traduko') {
+      foreach $vorto (@rez) {
+        $vorto =~ s|<traduko.*?lingvo="(.*?)".*?>(.*?)</traduko>|$2|i;
+        $lingvo = $1;    
+        my $ref = $referenco;
+        my $refvort = $artikolaro -> kapvorto_de_la_artikolo;
+        $refvort =~ s|\&|\%26|g;
+        $ref =~ s|\%REF|$refvort|;
+        print "<a href=\"$ref\">$vorto</a><br>\n";
+      }
+    }
+  }
+}
+
+# skribu la voston de la dosiero
+
+print '<p><a href="index.html">nova sercho...</a><p>';
+print "</body></html>";

@@ -1,0 +1,276 @@
+
+<!--****************************************************
+          PRECIPA STRUKTURO DE VORTARO
+********************************************************
+
+Vortaro kosistas el prologo, precipa parto kaj epilogo.
+Tie chi nur la meza parto estas pli detale difinita, la
+prologo kaj epilogo povas enhavi iujn ajn datumojn.
+-->
+
+<!ELEMENT vortaro - - (prologo?,precipa-parto,epilogo?)>
+<!ELEMENT prologo - - (#PCDATA|titolo|autoro)*>
+<!ELEMENT epilogo - - (#PCDATA)>
+<!ELEMENT titolo - - (#PCDATA)>
+<!ELEMENT autoro - - (#PCDATA)>
+
+<!-- KELKAJ UNUO-DIFINOJ POR POSTA UZO
+Povas esti, ke kelkaj XML-analiziloj ne subtenas
+tiun tipon de unuo. Se oni bezonas pliajn lingvojn, oni
+aldonu.
+-->
+
+<!-- MEZA PARTO DE LA VORTARO
+Ghi povas kosisti el diversaj partoj, ekz. por
+diversaj lingvoj. Tiuj partoj povas enhavi diversajn
+sekciojn ekz. por grupigi vortojn komencighantajn je
+sama litero.
+Partoj kaj sekciojn oni ne devas uzi, sed chiukaze
+la precipa parto enhavos artikolojn, kiuj priskribas
+la unuopajn leksikajn unuojn.
+-->
+
+<!ELEMENT - - precipa-parto (parto+|sekcio+|artikolo+)>
+<!ELEMENT - - parto (sekcio+|artikolo+)>
+<!ATTLIST parto
+	lingvo CDATA #IMPLIED
+>
+<!ELEMENT - - sekcio (artikolo+)>
+<!ATTLIST sekcio
+	litero CDATA #IMPLIED
+>
+
+<!-- ******************************************************
+             STRUKTURO DE ARTIKOLO
+***********************************************************
+
+artikolo konsistas el kapvorto kaj la resto de la artikolo,
+ghi povas kosisti el diversaj derivajhoj, sencoj kaj subsencoj. 
+Chiu tia subsekcio kosistas el la diversaj priskribaj elementoj.
+La atributo "marko" difinas la celon de eventuala referenco.
+-->
+
+<!-- priskribaj elementoj -->
+<!ENTITY % priskribaj-elementoj "fonto|gramatiko|uzo|difino|ekzemplo|rimarko|referenco|traduko|bildo">
+
+<!ELEMENT artikolo - - (kapvorto,(derivajho+|senco+|(%priskribaj-elementoj;)*))>
+<!ELEMENT derivajho - - (kapvorto,(senco|%priskribaj-elementoj)*)>
+<!ELEMENT senco - - (subsenco|%priskribaj-elementoj)*>
+<!ELEMENT subsenco - - (%priskribaj-elementoj)*>
+
+<!ATTLIST artikolo
+	marko ID #IMPLIED
+>
+<!ATTLIST derivajho
+	marko ID #IMPLIED
+>
+<!ATTLIST senco
+	marko ID #IMPLIED
+>
+<!ATTLIST subsenco
+	marko ID #IMPLIED
+>
+
+<!-- ************************************************
+            STRUKTUROJ DE DETALAJ ELEMENTOJ
+*****************************************************
+-->
+
+<!-- kapvorto okazas en du kuntekstoj - komence de artikolo
+kaj komence de derivajho, en la unua kazo ghi signas radikon
+en la dua kazo ghi kosistas el iuj literoj kaj eble tildo
+refencanta al la kapvorto, krome en la kapvorto povas okazi
+fontindiko.
+-->
+<!ELEMENT kapvorto - - (#PCDATA|radiko|fonto|tildo)*>
+
+<!-- Fonto enhavas informojn pri autoro, verko, trovloko
+au aliajn informojn
+-->
+<!ELEMENT fonto - - (#PCDATA|autoro|verko|loko)*>
+
+<!-- kiel grammatikaj informoj momente estas permesataj
+nur indiko de la vortspeco
+-->
+<!ELEMENT gramatiko - - (vortspeco)+>
+
+<!-- la uzo povas esti fako au regiono, en kiu estas uzata
+la vorto au termino. Ghia strukturo ne estas difinita nun
+-->
+<!ELEMENT uzo - - (#PCDATA)>
+<!ATTLIST uzo
+	tipo (fako|regiono) #IMPLIED
+>
+
+<!-- Difino estas la frazo difinanta la vorton, sencon au
+subsencon. Ghi povas esti ankau en alia(j) lingvo(j) ol la vorto
+mem.
+-->
+<!ELEMENT difino - - (#PCDATA|klarigo|referenco|tildo)*>
+<!ATTLIST difino
+	lingvo CDATA #IMPLIED
+>
+
+<!-- ekzemplo konsistas el ekzemplofrazo,
+klarigoj kaj fonto.
+-->
+<!ELEMENT ekzemplo - - (#PCDATA|klarigo|tildo|fonto)*>
+
+<!-- rimarko povas enhavi iujn indikojn pri la vorto au
+senco, krome referencojn, ekzemplojn, emfazitajn partojn.
+-->
+<!ELEMENT rimarko - - (#PCDATA|referenco|ekzemplo|tildo|em)*>
+
+<!-- referenco montras al alia, simil au alisignifa vorto,
+oni povas dstingi diversajn rilattipon al la
+referencita vorto. La enhavo de la referenco estas tio, kio
+aperas en la legebla teksto. La referencitan vorton mem
+oni difinas per la atributo "celo". La celon oni plej
+bone difinas per: radiko.derivajho.difino, oni povas uzi
+la numeron de la difino au derivajho. Plej bone oni
+generas la markojn (t.e. la eblaj celoj de referenco)
+automate por minimumigi erarojn.
+-->
+<!ELEMENT referenco - - (#PCDATA)>
+<!ATTLIST referenco
+	tipo (vidu|difino|sinonimo|antonimo|supernocio|malparto) "vidu"
+	celo IDREF #IMPLIED
+>
+
+<!-- traduko kosistas el traduka vorto au frazo
+kaj klarigoj, poste povos sekvi aliaj elementoj
+-->
+<!ELEMENT traduko - - (#PCDATA|klarigo)*>
+<!ATTLIST traduko
+	lingvo CDATA #IMPLIED
+>
+
+<!-- bildo povas ilustri iun vorton au sencon. Ghi
+referencas al ekstera dosiero, kiu entenas la bildon.
+-->
+<!ELEMENT bildo - o EMPTY>
+<!ATTLIST bildo
+	loko CDATA #REQUIRED
+>
+
+<!-- administraj informoj estu por redaktado, povus
+enhavi informojn pri kreodato, shanghdato, autoro
+ktp. de artikolo. Ghia strukturo ankorau estu
+diskutata.
+-->
+<!ELEMENT admin - - (#PCDATA)>
+
+<!-- Tildo rilatas al la radiko, donita en la kapvorto
+ghi ne bezonas enhavon.
+-->
+<!ELEMENT tildo EMPTY>
+
+<!-- La sekvaj elementoj momente ne havas
+internan strukturon.
+-->
+<!ELEMENT klarigo - - (#PCDATA|tildo)*>
+<!ELEMENT verko - - (#PCDATA)>
+<!ELEMENT loko - - (#PCDATA)>
+<!ELEMENT em - - (#PCDATA)>
+
+
+<!-- *************************************************
+                   LITEROJ
+******************************************************
+-->
+
+<!-- La sekvaj difinoj necesas por msxml
+<!ENTITY Ccirc "&#x0108;">
+<!ENTITY ccirc "&#x0109;">
+<!ENTITY Gcirc "&#x011c;">
+<!ENTITY gcirc "&#x011d;">
+<!ENTITY Hcirc "&#x0124;">
+<!ENTITY hcirc "&#x0125;">
+<!ENTITY Jcirc "&#x0134;">
+<!ENTITY jcirc "&#x0135;">
+<!ENTITY Scirc "&#x015c;">
+<!ENTITY scirc "&#x015d;">
+<!ENTITY Ubreve "&#x016c;">
+<!ENTITY ubreve "&#x016d;">
+-->
+
+<!-- le sekvaj estas lau XML-normo (por NXP)
+<!ENTITY Ccirc "&u-0108;">
+<!ENTITY ccirc "&u-0109;">
+<!ENTITY Gcirc "&u-011c;">
+<!ENTITY gcirc "&u-011d;">
+<!ENTITY Hcirc "&u-0124;">
+<!ENTITY hcirc "&u-0125;">
+<!ENTITY Jcirc "&u-0134;">
+<!ENTITY jcirc "&u-0135;">
+<!ENTITY Scirc "&u-015c;">
+<!ENTITY scirc "&u-015d;">
+<!ENTITY Ubreve "&u-016c;">
+<!ENTITY ubreve "&u-016d;">
+-->
+<!-- Mi ne scias, chu kaj se jes kiel en SGML oni
+     povas kodi Unikodajn signojn -->
+<!ENTITY Ccirc "Cx">
+<!ENTITY ccirc "cx">
+<!ENTITY Gcirc "Gx">
+<!ENTITY gcirc "gx">
+<!ENTITY Hcirc "Hx">
+<!ENTITY hcirc "hx">
+<!ENTITY Jcirc "Jx">
+<!ENTITY jcirc "jx">
+<!ENTITY Scirc "Sx">
+<!ENTITY scirc "sx">
+<!ENTITY Ubreve "Ux">
+<!ENTITY ubreve "ux">
+
+<!ENTITY OElig "OE">
+<!ENTITY oelig "oe">
+
+<!ENTITY Aacute "Á">
+<!ENTITY aacute "á">
+<!ENTITY Eacute "É">
+<!ENTITY eacute "é">
+<!ENTITY Iacute "Í">
+<!ENTITY iacute "í">
+<!ENTITY Oacute "Ó">
+<!ENTITY oacute "ó">
+<!ENTITY Uacute "Ú">
+<!ENTITY uacute "ú">
+
+<!ENTITY Agrave "À">
+<!ENTITY agrave "à">
+<!ENTITY Egrave "È">
+<!ENTITY egrave "è">
+<!ENTITY Igrave "Ì">
+<!ENTITY igrave "ì">
+<!ENTITY Ograve "Ò">
+<!ENTITY ograve "ò">
+<!ENTITY Ugrave "Ù">
+<!ENTITY ugrave "ù">
+
+<!ENTITY Acirc "Â">
+<!ENTITY acirc "â">
+<!ENTITY Ecirc "Ê">
+<!ENTITY ecirc "ê">
+<!ENTITY Icirc "Î">
+<!ENTITY icirc "î">
+<!ENTITY Ocirc "Ô">
+<!ENTITY ocirc "ô">
+<!ENTITY Ucirc "Û">
+<!ENTITY ucirc "û">
+
+<!ENTITY Auml "Ä">
+<!ENTITY auml "ä">
+<!ENTITY Ouml "Ö">
+<!ENTITY ouml "ö">
+<!ENTITY Uuml "Ü">
+<!ENTITY uuml "ü">
+<!ENTITY szlig "?">
+
+<!ENTITY Ntilde "Ñ">
+<!ENTITY ntilde "ñ">
+
+
+
+
+

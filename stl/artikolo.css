@@ -1,0 +1,18 @@
+BODY {background: E8FFE8; font-size: medium; 
+	font-family: Times SudEuro, Helvetica, Times}
+H1 {color: darkgreen; font-size: x-large}
+H2 {color: darkgreen; font-size: large}
+A {text-decoration: none}
+A:link {color: blue}
+A:visited {color: blue}
+
+.ekz {color: darkgreen}
+.drvdif {color: darkred}
+.sncgrpdif {color: darkred}
+.dif {color: darkred}
+.diftrd {font-style: italic}
+.rim {color: darkblue}
+.rimtrd {font-style: italic}
+.rimekz {font-style: italic}
+.klr {}
+.trd {color: #104040}
