@@ -134,19 +134,14 @@
     </xsl:choose>
   </dt>
   <dd>
-  <xsl:choose>
-    <xsl:when test="subsnc">
-      <xsl:apply-templates 
-        select="*[not(self::subsnc|self::trd|self::trdgrp|self::url)]"/>   
+    <xsl:apply-templates select="gra|uzo|fnt|dif"/>
+    <xsl:if test="subsnc">
       <dl compact="">
-      <xsl:apply-templates select="subsnc"/>
+        <xsl:apply-templates select="subsnc"/>
       </dl>
-    </xsl:when>
-    <xsl:otherwise>
-      <xsl:apply-templates />
-    </xsl:otherwise>
-  </xsl:choose>
-  <xsl:apply-templates select="trd|trdgrp|url"/>
+    </xsl:if>
+    <xsl:apply-templates
+        select="*[not(self::gra|self::uzo|self::fnt|self::dif|self::subsnc)]"/>
   </dd>
 </xsl:template>  
 
