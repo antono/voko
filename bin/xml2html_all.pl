@@ -4,21 +4,43 @@
 $debug=0;
 $tmp_file = '/tmp/'.$$.'voko.art';
 $|=1;
-$xsl = '/home/revo/voko/xsl/revohtml.xsl';
-$xslt = '/home/revo/voko/bin/xslt.sh';
+$xsl = $ENV{"VOKO"}.'/xsl/revohtml.xsl';
+$xslt = $ENV{"VOKO"}.'/bin/xslt.sh';
 
-while ($ARGV[0] =~ /^-/) {
+while (@ARGV) {
     if ($ARGV[0] eq '-v') {
 	$verbose = shift @ARGV; # skribas la dosiernomon dum la konverto
     } elsif ($ARGV[0] eq '-a') {
 	$all = shift @ARGV;     # æiujn, ne nur la pli novajn dosierojn traktu
+    } elsif ($ARGV[0] eq '-c') {
+	shift @ARGV;
+	$agord_dosiero = shift @ARGV; 
     } else {
 	die "nevalida argumento $ARGV[0]\n";
     }
 }
 
-$fromdir = shift @ARGV;
-$todir = shift @ARGV;
+
+# legu la agordo-dosieron
+unless ($agord_dosiero) { $agord_dosiero = "cfg/vortaro.cfg" };
+
+open CFG, $agord_dosiero 
+    or die "Ne povis malfermi agordodosieron \"$agord_dosiero\".\n";
+
+while ($line = <CFG>) {
+    if ($line !~ /^#|^\s*$/) {
+	$line =~ /^([^=]+)=(.*)$/;
+	$config{$1} = $2;
+    }
+}
+close CFG;
+
+$vortaro_pado = $config{"vortaro_pado"};
+unless ($vortaro_pado) { die "Malplena vortaro-pado\n"; }
+
+
+$fromdir = "$vortaro_pado/xml";
+$todir = "$vortaro_pado/art";
 
 opendir DIR,$fromdir;
 for $file (sort readdir(DIR)) {
@@ -34,8 +56,14 @@ for $file (sort readdir(DIR)) {
 	    or ((stat $outfile)[9] < (stat $infile)[9])
 	    or $all) {
 
+	    # transformu per XSL
 	    print "$infile -> $outfile..." if ($verbose);
 	    `$xslt $infile $xsl > $tmp_file`;
+
+	    # enshovu tezaurajn ligojn ktp.
+	    `htmlposte.pl $tmp_file`;
+
+	    # shovu la HTML-dosieron al ghusta loko
 	    if ($all) {
 		# aktualigu nur, se shanghite
 		diff_mv($tmp_file,$outfile);

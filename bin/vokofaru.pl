@@ -35,7 +35,7 @@ $|=1;
 unless ($agord_dosiero) { $agord_dosiero = "cfg/vortaro.cfg" };
 
 open CFG, $agord_dosiero 
-    || die "Ne povis malfermi agordodosieron \"$agord_dosiero\".\n";
+    or die "Ne povis malfermi agordodosieron \"$agord_dosiero\".\n";
 
 while ($line = <CFG>) {
     if ($line !~ /^#|^\s*$/) {
@@ -63,12 +63,6 @@ chdir("$vortaro_pado/dtd");
 $xml_pado="$vortaro_pado/xml";
 $art_pado="$vortaro_pado/art";
 
-$command = "xml2html_all.pl $verbose $xml_html_cxiujn $xml_pado $art_pado";
-print "$command\n" if ($verbose);
-open LOG, "$command |" || die "Ne povis dukti\n";
-while (<LOG>) { print };
-close LOG;
-
 # kreu indeksdosieron
 
 $command = "xml2inx.pl $verbose $xml_pado > $inxtmp_dos";
@@ -95,6 +89,12 @@ open LOG, "$command|"; while (<LOG>) { print }; close LOG;
 $command="tajperaroj.pl $verbose -H $xml_pado > $vortaro_pado/inx/eraroj.html";
 print "$command\n" if ($verbose);
 open LOG, "$command|"; while (<LOG>) { print }; close LOG;
+
+$command = "xml2html_all.pl $verbose -c $agord_dosiero";
+print "$command\n" if ($verbose);
+open LOG, "$command |" || die "Ne povis dukti\n";
+while (<LOG>) { print };
+close LOG;
 
 # se pasis manpleno da tagoj, shovu la indeks-dosieron, por
 # ke ghi atingu la TTT-servilon (sed ja ne tro ofte)

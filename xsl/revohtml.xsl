@@ -174,7 +174,13 @@ modifita de Wolfram Diestel
 </xsl:template>  
 	
 <xsl:template match="subdrv">
-  <dt><xsl:number format="A."/></dt>
+  <dt>
+    <xsl:number format="A."/>
+    <xsl:comment>[[
+      ref="<xsl:value-of select="ancestor::drv/@mrk"/><xsl:number format="A"/>"
+    ]]</xsl:comment>
+
+  </dt>
   <dd>
     <xsl:apply-templates select="dif|gra|uzo|fnt"/>
     <dl compact="">
@@ -186,7 +192,12 @@ modifita de Wolfram Diestel
 </xsl:template>
 
 <xsl:template match="drv/kap">
-  <h2><xsl:apply-templates/></h2>  
+  <h2>
+    <xsl:apply-templates/>
+    <xsl:comment>[[
+      ref="<xsl:value-of select="ancestor::drv/@mrk"/>"
+    ]]</xsl:comment>
+  </h2>  
 </xsl:template>
 
 <!-- sencoj -->
@@ -210,6 +221,17 @@ modifita de Wolfram Diestel
       </xsl:when>
       <xsl:when test="count(ancestor::node()[self::drv or self::subart][1]//snc)>1">
         <xsl:number from="drv|subart" level="any" count="snc" format="1."/>
+        <xsl:choose>
+          <xsl:when test="@mrk">			       
+            <xsl:comment>[[ref="<xsl:value-of select="@mrk"/>"]]</xsl:comment>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:comment>[[
+              ref="<xsl:value-of select="ancestor::drv/@mrk"/>
+              <xsl:number from="drv|subart" level="any" count="snc" format=".1"/>"
+            ]]</xsl:comment>
+          </xsl:otherwise>
+        </xsl:choose>
       </xsl:when>
     </xsl:choose>
   </dt>
@@ -229,7 +251,13 @@ modifita de Wolfram Diestel
   <xsl:if test="@mrk">
     <a name="{@mrk}"></a>
   </xsl:if>
-  <dt><xsl:number format="a)"/></dt>
+  <dt>
+    <xsl:number format="a)"/>
+    <xsl:comment>[[
+      ref="<xsl:value-of select="ancestor::drv/@mrk"/>
+      <xsl:number format="a"/>"
+    ]]</xsl:comment>
+  </dt>
   <dd>
   <xsl:apply-templates/>
   </dd>
@@ -406,7 +434,7 @@ modifita de Wolfram Diestel
   <img src="{@lok}"/>
   <br/>
   <i>
-  <xsl:apply-templates select="text()|tld|ind"/>
+  <xsl:apply-templates select="text()|tld|ind|klr"/>
   </i>
   <br/>
   </center>
@@ -423,6 +451,41 @@ modifita de Wolfram Diestel
   </xsl:if>
 </xsl:template>
 
+<xsl:template match="uzo[@tip='stl']">
+  <xsl:choose>
+    <xsl:when test=".='KOMUNE'">
+      <xsl:text>(komune) </xsl:text>
+    </xsl:when>
+    <xsl:when test=".='FIG'">
+      <xsl:text>(f) </xsl:text>
+    </xsl:when>
+    <xsl:when test=".='ARK'">
+      <xsl:text>(ark.) </xsl:text>
+    </xsl:when>
+    <xsl:when test=".='EVI'">
+      <xsl:text>(Ev.) </xsl:text>
+    </xsl:when>
+    <xsl:when test=".='FRAZ'">
+      <xsl:text>(fraza&#x0135;o) </xsl:text>
+    </xsl:when>
+    <xsl:when test=".='VULG'">
+      <xsl:text>(vulgare) </xsl:text>
+    </xsl:when>
+    <xsl:when test=".='RAR'">
+      <xsl:text>(malofte) </xsl:text>
+    </xsl:when>
+    <xsl:when test=".='POE'">
+      <xsl:text>(poezie) </xsl:text>
+    </xsl:when>
+    <xsl:when test=".='NEO'">
+      <xsl:text>(neologismo) </xsl:text>
+    </xsl:when>    
+  </xsl:choose>
+  <xsl:if test="drv/uzo">
+    <br />
+  </xsl:if>
+</xsl:template>
+
 <xsl:template match="uzo">
   <xsl:apply-templates/>
   <xsl:if test="drv/uzo">
@@ -433,7 +496,7 @@ modifita de Wolfram Diestel
 <xsl:template match="url">
   <br />
   <img src="{$smbdir}/url.gif" alt="URL:" />
-  <a class="url" href="{@ref}">
+  <a class="url" href="{@ref}" target="_new">
   <xsl:apply-templates/>
   </a>
 </xsl:template>
@@ -692,7 +755,7 @@ modifita de Wolfram Diestel
 </xsl:template>
 
 <xsl:template match="url" mode="fontoj">
-  <a class="fnturl" href="{@ref}">
+  <a class="fnturl" href="{@ref}" target="_new">
   <xsl:apply-templates/>
   </a>
 </xsl:template>

@@ -111,7 +111,6 @@ sub start_handler {
 	@art_sin = ();
 	@art_ant = ();
 	@art_vid = ();
-	@art_malvid = ();
 	@art_super = ();
 	@art_sub = ();
 	@art_prt = ();
@@ -126,7 +125,6 @@ sub start_handler {
 	@drv_sin = ();
 	@drv_ant = ();
 	@drv_vid = ();
-	@drv_malvid = ();
 	@drv_super = ();
 	@drv_sub = ();
 	@drv_prt = ();
@@ -145,7 +143,6 @@ sub start_handler {
 	@snc_sin = ();
 	@snc_ant = ();
 	@snc_vid = ();
-	@snc_malvid = ();
 	@snc_super = ();
 	@snc_sub = ();
 	@snc_prt = ();
@@ -164,7 +161,6 @@ sub start_handler {
 	@subsnc_sin = ();
 	@subsnc_ant = ();
 	@subsnc_vid = ();
-	@subsnc_malvid = ();
 	@subsnc_super = ();
 	@subsnc_sub = ();
 	@subsnc_prt = ();
@@ -251,7 +247,7 @@ sub add_entry {
     $entry{'mrk'} = ${$el.'_mrk'};
     $entry{'kap'} = ${$el.'_kap'};
 
-    foreach $a ('uzo','dif','sin','ant','vid','malvid','super','sub','prt','malprt') {
+    foreach $a ('uzo','dif','sin','ant','vid','super','sub','prt','malprt') {
       my @array = @{$el.'_'.$a};
       $entry{$a} = \@array;
     }
@@ -265,7 +261,7 @@ sub append_entry {
 
     my $entry = $wordlist{${$to.'_mrk'}};
 
-    foreach $a ('uzo','dif','sin','ant','vid','malvid','super','sub','prt','malprt') {
+    foreach $a ('uzo','dif','sin','ant','vid','super','sub','prt','malprt') {
 	push @{$entry->{$a}}, @{$from.'_'.$a};
     }
 }
@@ -297,7 +293,7 @@ sub complete_refs {
 	cmpl_refs_aux($entry,'sin',$entry->{'dif'}); # 'dif' alidirekte estu 'sin'!
 	cmpl_refs_aux($entry,'sin',$entry->{'sin'});
 	cmpl_refs_aux($entry,'ant',$entry->{'ant'});
-	cmpl_refs_aux($entry,'malvid',$entry->{'vid'}); 
+	cmpl_refs_aux($entry,'vid',$entry->{'vid'}); 
 	cmpl_refs_aux($entry,'sub',$entry->{'super'});
 	cmpl_refs_aux($entry,'super',$entry->{'sub'});
 	cmpl_refs_aux($entry,'prt',$entry->{'malprt'});
@@ -608,27 +604,6 @@ sub html_tree {
 	    print "<p>\n";
 	}
         
-        # referencita de
-	if (@{$entry->{'malvid'}}) {
-	    print "<i class=griza>referencita de</i><br>\n";
-	    for $v (ordigu($entry->{'malvid'})) {
-		print
-		"<a href=\"".tez_link($v)."\">",
-		"<img src=\"../smb/vid.gif\"  alt=\"".$smb{'vid'}."\" border=0>",
-		"</a>\n";
-		print "<a href=\"".word_ref($v)."\" target=\"precipa\">"
-		    .$v->{'kap'}."</a>";
-
-		unless ($tz_files{tez_file($v)}){ # se ne jam ekzistas
-		#	or not ekzistas_referencoj($v)) { # estos iu enhavo
-		    push @subs, ($v)};
-		#print "[<a href=\"".tez_link($v)."\">...</a>]<br>\n";
-		print "<br>\n";
-	    }
-	    print "<p>\n";
-	}
-
-
 	footer();
 	
 	close OUT;
@@ -716,7 +691,7 @@ sub create_fx {
 	header($fako);
 	linkbuttons();
 	print
-	    "<a href=\"fx_".lc($fako).".html\">alfabete</a> ",
+	    "<a href=\"../inx/fx_".lc($fako).".html\">alfabete</a> ",
 	    "<b>strukture</b>\n<h1>$fakoj{$fako} strukture...</h1>\n";
 
 	foreach $entry (@root) {
