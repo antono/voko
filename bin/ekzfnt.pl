@@ -29,7 +29,7 @@ $ekz_trov_max=5;
 # kiom da shanghoj estas permesitaj 
 # inter serchajho kaj trovloko
 # che String::Approx::amatch
-$lim_approx='30%';
+#$lim_approx='30%';
 
 # kiom da n-gramoj de la citajho devas 
 # trovighi en la frazo
@@ -354,9 +354,15 @@ sub preparu_dos {
        $txt = tegc_cx($txt);
     } elsif ($enc eq 'entity') {
        $txt = entity_cx($txt);
+    } elsif ($enc eq 'ccirc') {
+       $txt = ccirc_cx($txt);
     } else {
        die "Nekonata literokodo $enc\n" if ($enc);
     }
+
+    # forigu chiujn restintajn literunuojn, char ili
+    # ghenas la frazfaradon (alternative oni povus literigi ilin)
+    $txt =~ s/&\#?[a-z0-9_]+;//sg;
 
     # faru frazojn lau frazsignoj
     foreach $frazo (split(/[!\.;\?]/,$txt)) {
@@ -587,7 +593,7 @@ sub print_chiuj_trovoj {
 
 	    print "text: ", substr($text,0,50), "\n" if ($debug);
 
-	    &{$trovo->[5]}(\$text,$trovo->[4]);
+	    &{$trovo->[5]}(\$text,$trovo->[4],$trovo->[3]);
 
 	    # eligu xml
 	    print "\n$xml\n  ---\n";
@@ -677,6 +683,13 @@ sub cx_ccirc {
     $vort = shift;
     $vort =~ s/[CcGgHhJjSs]x/&$1circ;/g;
     $vort =~ s/[Uu]/&$1breve;/g;
+    return $vort;
+}
+
+sub ccirc_cx {
+    $vort = shift;
+    $vort =~ s/&([CcGgHhJjSs])circ;/$1x/g;
+    $vort =~ s/&([Uu])breve;/$1x/g;
     return $vort;
 }
 
