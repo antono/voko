@@ -162,12 +162,12 @@ modifita de Wolfram Diestel
 
 <xsl:template match="drv">
   <a name="{@mrk}"></a>
-  <xsl:apply-templates select="kap|gra|uzo|fnt"/>
+  <xsl:apply-templates select="kap|gra|uzo|fnt|dif"/>
   <dl compact="">
   <xsl:apply-templates select="subdrv|snc"/>
   </dl>
   <xsl:apply-templates
-    select="*[not(self::subdrv|self::snc|self::gra|self::uzo|self::fnt|self::kap)]"/>
+    select="*[not(self::subdrv|self::snc|self::gra|self::uzo|self::fnt|self::kap|self::dif)]"/>
 </xsl:template>  
 	
 <xsl:template match="subdrv">
@@ -295,6 +295,9 @@ modifita de Wolfram Diestel
     <xsl:when test="@tip='vid'">
       <xsl:text>VD:</xsl:text>
     </xsl:when>
+    <xsl:when test="@tip='dif'">
+      <xsl:text>=</xsl:text>
+    </xsl:when>
     <xsl:when test="@tip='sin'">
       <xsl:text>SIN:</xsl:text>
     </xsl:when>
@@ -349,6 +352,13 @@ modifita de Wolfram Diestel
 </xsl:template>
 
 <xsl:template match="dif/refgrp|dif/ref">
+  <xsl:if test="@tip='dif'">
+    <img src="{$smbdir}/{@tip}.gif">
+      <xsl:attribute name="alt">
+        <xsl:call-template name="reftip"/>
+      </xsl:attribute>
+    </img> 
+  </xsl:if>
   <xsl:variable name="file" select="substring-before(@cel,'.')"/>
   <xsl:choose>
     <xsl:when test="$file">

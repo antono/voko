@@ -169,19 +169,49 @@
   <xsl:apply-templates/>
 </xsl:template>
 
+<xsl:template name="reftip">
+  <xsl:choose>
+    <xsl:when test="@tip='vid'">
+      <xsl:text>VD:</xsl:text>
+    </xsl:when>
+    <xsl:when test="@tip='dif'">
+      <xsl:text>=</xsl:text>
+    </xsl:when>
+    <xsl:when test="@tip='sin'">
+      <xsl:text>SIN:</xsl:text>
+    </xsl:when>
+    <xsl:when test="@tip='ant'">
+      <xsl:text>ANT:</xsl:text>
+    </xsl:when>
+    <xsl:when test="@tip='super'">
+      <xsl:text>SUP:</xsl:text>
+    </xsl:when>
+    <xsl:when test="@tip='sub'">
+      <xsl:text>SUB:</xsl:text>
+    </xsl:when>
+    <xsl:when test="@tip='prt'">
+      <xsl:text>ERO:</xsl:text>
+    </xsl:when>
+    <xsl:when test="@tip='malprt'">
+      <xsl:text>UJO:</xsl:text>
+    </xsl:when>
+  </xsl:choose>
+</xsl:template>
+
 <xsl:template match="refgrp">
-  <xsl:text>=&gt; </xsl:text>
+  <xsl:call-template name="reftip"/>
   <xsl:apply-templates/>
 </xsl:template>
 
 <xsl:template match="ref">
-  <xsl:if test="@tip">
-    <xsl:text>=&gt; </xsl:text>
-  </xsl:if>
+  <xsl:call-template name="reftip"/>
   <xsl:apply-templates/>
 </xsl:template>
 
 <xsl:template match="dif/refgrp|dif/ref">
+  <xsl:if test="@tip='dif'">
+    <xsl:text>=</xsl:text>
+  </xsl:if>
   <xsl:apply-templates/>
 </xsl:template>
 
