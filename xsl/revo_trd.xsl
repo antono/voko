@@ -174,7 +174,14 @@ montru tie, cxar ili estas esenca parto de la tiuj -->
   <!-- skribu la tradukon mem --> 
   <xsl:text> </xsl:text>
   <span class="trdnac">
-    <xsl:apply-templates mode="tradukoj"/>
+    <xsl:choose>
+      <xsl:when test="trd">
+        <xsl:apply-templates select="trd" mode="tradukoj"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-templates mode="tradukoj"/>
+      </xsl:otherwise>
+    </xsl:choose>
   </span>
   <xsl:choose>
     <xsl:when test="not(position()=last())">
@@ -189,6 +196,9 @@ montru tie, cxar ili estas esenca parto de la tiuj -->
 
 <xsl:template match="trdgrp/trd" mode="tradukoj">
   <xsl:apply-templates mode="tradukoj"/>
+  <xsl:if test="following-sibling::trd">
+    <xsl:text>, </xsl:text>
+  </xsl:if>
 </xsl:template>
 
 <xsl:template match="klr[@tip='ind']" mode="tradukoj"/>

@@ -36,6 +36,7 @@ name="redcgi">/cgi-bin/vokomail.pl?art=</xsl:variable -->
 <xsl:variable name="bibliografio">../cfg/bibliogr.xml</xsl:variable>
 <xsl:variable name="bibliogrhtml">../dok/bibliogr.xml</xsl:variable>
 <xsl:variable name="revo">/home/revo/revo</xsl:variable>
+<xsl:variable name="lingvoj_cfg" select="'../cfg/lingvoj.xml'"/>
 
 <!-- ilustrite por HTML kun grafikoj ktp.
      simple por HTML tauga por konverto al simpla teksto -->
