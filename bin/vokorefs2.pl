@@ -15,6 +15,7 @@ $show_progress = 0;
 $| = 1;
 
 $tez_lim = 10;
+@romiaj = ('0','I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII');
 
 # analizi la argumentojn
 
@@ -132,6 +133,12 @@ sub start_handler {
 	@art_sub = ();
 	@art_prt = ();
 	@art_malprt = ();
+	$art_subart = 0;
+    }
+    elsif ($el eq 'subart')
+    {
+	++$art_subart;
+	$subart_snc = 0;
     }
     elsif ($el eq 'drv') 
     {
@@ -150,11 +157,22 @@ sub start_handler {
     }
     elsif ($el eq 'snc') 
     {
-	++$drv_snc;
-	unless ($snc_mrk = get_attr('mrk',@attrs)) {
-	    $snc_mrk = $drv_mrk.".".$drv_snc;
-	};
-	$snc_kap = $drv_kap." ".$drv_snc;
+	if ($xp->in_element('drv')) {
+	    ++$drv_snc;
+	    unless ($snc_mrk = get_attr('mrk',@attrs)) {
+		$snc_mrk = $drv_mrk.".".$drv_snc;
+	    };
+	    $snc_kap = $drv_kap." ".$drv_snc;
+	} elsif ($xp->in_element('subart')) {
+	    ++$subart_snc;
+	    unless ($snc_mrk = get_attr('mrk',@attrs)) {
+		$snc_mrk = $art_mrk.".".$romiaj[$art_subart].".".$subart_snc;
+	    }
+	    $snc_kap = $art_kap." ".$romiaj[$art_subart]." ".$subart_snc;
+	} else {
+	    warn "KOREKTU PROGRAMON: Senco nek ene de drv nek ene de subart".
+		"($art_kap)!\n";
+	}
 	@snc_uzo = ();
 	@snc_dif = ();
 	@snc_sin = ();
@@ -261,6 +279,7 @@ sub add_entry {
 
     my %entry = ();
 
+    # kopiu chion el {$el}_mrk, {$el}_kap ktp. al %entry
     $entry{'mrk'} = ${$el.'_mrk'};
     $entry{'kap'} = ${$el.'_kap'};
 
@@ -269,6 +288,7 @@ sub add_entry {
       $entry{$a} = \@array;
     }
 
+    # aldonu %entry al vortlisto
     $wordlist{${$el.'_mrk'}} = \%entry;
 }
 

@@ -80,8 +80,10 @@ $refdir = '../art/';
 # legu la fakojn
 %faknomoj = read_cfg($config{"fakoj"});
 
-# legu la tutan indeks-dosieron
+# legu la lingvojn
+%lingvoj=read_cfg($config{"lingvoj"});
 
+# legu la tutan indeks-dosieron
 print "Legi kaj analizi $inxfn...\n" if ($verbose);
 $/ = '</art';
 open INX, $inxfn or die "Ne povis malfermi $inxfn\n";
@@ -117,8 +119,7 @@ if ($indeksoj=~/fak/) {
 
 # lingvoindeksoj
 if ($indeksoj=~/lng/) {
-    # legu la lingvojn
-    %lingvoj=read_cfg($config{"lingvoj"});
+
     # kreu la lingvoindeksojn
     foreach $lng (sort keys %tradukoj) { 
 	@literoj = sort { cmp_nls($a,$b,$lng) } keys %{$tradukoj{$lng}};
@@ -191,7 +192,7 @@ sub artikolo {
     unless ($mrk) {
 	# se ne estas vosto de la dosiero, plendu
 	if ($tekst =~ /<\/art$/) {
-	    warn "marko ne trovighis en $tekst\n";
+	    warn "ERARO: marko ne trovighis en $tekst\n";
 	}
 	return;
     }
@@ -200,7 +201,7 @@ sub artikolo {
     $tekst =~ /^\s*<kap\s*>(.*?)<\/kap\s*>/s;
     $kap = $1;
     unless ($kap) {
-	warn "kapvorto ne trovighis en $tekst\n";
+	warn "ERARO: kapvorto ne trovighis en $tekst\n";
     }
 
     print "kap: $kap\n" if ($debug);
@@ -322,7 +323,8 @@ sub fako {
    my ($fak,$mrk,$kap,$rad)=@_;
 
    unless ($faknomoj{uc($fak)}) {
-        warn "Fako \"$fak\" ne difinita ($mrk)\n";
+        warn "ERARO: Fako \"$fak\" ne difinita ($mrk)\n";
+	return;
     }            
 
     $kap =~ s/\///;
@@ -368,6 +370,11 @@ sub traduko {
     my ($trd,$lng,$mrk,$kap)=@_;
     my ($letter,$ind);
     $kap =~ s/\///;
+
+    unless ($lingvoj{$lng}) {
+	warn "ERARO: Lingvo \"$lng\" ne difinita en \"$mrk\"!\n";
+	return;
+    }
 
     # mallongigita?
     if ($trd =~ s/<mll([^>]*)>(.*?)<\/mll\s*>//si) {
@@ -420,7 +427,7 @@ sub FAKINX {
     open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
     select OUT;
     unless ($faknomo=$faknomoj{uc($fako)}) {
-	warn "Fako \"$fako\" ne difinita\n";
+	warn "ERARO: Fako \"$fako\" ne difinita\n";
 	$faknomo='';
     }
 
@@ -894,7 +901,7 @@ sub INX_FAK {
 	    {
 		my $faknomo=$faknomoj{uc($fak)};
 		unless ($faknomo) {
-		    warn "Faknomo \"$fak\" ne difinita!\n";
+		    warn "ERARO: Faknomo \"$fak\" ne difinita!\n";
 		    $faknomo = 'nekonata';
 		}
 		print 
@@ -911,7 +918,7 @@ sub INX_FAK {
 	{
 	    my $faknomo=$faknomoj{uc($fak)};
 	    unless ($faknomo) {
-		warn "Faknomo \"$fak\" ne difinita!\n";
+		warn "ERARO: Faknomo \"$fak\" ne difinita!\n";
 		$faknomo = '';
 	    }
 	    print 
@@ -1063,7 +1070,7 @@ sub INX_PLENA {
 	    {
 		my $faknomo=$faknomoj{uc($fak)};
 		unless ($faknomo) {
-		    warn "Faknomo \"$fak\" ne difinita!\n";
+		    warn "ERARO: Faknomo \"$fak\" ne difinita!\n";
 		    $faknomo = '';
 		}
 		print "<a href=\"fx_", lc($fak), ".html\">", 
@@ -1079,7 +1086,7 @@ sub INX_PLENA {
 	{
 	    my $faknomo=$faknomoj{uc($fak)};
 	    unless ($faknomo) {
-		warn "Faknomo \"$fak\" ne difinita!\n";
+		warn "ERARO: Faknomo \"$fak\" ne difinita!\n";
 		$faknomo = '';
 	    }
 	    print "<a href=\"$strukt_fakoj{$fak}\">",
@@ -1326,7 +1333,7 @@ sub cvs_log {
 	$info = $2;
 
 	unless ($info) {
-	    warn "$dos: Ne povis elpreni versioinformon el $log\n";
+	    warn "ERARO: $dos: Ne povis elpreni versioinformon el $log\n";
 	    return;
 	}
 
