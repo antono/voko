@@ -13,9 +13,10 @@ $CGI::DISABLE_UPLOADS=1; # ne permesu dosier-shargojn
 
 # indikoj por la redaktopaghoj
 $revo_dir = '/data/homewww/ejs/webdir/voko/revo';
-$html_dir = "$revo_dir/art";
+$revo_url = 'http://www.uni-leipzig.de/esperanto/voko/revo';
+$html_dir = "$revo_url/art";
 $xml_dir = "$revo_dir/xml";
-$dok_dir = "$revo_dir/dok";
+$dok_dir = "$revo_url/dok";
 $revo_mail = 'mailto:revo@steloj.de'; 
 
 if ($eraro = test_params() ) {

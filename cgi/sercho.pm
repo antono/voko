@@ -1,172 +1,132 @@
 package sercho;
 
-# serchas en indekso.sgml 
+# serchas en indekso aý plena teksto iujn artikolojn
 #
-# kiel parametroj ghi prenas la indekso-dosieron, en kiu
-# serchi, la serchesprimon kaj la strukturo, en kiu serchi
-# la strukturo devas esti substrukturo de <drv>, do
-# estas eble momente <kap>, <trd> kaj <ref>.
-# La trovlokoj estas redonataj kiel
-# marko de la artikolo || artikolkapvorto || marko de la derivajho ||
-# derivajh-kapvorto || trovita vorto
+# kiel parametroj estu donataj serædosiero, seræesprimo kaj 
+# strukturilo, kiu estu traseræata
 #
-# tiu chi modulo estas intencita por uzo en CGI-programo.
+# La trovlokoj estos redonitaj en la formo
+# artikolmarko || kapvorto || deriva¼marko ||
+# deriva¼kapvorto || trovita vorto
 
-# kreas novan sercho-'klason'
+
+# kreu novan seræobjekton
 
 sub nova {
     my $class = shift;
     my %params = @_;
     my $this = {};
 
-    # kopiu la parametrojn
+    # kopiu parametrojn
     $this->{'dosiero'} = $params{'dosiero'};  # la indeksdosiero, en kiu serchi
     $this->{'esprimo'} = $params{'esprimo'};  # la serchesprimo
     $this->{'strukturo'} = $params{'strukturo'}; # la strukturo, en kiu serchi
     
-    # baptu la novan objekton
+    # baptu la objekton
     bless $this, $class;
 }
 
-
-# malfermas la dosieron, voku ghin antau 'serchu_sekvan'
+# malfermu la dosieron
 
 sub malfermu {
     my $this = shift;
     
-    # malfermu la indeksdoieron
-    open INX,$this->{'dosiero'} or die "Ne povis malfermi $this{'dosiero'}.\n";
+    # malfermu la indeksdosieron
+    open INX,$this->{'dosiero'} 
+      or die "Ne povis malfermi $this->{'dosiero'}.\n";
     $this -> {'dosierreferenco'} = INX;
 };
 
-# serchas, ghis ghi trovis artikolon, en kiu
-# trovighas la serchata au ghis la fino
-# de la dosiero
+# seræu artikolon
 
 sub serchu_sekvan {
     my $this = shift;
     my $dos = $this->{'dosierreferenco'};
     my $strukt = $this->{'strukturo'};
-    my $esprim = $this->{'esprimo'};
+    my $esprim = x_Lat3($this->{'esprimo'});
     my @rezulto,@rez1;
     my $amrk,$akap,$rez2,$drv;
 
     $/='</art';
 
-    # legu la unu artikolon el la dosiero
+    # legu unu artikolon
     while (<$dos>) {
 
-	# trovu la markon de la artikolo
+	# elprenu la markon
 	if (/<art\s+mrk\="([a-zA-Z0-9\.]*)"\s*>/si) { 
 	    $amrk = $1; 
 	    $amrk =~ s/\s+/ /sg;
 	};
 
+	# transformu la artikolon al Latin-3
+	$_ = Lat3($_);
+
+	# legu la kapvorton
+	if (/<kap[^>]*>(.*?)<\/kap\s*>/si) { 
+	    $akap = $1;
+	    $akap =~ s/<fnt>(.*)<\/fnt>//sg;
+	    $akap =~ s/<[^<]*>//sg;
+	    $akap =~ s/\s+Z?$//;
+	    $akap =~ s/\s+/ /sg;
+	    $akap =~ s/^\s+//;
+	};
+
 	if ($strukt eq 'art') {
 
-	    # anstatuigu e-signojn
-	    s/&([cghjs])circ;/$1x/sig;
-	    s/&(u)breve;/$1x/sig;
-
-	    # legu la kapvorton
-	    if (/<kap[^>]*>(.*?)<\/kap\s*>/si) { 
-		$akap = espsignoj1($1); 
-		$akap =~ s/<[^<]*>//sg;
-		$akap =~ s/\*\s*//;
-		$akap =~ s/[0-9]/\//g;
-		$akap =~ s/\s+Z?$//;
-		$akap =~ s/\s+/ /sg;
-		$akap =~ s/^\s+//;
-	    };
-    	
-	    # trovu la radikon kaj anstatauigu la tildojn
+	    # tildojn anstataýigu per la radiko
 	    if (/<rad\s*>(.*?)<\/rad\s*>/si) {
 		$drv = $1;
-		s/<tld>/$drv/sig;
+		s/<tld\/?>/$drv/sig;
 	    } else {
-		s/<tld>/~/sig;
+		s/<tld\/?>/~/sig;
 	    };
 
-	    # forigu chiujn strukturilojn el la artikolo
+	    # forigu æiujn strukturilojn el la artikolo
 	    s/<\/art$//si;
 	    s/[\s]*<[^<]*>[\s]*/ /sg;
 	    $rez2 = '';
 	    
-	    # serchu la esprimon
-	    while (/(\w*$esprim\w*)/g) { $rez2 .= "||".espsignoj1($1); };
-	    if ($rez2) { @rezulto = (@rezulto,"$amrk||$akap$rez2"); };
+	    # seræu la esprimon
+	    while (/(\w*$esprim\w*)/g) { $rez2 .= "||".$1; };
+	    if ($rez2) { @rezulto = (@rezulto,utf8("$amrk||$akap$rez2")); };
 	}
 	else {
 
-	    # legu la kapvorton
-	    if (/<kap[^>]*>(.*?)<\/kap\s*>/si) { 
-		$akap = $1; 
-		$akap =~ s/\*\s*//;
-		$akap =~ s/[0-9]/\//g;
-		$akap =~ s/\s+Z?$//;
-		$akap =~ s/\s+/ /sg;
-		$akap =~ s/^\s+//;
-	    };    
+	    # analizu cxion ekster (antaý) deriva¼oj
+	    if (/<art[^>]*>(.*?)(?:<drv|<\/art)/si) {
+		$drv = "<drv mrk=\"$amrk\">$1</drv>";
+		@rez1 = DRV($this,$amrk,$akap,$drv);
+		if (@rez1) { @rezulto = (@rezulto,@rez1); };
+	    };
 
-	    # analizu la derivajhojn
+	    # analizu la deriva¼ojn
 	    while (/(<drv.*?<\/drv\s*>)/sig) {
 		$drv = $1;
 		@rez1 = DRV($this,$amrk,$akap,$drv);
 		if (@rez1) { @rezulto = (@rezulto,@rez1); };
 	    };
+
+	    # fakte restas netrovata cxio, kio estas inter 
+	    # deriva¼oj kaj malantaý deriva¼oj, tio povus okazi
+	    # æe artikoloj, kiuj konsistas el subartikoloj.
+	    # kiel plej konvene solvi tion?
 	};
 	if (@rezulto) { return @rezulto };
     };
 
-    # fino de la dosiero
+    # dosierfino
     close $dos;
     return ();
 };
 
-# tiu chi funkcio redonas la rezulton nur post
-# trasercho de la tuta dosiero, ne estas tre
-# tauga, kaj momente ne uzata.
-
-sub serchu {
-    my $this = shift;
-    my @rezulto;
-    my $amrk,$akap;
-    
-    $/='</art';
-
-    # malfermu la indeksdoieron
-    open INX,$this->{'dosiero'} or die "Ne povis malfermi $this{'dosiero'}.\n";
-
-    # legu la unuopajn artikol-indekserojn el indekso
-    while (<INX>) {
-
-	# trovu la markon de la artikolo
-	if (/<art\s+mrk\="([a-zA-Z0-9\.]*)"\s*>/si) { 
-	    $amrk = $1; 
-	    $amrk =~ s/\s+/ /sg;
-	};
-	# legu la kapvorton
-	if (/<kap[^>]*>(.*?)<\/kap\s*>/si) { 
-	    $akap = $1; 
-	    $akap =~ s/\s+/ /sg;
-	    $akap =~ s/[0-9]/\//g;
-	    $akap =~ s/\*\s*//;
-	};    
-	# analizu la derivajhojn
-	while (/(<drv(.*?)<\/drv\s*>)/sig) {
-	    my @rez = DRV($this,$amrk,$akap,$1);
-	    if (@rez) { push @rezulto, @rez; };
-	};
-    };
-
-    return @rezulto;
-};
+# analizas artikoleron rilate al unu deriva¼o
 
 sub DRV {
     my ($this,$amrk,$akap,$tekst) = @_;
     my $mrk,$str,$kap;
     my $strukt = $this->{'strukturo'};
     my $esprim = $this->{'esprimo'};
+    $esprim = x_Lat3($esprim) unless ($strukt eq 'trd');
     my @rez;
 
     # legu la markon
@@ -178,50 +138,62 @@ sub DRV {
     # legu la kapvorton
     if ($tekst =~ /<kap[^>]*>(.*?)<\/kap\s*>/si) { 
 	$kap = $1; 
+	$akap =~ s/<fnt>(.*)<\/fnt>//sg;
 	$kap =~ s/\s+/ /sg;
-	#$kap =~ s/[0-9]/\//g;
-	$kap =~ s/\*\s*//;
     };
-
-#    print "$kap\n";
 
     # chu la serchata estas ene?
 
-    while ($tekst =~ /<$strukt[^>]*>(.*?)<\/$strukt\s*>/ig) {
+    while ($tekst =~ /<$strukt[^>]*>(.*?)<\/$strukt\s*>/sig) {
 	$str = $1;
-	$str = espsignoj($str);
 	if ($str =~ /$esprim/i) {
 	    $str =~ s/\s+/ /sg;
-	    $str = espsignoj1($str);
-	    @rez = (@rez,"$amrk||$akap||$mrk||$kap||$str");
+	    @rez = (@rez,utf8("$amrk||$akap||$mrk||$kap||$str"));
 	};
     };
 
     return @rez;
 };
 
-sub espsignoj {
+# anstataýigo de E-literoj
+
+sub Lat3 {
+    my $txt = $_[0];
+    
+    # povus esti unuoj ene
+    $txt =~ s/&Ccirc;/\306/sg;
+    $txt =~ s/&Gcirc;/\330/sg;
+    $txt =~ s/&Hcirc;/\246/sg;
+    $txt =~ s/&Jcirc;/\254/sg;
+    $txt =~ s/&Scirc;/\336/sg;
+    $txt =~ s/&Ubreve;/\335/sg;
+    $txt =~ s/&ccirc;/\346/sg;
+    $txt =~ s/&gcirc;/\370/sg;
+    $txt =~ s/&hcirc;/\266/sg;
+    $txt =~ s/&jcirc;/\274/sg;
+    $txt =~ s/&scirc;/\376/sg;
+    $txt =~ s/&ubreve;/\375/sg;
+
+    # kaj povus esti UTF-8 ene
+    $txt =~ s/\304\210/\306/g;
+    $txt =~ s/\304\234/\330/g;
+    $txt =~ s/\304\244/\246/g;
+    $txt =~ s/\304\264/\254/g;
+    $txt =~ s/\305\234/\336/g;
+    $txt =~ s/\305\254/\335/g;
+    $txt =~ s/\304\211/\346/g;
+    $txt =~ s/\304\235/\370/g;
+    $txt =~ s/\304\245/\266/g;
+    $txt =~ s/\304\265/\274/g;
+    $txt =~ s/\305\235/\376/g;
+    $txt =~ s/\305\255/\375/g;
+    
+    return $txt;
+}
+
+sub x_Lat3 {
     $vort = $_[0];
     # konverti la e-literojn al cx ... ux
-    $vort =~ s/\306/Cx/g;
-    $vort =~ s/\330/Gx/g;
-    $vort =~ s/\246/Hx/g; 
-    $vort =~ s/\254/Jx/g;
-    $vort =~ s/\336/Sx/g;
-    $vort =~ s/\335/Ux/g;
-    $vort =~ s/\346/cx/g;
-    $vort =~ s/\370/gx/g;
-    $vort =~ s/\266/hx/g;
-    $vort =~ s/\274/jx/g;
-    $vort =~ s/\376/sx/g; 
-    $vort =~ s/\375/ux/g;
-
-    return $vort;
-};
-
-sub espsignoj1 {
-    $vort = $_[0];
-    # konverti la e-literojn de cx ... ux
     $vort =~ s/Cx/\306/g;
     $vort =~ s/Gx/\330/g;
     $vort =~ s/Hx/\246/g; 
@@ -238,8 +210,42 @@ sub espsignoj1 {
     return $vort;
 };
 
+sub utf8 {
+    $txt = $_[0];
 
-# fino de la pakajho
+    # kaj povus esti UTF-8 ene
+    $txt =~ s/\306/\304\210/g;
+    $txt =~ s/\330/\304\234/g;
+    $txt =~ s/\246/\304\244/g;
+    $txt =~ s/\254/\304\264/g;
+    $txt =~ s/\336/\305\234/g;
+    $txt =~ s/\335/\305\254/g;
+    $txt =~ s/\346/\304\211/g;
+    $txt =~ s/\370/\304\235/g;
+    $txt =~ s/\266/\304\245/g;
+    $txt =~ s/\274/\304\265/g;
+    $txt =~ s/\376/\305\235/g;
+    $txt =~ s/\375/\305\255/g;
+
+    return $txt;
+};
+
+# fino de la paka¼o
 1;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

@@ -44,7 +44,8 @@ require $pado."sercho.pm";
 # Se en via medio (ENVIRONMENT) ne estas
 # difinita $VOKO, tie æi indiku la absolutan padon
 # al via voko-dosiero
-$VOKO = $ENV{'VOKO'};
+#$VOKO = $ENV{'VOKO'};
+$VOKO="/home/wolfram/work";
 
 # kiuj vortaroj ekzistas, kaj en kiuj
 # lokoj ili estas? La lokojn nepre donu 
@@ -53,15 +54,16 @@ $VOKO = $ENV{'VOKO'};
 # <input type=hidden name=vortaro value=%%%>
 
 %vortaroj = (
-  'pev' => "pev",
+  'revo' => "revo",
   'pevet' => "pevet",
   'grimp' => "grimp",
   'bak' => "bak"
 );
 
-$site="file:$VOKO/"; # por loka vortaro
+# $site="file:$VOKO/"; # por loka vortaro
 # $site="http://localhost/pado/al/voko/"; # por loka ttt-servilo
 # $site="http://mia.komputilo/pado/al/voko/"; # por 'publika' ttt-servilo 
+$site="http://localhost/voko/";
 
 # restriktoj por parametroj
 $eblaj_parametroj = 'strukturo|esprimo|nombro|vortaro';
@@ -99,8 +101,8 @@ $max=$params{'nombro'};
 if (($max eq '') or ($max <= 0)) { $max = 100000000 };
 
 # lokoj kaj nomoj de indekso kaj vortaro
-$inxfn = "$VOKO/$pado/sgm/indekso.sgml";
-$vrtfn = "$VOKO/$pado/sgm/vortaro.sgml";
+$inxfn = "$VOKO/$pado/sgm/indekso.xml";
+$vrtfn = "$VOKO/$pado/sgm/vortaro.xml";
 
 # sub Windows anstatauigu la disklegil-literon
 $pado =~ s§([A-Z])\:/§///$1|/§i;
@@ -111,19 +113,21 @@ $artikoloj = "$site$pado/art";
 $stilo = "<link titel=\"indekso-stilo\" type=\"text/css\" ".
     "rel=stylesheet href=\"$vortaro_radiko/stl/indeksoj.css\">\n";
 
-$referencoj= "<i><a href=\"$vortaro_radiko/sercxo.htm\" ".
-    "target=\"precipa\">seræo</a></i>\n".
-    "<i><a href=\"$vortaro_radiko/inx/indeksoj.htm\" ".
+$referencoj= "<i><a href=\"$vortaro_radiko/sercxo.html\" ".
+    "target=\"precipa\">ser\304\211o</a></i>\n".
+    "<i><a href=\"$vortaro_radiko/inx/indeksoj.html\" ".
     "target=\"indekso\">indeksoj</a></i>\n";
+
+$charset = "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n";
 
 $|=1;
 
 # skribu la kapon de la dosiero
 print "Content-Type: text/html\n\n";
 print "<html><head><title>sercxrezulto</title>\n";
-print "$stilo</head><body>\n";
+print "$charset$stilo</head><body>\n";
 print "$referencoj";
-print "<h1>serærezulto</h1>\n";
+print "<h1>ser\304\211rezulto</h1>\n";
 
 # parametroj por la serch-objekto
 if ($params{'strukturo'} eq 'art') {
@@ -139,7 +143,7 @@ if ($params{'strukturo'} eq 'art') {
 	for $linio (@rez) { 
 	    my @fields = split(/\|\|/,$linio);
 	    print "<a href=\"$artikoloj/".lc($fields[0]).
-		".htm\" target=\"precipa\">$fields[1]</a>";
+		".html\" target=\"precipa\">$fields[1]</a>";
 	    print " (".$fields[2];
 	    for ($i=3; $i < ( $#fields > 12 ? 12 : $#fields); $i++) {
 		print ", ".$fields[$i];
@@ -149,6 +153,8 @@ if ($params{'strukturo'} eq 'art') {
 	};
      };
 } else {
+
+    
     %parametroj = (
 	       'dosiero' => "$inxfn",
 	       'esprimo' => "$params{'esprimo'}",
@@ -161,7 +167,7 @@ if ($params{'strukturo'} eq 'art') {
 	for $linio (@rez) { 
 	    my @fields = split(/\|\|/,$linio);
 	    $fields[2] =~ s/^([^\.]*)(.*)$/"$artikoloj\/".lc($1).
-		".htm#$2"/e;
+		".html#$2"/e;
 	    if ($parametroj{'strukturo'} ne 'kap') { print "$fields[4]: "; };
 	    print "<a href=\"$fields[2]\" target=\"precipa\">$fields[3]</a>";
 	    print "<br>\n";
@@ -183,4 +189,5 @@ sub mortu {
     print "</body></html>\n";
     exit;
 };
+
 
