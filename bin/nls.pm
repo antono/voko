@@ -236,7 +236,7 @@ sub read_nls_cfg {
                    # ignoru komantariojn kaj malplenajn liniojn
 	    
 	    # chu nova lingvo-sekcio?
-	    if ($line =~ /^\[(..)\]\s*$/) {
+	    if ($line =~ /^\[([a-z]{2,3})\]\s*$/) {
 		$lng = $1;
 		($a,$b,$c)=(0,0,0);
 		$min = 1;

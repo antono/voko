@@ -142,7 +142,8 @@ sub start_handler {
 
     # klarigojn transprenu nur, sed tip="ind"
     elsif ( $el eq 'klr' and
-	    get_attr('tip',@attrs) eq 'ind')
+	    (get_attr('tip',@attrs) eq 'ind' or
+	     get_attr('tip',@attrs) eq 'amb'))
     {
 	$ind = 1;
 	print "<klr>";

@@ -316,7 +316,7 @@ minuskligo.
 <!-- [klr] Klarigo pri vorto, difino, ekzemplo ktp.-->
 <!ELEMENT klr (#PCDATA|trd|trdgrp|ekz|ref|refgrp|%tekst-stiloj;)*>
 <!ATTLIST klr
-            tip (ind) #IMPLIED>
+            tip (ind|amb) #IMPLIED>
 
 <!-- [bib] Bibliografia indiko por fonto, estas mallongigo el
 listo de difinitaj bibliografieroj kaj anstataŭas verko- kaj aŭtoroindikon
