@@ -68,7 +68,7 @@
   </xsl:choose>
 </xsl:template>
 
-<xsl:template match="ekz/tld">
+<xsl:template match="ekz//tld">
   <xsl:value-of select="@lit"/>
   <xsl:text>~</xsl:text>
 </xsl:template>
@@ -287,7 +287,10 @@
       <xsl:value-of select="$lingvo"/>
     </h3>
     <xsl:apply-templates mode="tradukoj"
-      select="//trd[@lng=$lng]|//trdgrp[@lng=$lng]"/>
+      select="//trd[@lng=$lng][not(parent::ekz|parent::bld)]
+      | //trdgrp[@lng=$lng][not(parent::ekz|parent::bld)]"/>
+    <xsl:apply-templates mode="tradukoj"
+      select="//ekz/trd[@lng=$lng]|//ekz/trdgrp[@lng=$lng]"/>
   </xsl:if>
 </xsl:template>  
 
@@ -354,7 +357,7 @@
   <strong>
   <xsl:apply-templates 
     select="ancestor::node()[self::drv or self::snc or self::subsnc or
-      self::subdrv or self::subart or self::art][1]" mode="tradukoj"/>:
+      self::subdrv or self::subart or self::art or self::ekz][1]" mode="tradukoj"/>:
   </strong>
   <xsl:text> </xsl:text>
   <xsl:apply-templates mode="tradukoj"/>
@@ -395,9 +398,17 @@
   <xsl:number format="I"/>
 </xsl:template>
 
+<xsl:template match="ekz" mode="tradukoj">
+  <xsl:apply-templates select="ind" mode="tradukoj"/>
+</xsl:template>        
+
 <xsl:template match="kap" mode="tradukoj">
   <xsl:apply-templates select="tld|rad|text()" mode="tradukoj"/>
 </xsl:template>
+
+<xsl:template match="ind" mode="tradukoj">
+  <xsl:apply-templates mode="tradukoj"/>
+</xsl:template>  
 
 <xsl:template match="trdgrp/trd" mode="tradukoj">
   <xsl:apply-templates mode="tradukoj"/>
