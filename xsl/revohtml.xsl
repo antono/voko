@@ -118,6 +118,9 @@ modifita de Wolfram Diestel
     <xsl:with-param name="lng">cs</xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="flago">
+    <xsl:with-param name="lng">da</xsl:with-param>
+  </xsl:call-template>
+  <xsl:call-template name="flago">
     <xsl:with-param name="lng">fi</xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="flago">
@@ -580,6 +583,10 @@ modifita de Wolfram Diestel
   <xsl:call-template name="lingvo">
     <xsl:with-param name="lng">cs</xsl:with-param>
     <xsl:with-param name="lingvo">&#x0109;e&#x0125;e</xsl:with-param>
+  </xsl:call-template>
+  <xsl:call-template name="lingvo">
+    <xsl:with-param name="lng">da</xsl:with-param>
+    <xsl:with-param name="lingvo">dane</xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="lingvo">
     <xsl:with-param name="lng">fi</xsl:with-param>
