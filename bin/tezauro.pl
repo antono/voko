@@ -57,7 +57,8 @@ $dos=$config{"rilato_dosiero"};
 	'prt' => '&#x2199;', #'&#x220b;',
 	'malprt' => '&#x2197;', #'&#2208;',
 	'dif' => '=',
-	'ekz' => '-');
+	'ekz' => '-',
+	'*listo' => '&#x2199;');
 
 %img = ('vid' => 'vid.gif',
 	'sin' => 'sin.gif',
@@ -67,7 +68,8 @@ $dos=$config{"rilato_dosiero"};
 	'prt' => 'sub.gif',
 	'malprt' => 'super.gif',
 	'dif' => 'dif.gif',
-	'ekz' => 'ekz.gif');
+	'ekz' => 'ekz.gif',
+	'*listo' => 'sub.gif');
 
 die "Ne ekzistas dosierujo \"$dos\""
   unless -f $dos;
@@ -192,14 +194,14 @@ sub start_handler {
     elsif ($el eq 'tez')
     {
 	$tez = create_node(get_attr('mrk',@attrs));
-	$tez->{'nodspc'} = (get_attr('nodspc',@attrs) || 'kap');
+	$tez->{'nodspc'} = (get_attr('tip',@attrs) eq 'listo')? 'lst':'kap';
 	$kap = '';
 	my ($tip,$cel);
 	# "tez" povas referenci mem al supernocio
 	if ($cel = get_attr('cel',@attrs)) {
 	    $tip = get_attr('tip',@attrs);
 	    # se mankas tipindiko, uzu "vid"
-	    $tip = 'vid' unless ($tip =~ /^dif|sin|ant|sub|super|prt|malprt|ekz|lst$/);
+	    $tip = 'vid' unless ($tip =~ /^super|malprt|listo$/);
 	    push @{$tez->{$tip}}, ($cel);
 	}
     }
@@ -232,6 +234,7 @@ sub end_handler {
     if ($el eq 'kap') 
     {
 	$kap =~ s/^\s+//; $kap =~ s/\s+$//; 
+	$kap =~ s/\s+/ /g;
 	unless ($xp->current_element() =~ /^art|drv$/) {
 	    warn "KOREKTU: </kap> ene de <".$xp->current_element().
 		"> ne estas traktata ($art->{'mrk'})!\n";
@@ -329,6 +332,8 @@ sub make_net {
 	make_refs($node,'malprt','prt');
 	make_refs($node,'ekz','lst');
 	make_refs($node,'lst','ekz');
+	make_refs($node,'*listo','listo');
+	make_refs($node,'listo','*listo');
     }
     print "\n" if ($show_progress);
 }
@@ -550,11 +555,12 @@ sub html_tree {
 		$v->{'kap'}."</a>";
 	    if ($v->{'h'}*$v->{'c'}>$tez_lim) { print "</b>"; }
 	    print "\n<br>\n";
-
+	    
 #	    unless ($tip eq 'super' or $tip eq 'malprt'
 #		    or $tz_files{tez_file($v)}) {
 #		push @subs, ($v);
 #	    }
+	    
 	}
 	print "<p>\n";
     }
@@ -645,6 +651,12 @@ sub html_tree {
 			ero($node->{'prt'},'prt');
 		    }
 		    
+		    # listoj
+		    if (@{$node->{'*listo'}}) {
+			print "<i class=griza>listoj</i><br>\n";
+			ero($node->{'*listo'},'*listo');
+		    }
+
 		    # vidu ankau
 		    if (@{$node->{'vid'}}) {
 			print "<i class=griza>vidu</i><br>\n";
