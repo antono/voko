@@ -161,7 +161,7 @@ $out_dir = "$vortaro_pado/$dok_dir";
 @nls_lingvoj =();
 my $lng='';
 my $target_file = "$out_dir/lingvoj.html";
-print "$target_file..." if ($verbose);
+#print "$target_file...\n" if ($verbose);
 open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
 select OUT;
 lingv_header("Mallongigoj de lingvoj");
@@ -197,7 +197,7 @@ print "</TABLE>\n";
 lingv_footer();
 close OUT;
 select STDOUT;
-diff_mv($tmp_file,$target_file);
+diff_mv($tmp_file,$target_file,$verbose);
 
 
 
@@ -207,7 +207,7 @@ foreach $lng (@nls_lingvoj) {
     %letters = defined_nls($lng);
 
     $target_file = "$out_dir/$lng.html";
-    print "$target_file..." if ($verbose);
+#    print "$target_file...\n" if ($verbose);
     
     open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
     select OUT;
@@ -215,10 +215,10 @@ foreach $lng (@nls_lingvoj) {
     lingv_header("Alfabeto kaj literunuoj de la $lingvoj{$lng}");
     print "<TABLE BORDER=\"0\">\n<TR>\n".
 	" <TH ALIGN=\"LEFT\">Grupo</TH>\n".
-  	    " <TH ALIGN=\"LEFT\">Litero</TH>\n".
-		" <TH ALIGN=\"LEFT\">Priskribo</TH>\n".
-		    " <TH ALIGN=\"LEFT\">XML-nomo</TH>\n".
-			" <TH ALIGN=\"LEFT\">Unikodo</TH>\n</TR>\n";
+	" <TH ALIGN=\"LEFT\">Litero</TH>\n".
+	" <TH ALIGN=\"LEFT\">Priskribo</TH>\n".
+	" <TH ALIGN=\"LEFT\">XML-nomo</TH>\n".
+	" <TH ALIGN=\"LEFT\">Unikodo</TH>\n</TR>\n";
     
     # kalkulu por chiu litergrupo, kiom da eroj ghi havas
     my %cnts;
@@ -238,7 +238,7 @@ foreach $lng (@nls_lingvoj) {
 	$unuo = "&amp;#x$kodo;" if ($kodo and !$unuo);
 	
 	my $nomo;
-	if (first_utf8char($lit) ne $lit) { #supozu litergrupon
+	if (length(pack("U*",unpack("U*",$lit))) > 1) { #supozu litergrupon
 	    $nomo="litergrupo $lit";
 	    $unuo="&nbsp;";
 	    $kodo="&nbsp;";
@@ -281,7 +281,7 @@ foreach $lng (@nls_lingvoj) {
     close OUT;
     select STDOUT;
     
-    diff_mv($tmp_file,$target_file);
+    diff_mv($tmp_file,$target_file,$verbose);
 }
 
 
@@ -354,8 +354,8 @@ sub kodo {
     if ($lit =~ /^[\000-\200]$/) {
 	$kodo='';
     } else {
-	$kodo = utf8_hex($lit);
-	$kodo =~ s/^0x//;
+	$kodo = sprintf("%04X",unpack("U",$lit));
+#	$kodo =~ s/^0x//;
     }
     return lc($kodo);
 }
@@ -421,21 +421,7 @@ sub lingv_footer {
     print "\n</body>\n</html>\n";
 }
 
-# komparas novan dosieron kun ekzistanta,
-# kaj nur che shanghoj au neekzisto alshovas
-# la novan dosieron
 
-sub diff_mv {
-    my ($newfile,$oldfile) = @_;
-
-    if ((! -e $oldfile) or (`diff -q $newfile $oldfile`)) {
-	print "farite\n" if ($verbose);
-	`mv $newfile $oldfile`;
-    } else {
-	print "(senshanghe)\n" if ($verbose);
-	unlink($newfile);
-    }
-};
 
 
 
