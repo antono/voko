@@ -217,7 +217,7 @@ mem. La lingvon indikas la atributo <dfn>lng</dfn>.
 klarigoj kaj fonto.
 -->
 
-<!ELEMENT ekz (#PCDATA|fnt|uzo|ref|refgrp|%tekst-stiloj;)*>
+<!ELEMENT ekz (#PCDATA|fnt|uzo|ref|refgrp|ind|trd|trdgrp|%tekst-stiloj;)*>
 
 <!-- [rim] Rimarko povas enhavi iujn indikojn pri la vorto aŭ
 senco, krome referencojn, ekzemplojn, emfazitajn partojn.
@@ -273,16 +273,17 @@ kaj klarigoj, poste povos sekvi aliaj elementoj.
 >
 
 <!-- [ind] Parto de traduko, kiu liveras la kapvorton en la
-indekso, do <trd>sich <ind>bem&uuml;hen</ind></trd> aperas
-sub bem&uuml;hen.
+indekso, do &lt;trd&gt;sich &lt;ind&gt;bem&uuml;hen&lt;/ind&gt;&lt;/trd&gt;
+aperas sub bem&uuml;hen. Aŭ parto de ekzemplo aŭ bildpriskribo, al
+kiu rilatas internaj tradukoj ktp.
 -->
-<!ELEMENT ind (#PCDATA)>
+<!ELEMENT ind (#PCDATA|tld)*>
 
 <!-- [bld] Bildo povas ilustri iun vorton aŭ sencon. Per la
 atributo <dfn>lok</dfn> ĝi
 referencas al ekstera dosiero, kiu entenas la bildon.
 -->
-<!ELEMENT bld (#PCDATA|tld|trd)*>
+<!ELEMENT bld (#PCDATA|tld|ind|trd|trdgrp)*>
 <!ATTLIST bld
 	lok CDATA #REQUIRED
 >

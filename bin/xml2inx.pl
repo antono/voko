@@ -22,6 +22,7 @@ die "Ne ekzistas dosierujo \"$dos\""
 $radiko='';
 $fako=0;
 $lingvo='';
+$fermu_ekz=0;
 
 # indeks-komencon skribu
 print '<?xml version="1.0" encoding="UTF-8"?>';
@@ -90,7 +91,7 @@ sub start_handler {
 	$el eq 'kap' or
 	$el eq 'drv' or
 	$el eq 'ref' or
-	$el eq 'ind' 
+	($el eq 'ind' and not $xp->in_element('ekz')) 
 	)
     {
 	$attr = attr_str(@attrs);
@@ -99,11 +100,10 @@ sub start_handler {
     elsif ( $el eq 'tld' and 
 	    ($xp->in_element('kap') or
 	     $xp->in_element('ref') or
-	     $xp->in_element('bld'))
+	     $xp->in_element('bld') or
+	     $xp->in_element('ind'))
 	    ) 
     {
-	#$attr = attr_str(@attrs);
-	#print "<tld$attr/>";
 	my $lit = get_attr('lit',@attrs);
 	my $rad = $radiko;
 	if ($lit) {
@@ -133,7 +133,7 @@ sub start_handler {
     {
 	$lingvo = get_attr('lng',@attrs); # memoru lingvon
     }
-    elsif ( $el eq 'trd' and not $xp->in_element('bld')) 
+    elsif ( $el eq 'trd' ) 
     {
 	if ($xp->in_element('trdgrp')) {
 	    $attr = " lng=\"$lingvo\""; # la lingvo venas de trdgrp 
@@ -141,6 +141,11 @@ sub start_handler {
 	    $attr = attr_str(@attrs);   # la lingvo estas en atributo
 	}
 	print "<$el$attr>";	
+    }
+    elsif ($el eq 'ind' and $xp->in_element('ekz'))
+    {
+	print "<ekz><ind>";
+	$fermu_ekz = 1;  # funkcias nur, se <ind> venas antau <trd>
     };
 
     $radiko = '' if ($el eq 'rad');
@@ -153,7 +158,7 @@ sub end_handler {
 	$el eq 'art' or
 	$el eq 'kap' or
 	$el eq 'drv' or
-	($el eq 'trd' and not $xp->in_element('bld')) or
+	$el eq 'trd' or
 	$el eq 'ref' or
 	$el eq 'ind' or
         $el eq 'bld'
@@ -174,6 +179,9 @@ sub end_handler {
     elsif ($el eq 'trdgrp') 
     {
 	$lingvo = '';
+    } elsif ($el eq 'ekz' and $fermu_ekz) {
+	print "</ekz>\n";
+	$fermu_ekz = 0;
     }
 
 }

@@ -266,16 +266,35 @@ sub indeksero {
     # aldonu al kapvortlisto
 #    push @kapvortoj, [$mrk,$kap];
 
+    # unue analizu de bildoj kaj ekzemploj
+    $tekst =~ s/<ekz\s*>(.*?)<\/ekz\s*>/ekzemplo($mrk,$kap,$1,$rad)/sieg;
+    $tekst =~ s/<bld\s*>(.*?)<\/bld>/bildo($mrk,$kap,$1,$rad)/sieg;
+
     # analizu la fakojn
     $tekst =~ s/<uzo\s*>(.*?)<\/uzo\s*>/fako($1,$mrk,$kap,$rad)/sieg;
     # analizu la tradukojn
     $tekst =~ s/<trd\s+lng="([^\"]*)"\s*>(.*?)<\/trd\s*>/
 	traduko($2,$1,$mrk,$kap)/siegx;
-    # analizu la bildojn
-    $tekst =~ s/<bld\s*>(.*?)<\/bld>/bildo($mrk,$kap,$1,$rad)/sieg;
 
     return '';
 }
+
+sub ekzemplo {
+    my ($mrk,$kap,$tekst,$rad)=@_;
+    
+    # tio, kio estas radukita
+    $tekst =~ s/<ind\s*>(.*?)<\/ind\s*>//si;
+    my $ind = $1;
+
+    # analizu la fakojn
+    $tekst =~ s/<uzo\s*>(.*?)<\/uzo\s*>/fako($1,$mrk,$ind,$rad)/sieg;
+    # analizu la tradukojn
+    $tekst =~ s/<trd\s+lng="([^\"]*)"\s*>(.*?)<\/trd\s*>/
+	traduko($2,$1,$mrk,$ind)/siegx;
+
+    return '';
+}
+
 
 # notas unopan fakindikon
 
@@ -294,6 +313,17 @@ sub bildo {
     my ($mrk,$kap,$tekst,$rad)=@_;
     $kap =~ s/\///;
     push @bildoj, [$mrk,$kap,$tekst,$rad];
+
+    # tio, kio estas radukita
+    my $ind;
+    if ($tekst =~ s/<ind\s*>(.*?)<\/ind\s*>//si) { $ind = $1; }
+    else { $ind = $kap; }
+
+    # analizu la fakojn
+    $tekst =~ s/<uzo\s*>(.*?)<\/uzo\s*>/fako($1,$mrk,$ind,$rad)/sieg;
+    # analizu la tradukojn
+    $tekst =~ s/<trd\s+lng="([^\"]*)"\s*>(.*?)<\/trd\s*>/
+	traduko($2,$1,$mrk,$ind)/siegx;
     
     return '';
 };
@@ -1254,7 +1284,7 @@ sub cvs_log {
 	$info =~ s/&/&amp;/g;
 	$info =~ s/</&lt;/g;
 	$info =~ s/>/&gt;/g;
-	$result .= " <font color=#666666 size=-1>$dato</font>\n<dd>$info\n";
+	$result .= " <span class=dato>$dato</span>\n<dd>$info\n";
     } else {
 	$result .= "\n<dd>(mankas informo)\n";
     }

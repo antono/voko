@@ -246,7 +246,7 @@ modifita de Wolfram Diestel
   <cite class="ekz"><xsl:apply-templates/></cite>
 </xsl:template>
 
-<xsl:template match="ekz/tld">
+<xsl:template match="ekz/tld|ind/tld">
   <u>
   <xsl:choose>
     <xsl:when test="@lit">
@@ -396,7 +396,7 @@ modifita de Wolfram Diestel
   <img src="{@lok}"/>
   <br/>
   <i>
-  <xsl:apply-templates select="text()|tld|trd"/>
+  <xsl:apply-templates select="text()|tld|ind"/>
   </i>
   <br/>
   </center>
@@ -453,6 +453,10 @@ modifita de Wolfram Diestel
   <xsl:apply-templates/>
 </xsl:template>
 
+<xsl:template match="ind">
+  <xsl:apply-templates/>
+</xsl:template>
+
 <xsl:template match="adm"/>
 
 <!-- teksto -->
@@ -474,7 +478,11 @@ modifita de Wolfram Diestel
       <xsl:value-of select="$lingvo"/>
     </h3>
     <xsl:apply-templates mode="tradukoj"
-      select="//trd[@lng=$lng and not(ancestor::bld)]|//trdgrp[@lng=$lng]"/>
+      select="//trd[@lng=$lng][not(parent::ekz|parent::bld)]
+      | //trdgrp[@lng=$lng][not(parent::ekz|parent::bld)]"/>
+    <xsl:apply-templates mode="tradukoj"
+      select="//ekz/trd[@lng=$lng]|//ekz/trdgrp[@lng=$lng]
+	|//bld/trd[@lng=$lng]|//bld/trdgrp[@lng=$lng]"/>
   </xsl:if>
 </xsl:template>  
 
@@ -545,7 +553,7 @@ modifita de Wolfram Diestel
   <a href="#{ancestor::node()[@mrk][1]/@mrk}">
   <xsl:apply-templates 
     select="ancestor::node()[self::drv or self::snc or self::subsnc or
-      self::subdrv or self::subart or self::art][1]" mode="tradukoj"/>:</a>
+      self::subdrv or self::subart or self::art or self::ekz or self::bld][1]" mode="tradukoj"/>:</a>
   </span>
   <xsl:text> </xsl:text>
   <span class="trdnac">
@@ -605,8 +613,16 @@ modifita de Wolfram Diestel
   <xsl:number format="I"/>
 </xsl:template>
 
+<xsl:template match="ekz|bld" mode="tradukoj">
+  <xsl:apply-templates select="ind" mode="tradukoj"/>
+</xsl:template>
+
 <xsl:template match="kap" mode="tradukoj">
   <xsl:apply-templates select="tld|rad|text()" mode="tradukoj"/>
+</xsl:template>
+
+<xsl:template match="ind" mode="tradukoj">
+  <xsl:apply-templates mode="tradukoj"/>
 </xsl:template>
 
 <xsl:template match="trdgrp/trd" mode="tradukoj">
