@@ -1,0 +1,399 @@
+<h1>Manlibreto pri la Voko-DTD</h1>
+
+%vortaro%<h2>vortaro</h2>
+
+Ekzistas du eblecoj por realigi vortaron laý la Voko-DTD.
+<ol>
+<li>La tuta vortaro estas en unu dosiero
+<li>Æiu unuopa artikolo estas en propra dosiero
+</ol>
+
+En la unua kazo, kiu konvenas por malgrandaj vortaroj aý por
+aýtomataj traktoj de la tuta vortaro, øi konsistas el la tri grandaj partoj
+prologo, precipa parto kaj epilogo. La precipa parto enhavas la
+unuopajn #art%artikolojn#.
+
+[[
+<?xml version="1.0"?>
+<!DOCTYPE vortaro SYSTEM "../dtd/vokoxml.dtd">  
+
+<vortaro>
+  <prologo>
+    ...
+  </prologo>
+  <precipa-parto>
+    <art>
+      ...
+    </art>
+    <art>
+      ...
+    </art>
+    <art>
+      ...
+    </art>
+  </precipa-parto>
+  <epilogo>
+    ...
+  </epilogo>
+</vortaro>
+]]
+
+En la dua kazo, kiu konvenas por redaktado de grandaj vortaroj,
+æiu dosiero enhavas krom la devigaj kadraj elementoj nur unu
+artikolon. 
+
+[[
+<?xml version="1.0"?>
+<!DOCTYPE vortaro SYSTEM "../dtd/vokoxml.dtd"> 
+
+<vortaro>
+  <art>
+    ...
+  </art>
+</vortaro>
+]]
+
+
+%art%<h2>artikolo</h2>
+
+Artikolo enhavas la informojn pri unu kapvorto. Øi
+konsistas do el la #kap%kapvorto# kaj la priskribo. La priskribo 
+estas normale dividita en plurajn #drv%deriva¼ojn#. Krome 
+la artikolo ricevas markon, kiu permesas referenci al la
+artikolo de aliaj lokoj. La marko principe egalas al la dosiernomo.
+
+[[
+<art mrk="vort">
+  <kap><rad>vort</rad>/o</kap>
+  <drv mrk="vort.0o">
+    ...
+  </drv>
+  <drv mrk="vort.0igi">
+    ...
+  </drv>
+  <drv mrk="vort.sen0a">
+    ...
+  </drv>
+</art>
+]]
+
+Se la artikoloj estas administrataj per la ar¶ivosistemo
+CVS, la marko estas aýtomate donita de tiu sistemo en loko
+markita per $Id$ kaj tiukaze enhavas krome indikojn pri
+versio kaj þanøtempo de la artikolo. Tiujn informojn uzas
+ankaý la retpoþta redaktoservo por certigi, ke ne du
+redaktantoj redaktas samtempe la saman artikolon.
+Ampleksaj artikoloj cetere povas esti dividitaj en
+subartikoloj. 
+
+[[
+<art mrk="$Id$">
+  <kap><rad>vort</rad>/o</kap>
+  <subart>
+    ...
+  </subart>
+  <subart>
+    ...
+  </subart>
+</art>
+]]
+
+Noto: Artikoloj de terminaroj normale ne bezonas la deriva¼ojn kaj 
+povas rekte enhavi la sencojn aý eæ la difinojn kaj
+ekzemplojn.
+
+%kap%<h2>kapvorto</h2>
+
+Kapvorto okazas en du lokoj, kiel kapvorto de #art%artikolo# 
+kaj kiel kapvorto de #drv%deriva¼o#. En la kapvorto de la artikolo 
+oni normale signas la radikon, per kiu oni povas anstataýi la 
+tildojn en la cetera artikolo. Krome la kapvorto povas enhavi 
+indikon pri la #fnt%fonto# kaj oficialeco de la kapvorto.
+
+[[
+<kap>
+  <rad>vort</rad>/o
+  <ofc>*</ofc>
+</kap>
+]]
+
+La kapvortoj de la deriva¼oj referencas per tildo al
+la radiko kaj nur aldonas prefiksojn, fina¼ojn ktp.
+
+[[
+<kap>
+  sen<tld/>a
+</kap>
+]]
+
+
+%drv%<h2>deriva¼oj</h2>
+
+Deriva¼oj entenas la priskribon pri iu vorto derivita
+el la kapvorto de la artikolo. Ili konsistas el propra
+kapvorto kaj øia priskribo, kiu normale estas dividita
+en plurajn sencojn. Se temas pri nur unu senco, la divido
+principe ne estas necesa. Sed por faciligi la taskon de
+la konvertiloj mi rekomendas eæ æe nur unu senco krampi
+øin per &lt;snc&gt;...&lt;/snc&gt;. Por ke deriva¼oj povas
+esti rekte referencitaj el aliaj artikoloj ili ricevas 
+same kiel la artikolo markon, kiu konsistas el la 
+dosiernomo, punkto kaj la kapvorto de la deriva¼o, en kiu
+la tildo estas anstataýigita per nulo.
+
+[[
+<drv mrk="vort.sen0a">
+  <kap>sen<tld/>a</kap>
+  <snc>
+  </snc>  
+</drv>
+]]
+
+Multsignifajn deriva¼ojn oni povas dividi per "subdrv".
+
+%snc%<h2>sencoj</h2>
+
+Sencoj entenas la priskribon pri unu senco de vorto.
+La priskribo povas uzi iujn el la sekvaj partoj:
+uzo, difino, #ekz%ekzemplo#, #ref%referenco#, #trd%traduko#
+kaj kelkaj aliaj.
+
+[[
+<snc>
+  <dif>
+    ...:
+    <ekz>...</ekz>;
+    <ekz>...</ekz>.
+  </dif>
+  <refgrp tip="sin">
+    <ref cel="...">...</ref>,
+    <ref cel="...">...</ref>
+  </refgrp>
+  <trd lng="cs">...</trd>
+  <trd lng="de">...</trd>
+  <trd lng="en">...</trd>
+</snc>
+<snc>
+  <uzo tip="fak">ZOO</uzo>
+  <dif>
+    ...
+  </dif>
+  <bld lok="...">...</bld>
+  <trd lng="en">...</trd>
+</snc>     
+]]
+
+Sencon, kiu ampleksas plurajn subtilajn subsencojn oni
+povas dividi per "subsnc".
+<p>
+Se vi volas referenci al iu senco, vi enmetu markon,
+kies unua parto estu la marko de la enhavanta deriva¼o
+kaj la dua parto identigu la sencon mem:
+
+[[
+<drv mrk="dorm.0i">
+  <snc mrk="dorm.0i.ripozi">
+    ...
+  </snc>
+  <snc mrk="dorm.0i.malvivi">
+    ...
+  </snc>
+</drv>
+]]
+
+Æar la sencnumeroj estas elkalkulataj aýtomate, ekzistas
+specialaj rimedoj por enþovi tian numeron en la tekston:
+
+[[
+<rim> 
+  La senco dormi <sncref ref="dorm.0i.malvivi"/> estas
+  uzata nur...
+</rim>
+]]
+
+en la prezento fariøas "Rim: La senco dormi <i>2</i>
+estas uzata nur..."
+<p>
+Se malsupre en artikolo vi volas doni ekzemploj rilate
+al senco pli frue okazita, vi povas fari tion per:
+
+[[
+<snc ref="dorm.0i.malvivi">
+  <ekz>
+    ...
+  </ekz>
+</snc>
+]]
+
+Tio poste fariøos "2: ..." (Komparu la artikolon pri "al").
+
+%ekz%<h2>ekzemploj</h2>
+
+Ekzemploj ilustras la uzon de vorto kaj povas enhavi 
+krom la citita aý ekzempla teksto klarigojn kaj #fnt%fontindikon#.
+
+[[
+<ekz>
+  lasi <tld/>i la manojn
+  <fnt>(<aut>Zamenhof</aut>: <vrk>Proverbaro</vrk>)</fnt>
+  <klr>
+    (f. perdi la kura&gcirc;on)
+  </klr>;
+</ekz>
+]]
+
+
+%fnt%<h2>fontindikoj</h2>
+
+Fontoj indikas la devenon de cita¼o aý kapvorto.
+Ili povas enhavi tre koncizan indikon pri la aýtoro aý
+verko. Sed tiu uzo estas evitinda, æar øi normale ne
+permesas la certan retrovon de la cita¼o.
+
+[[
+<fnt>Z</fnt>
+
+<fnt>PIV</fnt>
+]]
+
+Pli bone estas la indiko de la fonto per aýtoro, verko kaj
+se necese la loko en la verko.
+
+[[
+<fnt>(<aut>trad. Zamenhof</aut>:
+  <vrk>Malnova testamento</vrk>, 
+  <lok>Josuo 6, 20</lok>)</fnt>
+]]
+
+Alia ebleco, kiu konvenas aparte æe vortaroj organizitaj
+alfabete, estas la uzo de URLo por referenci al la verko,
+se øi troviøas en Interreto aý al bibliografia informo ene
+de Revo, kiu enhavas aldonajn informojn pri eldono, eldonejo
+ktp.
+
+[[
+<fnt><url ref="&Bib;PIV1">PIV 1</url></fnt>
+
+<fnt>(<lok><url ref="&KompLeks;/KO.html#komputi">KompLeks</url></lok>)</fnt>
+]]
+
+%trd%<h2>tradukoj</h2>
+
+Simplajn tradukoj vi donas ene de strukturo senco, deriva¼o
+aý simila per indiko de la ISO-kodo de la lingvo kaj la
+traduka vorto.
+
+[[
+<trd lng="de">am&uuml;sieren</trd>
+]]
+
+La diversaj tradukoj aperu en la artikolo ordigitaj laý
+la lingvokodo, alikaze æe multaj lingvoj oni iam perdas 
+la superrigardon.
+<p>
+Ofte la tradukoj konsistas el pluraj vortoj kaj oni devas
+marki la vorton, sub kiu la traduko aperu en la lingvoindekso.
+
+[[
+<trd lng="de">sich <ind>am&uuml;sieren</ind></trd>
+]]
+
+Se estas pluraj eblaj tradukoj oni grupigu ilin. Klarigojn,
+kiuj helpas trovi la øustan tradukon oni ankaý povas aldoni.
+
+[[
+<trdgrp lng="de">
+  <trd>Maulesel <klr>(de azenino)</klr></trd>,
+  <trd>Maultier <klr>(de &ccirc;evalino)</klr></trd>
+</trdgrp>
+]]
+
+Klarigojn, kiuj aperu en la lingvoindekso, sed ne
+en la artikolo mem, oni donas tiel.
+
+[[
+<trd>geben <klr tip="ind">(es gibt)</klr></trd>
+]]
+
+%ref%<h2>referencoj</h2>
+
+Referencoj servas por montri rilatojn de vorto 
+al aliaj vortoj. Ekzistas diversaj eblaj rilatoj.
+
+<dl>
+<dt>supernocio/subnocio
+<dd>Tiu rilato estas uzata por montri pli øeneralan vorton
+ aý ekzemplon. (Hundo estas besto. Ekzemplo de besto estas hundo)
+
+<dt>parto/malparto
+<dd>Tiu rilato estas uzata por montri, ke io estas parto de io
+ alia. (Monato estas parto de jaro. Semajno konsistas el la semajnotagoj
+ lundo, mardo, ...). Foje estas malfacile distingi tiun rilatotipon de
+ la antaýa. Provu tiukaze formuli frazon kun "ekzemplo" au "konsistas
+ el" aý "parto de", ofte tio helpas trovi la øustan rilaton.
+
+<dt>sinonimo/antonimo
+<dd>Tiu rilato estas uzata por montri samsencajn aý malsamsencajn
+ vortojn. (Monata¼o estas samsenca vorto kiel menstruo. Malo de
+ konstrui estas detrui.)
+
+<dt>nespecifita
+<dd>Ofte oni volas referenci al simila aý komparinda vorto, sed
+  la rilato ne estas tre strikta (Fari, komparu al krei, konstrui.)
+</dl>
+
+[[
+<!-- en la artikolo pri hundo -->
+<ref tip="super" cel="best.o">besto</ref>
+
+<!-- en la artikolo pri besto -->
+<ref tip="sub" cel="hund.o">hundo</ref>
+
+<!-- en la artikolo pri monato -->
+<ref tip="malprt" cel="jar.0o">jaro</ref>
+
+<!-- en la artikolo pri semajno -->
+<ref tip="prt" cel="lund.0o">lundo</ref>
+
+<!-- en la artikolo pri monataŽ¼o -->
+<ref tip="sin" cel="menstru.0o">menstruo</ref>
+
+<!-- en la artikolo pri konstrui -->
+<ref tip="ant" cel="detru.0i">detrui</ref>
+
+<!-- en la artikolo pri fari -->
+<ref tip="vid" cel="kre.0i">krei</ref>
+<!-- au -->
+<ref cel="konstru.0i">konstrui</ref>
+]]
+
+Æe la nespecifita tipo oni povas forlasi la tipon aý
+uzi "vid". En la unua okazo ne aperos referencsigno en
+la artikolo en la dua okazo aperos sageto.
+<p>
+Se oni volas referenci al pluraj vortoj kun sama rilato
+al la kapvorto oni povas grupigi tiujn referencojn.
+
+[[
+<!-- en la artikolo pri semajno -->
+<refgrp tip="prt">
+  <ref cel="lund.0o">lundo</ref>,
+  <ref cel="mard.0o">mardo</ref>,
+  ktp.
+</refgrp>
+
+<!-- en la artikolo pri fari -->
+<refgrp>
+  <ref cel="kre.0i">krei</ref>,
+  <ref cel="konstru.0i">konstrui</ref>
+</refgrp>
+]]
+
+Forlaso de la tipo æe referencgrupo signifas la implicitan
+tipon "vid" kaj do antaý la referencoj aperos sageto.
+<p>
+Noto: Ene de difinoj la tipoj de referencoj ne estas indikitaj
+per signo, æar tio øenas la fluan legadon. Tamen vi indiku la
+tipon, æar øi povas esti uzata de programoj, kiuj analizas la
+rilatojn inter vortoj.
+
