@@ -678,6 +678,7 @@ sub cmd_redakt {
     my ($shangh,$teksto) = @_;
     my $id,$art,$err;
     $shangho = $shangh; # memoru por poste
+    $shangho =~ s/\200-\377//g; # forigu ne-askiajn signojn
 
     # uniksajn linirompojn!
     $teksto =~ s/\r\n/\n/sg;
