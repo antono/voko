@@ -138,7 +138,7 @@ sub attr_str {
 	my $attr_name = shift @_;
 	my $attr_val  = shift @_;
 	if (($attr_name eq 'mrk') and ($attr_val =~/^\$Id/)) {
-	    $attr_val =~ s/^\$Id$$/$1/;
+	    $attr_val =~ s/^\044Id:\s+([^,\.]+)\.xml,v.*\044$/$1/;
 	}
 	$result .= " $attr_name=\"$attr_val\"";
     }
