@@ -90,16 +90,12 @@ $command="tajperaroj.pl $verbose -H $xml_pado -c $agord_dosiero > $vortaro_pado/
 print "$command\n" if ($verbose);
 open LOG, "$command|"; while (<LOG>) { print }; close LOG;
 
-$command="cfg2html.pl $vortaro_pado/cfg/bibliogr.cfg > $vortaro_pado/dok/bibliogr.html";
-print "$command\n" if ($verbose);
-`$command`;
-
-foreach $file ("bibliogr","fakoj","lingvoj","stiloj","mallongigoj") {
-    $command="cfg2html.pl $vortaro_pado/cfg/$file.cfg >".
-	"$vortaro_pado/dok/$file.html";
-    print "$command\n" if ($verbose);
-    `$command`;
-}
+#foreach $file ("bibliogr","fakoj","lingvoj","stiloj","mallongigoj") {
+#    $command="cfg2html.pl $vortaro_pado/cfg/$file.cfg >".
+#	"$vortaro_pado/dok/$file.html";
+#    print "$command\n" if ($verbose);
+#    `$command`;
+#}
 
 $command = "xml2html_all.pl $verbose -c $agord_dosiero";
 print "$command\n" if ($verbose);

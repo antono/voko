@@ -245,36 +245,29 @@ krom la citita aý ekzempla teksto klarigojn kaj #fnt%fontindikon#.
 
 %fnt%<h2>fontindikoj</h2>
 
-Fontoj indikas la devenon de cita¼o aý kapvorto.
-Ili povas enhavi tre koncizan indikon pri la aýtoro aý
-verko. Sed tiu uzo estas evitinda, æar øi normale ne
-permesas la certan retrovon de la cita¼o.
+Fontoj indikas la devenon de cita¼o aý kapvorto.
+Ili indikas normale la verkon kaj la lokon ene de 
+la verko. La verkon plej konvene oni indikas per 
+referenco al la bibliografio.
+
+[[
+<fnt><bib>M</bib>, <lok>Josuo 6, 20</lok></fnt>
+]]
+
+Esceptokaze oni povus uzi ankaý iun el la sekvaj 
+formoj de fontindikoj, sed tio estas malrekomendinda 
+por novaj redaktoj.
 
 [[
 <fnt>Z</fnt>
 
 <fnt>PIV</fnt>
-]]
 
-Pli bone estas la indiko de la fonto per aýtoro, verko kaj
-se necese la loko en la verko.
-
-[[
-<fnt>(<aut>trad. Zamenhof</aut>:
+<fnt><aut>trad. Zamenhof</aut>:
   <vrk>Malnova testamento</vrk>, 
-  <lok>Josuo 6, 20</lok>)</fnt>
-]]
+  <lok>Josuo 6, 20</lok></fnt>
 
-Alia ebleco, kiu konvenas aparte æe vortaroj organizitaj
-alfabete, estas la uzo de URLo por referenci al la verko,
-se øi troviøas en Interreto aý al bibliografia informo ene
-de Revo, kiu enhavas aldonajn informojn pri eldono, eldonejo
-ktp.
-
-[[
-<fnt><url ref="&Bib;PIV1">PIV 1</url></fnt>
-
-<fnt>(<lok><url ref="&KompLeks;/KO.html#komputi">KompLeks</url></lok>)</fnt>
+<fnt><lok><url ref="&KompLeks;/KO.html#komputi">KompLeks</url></lok></fnt>
 ]]
 
 %trd%<h2>tradukoj</h2>
@@ -430,7 +423,7 @@ rilatojn inter vortoj.
 %uzo%<h2>uzindikoj</h2>
 
 Uzo indikas en kiu medio vorto estas uzata. Tio povas
-rilati al fako, regiono, tempo ktp.:
+rilati al fako, stilo, regiono, tempo ktp.:
 
 [[
 <!-- arkaisma vorto el fako biologio -->
@@ -442,5 +435,6 @@ rilati al fako, regiono, tempo ktp.:
   ...
 </drv>
 ]]
+
 
 

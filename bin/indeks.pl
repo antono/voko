@@ -35,7 +35,7 @@ $tmp_file = '/tmp/'.$$.'voko.inx';
 $tagoj   = 14;       # shanghindekso indikas shanghitajn en la lastaj n tagoj
 $xml_dir = 'xml';    # relative al vortara radidosierujo
 $art_dir = '../art'; # relative al inx
-$nmax    = 300;      # maksimume tiom da shanghitajn artikolojn indiku
+$nmax    = 600;      # maksimume tiom da shanghitajn artikolojn indiku
 $cvs_log = '/usr/bin/cvs log';
 $neliteroj = '0-9\/\s,;\(\)\.\-!:';
 

@@ -2,7 +2,7 @@
 #
 # voku ekz.
 #   ekzfnt.pl [-v] [-x art.xml | -e "citajho serchenda"] 
-#       [-m ea345] [-c agordodosiero] [-n maks. trovnombro]
+#       [-m ea345] [-c agordodosiero] [-n maks. trovnombro] [-s serchloko]
 #
 #   metodoj e: ekzakte
 #           a: per String::Approx (per Levenshtein-distanco)
@@ -70,8 +70,18 @@ while (@ARGV) {
     } elsif ($ARGV[0] eq '-n') {
         shift @ARGV;
         $ekz_trov_max = shift @ARGV;
+    } elsif ($ARGV[0] eq '-s') {
+	shift @ARGV;
+	$serchu_nur_en = shift @ARGV;
+    } elsif ($ARGV[0] eq '-l') {
+	$listigu = 1;
+	shift @ARGV;
+    } elsif ($ARGV[0] eq '-h' or $ARGV[0] eq '--help') {
+	help_screen();
+	exit 0;
     } else {
-        die "Nevalida komandlinia argumento.\n";
+	help_screen();
+        die "\nNevalida komandlinia argumento.\n";
     }
 };
 
@@ -80,6 +90,11 @@ $agordo_dosiero = "$ENV{'VOKO'}/cfg/ekzfnt.cfg" unless $agordo_dosiero;
 
 # legu la agordo-dosieron
 read_cfg();
+
+if ($listigu) {
+    tekstogrupoj();
+    exit 0;
+}
 
 # elprenu la ekzemplojn el XML-atikolo
 if ($xml) {
@@ -252,6 +267,8 @@ sub serchu {
 	
 	$serch_fonto = $fonto->{'id'};
 	print "[", $serch_fonto, "]\n" if ($verbose);
+
+	next if ($serchu_nur_en and $serchu_nur_en ne $serch_fonto);
 
         my $dir = $fonto->{'pado'};
         my $fin = $fonto->{'finajhoj'};
@@ -678,6 +695,81 @@ sub romie_arabe {
     warn "Nekonata romia cifero $romie\n";
     return '';
 }
+
+sub help_screen {
+
+print <<EOH;
+  ekzfnt.pl (c) 2000-2001 che Wolfram Diestel
+            licenco: GPL 2.0
+
+  
+  uzo:
+
+  ekzfnt.pl [-v] [-x <artikolo> | -e <serchajho>] 
+            [-m ea345] [-c <agordodosiero>] [-n <maks. trovnombro>] 
+            [-s <serchloko>] 
+  ekzfnt.pl [-c <agordodosiero>] [-l] 
+  ekzfnt.pl [-h|--help] 
+		
+  La programo serchas frazon au vorton en tekstaro. La traserchenda
+  tekstaro estas priskribita en agordodosiero. La trovoj estas redonataj
+  ordigitaj lau similecgrado kun la serchajho.
+ 
+  Opcioj:
+      -v  vortoricha, dum la sercho elighas la traserchataj
+          dosieroj kaj trovajhoj
+
+      -c  Agordodosiero, se ne donita \$VOKO/cfg/ekzfnt.pl estas uzata
+
+      -e  Donas la serchatan esprimon (vorto(j)n au frazon)
+      -x  Donas Voko-artikolon kies ekzemplofrazoj estas serchataj
+    
+      -m  Serchmetodo: 
+	      e = ekzakta 
+              a = proksimuma (Levenshtein-distanco, toleras tajperarojn)
+              3,4,5 = n-gramo-sercho (komparas litergrupoj kaj multon toleras
+                  kiel ellason de vortoj, alian vortordon ktp.)
+      -n  Maks. trovnombro. Nur tiom da trovoj estas listigitaj
+          en la fina raporto. Apriora valoro estas 5 (tauga por citajhoj).
+          Por serchi je unuopaj vortoj eble uzu -n 100
+
+      -h, --help  Montru tiun chi helpon
+
+      -l  Listigu tekstogrupojn el la agordodosiero
+
+      -s  Serchloko. Por la sercho estas uzataj nur la tekstoj
+          donitaj en la donita tekstogrupo (lau la grupigo en la agorddosiero)
+EOH
+}        
+
+sub tekstogrupoj {
+    
+    print "           tekstogrupoj:\n";
+
+    foreach $fonto (@serch_pado) {
+	print "              $fonto->{'id'} ($fonto->{'pado'})\n";
+    }
+}
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

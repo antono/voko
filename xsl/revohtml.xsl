@@ -20,7 +20,7 @@ modifita de Wolfram Diestel
 <xsl:variable name="xmldir">../xml</xsl:variable> 
 <xsl:variable name="cssdir">../stl</xsl:variable>
 <xsl:variable name="redcgi">/cgi-bin/vokomail.pl?art=</xsl:variable>
-
+<xsl:variable name="bibliografio">file:/home/revo/revo/sgm/bibliogr.xml</xsl:variable>
 
 <!-- kruda artikolstrukturo -->
 
@@ -61,7 +61,7 @@ modifita de Wolfram Diestel
   <xsl:if test="//fnt[aut|vrk|lok]">
     <hr />
     <h2>fontoj</h2>
-    <xsl:apply-templates select="//fnt[aut|vrk|lok]" mode="fontoj"/>
+    <xsl:apply-templates select="//fnt[bib|aut|vrk|lok]" mode="fontoj"/>
   </xsl:if>
   <xsl:if test="//adm">
     <hr />
@@ -421,14 +421,14 @@ modifita de Wolfram Diestel
   <sup class="{local-name()}"><xsl:value-of select="."/></sup>
 </xsl:template>
 
-<xsl:template match="fnt[aut|vrk|lok]">
+<xsl:template match="fnt[bib|aut|vrk|lok]">
   <xsl:variable name="n">
-    <xsl:number level="any" count="fnt[aut|vrk|lok]"/>
+    <xsl:number level="any" count="fnt[bib|aut|vrk|lok]"/>
   </xsl:variable>
   <span class="fnt">
     <a name="ekz_{$n}"></a>
     <xsl:text>[</xsl:text>
-    <a class="{local-name((ancestor::rim|ancestor::ekz|node())[1])}" href="#fnt_{$n}"><xsl:value-of select="$n"/></a>
+    <a class="{local-name((ancestor::rim|ancestor::ekz|self::node())[1])}" href="#fnt_{$n}"><xsl:value-of select="$n"/></a>
     <xsl:text>]</xsl:text>
   </span>
 </xsl:template>
@@ -743,11 +743,11 @@ modifita de Wolfram Diestel
 
 <xsl:template match="klr[@tip='ind']" mode="tradukoj"/>
 
-<!-- fontoj -->
+<!-- ######################### fontoj ########################## -->
 
 <xsl:template match="fnt" mode="fontoj">
   <xsl:variable name="n">
-    <xsl:number level="any" count="fnt[aut|vrk|lok]"/>
+    <xsl:number level="any" count="fnt[bib|aut|vrk|lok]"/>
   </xsl:variable>
   <span class="fontoj">
   <a name="fnt_{$n}"></a>
@@ -758,12 +758,42 @@ modifita de Wolfram Diestel
 </xsl:template>
 
 <xsl:template match="bib" mode="fontoj">
-  <a  class="fnt" href="../dok/bibliogr.html#{.}">
-  <b><xsl:apply-templates mode="fontoj"/></b>
+  <xsl:variable name="mll" select="."/>
+  <a class="fnt" href="../dok/bibliogr.html#{$mll}" target="indekso">
+  <xsl:apply-templates mode="bibliogr"
+    select="document($bibliografio)//vrk[@mll=$mll]"/>
   </a>
   <xsl:if test="following-sibling::lok">
     <xsl:text>, </xsl:text>
   </xsl:if>
+</xsl:template>
+
+<xsl:template match="vrk" mode="bibliogr">
+  <xsl:apply-templates mode="bibliogr" select="aut|trd|tit"/>
+</xsl:template>
+
+<xsl:template match="aut" mode="bibliogr">
+  <xsl:apply-templates mode="bibliogr"/>
+  <xsl:choose>
+    <xsl:when test="following-sibling::trd">
+      <xsl:text>, </xsl:text>
+    </xsl:when>
+    <xsl:when test="following-sibling::tit">
+      <xsl:text>: </xsl:text>
+    </xsl:when>
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template match="trd" mode="bibliogr">
+  <xsl:text>trad. </xsl:text>
+  <xsl:apply-templates mode="bibliogr"/>
+  <xsl:if test="following-sibling::tit">
+      <xsl:text>: </xsl:text>
+  </xsl:if>
+</xsl:template>
+
+<xsl:template match="tit" mode="bibliogr">
+  <xsl:apply-templates mode="bibliogr"/>
 </xsl:template>
 
 <xsl:template match="aut" mode="fontoj">
