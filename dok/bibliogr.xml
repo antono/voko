@@ -31,6 +31,16 @@
  
 <bibliografio>
 
+  <vrk mll="BonaLingvo">
+    <aut>Claude Piron</aut>
+    <tit>La bona lingvo</tit>
+    <eld>
+      <nom>Pro Esperanto/HEA</nom>
+      <lok>Vieno/Budape&scirc;to</lok>
+      <dat>1989</dat>
+    </eld>
+  </vrk>
+
   <vrk mll="F">
     <url>ftp://ftp.esperanto.org/publika/tekstoj/</url>
     <aut>L. L. Zamenhof</aut>
@@ -38,6 +48,15 @@
     <eld>
       <lok>Varsovio</lok>
       <dat>1905</dat>
+    </eld>
+  </vrk>
+
+  <vrk mll="Gerda">
+    <url>http://www.worldnet.fr/~mjb/revo/gerda1.txt</url>
+    <aut>Claude Piron</aut>
+    <tit>Gerda malaperis</tit>
+    <eld>
+      <nom>Fonto</nom>
     </eld>
   </vrk>
 
@@ -51,6 +70,18 @@
     <url>ftp://ftp.esperanto.org/publika/tekstoj/html</url>
     <trd>L. L. Zamenhof</trd>
     <tit>Nova Testamento</tit>
+  </vrk>
+
+ <vrk mll="MT">
+    <url>ftp://ftp.esperanto.org/publika/tekstoj/</url>
+    <trd>L. L. Zamenhof</trd>
+    <tit>Malnova Testamento</tit>
+  </vrk>
+ 
+  <vrk mll="NT">
+    <url>ftp://ftp.esperanto.org/publika/tekstoj/html</url>
+    <trd>L. L. Zamenhof(?)</trd>
+    <tit>Nova Testamento, Londona Biblio</tit>
   </vrk>
 
   <vrk mll="PIV1">
@@ -67,7 +98,16 @@
     <aut>Sergio Pokrovskij</aut>
     <tit>Komputila Leksikono</tit>
   </vrk>
-  
+ 
+  <vrk mll="Lasu">
+    <url>http://www.worldnet.fr/~mjb/revo/lasu1.txt</url>
+    <aut>Claude Piron</aut>
+    <tit>Lasu min paroli plu!</tit>
+    <eld>
+      <nom>Fonto</nom>
+    </eld>
+  </vrk>
+ 
   <vrk mll="Bird">
     <aut>Mészáros Béla</aut>
     <tit>Oklingva nomaro de eŭropaj birdoj</tit>
@@ -240,6 +280,24 @@
     <tit>Paroloj</tit>
   </vrk>
 
+  <vrk mll="SPIV">
+    <tit>Plena Ilustrita Vortaro de Esperanto, Suplemento</tit>
+    <eld>
+      <nom>SAT</nom>
+      <lok>Parizo</lok>
+      <dat>1987</dat>
+    </eld>
+  </vrk>
+
+  <vrk mll="MatVort">
+    <url>http://www.worldnet.fr/~mjb/revo/werner.htm</url>
+    <aut>Jan Werner</aut>
+    <tit>Matematika Vortaro, Esperanta-&Ccirc;e&hcirc;a-Germana</tit>
+    <eld>
+      <lok>Brno</lok>
+      <dat>1990</dat>
+    </eld>
+  </vrk>
 
 </bibliografio>
 

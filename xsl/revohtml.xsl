@@ -476,7 +476,7 @@ pluevoluigita de Wolfram Diestel
 </xsl:template>
 
 <xsl:template match="bld/trd">
-  <xsl:apply-templates/>
+  <i><xsl:apply-templates/></i>
 </xsl:template>
 
 <xsl:template match="uzo[@tip='fak']">
@@ -558,7 +558,7 @@ pluevoluigita de Wolfram Diestel
 </xsl:template>
 
 <xsl:template match="dif/trd">
-  <xsl:apply-templates/>
+  <i><xsl:apply-templates/></i>
 </xsl:template>
 
 <xsl:template match="adm"/>

@@ -257,6 +257,7 @@ sub process_ent {
 	    print $part->mime_type, "\n" if ($debug);
 
 	    # elprenu la tekston
+	    unless ($part->bodyhandle) { next; } # ignoru plurpartajn partojn
 	    $parttxt = $part->bodyhandle->as_string;
 
 	    # chu temas pri TTT-formularo?
