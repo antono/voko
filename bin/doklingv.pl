@@ -63,10 +63,15 @@ $lingvoj=$config{"lingvoj"};
 $cfg_dir = "$vortaro_pado/cfg";
 $dtd_dir = "$vortaro_pado/dtd";
 $smb_dir = "$vortaro_pado/smb";
-$out_dir = "$vortaro_pado/$dok_dir"; 
+$out_dir = "/home/revo/tmp/$dok_dir"; 
 
+# legu la informojn
 %lingvoj=read_cfg("$lingvoj");
 %regpri =read_cfg("$cfg_dir/regpri.cfg");
+%unuoj=read_entities("$dtd_dir/vokosgn.dtd");
+read_nls_cfg("$nls_cfg");
+
+# skribu dosieron kun lingvotabelo
 @nls_lingvoj =();
 my $lng='';
 my $target_file = "$out_dir/lingvoj.html";
@@ -81,6 +86,7 @@ print
     " <TH ALIGN=\"LEFT\">Mallongigo</TH>\n",
     " <TH ALIGN=\"LEFT\">Flago</TH>\n",
     " <TH ALIGN=\"LEFT\">Lingvo</TH>\n</TR>\n";
+
 foreach $lng (sort keys %lingvoj) {
     print "<TR>\n <TD ALIGN=\"RIGHT\">";
     if (defined_nls($lng)) {
@@ -107,174 +113,86 @@ close OUT;
 select STDOUT;
 diff_mv($tmp_file,$target_file);
 
-#print join(',',@nls_lingvoj) if $debug;
-#dump_nls_info{"cs"} if $debug;
 
-#foreach $lng (@nls_lingvoj) {
 
-%entoj=read_entities("$dtd_dir/vokosgn.dtd");
 
-my $cfg_file = "$nls_cfg";
-open CFG, $cfg_file or die "Ne povis malfermi \"$cfg_file\": $!\n";
-my $skribis = 0;
-$tabelkapo = "<TABLE BORDER=\"0\">\n<TR>\n".
-        " <TH ALIGN=\"LEFT\">Interna Kodo</TH>\n".
-        " <TH ALIGN=\"LEFT\">Litero</TH>\n".
-        " <TH ALIGN=\"LEFT\">Priskribo</TH>\n".
-        " <TH ALIGN=\"LEFT\">Literunuo</TH>\n".
-        " <TH ALIGN=\"LEFT\">Unikodo</TH>\n</TR>\n";
-while ($line=<CFG>) {
-    if ($line !~ /^\#|^\s*$/) { # ignoru komentojn kaj malplenajn liniojn
-	if ($line =~ /^\[([a-z]{2,3})\]\s*$/) { # nova lingvo-sekcio
-      	    $ekslng = $lng;
-	    $lng = $1;
-	    $min = 1;
-	    if ($skribis) { # finigu la antauxan
-		if (%{"alicp_$ekslng"}) { # tabeligu restintajn signojn
-                    print "</TABLE>\n";
-                    print $tabelkapo;
-	            foreach $from (keys %{"alicp_$ekslng"}) {
-			$litgrp=${"alicp_$ekslng"}{$from}[1];
-                        $intkod = length($litgrp)>1 ? "=$litgrp" : "neniu";
-			print "<TR>\n <TD ALIGN=\"LEFT\">($intkod)</TD>\n";
-			$lit=${"alicp_$ekslng"}{$from}[0];
-			print " <TD $bgcol ALIGN=\"LEFT\">$from</TD>\n";
-			$nomo=priskribo($lit);
-			print " <TD $bgcol ALIGN=\"LEFT\">$nomo</TD>\n";
-			$kodo=kodo($lit);
-		        $ento='';
-		        if (defined $entoj{$kodo}) {
-		           $ento = "&amp;".$entoj{$kodo}[0].";";
-	 	        }
-           		$ento = "&amp;#x$kodo;" if (!$ento and $kodo);
-		      	print " <TD $bgcol ALIGN=\"LEFT\">$ento</TD>\n";
-		       	print " <TD $bgcol ALIGN=\"LEFT\">$kodo</TD>\n";
-			print " </TR>\n";
-		    }
-		}
-                print "</TABLE>\n";
-	 	lingv_footer();
-		close OUT;
-		select STDOUT;
-		diff_mv($tmp_file,$target_file);
-	    }
-	    $target_file = "$out_dir/$lng.html";
-	    print "$target_file..." if ($verbose);
-            open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
-            select OUT;
-            lingv_header("Alfabeto kaj literunuoj de la $lingvoj{$lng}");
-            print $tabelkapo;
-	    $skribis=1;
+foreach $lng (@nls_lingvoj) {
+    
+    %letters = defined_nls($lng);
+
+    $target_file = "$out_dir/$lng.html";
+    print "$target_file..." if ($verbose);
+    
+    open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
+    select OUT;
+    
+    lingv_header("Alfabeto kaj literunuoj de la $lingvoj{$lng}");
+    print "<TABLE BORDER=\"0\">\n<TR>\n".
+	" <TH ALIGN=\"LEFT\">Grupo</TH>\n".
+  	    " <TH ALIGN=\"LEFT\">Litero</TH>\n".
+		" <TH ALIGN=\"LEFT\">Priskribo</TH>\n".
+		    " <TH ALIGN=\"LEFT\">XML-nomo</TH>\n".
+			" <TH ALIGN=\"LEFT\">Unikodo</TH>\n</TR>\n";
+    
+    # kalkulu por chiu litergrupo, kiom da eroj ghi havas
+    my %cnts;
+    foreach $desc (values %letters) { $cnts{$desc->[0]}++ }
+
+    my ($c,$rowcnt1) = (0,0);
+    foreach $lit (sort {cmp_nls($a,$b,$lng)} (keys %letters)) {
+	
+	$desc = $letters{$lit};
+	
+	my $kodo = kodo($lit);
+	
+	my $unuo='';
+	if (defined $unuoj{$kodo}) {
+	    $unuo = "&amp;".$unuoj{$kodo}[0].";";
 	}
-	    # chu MAJ?
-	    elsif ($line =~ /^MAJ\s*$/) {
-		$min = 2;
-	    }
-	    # chu anstatauigo de litergrupo
-	    elsif ($line =~ /^\+([^=]+)=(.*)$/) {
-		${"aliases_$lng"}{convert_non_ascii($1)}=convert_non_ascii($2);
-		${"alicp_$lng"}{convert_non_ascii($1)}=[$1,convert_non_ascii($2)];
-	    }
-	    # estas liter-priskribo
-            elsif ($line =~ /^([a-z]+):\s*(.*)\s*$/) {
-		$ascii = $1;
-		my $priskribo = $2;
-		# chu temas pri intervalo? (aziaj lingvoj)
-		if ($priskribo =~ /\[\s*(.*?)\s*,\s*(.*?)\s*\]/) {
-		    # eltrovu la intervallimojn
-		    my ($from,$to) = ($1,$2);
-		    unless ($from =~ /\\u([a-f0-9]{4})/i) {
-			die "Sintakseraro: interlimojn indiku per \uffff\n";
-		    }
-		    $kfrom = $1;
-		    unless ($to =~ /\\u([a-f0-9]{4})/i) {
-			die "Sintakseraro: interlimojn indiku per \uffff\n";
-		    }
-		    $kto = $1;
-		    print "<TR>\n <TD $bgcol ALIGN=\"LEFT\">$ascii</TD>\n";
-                    $lfrom=convert_non_ascii($from);
-                    $lto=convert_non_ascii($to);
-                    print " <TD $bgcol ALIGN=\"LEFT\">$lfrom - $lto</TD>\n";
-		    print " <TD $bgcol ALIGN=\"LEFT\">ne konata</TD>\n";
-	            print " <TD $bgcol ALIGN=\"LEFT\">&amp;#x$kfrom; - &amp;#x$kto;</TD>\n";
-	            print " <TD $bgcol ALIGN=\"LEFT\">$kfrom - $kto</TD>\n";
-		    print "</TR>\n";
-		} else {
-		    # temas pri unuopaj literoj
-		    @literoj = split(',',$priskribo);
-		    foreach $litgrp (@literoj) {
-			$litgrp =~ s/^\s*//;
-			$litgrp =~ s/\s*$//;
-			@unuopaj=split /\s+/, $litgrp;
-			$minusklo = convert_non_ascii($unuopaj[$min -1]);
-			# renversu alinomigon
-			while (($from,$to)=each %{"aliases_$lng"}) {
-			    $minusklo = replace($minusklo,$to,$from);
-			}
-			$kiom=$#unuopaj+1;
-			print "<TR>\n <TD $bgcol ALIGN=\"LEFT\" ROWSPAN=\"$kiom\">$ascii</TD>\n";
-			if ($min==2 && $kiom>1) {
-			    $tmp=$unuopaj[1]; $unuopaj[1]=$unuopaj[0]; $unuopaj[0]=$tmp;
-			}
-			$unua=1;
-			while (@unuopaj) {
-			    $lit = shift @unuopaj;
-			    print " <TR>\n" unless $unua;
-			    $l=convert_non_ascii($lit);
-			    $ali=0;
-			    while (($from,$to)=each %{"aliases_$lng"}) {
-				if ($to) {
-				    $nov = replace($l,$to,$from);
-				    if ($nov ne $l) {
-					$ali=1;
-					#uzis tiun signon
-					delete ${"alicp_$lng"}{$from};
-				        $l=$nov;
-				    }
-			        }
-			    }
-			    print " <TD $bgcol ALIGN=\"LEFT\">$l</TD>\n";
-			    if ($ali) { #supozu litergrupon
-				$nomo="litergrupo $l";
-			    } elsif ($lit =~ /^[a-z]$/) {
-			        $nomo="minuskla $lit";
-			    } elsif ($lit =~ /^[A-Z]$/){
-				$nomo="majuskla $lit";
-			    } else {
-				$nomo=priskribo($lit);
-			    }
-			    print " <TD $bgcol ALIGN=\"LEFT\">$nomo</TD>\n";
-			    if (!$ali && $lit !~ /^[a-zA-Z]$/) {
-				$kodo=kodo($lit);
-				$ento='';
-				if (defined $entoj{$kodo}) {
-                                    $ento = "&amp;".$entoj{$kodo}[0].";";
-				}
-				$ento = "&amp;#x$kodo;" if (!$ento and $kodo);
-				print " <TD $bgcol ALIGN=\"LEFT\">$ento</TD>\n";
-				print " <TD $bgcol ALIGN=\"LEFT\">$kodo</TD>\n";
-			    }
-			    print " </TR>\n";
-			    $unua=0;
-			} # while (@unuopaj)
-		    } # foreach $litgrp (@literoj)
-		} # temas pri unuopaj literoj
-	    } # estas liter-priskribo
-        } # ignoru komentojn ...
-    } #  while ($line=<CFG>)
+	$unuo = "&amp;#x$kodo;" if ($kodo and !$unuo);
+	
+	my $nomo;
+	if ($ali) { #supozu litergrupon
+	    $nomo="litergrupo $l";
+	} elsif ($lit =~ /^[a-z]$/) {
+	    $nomo="minuskla $lit";
+	} elsif ($lit =~ /^[A-Z]$/){
+	    $nomo="majuskla $lit";
+	} else {
+	    $nomo=priskribo($lit);
+	}
+
+	# kiom da linioj en unue kolumno?
+	if ($c != $desc->[0]) {
+	    $rowcnt = "ROWSPAN = \"$cnts{$desc->[0]}\"";
+	    $c = $desc->[0];
+	} else {
+	    $rowcnt = '';
+	}
+	
+	if ($rowcnt =~ /"1"$/) {
+	    print "<TR $bgcol><TD $bgcol ALIGN=\"LEFT\">".
+		$desc->[2]." (".$desc->[3].")</TD>";
+	} elsif ($rowcnt) {
+	    print "<TR $bgcol><TD $bgcol $rowcnt ALIGN=\"LEFT\">".
+		$desc->[2]." (".$desc->[3].")</TD>";
+	} else {
+	    print "<TR $bgcol>";
+	}
+
+	print "<TD>$lit</TD><TD>$nomo</TD>".
+	    "<TD>$unuo</TD><TD>$kodo</TD></TR>\n";
+
+    }
     print "</TABLE>\n";
+    
     lingv_footer();
     close OUT;
     select STDOUT;
+    
     diff_mv($tmp_file,$target_file);
+}
 
-#if ($debug) {
-#    foreach $kodo (keys %entoj) {
-#	$e=$entoj{$kodo}[0];
-#	print "$kodo:&$e; ";
-#    }
-#print "\n";
-#}
 
 unlink($tmp_file);
 
@@ -356,12 +274,11 @@ sub kodo {
     my ($lit)=@_;
     my $kodo='';
 
-    if ($lit =~ /^[\200-\377]$/) {
-	$kodo=sprintf("%04x",ord($lit));
-    } elsif ($lit =~ /\\u([a-f0-9]{4})/) {
-	$kodo=$1;
-    } else {
+    if ($lit =~ /^[\000-\200]$/) {
 	$kodo='';
+    } else {
+	$kodo = utf8_hex($lit);
+	$kodo =~ s/^0x//;
     }
     return lc($kodo);
 }
@@ -373,15 +290,15 @@ sub priskribo {
     my $pri='';
 
     $kodo=kodo($lit);
-    if ($kodo and $entoj{$kodo}) {
+    if ($kodo and $unuoj{$kodo}) {
 
-	if ($debug) { warn ">>> $kodo ".join(', ',@{$entoj{$kodo}})."\n"; };
+	if ($debug) { warn ">>> $kodo ".join(', ',@{$unuoj{$kodo}})."\n"; };
 
-        $pri=$entoj{$kodo}[1]; #neregula priskribo
+        $pri=$unuoj{$kodo}[1]; #neregula priskribo
         # prenu regulan priskribon
         if (! $pri) {
-	    my $l=substr($entoj{$kodo}[0],0,1);
- 	    my $kromsigno = substr($entoj{$kodo}[0],1,length($entoj{$kodo}[0])-1);
+	    my $l=substr($unuoj{$kodo}[0],0,1);
+ 	    my $kromsigno = substr($unuoj{$kodo}[0],1,length($unuoj{$kodo}[0])-1);
 	    if (defined $regpri{$kromsigno}) {
   	        $pri = ( ($l =~ /^[a-z]$/)?"min":"maj")."uskla $l $regpri{$kromsigno}";
 	    } else {

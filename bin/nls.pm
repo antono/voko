@@ -5,15 +5,17 @@ require Exporter;
 
 @EXPORT = qw(read_nls_cfg pop_utf8char first_utf8char last_utf8char 
 	     defined_nls cmp_nls reverse_utf8 letter_nls letter_asci_nls
-             convert_non_ascii replace to_utf8 utf8_hex); 
+             convert_non_ascii replace to_utf8 utf8_hex nls_lingvoj); 
 
 
 
-read_nls_cfg("/home/revo/voko/cfg/nls.cfg");
-dump_nls_info("eo");
-dump_nls_info("fr");
-dump_nls_info("ru");
-dump_nls_info("ko");
+#read_nls_cfg("/home/revo/voko/cfg/nls.cfg");
+#dump_nls_info("de");
+#dump_nls_info("hu");
+#dump_nls_info("eo");
+#dump_nls_info("fr");
+#dump_nls_info("ru");
+#dump_nls_info("ko");
 
 # $interpunkcio = '[\s,;\.:\(\)\-\'\/\?!\"]';
 $interpunkcio = '[\s,;\.:\(\)\-\'\/\"]';
@@ -311,14 +313,16 @@ sub read_nls_cfg {
 		
 		    # temas pri unuopaj literoj
 		    ($b,$c) = (0,0);
+		    $minusklo = '';
 		    @literoj = split(',',$priskribo);
+
 		    foreach $litgrp (@literoj) {
 			$b++; $c=0;
 			$litgrp =~ s/^\s*//;
 			$litgrp =~ s/\s*$//;
 			
 			$minusklo = convert_non_ascii(
-			   (split /\s+/, $litgrp)[$min -1]);
+			   (split /\s+/, $litgrp)[$min -1]) unless($minusklo);
 			# renversu alinomigon
 			while (($from,$to)=each %{"aliases_$lng"}) {
 			    if ($to) { 
@@ -395,10 +399,12 @@ sub hex_utf8 {
     int_utf8(hex($_[0]));
 }
 
-# kontrolas cxu nls por $lng difinitas
+# kontrolas cxu lingvo $lng estas difinita
+# redonas la difinojn tiuokaze
 sub defined_nls {
   my $lng = shift;
   my $letters = \%{"letters_$lng"};
-  return (defined %$letters);
+  return %$letters;
 }
+
 
