@@ -6,7 +6,7 @@
 $lng_simboloj = 1; # enmetu simbolojn por lingvoj
 $ref_simboloj = 1; # enmetu simbolojn por referenctipoj
 $fak_simboloj = 1; # enmetu simbolojn por fakoj
-$redakto_cgi  = '/cgi-bin/redakti.pl'; # ligo al redakto-programo
+$redakto_cgi  = '/cgi-bin/vokomail.pl'; # ligo al redakto-programo
 
 # kie troviøas simboletoj (rilate al la artikoloj)
 $smb_dosierujo = "../smb";
@@ -135,6 +135,7 @@ sub vortaro_ {
 sub art {
     shift; shift; # ignoru xp kaj el
     $marko = get_attr('mrk',@_);
+    $marko =~ s/^\044Id:\s+([^,\.]+)\.xml,v.*\044$/$1/; 
 
     $snc_cnt=0;
     $subdrv_cnt=0;
