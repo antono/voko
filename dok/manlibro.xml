@@ -1,22 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<manlibro>
 <h1>Manlibreto pri la Voko-DTD</h1>
 
-%vortaro%<h2>vortaro</h2>
+<h2 id="vortaro">vortaro</h2>
 
-Ekzistas du eblecoj por realigi vortaron laı la Voko-DTD.
+<p>
+Ekzistas du eblecoj por realigi vortaron laÅ­ la Voko-DTD.
+</p>
 <ol>
-<li>La tuta vortaro estas en unu dosiero
-<li>Æiu unuopa artikolo estas en propra dosiero
+<li>La tuta vortaro estas en unu dosiero</li>
+<li>Äˆiu unuopa artikolo estas en propra dosiero</li>
 </ol>
-
-En la unua kazo, kiu konvenas por malgrandaj vortaroj aı por
-aıtomataj traktoj de la tuta vortaro, øi konsistas el la tri grandaj partoj
+<p>
+En la unua okazo, kiu konvenas por malgrandaj vortaroj aÅ­ por
+aÅ­tomataj traktoj de la tuta vortaro, Äi konsistas el la tri grandaj partoj
 prologo, precipa parto kaj epilogo. La precipa parto enhavas la
-unuopajn #art%artikolojn#.
+unuopajn <a href="#art">artikolojn</a>.
+</p>
 
-[[
-<?xml version="1.0"?>
+<code>
+<![CDATA[<?xml version="1.0"?>
 <!DOCTYPE vortaro SYSTEM "../dtd/vokoxml.dtd">  
-
+]]>
 <vortaro>
   <prologo>
     ...
@@ -36,33 +42,36 @@ unuopajn #art%artikolojn#.
     ...
   </epilogo>
 </vortaro>
-]]
+</code>
 
-En la dua kazo, kiu konvenas por redaktado de grandaj vortaroj,
-æiu dosiero enhavas krom la devigaj kadraj elementoj nur unu
+<p>
+En la dua okazo, kiu konvenas por redaktado de grandaj vortaroj,
+Ä‰iu dosiero enhavas krom la devigaj kadraj elementoj nur unu
 artikolon. 
+</p>
 
-[[
-<?xml version="1.0"?>
+<code>
+<![CDATA[<?xml version="1.0"?>
 <!DOCTYPE vortaro SYSTEM "../dtd/vokoxml.dtd"> 
-
+]]>
 <vortaro>
   <art>
     ...
   </art>
 </vortaro>
-]]
+</code>
 
 
-%art%<h2>artikolo</h2>
-
-Artikolo enhavas la informojn pri unu kapvorto. Øi
-konsistas do el la #kap%kapvorto# kaj la priskribo. La priskribo 
-estas normale dividita en plurajn #drv%deriva¼ojn#. Krome 
+<h2 id="art">artikolo</h2>
+<p>
+Artikolo enhavas la informojn pri unu kapvorto. Äœi
+konsistas do el la <a href="#kap">kapvorto</a> kaj la priskribo. La priskribo 
+estas normale dividita en plurajn <a href="#drv">derivaÄµojn</a>. Krome 
 la artikolo ricevas markon, kiu permesas referenci al la
 artikolo de aliaj lokoj. La marko principe egalas al la dosiernomo.
+</p>
 
-[[
+<code>
 <art mrk="vort">
   <kap><rad>vort</rad>/o</kap>
   <drv mrk="vort.0o">
@@ -75,18 +84,20 @@ artikolo de aliaj lokoj. La marko principe egalas al la dosiernomo.
     ...
   </drv>
 </art>
-]]
+</code>
 
-Se la artikoloj estas administrataj per la ar¶ivosistemo
-CVS, la marko estas aıtomate donita de tiu sistemo en loko
+<p>
+Se la artikoloj estas administrataj per la arÄ¥ivosistemo
+CVS, la marko estas aÅ­tomate donita de tiu sistemo en loko
 markita per &#36;Id&#36; kaj tiukaze enhavas krome indikojn pri
-versio kaj şanøtempo de la artikolo. Tiujn informojn uzas
-ankaı la retpoşta redaktoservo por certigi, ke ne du
+versio kaj ÅanÄtempo de la artikolo. Tiujn informojn uzas
+ankaÅ­,a retpoÅta redaktoservo por certigi, ke ne du
 redaktantoj redaktas samtempe la saman artikolon.
 Ampleksaj artikoloj cetere povas esti dividitaj en
 subartikoloj. 
+</p>
 
-[[
+<code>
 <art mrk="&#36;Id: vort.xml,v 1.6 2000/03/31 20:09:48 revo Exp &#36;">
   <kap><rad>vort</rad>/o</kap>
   <subart>
@@ -96,69 +107,80 @@ subartikoloj.
     ...
   </subart>
 </art>
-]]
+</code>
 
-Noto: Artikoloj de terminaroj normale ne bezonas la deriva¼ojn kaj 
-povas rekte enhavi la sencojn aı eæ la difinojn kaj
+<p>
+Noto: Artikoloj de terminaroj normale ne bezonas la derivaÄµojn kaj 
+povas rekte enhavi la sencojn aÅ­ eÄ‰ la difinojn kaj
 ekzemplojn.
+</p>
 
-%kap%<h2>kapvorto</h2>
+<h2 id="kap">kapvorto</h2>
 
-Kapvorto okazas en du lokoj, kiel kapvorto de #art%artikolo# 
-kaj kiel kapvorto de #drv%deriva¼o#. En la kapvorto de la artikolo 
-oni normale signas la radikon, per kiu oni povas anstataıi la 
+<p>
+Kapvorto okazas en du lokoj, kiel kapvorto de <a href="#art">artikolo</a> 
+kaj kiel kapvorto de <a href="#drv">derivaÄµo</a>. En la kapvorto de la artikolo 
+oni normale signas la radikon, per kiu oni povas anstataÅ­i la 
 tildojn en la cetera artikolo. Krome la kapvorto povas enhavi 
-indikon pri la #fnt%fonto# kaj oficialeco de la kapvorto.
+indikon pri la <a href="#fnt">fonto</a> kaj oficialeco de la kapvorto.
+</p>
 
-[[
+<code>
 <kap>
   <rad>vort</rad>/o
   <ofc>*</ofc>
 </kap>
-]]
+</code>
 
-La kapvortoj de la deriva¼oj referencas per tildo al
-la radiko kaj nur aldonas prefiksojn, fina¼ojn ktp.
+<p>
+La kapvortoj de la derivaÄµoj referencas per tildo al
+la radiko kaj nur aldonas prefiksojn, finaÄµojn ktp.
+</p>
 
-[[
+<code>
 <kap>
   sen<tld/>a
 </kap>
-]]
+</code>
 
 
-%drv%<h2>deriva¼oj</h2>
-
-Deriva¼oj entenas la priskribon pri iu vorto derivita
+<h2 id="drv">derivaÄµoj</h2>
+<p>
+DerivaÄµoj entenas la priskribon pri iu vorto derivita
 el la kapvorto de la artikolo. Ili konsistas el propra
-kapvorto kaj øia priskribo, kiu normale estas dividita
+kapvorto kaj Äia priskribo, kiu normale estas dividita
 en plurajn sencojn. Se temas pri nur unu senco, la divido
 principe ne estas necesa. Sed por faciligi la taskon de
-la konvertiloj mi rekomendas eæ æe nur unu senco krampi
-øin per &lt;snc&gt;...&lt;/snc&gt;. Por ke deriva¼oj povas
+la konvertiloj mi rekomendas eÄ‰ Ä‰e nur unu senco krampi
+Äin per &lt;snc&gt;...&lt;/snc&gt;. Por ke derivaÄµoj povas
 esti rekte referencitaj el aliaj artikoloj ili ricevas 
 same kiel la artikolo markon, kiu konsistas el la 
-dosiernomo, punkto kaj la kapvorto de la deriva¼o, en kiu
-la tildo estas anstataıigita per nulo.
-
-[[
+dosiernomo, punkto kaj la kapvorto de la derivaÄµo, en kiu
+la tildo estas anstataÅ­igita per nulo.
+</p>
+<code>
 <drv mrk="vort.sen0a">
   <kap>sen<tld/>a</kap>
   <snc>
   </snc>  
 </drv>
-]]
+</code>
+<p>
+Multsignifajn derivaÄµojn oni povas dividi per "subdrv".
+</p>
 
-Multsignifajn deriva¼ojn oni povas dividi per "subdrv".
 
-%snc%<h2>sencoj</h2>
-
+<h2 id="snc">sencoj</h2>
+<p>
 Sencoj entenas la priskribon pri unu senco de vorto.
 La priskribo povas uzi iujn el la sekvaj partoj:
-uzo, difino, #ekz%ekzemplo#, #ref%referenco#, #trd%traduko#
+uzo, difino, <a href="#ekz">ekzemplo</a>, <a
+href="#ref">referenco</a>, 
+<a href="#trd">traduko</a>
 kaj kelkaj aliaj.
+</p>
 
-[[
+<code>
 <snc>
   <dif>
     ...:
@@ -181,16 +203,18 @@ kaj kelkaj aliaj.
   <bld lok="...">...</bld>
   <trd lng="en">...</trd>
 </snc>     
-]]
+</code>
 
+<p>
 Sencon, kiu ampleksas plurajn subtilajn subsencojn oni
 povas dividi per "subsnc".
-<p>
+</p><p>
 Se vi volas referenci al iu senco, vi enmetu markon,
-kies unua parto estu la marko de la enhavanta deriva¼o
+kies unua parto estu la marko de la enhavanta derivaÄµo
 kaj la dua parto identigu la sencon mem:
+</p>
 
-[[
+<code>
 <drv mrk="dorm.0i">
   <snc mrk="dorm.0i.ripozi">
     ...
@@ -199,66 +223,79 @@ kaj la dua parto identigu la sencon mem:
     ...
   </snc>
 </drv>
-]]
+</code>
 
-Æar la sencnumeroj estas elkalkulataj aıtomate, ekzistas
-specialaj rimedoj por enşovi tian numeron en la tekston:
+<p>
+Äˆar la sencnumeroj estas elkalkulataj aÅ­tomate, ekzistas
+specialaj rimedoj por enÅovi tian numeron en la tekston:
+</p>
 
-[[
+<code>
 <rim> 
   La senco dormi <sncref ref="dorm.0i.malvivi"/> estas
   uzata nur...
 </rim>
-]]
+</code>
 
-en la prezento fariøas "Rim: La senco dormi <i>2</i>
-estas uzata nur..."
 <p>
-Se malsupre en artikolo vi volas doni ekzemploj rilate
+en la prezento fariÄas "Rim: La senco dormi <i>2</i>
+estas uzata nur..."
+</p><p>
+Se malsupre en artikolo vi volas doni ekzemplojn rilate
 al senco pli frue okazita, vi povas fari tion per:
+</p>
 
-[[
+<code>
 <snc ref="dorm.0i.malvivi">
   <ekz>
     ...
   </ekz>
 </snc>
-]]
+</code>
 
-Tio poste fariøos "2: ..." (Komparu la artikolon pri "al").
+<p>
+Tio poste fariÄos "2: ..." (Komparu la artikolon pri "al").
+</p>
 
-%ekz%<h2>ekzemploj</h2>
+<h2 id="ekz">ekzemploj</h2>
 
+<p>
 Ekzemploj ilustras la uzon de vorto kaj povas enhavi 
-krom la citita aı ekzempla teksto klarigojn kaj #fnt%fontindikon#.
+krom la citita aÅ­ ekzempla teksto klarigojn kaj 
+<a href="#fnt">fontindikon</a>.
+</p>
 
-[[
+<code>
 <ekz>
   lasi <tld/>i la manojn
   <fnt>(<aut>Zamenhof</aut>: <vrk>Proverbaro</vrk>)</fnt>
   <klr>
-    (f. perdi la kura&gcirc;on)
+    (f. perdi la kura&amp;gcirc;on)
   </klr>;
 </ekz>
-]]
+</code>
 
 
-%fnt%<h2>fontindikoj</h2>
+<h2 id="fnt">fontindikoj</h2>
 
-Fontoj indikas la devenon de cita¼o aı kapvorto.
+<p>
+Fontoj indikas la devenon de citaÄµo aÅ­ kapvorto.
 Ili indikas normale la verkon kaj la lokon ene de 
 la verko. La verkon plej konvene oni indikas per 
 referenco al la bibliografio.
+</p>
 
-[[
+<code>
 <fnt><bib>M</bib>, <lok>Josuo 6, 20</lok></fnt>
-]]
+</code>
 
-Esceptokaze oni povus uzi ankaı iun el la sekvaj 
+<p>
+Esceptokaze oni povus uzi ankaÅ­ iun el la sekvaj 
 formoj de fontindikoj, sed tio estas malrekomendinda 
 por novaj redaktoj.
+</p>
 
-[[
+<code>
 <fnt>Z</fnt>
 
 <fnt>PIV</fnt>
@@ -267,63 +304,65 @@ por novaj redaktoj.
   <vrk>Malnova testamento</vrk>, 
   <lok>Josuo 6, 20</lok></fnt>
 
-<fnt><lok><url ref="&KompLeks;/KO.html#komputi">KompLeks</url></lok></fnt>
-]]
+<fnt><lok><url ref="&amp;KompLeks;/KO.html#komputi">KompLeks</url></lok></fnt>
+</code>
 
-%trd%<h2>tradukoj</h2>
 
-Simplajn tradukoj vi donas ene de strukturo senco, deriva¼o
-aı simila per indiko de la ISO-kodo de la lingvo kaj la
-traduka vorto.
+<h2 id="trd">tradukoj</h2>
 
-[[
-<trd lng="de">am&uuml;sieren</trd>
-]]
-
-La diversaj tradukoj aperu en la artikolo ordigitaj laı
-la lingvokodo, alikaze æe multaj lingvoj oni iam perdas 
-la superrigardon.
 <p>
+Simplajn tradukoj vi donas ene de strukturo senco, derivaÄµo
+aÅ­ simila per indiko de la ISO-kodo de la lingvo kaj la
+traduka vorto.
+</p>
+<code>
+<trd lng="de">am&amp;uuml;sieren</trd>
+</code>
+<p>
+La diversaj tradukoj aperu en la artikolo ordigitaj laÅ­
+la lingvokodo, aliokaze Ä‰e multaj lingvoj oni iam perdas 
+la superrigardon.
+</p><p>
 Ofte la tradukoj konsistas el pluraj vortoj kaj oni devas
 marki la vorton, sub kiu la traduko aperu en la lingvoindekso.
-
-[[
-<trd lng="de">sich <ind>am&uuml;sieren</ind></trd>
-]]
-
+</p>
+<code>
+<trd lng="de">sich <ind>am&amp;uuml;sieren</ind></trd>
+</code>
+<p>
 Se estas pluraj eblaj tradukoj oni grupigu ilin. Klarigojn,
-kiuj helpas trovi la øustan tradukon oni ankaı  povas aldoni.
-
-[[
+kiuj helpas trovi la Äustan tradukon oni ankaÅ­  povas aldoni.
+</p>
+<code>
 <trdgrp lng="de">
   <trd>Maulesel <klr>(de azenino)</klr></trd>,
-  <trd>Maultier <klr>(de &ccirc;evalino)</klr></trd>
+  <trd>Maultier <klr>(de &amp;ccirc;evalino)</klr></trd>
 </trdgrp>
-]]
-
+</code>
+<p>
 Klarigojn, kiuj aperu en la lingvoindekso, sed ne
 en la artikolo mem, oni donas tiel.
-
-[[
+</p>
+<code>
 <trd>geben <klr tip="ind">(es gibt)</klr></trd>
-]]
-
-Vi ankaı povas traduki ekzemplon aı parton de ekzemplo, 
-se øi redonas tipan parolmanieron. La tradukatan parton de
+</code>
+<p>
+Vi ankaÅ­ povas traduki ekzemplon aÅ­ parton de ekzemplo, 
+se Äi redonas tipan parolmanieron. La tradukatan parton de
 la ekzemplo vi devas signi per la strukturilo &lt;ind&gt;.
-
-[[
+</p>
+<code>
 <ekz>
   <ind>ne gravas</ind>
   <trd lng="de">macht nichts</trd>
 </ekz>
-]]
-
-Se la ekzemplo aı la traduko estas tro longaj por aperi tute 
-en la indekso, vi povas provizi mallongigon, kiu laı sia tipo
-aldonos tripunkton antaıe kaj/aı malantaıe.
-
-[[
+</code>
+<p>
+Se la ekzemplo aÅ­ la traduko estas tro longaj por aperi tute 
+en la indekso, vi povas provizi mallongigon, kiu laÅ­ sia tipo
+aldonos tripunkton antaÅ­e kaj/aÅ­ malantaÅ­e.
+</p>
+<code>
 <ekz>
   <ind>
     sed tio 
@@ -334,48 +373,49 @@ aldonos tripunkton antaıe kaj/aı malantaıe.
     <mll tip="fin">macht nichts</mll>
   </trd>
 </ekz>
-]]
-
-Tio fariøas "...macht nichts = ...ne gravas" en la indekso.
-
-%ref%<h2>referencoj</h2>
-
+</code>
+<p>
+Tio fariÄas "...macht nichts = ...ne gravas" en la indekso.
+</p>
+<h2 id="ref">referencoj</h2>
+<p>
 Referencoj servas por montri rilatojn de vorto 
 al aliaj vortoj. Ekzistas diversaj eblaj rilatoj.
-
+</p>
 <dl>
-<dt>supernocio/subnocio
-<dd>Tiu rilato estas uzata por montri pli øeneralan vorton
- aı ekzemplon. (Hundo estas besto. Ekzemplo de besto estas hundo)
-
-<dt>parto/malparto
+<dt>supernocio/subnocio</dt>
+<dd>Tiu rilato estas uzata por montri pli Äeneralan vorton
+ aÅ­ ekzemplon. (Hundo estas besto. Ekzemplo de besto estas hundo)
+</dd>
+<dt>parto/malparto</dt>
 <dd>Tiu rilato estas uzata por montri, ke io estas parto de io
  alia. (Monato estas parto de jaro. Semajno konsistas el la semajnotagoj
  lundo, mardo, ...). Foje estas malfacile distingi tiun rilatotipon de
- la antaıa. Provu tiukaze formuli frazon kun "ekzemplo" au "konsistas
- el" aı "parto de", ofte tio helpas trovi la øustan rilaton.
-
-<dt>sinonimo/antonimo
-<dd>Tiu rilato estas uzata por montri samsencajn aı malsamsencajn
- vortojn. (Monata¼o estas samsenca vorto kiel menstruo. Malo de
+ la antaÅ­a. Provu tiukaze formuli frazon kun "ekzemplo" aÅ­ "konsistas
+ el" aÅ­ "parto de", ofte tio helpas trovi la Äustan rilaton.
+</dd>
+<dt>sinonimo/antonimo</dt>
+<dd>Tiu rilato estas uzata por montri samsencajn aÅ­ malsamsencajn
+ vortojn. (MonataÄµo estas samsenca vorto kiel menstruo. Malo de
  konstrui estas detrui.)
-
-<dt>difina
+</dd>
+<dt>difina</dt>
 <dd>Tiu rilato estas uzata, se vorto sinonima al alia, sed
-pli malofta aı evitinda estas difinita per referenco al la 
-pli uzinda vorto, sub kiu troviøas la tuta difino. (En la tezaıro
+pli malofta aÅ­ evitinda estas difinita per referenco al la 
+pli uzinda vorto, sub kiu troviÄas la tuta difino. (En la tezaÅ­ro
 difina kaj sinonima referencoj estas traktitaj kiel ekvivalentaj)
-
-<dt>homonima
+</dd>
+<dt>homonima</dt>
 <dd>Tiu rilato estas uzata por atentigi pri samforma sed
-alisignifa vorto. (ekz. ero (parteto) kaj ero (tempodaıro)). 
-
-<dt>nespecifita
-<dd>Ofte oni volas referenci al simila aı komparinda vorto, sed
+alisignifa vorto. (ekz. ero (parteto) kaj ero (tempodaÅ­ro)). 
+</dd>
+<dt>nespecifita</dt>
+<dd>Ofte oni volas referenci al simila aÅ­ komparinda vorto, sed
   la rilato ne estas tre strikta (Fari, komparu al krei, konstrui.)
+</dd>
 </dl>
 
-[[
+<code>
 <!-- en la artikolo pri hundo -->
 <ref tip="super" cel="best.o">besto</ref>
 
@@ -388,7 +428,7 @@ alisignifa vorto. (ekz. ero (parteto) kaj ero (tempodaıro)).
 <!-- en la artikolo pri semajno -->
 <ref tip="prt" cel="lund.0o">lundo</ref>
 
-<!-- en la artikolo pri monata¼o -->
+<!-- en la artikolo pri monataÄµo -->
 <ref tip="sin" cel="menstru.0o">menstruo</ref>
 
 <!-- en la artikolo pri konstrui -->
@@ -404,16 +444,16 @@ alisignifa vorto. (ekz. ero (parteto) kaj ero (tempodaıro)).
 <ref tip="vid" cel="kre.0i">krei</ref>
 <!-- au -->
 <ref cel="konstru.0i">konstrui</ref>
-]]
-
-Æe la nespecifita tipo oni povas forlasi la tipon aı
+</code>
+<p>
+Äˆe la nespecifita tipo oni povas forlasi la tipon aÅ­
 uzi "vid". En la unua okazo ne aperos referencsigno en
 la artikolo en la dua okazo aperos sageto.
-<p>
+</p><p>
 Se oni volas referenci al pluraj vortoj kun sama rilato
 al la kapvorto oni povas grupigi tiujn referencojn.
-
-[[
+</p>
+<code>
 <!-- en la artikolo pri semajno -->
 <refgrp tip="prt">
   <ref cel="lund.0o">lundo</ref>,
@@ -426,22 +466,24 @@ al la kapvorto oni povas grupigi tiujn referencojn.
   <ref cel="kre.0i">krei</ref>,
   <ref cel="konstru.0i">konstrui</ref>
 </refgrp>
-]]
-
-Forlaso de la tipo æe referencgrupo signifas la implicitan
-tipon "vid" kaj do antaı la referencoj aperos sageto.
+</code>
 <p>
+Forlaso de la tipo Ä‰e referencgrupo signifas la implicitan
+tipon "vid" kaj do antaÅ­ la referencoj aperos sageto.
+</p><p>
 Noto: Ene de difinoj la tipoj de referencoj ne estas indikitaj
-per signo, æar tio øenas la fluan legadon. Tamen vi indiku la
-tipon, æar øi povas esti uzata de programoj, kiuj analizas la
+per signo, Ä‰ar tio Äenas la fluan legadon. Tamen vi indiku la
+tipon, Ä‰ar Äi povas esti uzata de programoj, kiuj analizas la
 rilatojn inter vortoj.
+</p>
 
-%uzo%<h2>uzindikoj</h2>
 
+<h2 id="uzo">uzindikoj</h2>
+<p>
 Uzo indikas en kiu medio vorto estas uzata. Tio povas
 rilati al fako, stilo, regiono, tempo ktp.:
-
-[[
+</p>
+<code>
 <!-- arkaisma vorto el fako biologio -->
 <drv mrk="krkspl.0o">
   <kap><tld/>o</kap>
@@ -450,7 +492,13 @@ rilati al fako, stilo, regiono, tempo ktp.:
   <uzo tip="klr">p.p. pri vertebruloj</uzo>
   ...
 </drv>
-]]
+</code>
+
+</manlibro>
+
+
+
+
 
 
 

@@ -17,11 +17,11 @@ indekso:
 dok: dok/manlibro.html dok/lingva_manlibro.html dok/dtd.html dok/fakoj.html dok/lingvoj.html \
      dok/bibliogr.html dok/bibltit.html dok/biblaut.html dok/mallongigoj.html dok/stiloj.html
 
-dok/manlibro.html: ${VOKO}/dok/manlibro.txt
-	${VOKO}/bin/manlibro.pl $< > $@
+dok/manlibro.html: ${VOKO}/dok/manlibro.xml
+	${VOKO}/bin/xslt.sh $< ${VOKO}/xsl/manlibro.xsl > $@
 
-dok/lingva_manlibro.html: ${VOKO}/dok/lingva_manlibro.txt
-	${VOKO}/bin/manlibro.pl $< > $@
+dok/lingva_manlibro.html: ${VOKO}/dok/lingva_manlibro.xml
+	${VOKO}/bin/xslt.sh $< ${VOKO}/xsl/manlibro.xsl > $@
 
 dok/dtd.html: ${REVO}/dtd/vokoxml.dtd
 	${VOKO}/bin/dtd2html.pl $<
