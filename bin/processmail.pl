@@ -4,14 +4,6 @@
 # kaj dispartigas ilin en kapon kaj korpon,
 # che MIME-mesaghoj - elpakas ties unuopajn partojn
 
-# agendo
-#   konstruo de mesaghoj por forsendado
-#   test-programeto por la afero
-#     por tio necesas: ekzemplaj mesaghoj, 
-#       shaltilo por malhelpi sendadon de mesaghoj, sed
-#       anstataua savo en dosieroj
-#   sendu unu raporton al redaktantoj anstatau plurajn mesaghojn
-#
 
 use MIME::Parser;
 use MIME::Entity;
