@@ -20,7 +20,7 @@ $xsl = "/home/revo/voko/xsl/revotxt.xsl";
 $tmp = "/home/revo/tmp";
 $datfile = "/home/revo/dict/revo.dat";
 $inxpref = "/home/revo/dict/revo";
-$indekso = "/home/revo/revo/sgm/indekso.xml";
+$indekso = "/home/revo/tmp/indekso.xml";
 
 $b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
@@ -29,60 +29,41 @@ $b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 #########           indeksdosieron
 
 $pos = 0;
+$dir = shift @ARGV;
+unless ($dir) {
+    warn "Vi ne donis XML-dosierujon. Kreante nur la indeksojn...\n";
+    $nur_indeksoj = 1;
+}
 
 unless ($nur_indeksoj) {
 
     unlink "$datfile"; 
 
-    $dir = shift @ARGV;
     opendir DIR, $dir;
     open INX,">$inxpref.inx" or die "Ne eblis malfermi \"$inxpref.inx\" por skribi\n";
+
+    my $n = 1;
 
     while ($file = readdir DIR) {
 	
 	if (-f "$dir/$file" and $file =~ /\.xml$/) {
 	    
-	    print "$file: " if ($verbose);
+	    print ($n++)."$file: " if ($verbose);
 
 	    # konvertu XML->TXT kaj alpendigu al datumdosiero
 	    `$xslbin $dir/$file $xsl > $tmp/$file.html`;
 	    `lynx -dump $tmp/$file.html >> $datfile`;
 	    $len = (-s "$datfile") - $pos;
-	
-	# elprenu la kapvorton
-#	open HTML, "$tmp/$file.html" 
-#	    or die "Ne povis malfermi $tmp/$file.html: $!\n";
-#	$html = join('',<HTML>);
-#	close HTML;
-#	$html =~ /<title>(.*?)<\/title>/si;
-#	$kapv = $1;
-#	$kapv =~ s/^\s+//s;
-#	$kapv =~ s/\s+$//s;
-#	$kapv =~ s/\s+/ /sg;
-#	$kapv =~ s/\///g;
-#	$kapv =~ s/&#(\d+);/int_utf8($1)/eg;
-
 	    unlink "$tmp/$file.html";
 	
 	    print "[$pos\t$len]\n" if ($verbose);
-	    
 	    $file =~ s/\.xml$//;
 	    print INX $file,"\t",b64_encode($pos),"\t",b64_encode($len),"\n";
-#	$inx{$kapv} = [$pos,$len];
 	
 	    $pos += $len;
 	}
     }
     closedir DIR;
-
-# skribu indekson
-#open INX, ">$inxfile" or die "Ne povis malfermi $inxfile: $!\n";
-
-#foreach $kapv (sort keys %inx) {
-#    ($pos,$len) = @{$inx{$kapv}};
-#    print INX "$kapv\t".b64_encode($pos)."\t".b64_encode($len)."\n";
-#}
-
     close INX;
 }
 
@@ -119,7 +100,6 @@ foreach $lng (@lingvoj) {
 
     open INX, ">$inxpref.$lng.inx";
     $refs = $tradukoj{$lng};
-#    @$refs = sort { $a->[0] cmp $b->[0] } @$refs;
     for $entry (sort { compare($a->[0],$b->[0]) } @$refs) {
 	if (($pos = $positions{$entry->[1]})
 	    and (($last0 ne $entry->[0]) or ($last1 ne $entry->[1]))) { 
