@@ -90,6 +90,9 @@ $/ = "\n";
 #print "Analizi la indekserojn...\n" if ($verbose);
 #$inx =~ s/<art\s+mrk="([^\"]*)"\s*>(.*?)<\/art\s*>/artikolo($1,$2)/sieg;
 
+# kreu la Javaskripto-dosierojn
+&javaskriptoDosieroj();
+
 # kreu la html-dosierojn
 
 # fakindeksoj
@@ -520,6 +523,7 @@ sub LINGVINX {
     select OUT;
     index_header("lingvoindekso: $lingvoj{$lng}");
     index_buttons();
+    print "<a href=\"lx_${lng}.html\">Ser&#x0109;o</a> ";
     index_letters($lingvoj{$lng},"lx_${lng}_",$lit,$literoj,
 		 [map {letter_asci_nls($_,$lng)} @$literoj]);
 #    print "<h1>$lingvoj{$lng} $lit...</h1>\n";
@@ -945,7 +949,10 @@ sub INX_LNG {
 #	    } else {
 #		print "<img src=\"../smb/xx.png\" alt = \"[$lng]\" class=\"flago\">&nbsp;";
 #	    }
-	    print "<a href=\"lx_${lng}_$unua_litero{$lng}.html\">";
+            if ($indeksoj=~/jx/)
+            { print "<a href=\"lx_${lng}.html\">"; }
+            else
+            { print "<a href=\"lx_${lng}_$unua_litero{$lng}.html\">"; }
 
 	    if ($statistiko{"lng_$lng"} >= 1000) {
 		print "<b>$lingvoj{$lng}</b>";
@@ -964,7 +971,10 @@ sub INX_LNG {
 #	} else {
 #	    print "<img src=\"../smb/xx.png\" alt = \"[$lng]\" class=\"flago\">&nbsp;";
 #	}
-	print "<a href=\"lx_${lng}_$unua_litero{$lng}.html\">";
+        if ($indeksoj=~/jx/)
+        { print "<a href=\"lx_${lng}.html\">"; }
+        else
+        { print "<a href=\"lx_${lng}_$unua_litero{$lng}.html\">"; }
 	if ($statistiko{"lng_$lng"} >= 1000) {
 	    print "<b>$lingvoj{$lng}</b>";
 	} else {
@@ -1152,7 +1162,10 @@ sub INX_PLENA {
     print "LINGVOJ:\n";
     for $lng (sort keys %tradukoj) 
     {
-	print "<a href=\"lx_${lng}_$unua_litero{$lng}.html\">";
+        if ($indeksoj=~/jx/)
+        { print "<a href=\"lx_${lng}.html\">"; }
+        else
+        { print "<a href=\"lx_${lng}_$unua_litero{$lng}.html\">"; }
 #	if (-f "$vortaro_pado/smb/$lng.png") {
 #	    print "<img src=\"../smb/$lng.png\" alt=\"$lng\" class=\"flago\"> ";
 #	} else {
@@ -1396,12 +1409,257 @@ sub cvs_log {
 
 #################################################################
 
+# Javaskriptodosieroj
 
+my $n; #indekso de Esperanta vorto en Javaskriptlisto
+my $nombroListoj; #indekso de la Javaskriptlisto
+my $listoNomo; #nomo de la Javaskriptlisto
+my %eoKunTraduko = (); #la Esperantaj vortoj kiuj havas tradukon.
 
+#Konstruu cxiun dosieron por sercxi per Javaskripto
+sub javaskriptoDosieroj {
+  print "Javaskriptodosieroj...\n";
+  if ($indeksoj=~/jx/) {
+    # kreu la lingvoindeksojn
+    #$lng = 'nl'; {
+    foreach $lng (sort keys %tradukoj) { 
+      @literoj = sort { cmp_nls($a,$b,$lng) } keys %{$tradukoj{$lng}};
+      $unua_litero{$lng} = letter_asci_nls($literoj[0],$lng);
+      $n = 0;
+      $nombroListoj = 0;
+      $listoNomo = 'Eroj';
+      %eoKunTraduko = ();
+      foreach $lit (@literoj) {
+        $refs = $tradukoj{$lng}->{$lit};
+        @$refs = sort { cmp_nls($a->[2],$b->[2],$lng) } @$refs;
+        &jx_lng_lit_js($lng,$lit,\@literoj,$refs);
+      }
+      &jx_lng_js($lng,\@literoj);
+      &lx_lng_html($lng,\@literoj);
+    }
+  }
+  print ".\n";
+}
 
+# Konstruu Javaskriptdosieron kun la listo de Esperantaj vortoj kaj
+# ilia traduko por unu litero ($lit) de unu lingvo ($lng). 
+sub jx_lng_lit_js {
+  my ($lng,$lit,$literoj,$refs) = @_;
+  my $asci = letter_asci_nls($lit,$lng);
+  my $target_file = "$dir/jx_${lng}_$asci.js";
+  my $r;
+  my $last1 = '';
+  my $last2 = '';
+  my $trd;
+ 
+  #print "$target_file..." if ($verbose);
+  open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
+  select OUT;
+  print "$listoNomo" . "[$nombroListoj]=new Array(\n";
+  ++$nombroListoj;
+  $n = 0;
+  foreach $ref (@$refs) {
+    if (($last1 ne $ref->[1]) or ($last2 ne $ref->[3])) {
+      $r=referenco($ref->[0]);    
+      $trd = $ref->[3];
+      #$trd =~ s/(<\/?)ind>/$1u>/sg;
+      $trd =~ s/[\r\n\f]/ /g;
+      $trd =~ s/ *$//g;
+      $trd =~ s/  / /g;
+      if ($r =~ /\#([^.]*)\.([^"]*)$/)
+      {
+        &NovaEro($trd, $1, $2, $ref->[1]);
+      }
+      elsif ($r =~ /art\/([^.]*)\.html$/)
+      {
+        &NovaEro($trd, $1, '', $ref->[1]);
+      }
+      else
+      {
+        print STDERR "ne trovas eroj en: $trd: $r $ref->[1]\n";
+      }
+      $last1 = $ref->[1];
+      $last2 = $ref->[3];
+    }
+  }
+  print "'');";
+  close OUT;
+  select STDOUT;
+  diff_mv($tmp_file,$target_file,$verbose);
+}
 
+# Konstruu la cxefan Javaskriptdosieron por $lng kun
+#  - parametroj UnuaParto kaj Eroj,
+#  - listo de Eo vortoj kiuj ne havas tradukon.
+sub jx_lng_js {
+  my ($lng,$literoj) = @_;
+  my $target_file = "$dir/jx_${lng}.js";
+ 
+  #print "$target_file..." if ($verbose);
+  my $unuaParto = '';
+  #ne funkcias por specialaj literoj:
+  #open OUT,">",\$unuaParto or die "Ne povis krei \$unuaParto: $!\n";
+  open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
+  select OUT;
+  &lx_unua_parto($lng,\@literoj);
+  close OUT;
+  open IN,"<$tmp_file" or die "Ne povis legi $tmp_file: $!\n";
+  while (<IN>) { $unuaParto .= $_; }
+  close IN;
+  $unuaParto =~ s/[\r\n\f]/ /g;
+  $unuaParto =~ s/'/\\'/g;
+  #select STDOUT; print $unuaParto;
+  open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
+  select OUT;
+  print "UnuaParto = '$unuaParto<P>\\n';\n";
+  $listoNomo = 'Eroj';
+  print "$listoNomo=new Array();\n";
+  $listoNomo = 'Eo';
+  print "$listoNomo=new Array();";
+  close OUT;
+  select STDOUT;
+  diff_mv($tmp_file,$target_file,$verbose);
 
+  #listo de Esperantaj vortoj sen traduko (ne estas in %eoKunTraduko)
+  $listoNomo = 'Eo';
+  $nombroListoj = 0;
+  @literoj2 = sort {cmp_nls($a,$b,'eo')} keys %kapvortoj;
+  foreach $lit (@literoj2) {
+    $refs = $kapvortoj{$lit};
+    @$refs = sort { cmp_nls($a->[1],$b->[1],'eo') } @$refs;
+    &jx_lng_eo_lit_js($lng,$lit,\@literoj,$refs);
+  }
+}
 
+# Konstruu Javaskriptdosieron kun la listo de Esperantaj vortoj sen
+# traduko por unu litero ($lit) de Esperanto por lingvo $lng. 
+sub jx_lng_eo_lit_js {
+  my ($lng,$lit,$literoj,$refs) = @_;
+  my $asci = letter_asci_nls($lit,'eo');
+  my $target_file = "$dir/jx_${lng}_eo_$asci.js";
+  $n = 0;
+  my $r;
+  my $last0 = '';
+  my $last1 = '';
+ 
+  #print "$target_file..." if ($verbose);
+  open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
+  select OUT;
+  print "$listoNomo" . "[$nombroListoj]=new Array(\n";
+  ++$nombroListoj;
+  $n = 0;
+  foreach $ref (@$refs) {
+    if (($last0 ne $ref->[0]) or ($last1 ne $ref->[1])) {
+      $r=referenco($ref->[0]);
+      if ($r =~ /\#([^.]*)\.([^"]*)$/)
+      {
+        if (!exists($eoKunTraduko{$ref->[1]}))
+        { &NovaEro('', $1, $2, $ref->[1]); }
+      }
+      elsif ($r =~ /art\/([^.]*)\.html$/)
+      {
+        if (!exists($eoKunTraduko{$ref->[1]}))
+        { &NovaEro('', $1, '', $ref->[1]); }
+      }
+      else
+      {
+        print STDERR "ne trovas eroj en: $r $ref->[1]\n";
+      }
+      $last0 = $ref->[0];
+      $last1 = $ref->[1];
+    }
+  }
+  print "'');";
+  close OUT;
+  select STDOUT;
+  diff_mv($tmp_file,$target_file,$verbose);
+}
 
+# Aldonu ero de la Javaskriptlisto en EL.
+# $traduko: traduko de la Esperanta vorto.
+# $dosiero: dosiero kie trovigxas la Esperanta vorto.
+# $loko: HTML loko de la Esperanta vorto en la dosiero.
+# $esperanto: la Esperanta vorto.
+# Estas notite en %eoKunTraduko ke tiu Esperanta vorto havas tradukon.
+sub NovaEro()
+{
+  local ($traduko, $dosiero, $loko, $esperanto) = @_;
+  $traduko =~ s/<[^>]*>//g;
+  $traduko =~ s/"/\\"/g;
+  $traduko =~ s/\\$/\\ /g;
+  $esperanto =~ s/[\r\n\f] */ /g;
+  $eoKunTraduko{$esperanto} = '1';
+  if ($traduko ne '')
+  {
+    print '"'.$traduko.'",';
+  }
+  if ($loko ne '') { $loko = '.' . $loko; }
+  #print EL '"'.$esperanto.'","'.$dosiero.$loko."\",";
+  print '"'.$esperanto.'","'.$dosiero.$loko."\",\n";
+  $n += 4;
+  if ($n > 64000)
+  { # Javaskriptlisto ne povas havi pli ol 64000 erojn.
+    print "'');\n$listoNomo" . "[$nombroListoj]=new Array(\n";
+    ++$nombroListoj;
+    $n = 0;
+  }
+}
 
+# Unua parto de la HTML-dosiero por sercxi en $lng.
+sub lx_unua_parto {
+  my ($lng,$literoj) = @_;
+  index_header("lingvoindekso: $lingvoj{$lng}");
+  index_buttons();
+  print "<b>Ser&#x0109;o</b> ";
+  index_letters($lingvoj{$lng},"lx_${lng}_",'',$literoj,
+    [map {letter_asci_nls($_,$lng)} @$literoj]);
+  #referencoj al Javaskripto-dosieroj.
+  print '<script type="text/javascript" src="./jx_'
+    . $lng . ".js\"></script>\n";
+  for $litero (@$literoj) {
+    my $asci = letter_asci_nls($litero,$lng);
+    print '<script type="text/javascript" src="./jx_'
+      . $lng . '_' . $asci . ".js\"></script>\n";
+  }
+  @literoj2 = sort {cmp_nls($a,$b,'eo')} keys %kapvortoj;
+  foreach $litero (@literoj2) {
+    my $asci = letter_asci_nls($litero,'eo');
+    print '<script type="text/javascript" src="./jx_'
+      . $lng . '_eo_' . $asci . ".js\"></script>\n";
+  }
+  print '<script type="text/javascript" src="./sercxu.js"></script>';
+  #form
+  print '<form name="Kamparo" action="javascript:Sercxu(document.Kamparo.Kampo.value)">';
+  print $lingvoj{$lng} . ':';
+  print '<input type="text" name="Kampo" size="10" style="font-size: 8pt">';
+  print '<input type="submit" value="Ser&#x0109;u" style="font-size: 8pt">';
+  print '</form>';
+  print '<form name="KamparoEo" action="javascript:SercxuEo(document.KamparoEo.KampoEo.value)">';
+  print 'esperanto:';
+  print '<input type="text" name="KampoEo" size="10" style="font-size: 8pt">';
+  print '<input type="submit" value="Ser&#x0109;u" style="font-size: 8pt">';
+  print '</form>';
+}
 
+# Konstruu la cxefan HTML dosieron por la lingvo $lng
+sub lx_lng_html {
+  my ($lng,$literoj) = @_;
+  my $target_file = "$dir/lx_${lng}.html";
+ 
+  #print "$target_file..." if ($verbose);
+  open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
+  select OUT;
+  &lx_unua_parto($lng,\@literoj);
+  print "<p>En la supran formularon skribu <a href='../dok/sercespr.html' "
+    ."target='precipa'>\n"
+    . "regulan ser&#x0109;esprimon</a>. La &#x0108;apelajn\n"
+    . "literojn indiku per Cx, Gx, ...,  Ux, cx, gx, ..., ux.<p>\n";
+  print "En la listo de trovitaj vortoj vi trovos tiujn, kiuj "
+    . "egalas al la ser&#x0109;ata vorto, poste tiujn, kiuj enhavas "
+    . "la ser&#x0109;atan vorton kaj fine la esprimoj "
+    . "en kiuj la ser&#x0109;a&#x0135;o estas vortoparto.";
+  index_footer();
+  close OUT;
+  select STDOUT;
+  diff_mv($tmp_file,$target_file,$verbose);
+}
