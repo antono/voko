@@ -3,6 +3,9 @@
 		version="1.0"
                 extension-element-prefixes="xt">
 
+<!-- XSL-difino produktanta simplan HTMLon, kiun per "lynx -dump"
+    oni povas plutransformi al simpla teksto -->
+
 <xsl:strip-space elements="kap trd"/>
 
 <!-- kruda artikolstrukturo -->

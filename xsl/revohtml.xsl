@@ -156,13 +156,13 @@ modifita de Wolfram Diestel
     <xsl:value-of select="@mrk"/>
   </xsl:attribute>
   </a>
-  <xsl:apply-templates
-    select="*[not(self::subdrv|self::snc|self::trd|self::trdgrp|self::url)]"/>
+  <xsl:apply-templates select="kap|gra|uzo|fnt"/>
   <dl>
   <xsl:attribute name="compact"/>
   <xsl:apply-templates select="subdrv|snc"/>
   </dl>
-  <xsl:apply-templates select="trd|trdgrp|url"/>
+  <xsl:apply-templates
+    select="*[not(self::subdrv|self::snc|self::gra|self::uzo|self::fnt|self::kap)]"/>
 </xsl:template>  
 	
 <xsl:template match="subdrv">
@@ -318,12 +318,6 @@ modifita de Wolfram Diestel
   <xsl:if test="drv/uzo">
     <br />
   </xsl:if>
-</xsl:template>
-
-<xsl:template match="lok/url">
-  <a href="{@ref}">
-  <xsl:apply-templates/>
-  </a>
 </xsl:template>
 
 <xsl:template match="url">
@@ -489,7 +483,7 @@ modifita de Wolfram Diestel
   <a name="fnt_{$n}"></a>
   <sup><a href="#ekz_{$n}">
     <xsl:value-of select="$n"/></a>) </sup>
-  <xsl:variable name="fnt" select="normalize-space(.)"/>
+  <xsl:variable name="fnt" select="normalize-space(text()[position()=1])"/>
   <xsl:choose>
     <xsl:when test="starts-with($fnt,'(')">
       <xsl:value-of 
@@ -499,8 +493,27 @@ modifita de Wolfram Diestel
       <xsl:value-of select="$fnt"/>
     </xsl:otherwise>
   </xsl:choose>
+  <xsl:apply-templates
+    select="*[not (self::text() and (position()=1 or position=last()))]"/>
+  <xsl:variable name="fnt"
+    select="normalize-space(text()[position()=last()])"/>
+  <xsl:choose>
+    <xsl:when test="substring($fnt,string-length($fnt),1)=')'">
+      <xsl:value-of 
+        select="substring($fnt,1,string-length($fnt)-1)"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="$fnt"/>
+    </xsl:otherwise>
+  </xsl:choose>
   </span>
   <br />
+</xsl:template>
+
+<xsl:template match="lok/url">
+  <a href="{@ref}">
+  <xsl:apply-templates/>
+  </a>
 </xsl:template>
 
 <!-- redakto -->
