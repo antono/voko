@@ -64,6 +64,7 @@ $head_level=2;
 $radiko='';
 $marko='';
 $cvs_id='';
+$drv_finished=0;
 
 if ($file) {
     $parser->parsefile($file);
@@ -221,6 +222,7 @@ sub drv {
 
     $subdrv_cnt=0;
     $snc_cnt=0;
+    $drv_finished=0;
 
     $head_level++;
 
@@ -231,7 +233,7 @@ sub drv {
 sub drv_ {
     $head_level--;
     if ($subdrv_cnt || $snc_cnt) {
-	print "</dl>";
+	print "</dl>" unless ($drv_finished);
     };
 }
 
@@ -369,6 +371,16 @@ sub trdgrp {
     my $lng = get_attr('lng',@_);
     my $class;
 
+    # se la traduko rilatas al drv, jam metz </dl>
+    # atentu, ke tio nur funkcias, se la tradukoj
+    # chiam venas fine
+    if ($xp->in_element('drv')) {
+	if (($subdrv_cnt || $snc_cnt) && !($drv_finished)) {
+	    print "</dl>\n";
+	    $drv_finished = 1;
+	}
+    }
+
     if ($xp->in_element('rim')) {
 	$class = 'rimtrd';
     } elsif ($xp->in_element('dif')) {
@@ -397,6 +409,16 @@ sub trd  {
     shift; # ignoru el
     my $lng = get_attr('lng',@_);
     my $class;
+
+    # se la traduko rilatas al drv, jam metz </dl>
+    # atentu, ke tio nur funkcias, se la tradukoj
+    # chiam venas fine
+    if ($xp->in_element('drv')) {
+	if (($subdrv_cnt || $snc_cnt) && !($drv_finished)) {
+	    print "</dl>\n";
+	    $drv_finished = 1;
+	}
+    }
 
     if ($xp->in_element('trdgrp')) {
 	$class = 'trdgrptrd';
