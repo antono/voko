@@ -72,8 +72,20 @@ print $out if ($verbose);
 print "\ntraserchas chiujn artikolojn je referencoj al $old...\n";
 
 # kiuj artikoloj referencas al la artikolo?
-opendir DIR, "." or die "Ne povis malfermi aktualan dosierujon: $!\n";
-while ($file = readdir(DIR)) {
+$artikoloj_donitaj = 0;
+$file = shift @ARGV;
+if ($file)
+{
+  $artikoloj_donitaj = 1;
+}
+else
+{
+  #opendir DIR, "." or die "Ne povis malfermi aktualan dosierujon: $!\n";
+  #$file = readdir(DIR);
+  @files = split("\n+", `grep -l $old *`);
+  $file = shift @files;
+}
+while ($file) {
     if (-f $file and $file =~ /\.xml$/) {
 	open IN,$file or die "Ne povis malfermi $file: $!\n";
 	$text = join('',<IN>);
@@ -92,8 +104,17 @@ while ($file = readdir(DIR)) {
 	    print $out if ($verbose);
 	}
     }
+  if ($artikoloj_donitaj)
+  {
+    $file = shift @ARGV;
+  }
+  else
+  {
+    #$file = readdir(DIR);
+    $file = shift @files;
+  }
 }
-closedir DIR;
+#closedir DIR;
 
 
 
