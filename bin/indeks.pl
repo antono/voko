@@ -740,8 +740,8 @@ sub referenco {
     my $rez;
 
     if ($ref =~ /^([^\.]*)\.(.*)$/) {
-	my $r1=$1; my $r2=$2;
-	$rez="$refdir".lc($r1).".html#".uc($r2);
+	my $r1=$1; my $r2="$1.$2";
+	$rez="$refdir".lc($r1).".html#".$r2;
     } else {
 	$rez="$refdir".lc($ref).".html";
     };
