@@ -581,8 +581,9 @@ sub INVKAPVORTINX {
     print "$inxref\n";
     for $a (@invliteroj) { 
 	if ($a ne $lit) {
-	    print "<a href=\"ix_inv".enmetu_x($a)."$html\">$a</a>\n"; 
-	} else { print "<b>$a</b> "; };
+	    print "<a href=\"ix_inv".enmetu_x($a)."$html\">"
+		.Lat3_UTF8($a)."</a>\n"; 
+	} else { print "<b>".Lat3_UTF8($a)."</b> "; };
     };
     print "<h1>inversa indekso ...".Lat3_UTF8($lit)."</h1>\n";
 
@@ -811,12 +812,12 @@ sub INVLIT {
 #    $vort =~ s/\375/ux/g;
 
     # konverti la e-literojn de UTF-8 al cx ... ux
-    $vort =~ s/\304[\210\211]/cx/g;
-    $vort =~ s/\304[\234\235]/gx/g;
-    $vort =~ s/\304[\244\245]/hx/g;
-    $vort =~ s/\304[\264\265]/jx/g;
-    $vort =~ s/\305[\234\235]/sx/g;
-    $vort =~ s/\305[\254\255]/ux/g;
+    $vort =~ s/[\210\211]\304/cx/g;
+    $vort =~ s/[\234\235]\304/gx/g;
+    $vort =~ s/[\244\245]\304/hx/g;
+    $vort =~ s/[\264\265]\304/jx/g;
+    $vort =~ s/[\234\235]\305/sx/g;
+    $vort =~ s/[\254\255]\305/ux/g;
 
     # forigi finajxon
     $vort =~ s/^(?:[aeio]|oj)[\/1-9]//;
