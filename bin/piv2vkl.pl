@@ -881,7 +881,7 @@ sub DIFINO {
     # se vershajnas, ke latina traduko estas ene, serchu
     if ($latina) {
 	$dif =~ s/(\([^\)]+)<I>([A-Za-z\.,]+)<P>([^\)]*\))/
-	    $1.TRADUKO($2,'latina').$3/eg};
+	    $1.TRADUKO($2,'la').$3/eg};
 
     # ekzemploj: "oblikvaj literoj"+"fonto"+"klarigo"+[;.,]
     while ($dif =~ 
@@ -1045,7 +1045,7 @@ sub KLARIGO {
     $klarig =~ s/<\->(.*?)<P>/<sub>$1<\/sub>/g;
     
     # klarigo povas enhavi latinan tradukon
-    if ($latina) { $klarig =~ s/<I>([A-Za-z\.,]+)<P>/TRADUKO($1,'latina')/e };
+    if ($latina) { $klarig =~ s/<I>([A-Za-z\.,]+)<P>/TRADUKO($1,'la')/e };
 
     # klarigo povas konsisti el ekzemplo
     $klarig =~ s/^\((<I>.*?<P>)\)$/'('.EKZEMPLO_ENA($1).')'/e;
@@ -1078,7 +1078,7 @@ sub KLARIGO_ENA {
     $klarig =~ s/<\->(.*?)<P>/<sub>$1<\/sub>/g;
     
     # klarigo povas enhavi latinan tradukon
-    if ($latina) { $klarig =~ s/<I>([A-Za-z\.,]+)<P>/TRADUKO($1,'latina')/e };
+    if ($latina) { $klarig =~ s/<I>([A-Za-z\.,]+)<P>/TRADUKO($1,'la')/e };
 
     # klarigo povas konsisti el ekzemplo
     $klarig =~ s/^\((<I>.*?<P>)\)$/'('.EKZEMPLO_ENA($1).')'/e;
@@ -1096,7 +1096,7 @@ sub RIMARKO {
 
     # eble latinaj tradukoj
     if ($latina) {
-	$rim =~ s/\(<I>([A-Za-z\.,]+)<P>\)/'('.TRADUKO($1,'latina').')'/eg};
+	$rim =~ s/\(<I>([A-Za-z\.,]+)<P>\)/'('.TRADUKO($1,'la').')'/eg};
 
     # ekzemploj: "oblikvaj literoj"+"fonto"+"klarigo"+[;.,]
     $rim =~ s/$ekzemplo([\s\.,;]*)(?:$ekzfonto)?\s*(?:$klarigo)?
