@@ -154,6 +154,9 @@ pluevoluigita de Wolfram Diestel
     <xsl:with-param name="lng">ja</xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="flago">
+    <xsl:with-param name="lng">hr</xsl:with-param>
+  </xsl:call-template>
+  <xsl:call-template name="flago">
     <xsl:with-param name="lng">la</xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="flago">
@@ -204,7 +207,7 @@ pluevoluigita de Wolfram Diestel
     <xsl:text> </xsl:text>
     <a href="#lng_{$lng}">
     <img src="{$smbdir}/{$lng}.png" alt="{$lng}" 
-      border="0" align="right" hspace="3" width="24" height="16"/>
+      border="0" hspace="3" width="21" height="15"/>
     </a>
   </xsl:if>
 </xsl:template>
@@ -478,7 +481,8 @@ pluevoluigita de Wolfram Diestel
   <span class="fnt">
     <a name="ekz_{$n}"></a>
     <xsl:text>[</xsl:text>
-    <a class="{local-name((ancestor::rim|ancestor::ekz|self::node())[1])}" href="#fnt_{$n}"><xsl:value-of select="$n"/></a>
+    <a class="{local-name((ancestor::rim|ancestor::ekz|ancestor::bld|self::node())[1])}" 
+	href="#fnt_{$n}"><xsl:value-of select="$n"/></a>
     <xsl:text>]</xsl:text>
   </span>
 </xsl:template>
@@ -493,7 +497,7 @@ pluevoluigita de Wolfram Diestel
   <img src="{@lok}"/>
   <br/>
   <i>
-  <xsl:apply-templates select="text()|tld|ind|klr"/>
+  <xsl:apply-templates select="text()|tld|ind|klr|fnt"/>
   </i>
   <br/>
   </center>
@@ -601,7 +605,7 @@ pluevoluigita de Wolfram Diestel
   <xsl:if test="//trd[@lng=$lng and not(ancestor::bld)]|//trdgrp[@lng=$lng]">
     <a name="lng_{$lng}"></a>
     <h3>
-      <img src="{$smbdir}/{$lng}.png" width="24" height="16" alt="[{$lng}]"/>
+      <img src="{$smbdir}/{$lng}.png" width="21" height="15" alt="[{$lng}]"/>
       <xsl:text> </xsl:text>
       <xsl:value-of select="$lingvo"/>
     </h3>
@@ -678,6 +682,10 @@ pluevoluigita de Wolfram Diestel
   <xsl:call-template name="lingvo">
     <xsl:with-param name="lng">ja</xsl:with-param>
     <xsl:with-param name="lingvo">japane</xsl:with-param>
+  </xsl:call-template>
+  <xsl:call-template name="lingvo">
+    <xsl:with-param name="lng">hr</xsl:with-param>
+    <xsl:with-param name="lingvo">kroate</xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="lingvo">
     <xsl:with-param name="lng">la</xsl:with-param>
@@ -938,10 +946,11 @@ pluevoluigita de Wolfram Diestel
 </xsl:template>
 
 <xsl:template match="art|drv" mode="admin">
-  <xsl:apply-templates select="kap" mode="admin"/>
+  <a href="#{@mrk}"><xsl:apply-templates select="kap" mode="admin"/></a>
 </xsl:template>
 
 <xsl:template match="snc" mode="admin">
+  <a href="#{ancestor::node()[@mrk][1]/@mrk}">
   <xsl:apply-templates select="ancestor::node()[self::drv or
     self::art][1]/kap" mode="admin"/>
     <xsl:text> </xsl:text>
@@ -953,9 +962,11 @@ pluevoluigita de Wolfram Diestel
         <xsl:number from="drv|subart" level="any" count="snc" format="1."/>
       </xsl:when>
     </xsl:choose>
+  </a>
 </xsl:template>
 
 <xsl:template match="subsnc" mode="admin">
+  <a href="#{ancestor::node()[@mrk][1]/@mrk}">
   <xsl:apply-templates select="ancestor::node()[self::drv or
     self::art][1]/kap" mode="admin"/>
   <xsl:if test="@num">
@@ -964,18 +975,23 @@ pluevoluigita de Wolfram Diestel
   </xsl:if>
   <xsl:text> </xsl:text>
   <xsl:number format="a"/>
+  </a>
 </xsl:template>
 
 <xsl:template match="subart" mode="admin">
+  <a href="#{ancestor::node()[@mrk][1]/@mrk}">
   <xsl:apply-templates select="ancestor::art/kap" mode="admin"/>
   <xsl:text> </xsl:text>
   <xsl:number format="I"/>
+  </a>
 </xsl:template>
 
 <xsl:template match="subdrv" mode="admin">
+  <a href="#{ancestor::node()[@mrk][1]/@mrk}">
   <xsl:apply-templates select="ancestor::drv/kap" mode="admin"/>
   <xsl:text> </xsl:text>
   <xsl:number format="A"/>
+  </a>
 </xsl:template>
 
 <xsl:template match="kap" mode="admin">
