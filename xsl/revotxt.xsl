@@ -206,6 +206,9 @@
     <xsl:when test="@tip='malprt'">
       <xsl:text>UJO: </xsl:text>
     </xsl:when>
+    <xsl:when test="@tip='hom'">
+      <xsl:text>HOM: </xsl:text>
+    </xsl:when>
   </xsl:choose>
 </xsl:template>
 

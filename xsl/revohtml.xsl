@@ -407,6 +407,9 @@ pluevoluigita de Wolfram Diestel
     <xsl:when test="@tip='malprt'">
       <xsl:text>TUT:</xsl:text>
     </xsl:when>
+    <xsl:when test="@tip='hom'">
+      <xsl:text>HOM:</xsl:text>
+    </xsl:when>
   </xsl:choose>
 </xsl:template>
 
