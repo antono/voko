@@ -752,10 +752,10 @@ sub INXSTATISTIKO {
     }
     foreach $s (sort {$b->[1] <=> $a->[1]} @trdj) {
 	$lng = $s->[0];
-	if (-f "$vortaro_pado/smb/$lng.jpg") {
-		print "<img src=\"../smb/$lng.jpg\" alt=\"\">&nbsp;";
+	if (-f "$vortaro_pado/smb/$lng.png") {
+		print "<img src=\"../smb/$lng.png\" alt=\"\">&nbsp;";
 	    } else {
-		print "<img src=\"../smb/xx.jpg\" alt = \"\">&nbsp;";
+		print "<img src=\"../smb/xx.png\" alt = \"\">&nbsp;";
 	    }
 	print "$lingvoj{$lng}j: ".$s->[1];
 	printf(" (%.02f%%)",100*$s->[1]/$statistiko{'drv'});
@@ -844,10 +844,10 @@ sub INX_LNG {
     for $lng (sort keys %tradukoj) 
     {
 	unless ($lng eq 'la') {
-	    if (-f "$vortaro_pado/smb/$lng.jpg") {
-		print "<img src=\"../smb/$lng.jpg\" alt=\"[$lng]\">&nbsp;";
+	    if (-f "$vortaro_pado/smb/$lng.png") {
+		print "<img src=\"../smb/$lng.png\" alt=\"[$lng]\">&nbsp;";
 	    } else {
-		print "<img src=\"../smb/xx.jpg\" alt = \"[$lng]\">&nbsp;";
+		print "<img src=\"../smb/xx.png\" alt = \"[$lng]\">&nbsp;";
 	    }
 	    print "<a href=\"lx_${lng}_$unua_litero{$lng}.html\">";
 	    print "$lingvoj{$lng}</a><br>\n";
@@ -857,10 +857,10 @@ sub INX_LNG {
     if (exists $tradukoj{'la'}) {
 	print "<p>\n";
 	$lng = 'la';
-	if (-f "$vortaro_pado/smb/$lng.jpg") {
-	    print "<img src=\"../smb/$lng.jpg\" alt=\"[$lng]\">&nbsp;";
+	if (-f "$vortaro_pado/smb/$lng.png") {
+	    print "<img src=\"../smb/$lng.png\" alt=\"[$lng]\">&nbsp;";
 	} else {
-	    print "<img src=\"../smb/xx.jpg\" alt = \"[$lng]\">&nbsp;";
+	    print "<img src=\"../smb/xx.png\" alt = \"[$lng]\">&nbsp;";
 	}
 	print "<a href=\"lx_${lng}_$unua_litero{$lng}.html\">";
 	print "$lingvoj{$lng}</a><br>\n";
@@ -1044,10 +1044,10 @@ sub INX_PLENA {
     for $lng (sort keys %tradukoj) 
     {
 	print "<a href=\"lx_${lng}_$unua_litero{$lng}.html\">";
-	if (-f "$vortaro_pado/smb/$lng.jpg") {
-	    print "<img src=\"../smb/$lng.jpg\" alt=\"$lng\"> ";
+	if (-f "$vortaro_pado/smb/$lng.png") {
+	    print "<img src=\"../smb/$lng.png\" alt=\"$lng\"> ";
 	} else {
-	    print "<img src=\"../smb/xx.jpg\" alt = \"$lng\"> ";
+	    print "<img src=\"../smb/xx.png\" alt = \"$lng\"> ";
 	}
 	print "</a>\n";
     };
@@ -1073,14 +1073,14 @@ sub INX_PLENA {
     if ($config{"inx_fak"}=~/tezauro/) {
 	print "FAKOJ (strukture):\n";
 	
-	for $fak (@strukt_fakoj) 
+	for $fak (sort keys %strukt_fakoj) 
 	{
 	    my $faknomo=$faknomoj{uc($fak)};
 	    unless ($faknomo) {
 		warn "Faknomo \"$fak\" ne difinita!\n";
 		$faknomo = '';
 	    }
-	    print "<a href=\"fxs_", lc($fak), ".html\">",
+	    print "<a href=\"$strukt_fakoj{$fak}\">",
 	    "<img src=\"../smb/$fak.gif\" alt=\"$fak\" border=0></a>\n";
 	}
     }
@@ -1108,18 +1108,18 @@ sub INX_PLENA {
 	print "DIVERSAJ INDEKSOJ:\n";
 	if ($inx=~/bildoj/) {
 	    print "<a href=\"bildoj.html\">";
-	    print "bildoj</a>\n";
+	    print "bildoj</a>,\n";
 	};
 	if ($inx=~/inversa/) {
 	    print "<a href=\"inv_$unua_litero{'inv'}.html\">";
-	    print "inversa indekso</a>\n";
+	    print "inversa indekso</a>,\n";
 	};
 	if ($inx=~/shanghitaj/) {
 	    print "<a href=\"novaj.html\">ŝanĝitaj ",
-	    "artikoloj</a>\n";
+	    "artikoloj</a>,\n";
 	}
 	if ($inx=~/statistiko/) {
-	    print "<a href=\"statistiko.html\">statistiko</a>\n";
+	    print "<a href=\"statistiko.html\">statistiko</a>,\n";
 	}
     }
 
@@ -1133,7 +1133,7 @@ sub INX_PLENA {
 	    print 
 		"<a href=\"$href\" target=\"",
 		($href=~/^http:/)? "_new" : "precipa",
-		"\">$title</a>\n";
+		"\">$title</a>,\n";
 	}
     }
     print "<p>\n";
@@ -1149,7 +1149,7 @@ sub INX_PLENA {
 	    print 
 		"<a href=\"$href\" target=\"",
 		($href=~/^http:/)? "_new" : "precipa",
-		"\">$title</a>\n";
+		"\">$title</a>,\n";
 	}
     }
     print "<p>\n";
@@ -1161,7 +1161,10 @@ sub INX_PLENA {
 	open TEZ, $config{"tezauro_radikoj"};
 	while (<TEZ>) {
 	    my ($file,$kap,$cnt) = split(';');
-	    print "<a href=\"$file\">$kap</a>\n";
+	    if ($cnt >= $tez_lim2) { print "<b>"; }
+	    print "<a href=\"$file\">$kap</a>";
+	    if ($cnt >= $tez_lim2) { print "</b>"; }
+	    print ",\n";
 	}
     }
     print "<p>\n";
@@ -1332,7 +1335,7 @@ sub cvs_log {
 	$info =~ s/\s*<[^>]+\@[^>]+>\s*//s;
 
 	# elprenu la autoron
-	if ($info =~ s/^([a-z \.]+)://si) { $aut = $1; }
+	if ($info =~ s/^([a-z \.\-]+)://si) { $aut = $1; }
 	else {$aut = "revo"; }
 
 	# skribu la informojn

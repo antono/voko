@@ -50,8 +50,8 @@ $dos=$config{"rilato_dosiero"};
 	'ant' => '&#x21cf;',
 	'sub' => '&#x2199;', #'&#x2283;',
 	'super' => '&#x2197;', #'&#x2282;',
-	'prt' => '&#x220b;',
-	'malprt' => '&#2208;',
+	'prt' => '&#x2199;', #'&#x220b;',
+	'malprt' => '&#x2197;', #'&#2208;',
 	'dif' => '=');
 
 %img = ('vid' => 'vid.gif',
@@ -87,7 +87,7 @@ complete_refs();
 # elkalkuli altecojn kaj ero-nombrojn
 
 cnt_and_depth();
-dump_cnt_dep();
+#dump_cnt_dep();
 
 # faru la fakindeksojn kaj noddosierojn
 
@@ -497,12 +497,17 @@ sub html_tree {
     my $tip = shift;
 
     for $v ( sort {$a->{'mrk'} cmp $b->{'mrk'}} @$list ) {
+	
 	print
 	    "<a href=\"".tez_link($v)."\">",
 	    "<img src=\"../smb/$img{$tip}\" alt=\"$smb{$tip}\" border=0>",
-	    "</a>\n",
+	    "</a>\n";
+	if ($v->{'h'}*$v->{'c'}>$tez_lim) { print "<b>"; }
+	print
 	    "<a href=\"".word_ref($v)."\" target=\"precipa\">",
-	    $v->{'kap'}."</a>\n<br>\n";
+	    $v->{'kap'}."</a>";
+	if ($v->{'h'}*$v->{'c'}>$tez_lim) { print "</b>"; }
+	print "\n<br>\n";
 
 	unless ($tip eq 'super' or $tip eq 'malprt'
 		or $tz_files{tez_file($v)}) {

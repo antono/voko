@@ -258,8 +258,10 @@ sub process_ent {
 	    $parttxt = $part->bodyhandle->as_string;
 
 	    # chu temas pri TTT-formularo?
-	    if (($entity->head->get('subject') 
-		 =~ /Internet\s+Explorer/)
+	    if ((($entity->head->get('subject') 
+		 =~ /Microsoft.*Internet.*lorer/s) 
+                or ($entity->head->get('content-type')
+		    =~  /POSTDATA\.ATT/s))
 		and ($parttxt =~ /^\s*komando=redakto&/)
 		or ($part->mime_type 
 		    =~ m|application/x-www-form-urlencoded|)) {
@@ -309,6 +311,9 @@ sub is_editor {
     my $res_addr = '';
 
     chomp $email_addr;
+    $email_addr =~ s/\([^\)]+\)//s; # nomindiko lau malnova maniero
+    $email_addr =~ s/^\s+//s;
+    $email_addr =~ s/\s+$//s;
     $email_addr =~ s/^.*<([a-z0-9\.\_\-]+\@[a-z0-9\._\-]+)>.*$/<$1>/si;
     unless ($email_addr =~ /<?[a-z0-9\.\_\-]+\@[a-z0-9\._\-]+>?/i) { 
 	return; # ne estas valida retadreso

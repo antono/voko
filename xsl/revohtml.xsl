@@ -106,6 +106,9 @@ modifita de Wolfram Diestel
 
 <xsl:template name="flagoj">
   <xsl:call-template name="flago">
+    <xsl:with-param name="lng">en</xsl:with-param>
+  </xsl:call-template>
+  <xsl:call-template name="flago">
     <xsl:with-param name="lng">be</xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="flago">
@@ -115,16 +118,19 @@ modifita de Wolfram Diestel
     <xsl:with-param name="lng">cs</xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="flago">
-    <xsl:with-param name="lng">de</xsl:with-param>
-  </xsl:call-template>
-  <xsl:call-template name="flago">
-    <xsl:with-param name="lng">en</xsl:with-param>
-  </xsl:call-template>
-  <xsl:call-template name="flago">
-    <xsl:with-param name="lng">es</xsl:with-param>
+    <xsl:with-param name="lng">fi</xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="flago">
     <xsl:with-param name="lng">fr</xsl:with-param>
+  </xsl:call-template>
+  <xsl:call-template name="flago">
+    <xsl:with-param name="lng">de</xsl:with-param>
+  </xsl:call-template>
+  <xsl:call-template name="flago">
+    <xsl:with-param name="lng">el</xsl:with-param>
+  </xsl:call-template>
+  <xsl:call-template name="flago">
+    <xsl:with-param name="lng">es</xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="flago">
     <xsl:with-param name="lng">hu</xsl:with-param>
@@ -145,6 +151,9 @@ modifita de Wolfram Diestel
     <xsl:with-param name="lng">ru</xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="flago">
+    <xsl:with-param name="lng">sv</xsl:with-param>
+  </xsl:call-template>
+  <xsl:call-template name="flago">
     <xsl:with-param name="lng">tr</xsl:with-param>
   </xsl:call-template>
 
@@ -155,7 +164,7 @@ modifita de Wolfram Diestel
   <xsl:if test="//trd[@lng=$lng]|//trdgrp[@lng=$lng]">
     <xsl:text> </xsl:text>
     <a href="#lng_{$lng}">
-    <img src="{$smbdir}/{$lng}.jpg" alt="{$lng}" 
+    <img src="{$smbdir}/{$lng}.png" alt="{$lng}" 
       border="0" align="right" hspace="3" width="24" height="16"/>
     </a>
   </xsl:if>
@@ -542,7 +551,7 @@ modifita de Wolfram Diestel
   <xsl:if test="//trd[@lng=$lng and not(ancestor::bld)]|//trdgrp[@lng=$lng]">
     <a name="lng_{$lng}"></a>
     <h3>
-      <img src="{$smbdir}/{$lng}.jpg" width="24" height="16" alt="[{$lng}]"/>
+      <img src="{$smbdir}/{$lng}.png" width="24" height="16" alt="[{$lng}]"/>
       <xsl:text> </xsl:text>
       <xsl:value-of select="$lingvo"/>
     </h3>
@@ -557,6 +566,10 @@ modifita de Wolfram Diestel
 
 <xsl:template match="art" mode="tradukoj">
   <xsl:call-template name="lingvo">
+    <xsl:with-param name="lng">en</xsl:with-param>
+    <xsl:with-param name="lingvo">angle</xsl:with-param>
+  </xsl:call-template>
+  <xsl:call-template name="lingvo">
     <xsl:with-param name="lng">be</xsl:with-param>
     <xsl:with-param name="lingvo">beloruse</xsl:with-param>
   </xsl:call-template>
@@ -569,20 +582,24 @@ modifita de Wolfram Diestel
     <xsl:with-param name="lingvo">&#x0109;e&#x0125;e</xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="lingvo">
-    <xsl:with-param name="lng">de</xsl:with-param>
-    <xsl:with-param name="lingvo">germane</xsl:with-param>
-  </xsl:call-template>
-  <xsl:call-template name="lingvo">
-    <xsl:with-param name="lng">en</xsl:with-param>
-    <xsl:with-param name="lingvo">angle</xsl:with-param>
-  </xsl:call-template>
-  <xsl:call-template name="lingvo">
-    <xsl:with-param name="lng">es</xsl:with-param>
-    <xsl:with-param name="lingvo">hispane</xsl:with-param>
+    <xsl:with-param name="lng">fi</xsl:with-param>
+    <xsl:with-param name="lingvo">finne</xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="lingvo">
     <xsl:with-param name="lng">fr</xsl:with-param>
     <xsl:with-param name="lingvo">france</xsl:with-param>
+  </xsl:call-template>
+  <xsl:call-template name="lingvo">
+    <xsl:with-param name="lng">de</xsl:with-param>
+    <xsl:with-param name="lingvo">germane</xsl:with-param>
+  </xsl:call-template>
+  <xsl:call-template name="lingvo">
+    <xsl:with-param name="lng">el</xsl:with-param>
+    <xsl:with-param name="lingvo">greke</xsl:with-param>
+  </xsl:call-template>
+  <xsl:call-template name="lingvo">
+    <xsl:with-param name="lng">es</xsl:with-param>
+    <xsl:with-param name="lingvo">hispane</xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="lingvo">
     <xsl:with-param name="lng">hu</xsl:with-param>
@@ -607,6 +624,10 @@ modifita de Wolfram Diestel
   <xsl:call-template name="lingvo">
     <xsl:with-param name="lng">ru</xsl:with-param>
     <xsl:with-param name="lingvo">ruse</xsl:with-param>
+  </xsl:call-template>
+  <xsl:call-template name="lingvo">
+    <xsl:with-param name="lng">sv</xsl:with-param>
+    <xsl:with-param name="lingvo">svede</xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="lingvo">
     <xsl:with-param name="lng">tr</xsl:with-param>

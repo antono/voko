@@ -299,7 +299,7 @@ marki la vorton, sub kiu la traduko aperu en la lingvoindekso.
 ]]
 
 Se estas pluraj eblaj tradukoj oni grupigu ilin. Klarigojn,
-kiuj helpas trovi la øustan tradukon oni ankaý povas aldoni.
+kiuj helpas trovi la øustan tradukon oni ankaý  povas aldoni.
 
 [[
 <trdgrp lng="de">
@@ -314,6 +314,36 @@ en la artikolo mem, oni donas tiel.
 [[
 <trd>geben <klr tip="ind">(es gibt)</klr></trd>
 ]]
+
+Vi ankaý povas traduki ekzemplon aý parton de ekzemplo, 
+se øi redonas tipan parolmanieron. La tradukatan parton de
+la ekzemplo vi devas signi per la strukturilo &lt;ind&gt;.
+
+[[
+<ekz>
+  <ind>ne gravas</ind>
+  <trd lng="de">macht nichts</trd>
+</ekz>
+]]
+
+Se la ekzemplo aý la traduko estas tro longaj por aperi tute 
+en la indekso, vi povas provizi mallongigon, kiu laý sia tipo
+aldonos tripunkton antaýe kaj/aý malantaýe.
+
+[[
+<ekz>
+  <ind>
+    sed tio 
+    <mll tip="fin">ne gravas</mll>
+  </ind>!
+  <trd lng="de">
+    aber das 
+    <mll tip="fin">macht nichts</mll>
+  </trd>
+</ekz>
+]]
+
+Tio fariøas "...macht nichts = ...ne gravas" en la indekso.
 
 %ref%<h2>referencoj</h2>
 
@@ -407,7 +437,8 @@ rilati al fako, regiono, tempo ktp.:
 <drv mrk="krkspl.0o">
   <kap><tld/>o</kap>
   <uzo tip="fak">BIO</uzo>
-  <uzo>(ark.)</uzo>
+  <uzo tip="stl">ARK</uzo>
+  <uzo tip="klr">p.p. pri vertebruloj</uzo>
   ...
 </drv>
 ]]
