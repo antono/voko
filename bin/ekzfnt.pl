@@ -352,6 +352,8 @@ sub preparu_dos {
        $txt = cteg_cx($txt);
     } elsif ($enc eq '^c') {
        $txt = tegc_cx($txt);
+    } elsif ($enc eq 'entity') {
+       $txt = entity_cx($txt);
     } else {
        die "Nekonata literokodo $enc\n" if ($enc);
     }
@@ -678,6 +680,41 @@ sub cx_ccirc {
     return $vort;
 }
 
+sub entity_ccirc {
+    $vort = shift;
+    $vort =~ s/&#264;/&Ccirc;/g;
+    $vort =~ s/&#265;/&ccirc;/g;
+    $vort =~ s/&#284/&Gcirc;/g;
+    $vort =~ s/&#285;/&gcirc;/g;
+    $vort =~ s/&#292;/&Hcirc;/g;
+    $vort =~ s/&#293;/&hcirc;/g;
+    $vort =~ s/&#308;/&Jcirc;/g;
+    $vort =~ s/&#309;/&jcirc;/g;
+    $vort =~ s/&#348;/&Scirc;/g;
+    $vort =~ s/&#349;/&scirc;/g;
+    $vort =~ s/&#364;/&Ubreve;/g;
+    $vort =~ s/&#365;/&ubreve;/g;      
+    return $vort;
+}
+
+
+sub entity_cx {
+    $vort = shift;
+    $vort =~ s/&#264;/Cx/g;
+    $vort =~ s/&#265;/cx/g;
+    $vort =~ s/&#284;/Gx/g;
+    $vort =~ s/&#285;/gx/g;
+    $vort =~ s/&#292;/Hx/g;
+    $vort =~ s/&#293;/hx/g;
+    $vort =~ s/&#308;/Jx/g;
+    $vort =~ s/&#309;/jx/g;
+    $vort =~ s/&#348;/Sx/g;
+    $vort =~ s/&#349;/sx/g;
+    $vort =~ s/&#364;/Ux/g;
+    $vort =~ s/&#365;/ux/g;      
+    return $vort;
+}
+
 sub romie_arabe {
     my $romie = shift;
 
@@ -751,6 +788,30 @@ sub tekstogrupoj {
     }
 }
     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!ENTITY KompLeks "http://purl.oclc.org/NET/voko/URL/KompLeks">
+<!ENTITY KompLeks "http://purl.org/NET/vokoURL/KompLeks">
 <!ENTITY Bib "../dok/bibliogr.html#">
-<!ENTITY Monato "http://purl.org/NET/voko/URL/Monato">
+<!ENTITY Monato "http://purl.org/NET/vokoURL/Monato">

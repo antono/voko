@@ -10,7 +10,7 @@
 
 origine kreita de Donald Rogers
 modifita de Bertil Wennergren
-modifita de Wolfram Diestel
+pluevoluigita de Wolfram Diestel
 
 -->
 
@@ -20,7 +20,7 @@ modifita de Wolfram Diestel
 <xsl:variable name="xmldir">../xml</xsl:variable> 
 <xsl:variable name="cssdir">../stl</xsl:variable>
 <xsl:variable name="redcgi">/cgi-bin/vokomail.pl?art=</xsl:variable>
-<xsl:variable name="bibliografio">file:/home/revo/revo/sgm/bibliogr.xml</xsl:variable>
+<xsl:variable name="bibliografio">../dok/bibliogr.xml</xsl:variable>
 
 <!-- kruda artikolstrukturo -->
 
@@ -58,7 +58,7 @@ modifita de Wolfram Diestel
     <h2>tradukoj</h2>
     <xsl:apply-templates select="//art" mode="tradukoj"/>
   </xsl:if>
-  <xsl:if test="//fnt[aut|vrk|lok]">
+  <xsl:if test="//fnt[bib|aut|vrk|lok]">
     <hr />
     <h2>fontoj</h2>
     <xsl:apply-templates select="//fnt[bib|aut|vrk|lok]" mode="fontoj"/>
@@ -133,9 +133,6 @@ modifita de Wolfram Diestel
     <xsl:with-param name="lng">el</xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="flago">
-    <xsl:with-param name="lng">grc</xsl:with-param>
-  </xsl:call-template>
-  <xsl:call-template name="flago">
     <xsl:with-param name="lng">es</xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="flago">
@@ -145,13 +142,25 @@ modifita de Wolfram Diestel
     <xsl:with-param name="lng">it</xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="flago">
+    <xsl:with-param name="lng">ja</xsl:with-param>
+  </xsl:call-template>
+  <xsl:call-template name="flago">
     <xsl:with-param name="lng">la</xsl:with-param>
+  </xsl:call-template>
+  <xsl:call-template name="flago">
+    <xsl:with-param name="lng">grc</xsl:with-param>
+  </xsl:call-template>
+  <xsl:call-template name="flago">
+    <xsl:with-param name="lng">lat</xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="flago">
     <xsl:with-param name="lng">nl</xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="flago">
     <xsl:with-param name="lng">pl</xsl:with-param>
+  </xsl:call-template>
+  <xsl:call-template name="flago">
+    <xsl:with-param name="lng">pt</xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="flago">
     <xsl:with-param name="lng">ru</xsl:with-param>
@@ -608,10 +617,6 @@ modifita de Wolfram Diestel
     <xsl:with-param name="lingvo">greke</xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="lingvo">
-    <xsl:with-param name="lng">grc</xsl:with-param>
-    <xsl:with-param name="lingvo">greke (klasike)</xsl:with-param>
-  </xsl:call-template>
-  <xsl:call-template name="lingvo">
     <xsl:with-param name="lng">es</xsl:with-param>
     <xsl:with-param name="lingvo">hispane</xsl:with-param>
   </xsl:call-template>
@@ -624,8 +629,20 @@ modifita de Wolfram Diestel
     <xsl:with-param name="lingvo">itale</xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="lingvo">
+    <xsl:with-param name="lng">ja</xsl:with-param>
+    <xsl:with-param name="lingvo">japane</xsl:with-param>
+  </xsl:call-template>
+  <xsl:call-template name="lingvo">
     <xsl:with-param name="lng">la</xsl:with-param>
     <xsl:with-param name="lingvo">latine</xsl:with-param>
+  </xsl:call-template>
+  <xsl:call-template name="lingvo">
+    <xsl:with-param name="lng">grc</xsl:with-param>
+    <xsl:with-param name="lingvo">malnovgreke</xsl:with-param>
+  </xsl:call-template>
+  <xsl:call-template name="lingvo">
+    <xsl:with-param name="lng">lat</xsl:with-param>
+    <xsl:with-param name="lingvo">malnovlatine</xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="lingvo">
     <xsl:with-param name="lng">nl</xsl:with-param>
@@ -634,6 +651,10 @@ modifita de Wolfram Diestel
   <xsl:call-template name="lingvo">
     <xsl:with-param name="lng">pl</xsl:with-param>
     <xsl:with-param name="lingvo">pole</xsl:with-param>
+  </xsl:call-template>
+  <xsl:call-template name="lingvo">
+    <xsl:with-param name="lng">pt</xsl:with-param>
+    <xsl:with-param name="lingvo">portugale</xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="lingvo">
     <xsl:with-param name="lng">ru</xsl:with-param>

@@ -14,6 +14,19 @@
 <!ELEMENT lok (#PCDATA)>
 <!ELEMENT dat (#PCDATA)>
 
+<!ENTITY Ccirc "&#x0108;">
+<!ENTITY ccirc "&#x0109;">
+<!ENTITY Gcirc "&#x011c;">
+<!ENTITY gcirc "&#x011d;">
+<!ENTITY Hcirc "&#x0124;">
+<!ENTITY hcirc "&#x0125;">
+<!ENTITY Jcirc "&#x0134;">
+<!ENTITY jcirc "&#x0135;">
+<!ENTITY Scirc "&#x015c;">
+<!ENTITY scirc "&#x015d;">
+<!ENTITY Ubreve "&#x016c;">
+<!ENTITY ubreve "&#x016d;">
+
 ]>
  
 <bibliografio>
@@ -147,7 +160,7 @@
   </vrk>
 
   <vrk mll="Fab3">
-    <url>http://www.uni-leipzig.de/esperanto/texte/bibl/fabeloj_andersen/tria_vol/</url>
+    <url>http://www.uni-leipzig.de/esperanto/texte/bibl/fabeloj_andersen/</url>
     <aut>H. C. Andersen</aut>
     <trd>L. L. Zamenhof</trd>
     <tit>Fabeloj, vol. 3</tit>
@@ -156,6 +169,13 @@
       <lok>Parizo</lok>
       <dat>1932</dat>
     </eld>
+  </vrk>
+
+  <vrk mll="Fab4">
+    <url>http://www.uni-leipzig.de/esperanto/texte/bibl/fabeloj_andersen/tria_vol/</url>
+    <aut>H. C. Andersen</aut>
+    <trd>L. L. Zamenhof</trd>
+    <tit>Fabeloj, vol. 4</tit>
   </vrk>
 
   <vrk mll="HejmVort">
@@ -178,6 +198,28 @@
       <lok>Belgio</lok>
     </eld>
   </vrk>
+
+  <vrk mll="Isxtar">
+    <url>http://home.att.net/~karlpov/proisxtr.htm</url>
+    <aut>H. A. Luyken</aut>
+    <tit>Pro I&scirc;tar</tit>
+    <eld>
+      <nom>Ferdinand Hirt &amp; Sohn</nom>
+      <lok>Lepsiko</lok>
+      <dat>1924</dat>
+    </eld>
+  </vrk>
+
+  <vrk mll="ManPol">
+    <aut>Stefan Maul k. a.</aut>
+    <tit>Deklingva manlibro pri politiko</tit>
+    <eld>
+      <nom>Flandra Esperanto-Ligo</nom> 
+      <lok>Antverpeno</lok>
+      <dat>1994</dat>
+    </eld>
+  </vrk>
+
 
 </bibliografio>
 
