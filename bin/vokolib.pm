@@ -172,3 +172,5 @@ sub diff_mv {
 	return 0;
     }
 };
+
+1;
