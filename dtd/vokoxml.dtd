@@ -75,7 +75,7 @@ artikolo estas avantaĝe difini tiun ĉi unuon.-->
 
 <!-- priskribaj elementoj -->
 <!ENTITY % priskribaj-elementoj 
-  "fnt|gra|uzo|dif|ekz|rim|ref|refgrp|trd|trdgrp|bld|adm|url|mlg|tez">
+  "fnt|gra|uzo|dif|ekz|rim|ref|refgrp|trd|trdgrp|bld|adm|url|mlg|tez|tezrad">
 
 <!-- [%tekst-stiloj] La unuo <dfn>tekst-stiloj</dfn> 
 listigas ĉiujn strukturilojn, kiuj donas stilon al tekstoparto,
@@ -152,9 +152,9 @@ Ili estas nombrataj per a), b), ... -->
 >
 
 <!-- [sncref] Referenco al alia senco. Tiu elemento estas anstatauigata
- per la numero de la referencita senco. Tio funkcias nur, se la
- referencita senco estas en la sama dosiero. Tamen ne hezitu uzi ĝin
- ankaŭ trans artikolojn, ĉar iama papera eldono profitos de ĝi.
+ per la numero de la referencita senco. Vi povas forlasi la atributon 
+ ref, se ekzistas parenca elemento ref, kies atributo cel montras al la
+ referencita senco.
 -->
 
 <!ELEMENT sncref EMPTY>
@@ -276,6 +276,10 @@ aŭtomate por minimumigi erarojn.
         tip (super|malprt|listo) #IMPLIED
 	cel CDATA #IMPLIED
 >
+
+<!-- [tezrad] Tezaŭraradiko. La kapvorto aperas en la enir-listo
+de la tezaŭo. -->
+<!ELEMENT tezrad EMPTY>
 
 <!-- [trdgrp] Tradukgrupo kunigas diversajn tradukojn de
 sama lingvo.

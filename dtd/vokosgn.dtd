@@ -499,7 +499,7 @@
 <!ENTITY c_ib "&#x0456;">
 
 
-<!-- chehhaj kaj polaj -->
+<!-- chehhaj, slovakaj kaj polaj -->
 <!ENTITY Ccaron "&#x010c;">
 <!ENTITY ccaron "&#x010d;">
 <!ENTITY Scaron "&#x0160;">
@@ -522,6 +522,13 @@
 <!ENTITY tcaron "&#x0165;">    
 <!ENTITY Uring  "&#x016e;">
 <!ENTITY uring  "&#x016f;">
+
+<!ENTITY Lacute "&#x0139;">
+<!ENTITY lacute "&#x013a;">
+<!ENTITY Lcaron "&#x013d;">
+<!ENTITY lcaron "&#x013e;">
+<!ENTITY Racute "&#x0154;">
+<!ENTITY racute "&#x0155;">
 
 <!ENTITY Aogonek "&#x0104;">
 <!ENTITY aogonek "&#x0105;">
