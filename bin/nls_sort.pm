@@ -230,4 +230,76 @@ sub letterval_eo {
   }
 }
 
+
+# franca ordigfunckio
+sub letterval_fr {
+  my ($chr,$level) = @_;
+  my $offset;
+
+  if ($level == 1) {
+	$offset = 0;     # kruda
+  } else {
+      $offset = 0.1;   # subtila
+  };
+
+  my %values = (
+    to_utf8("\000Á") => ord('a')+2*$offset,    # Á egalas/post A
+    to_utf8("\000á") => ord('a')+3*$offset,    # á egalas/post a
+    to_utf8("\000À") => ord('a')+2*$offset,    # À egalas/post A
+    to_utf8("\000à") => ord('a')+3*$offset,    # à egalas/post a
+    to_utf8("\000Â") => ord('a')+2*$offset,    # Â egalas/post A
+    to_utf8("\000â") => ord('a')+3*$offset,    # â egalas/post a
+
+    to_utf8("\000É") => ord('e')+2*$offset,    # É egalas/post E
+    to_utf8("\000é") => ord('e')+3*$offset,    # é egalas/post e
+    to_utf8("\000È") => ord('e')+2*$offset,    # È egalas/post E
+    to_utf8("\000è") => ord('e')+3*$offset,    # è egalas/post e
+    to_utf8("\000Ê") => ord('e')+2*$offset,    # Ê egalas/post E
+    to_utf8("\000ê") => ord('e')+3*$offset,    # ê egalas/post e
+
+    to_utf8("\000Í") => ord('i')+2*$offset,    # Í egalas/post I
+    to_utf8("\000í") => ord('i')+3*$offset,    # í egalas/post i
+    to_utf8("\000Ì") => ord('i')+2*$offset,    # Ì egalas/post I
+    to_utf8("\000ì") => ord('i')+3*$offset,    # ì egalas/post i
+    to_utf8("\000Î") => ord('i')+2*$offset,    # Î egalas/post I
+    to_utf8("\000î") => ord('i')+3*$offset,    # î egalas/post i
+
+    to_utf8("\000Ó") => ord('o')+2*$offset,    # Ó egalas/post O
+    to_utf8("\000ó") => ord('o')+3*$offset,    # ó egalas/post o
+    to_utf8("\000Ò") => ord('o')+2*$offset,    # Ò egalas/post O
+    to_utf8("\000ò") => ord('o')+3*$offset,    # ò egalas/post o
+    to_utf8("\000Ô") => ord('o')+2*$offset,    # Ô egalas/post O
+    to_utf8("\000ô") => ord('o')+3*$offset,    # ô egalas/post o
+
+    to_utf8("\000Ú") => ord('u')+2*$offset,    # Ú egalas/post U
+    to_utf8("\000ú") => ord('u')+3*$offset,    # ú egalas/post u
+    to_utf8("\000Ù") => ord('u')+2*$offset,    # Ù egalas/post U
+    to_utf8("\000ù") => ord('u')+3*$offset,    # ù egalas/post u
+    to_utf8("\000Û") => ord('u')+2*$offset,    # Û egalas/post U
+    to_utf8("\000û") => ord('u')+3*$offset,    # û egalas/post u
+
+    );
+
+  if (! $chr) {
+  	return 0;
+  } elsif ($chr =~ /^[A-Z]$/) {
+  	return ord(lc($chr));
+  } elsif ($chr =~  /^[a-z]$/) {
+	return ord(lc($chr)) + $offset;
+  } elsif ( exists $values{$chr} ) {
+      return $values{$chr};
+  } else {
+      return 999;
+  }
+}
+
+
+
+
+
 1;
+
+
+
+
+

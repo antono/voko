@@ -7,6 +7,16 @@
 # voku: indeks.pl -dceldosierujo -r../art/ fontdosierujo/indekso.sgml 
 # au:   indeks.pl -dceldosierujo -r../art/vortaro.html\# fontdosiero/indekso.sgml
 
+BEGIN {
+# en kiu dosierujo mi estas?
+  $pado = $0;
+  $pado =~ s|\\|/|g; # sub Windows anstatauigu \ per /
+  $pado =~ s/indeks.pl$//;
+# print $pado;
+  # shargu la funkcio-bibliotekon
+  require $pado."nls_sort.pm";
+}         
+
 
 # konstantoj
 
@@ -495,7 +505,8 @@ sub LINGVINX {
     print "$inxstl\n$cntdecl</head>\n<body>\n";    
     print "$inxref\n<h1>indekso $lingvo</h1>\n";
 
-    foreach $ref (sort { LIT($a->[2]) cmp LIT($b->[2]) } @$refs) {
+#    foreach $ref (sort { LIT($a->[2]) cmp LIT($b->[2]) } @$refs) {
+    foreach $ref (sort {nls_sort::cmp_nls($a->[2],$b->[2],$ln)} @$refs) {
 	$r=REFERENCO($ref->[0]);    
 	print "$ref->[2] = <a href=\"$r\" ";
 	print "target=\"precipa\">$ref->[1]</a><br>\n";

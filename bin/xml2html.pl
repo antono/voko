@@ -153,14 +153,14 @@ sub art {
     $head_level=2;
 };
 sub art_ {
-    if ($subart_cnt) { print "</dl>\n" };
+    if ($subart_cnt) { print "</dl>" };
 };
 
 sub kap {
     print "<h$head_level>";
 };
 sub kap_ {
-    print "</h$head_level>\n";
+    print "</h$head_level>";
 }
 
 sub rad {
@@ -211,7 +211,7 @@ sub subart {
 }
 sub subart_ {
  if ($snc_cnt) {
-	print "</dl>\n";
+	print "</dl>";
     };
 }
 
@@ -231,7 +231,7 @@ sub drv {
 sub drv_ {
     $head_level--;
     if ($subdrv_cnt || $snc_cnt) {
-	print "</dl>\n";
+	print "</dl>";
     };
 }
 
@@ -245,7 +245,7 @@ sub subdrv {
 };
 sub subdrv_ {
     if ($snc_cnt) {
-	print "</dl>\n";
+	print "</dl>";
     };
 };
 
@@ -267,7 +267,7 @@ sub snc {
 };
 sub snc_ {
     if ($subsnc_cnt) {
-	print "</dl>\n";
+	print "</dl>";
     };
 };
 
@@ -322,7 +322,7 @@ sub ref {
     print "<a href=\"$cel\">";
 };
 sub ref_ {
-    print "</a>\n";
+    print "</a>";
 };
   
 
@@ -337,16 +337,16 @@ sub ekz  {
     };
     print "<cite class=$class>" 
 };
-sub ekz_ { print "</cite>\n" };
+sub ekz_ { print "</cite>" };
 
 sub dif  { print "<span class=dif>" };
-sub dif_ { print "</span>\n" };
+sub dif_ { print "</span>" };
 
 sub fnt  { print "<sup>" };
 sub fnt_ { print "</sup>" };
 
 sub gra  { print "(" };
-sub gra_ { print ")<br>\n" };
+sub gra_ { print ")<br>" };
 
 sub rim  { 
     shift; shift; # ignoru la argumentojn xp kaj el
@@ -355,10 +355,10 @@ sub rim  {
 
     print "<span class=rim>RIM.$num: " 
 };
-sub rim_ { print "</span>\n"};
+sub rim_ { print "</span>"};
 
 sub klr  { print "<span class=klr>" };
-sub klr_ { print "</span>\n" };
+sub klr_ { print "</span>" };
 
 
 sub trd  { 
@@ -422,7 +422,28 @@ sub fak_smb{
 	    ."align=absmiddle>\n";
     };
 };
-  
+
+sub url { 
+   my $xp = shift;
+   shift; # ignoru el
+   my $ref = get_attr('ref',@_);
+
+   if ($xp->in_element('lok')) {
+       print "<a href=\"$ref\">";
+   } else {
+       print "<br>";
+       # priskriba elemento en snc, drv, ...
+       if ($ref_simboloj) {
+	   print "<img src=\"$smb_dosierujo/url.gif\" alt=\"URL:\"> ";
+       } else {
+	   print "<i>URL:</i> ";
+       }
+       print "<a href=\"$ref\">";
+   }
+};
+sub url_ {
+    print "</a>";
+}
 
 
 ################### tekst-stiloj #################
@@ -435,6 +456,12 @@ sub sup_ { print "</sup>" };
 
 sub sub  { print "<sub>" };
 sub sub_ { print "</sub>" };
+
+
+
+
+
+
 
 
 

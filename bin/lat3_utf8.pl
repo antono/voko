@@ -2,9 +2,13 @@
 
 # konvertas de lat3 al utf8
 # inklude de la linio charset = ... 
-# voku: lat3_utf8.pl < lat3.html > utf8.html
+# voku: lat3_utf8.pl <dosieroj>
 
-while (<>) {
+foreach $file (@ARGV) {
+
+    open FILE, $file or die "Ne povis legi $file: $!\n";
+    $_ = join('',<FILE>);
+    close FILE;
 
     # konverti la indikon charset=...
     s/charset=iso-8859-3/charset=utf-8/i;
@@ -23,7 +27,9 @@ while (<>) {
     s/\376/\305\235/g; #sx
     s/\375/\305\255/g; #ux
 
-    print;
+    open FILE, ">$file" or die "Ne povis skribi $file: $!\n";
+    print FILE;
+    close FILE;
 };
 
 
