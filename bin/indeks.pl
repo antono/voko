@@ -31,7 +31,7 @@ $tmp_file = '/tmp/'.$$.'voko.inx';
 $tagoj   = 14;       # shanghindekso indikas shanghitajn en la lastaj n tagoj
 $xml_dir = 'xml';    # relative al vortara radidosierujo
 $art_dir = '../art'; # relative al inx
-$nmax    = 200;      # maksimume tiom da shanghitajn artikolojn indiku
+$nmax    = 300;      # maksimume tiom da shanghitajn artikolojn indiku
 $cvs_log = '/usr/bin/cvs log';
 $neliteroj = '0-9\/\s,;\(\)\.\-!:';
 
@@ -509,7 +509,7 @@ sub INVVORTINX {
     diff_mv($tmp_file,$target_file);
 }
 
-# kreas indekson de la laste shaghitaj artikoloj
+# kreas indekson de la laste shanghitaj artikoloj
 
 sub INXSHANGHITAJ {
     my $now = time();
@@ -517,16 +517,10 @@ sub INXSHANGHITAJ {
     my $n = 0;
     my @files = ();
 
-    my $target_file = "$dir/novaj.html";
+    my @novaj = ();
+    my %shangh = ();
 
-    print "$target_file..." if ($verbose);
-    open OUT, ">$tmp_file" or die "Ne povis malfermi $tmp_file: $!\n";
-    select OUT;
-    index_header("laste ŝanĝitaj");
-    linkbuttons();
-    print "<h1>laste ŝanĝitaj</h1>\n";
-
-    # malfermu kaj trakribru xml-dosierujon
+    # prenu tempon kaj dosiernomon de la xml-dosieroj
     opendir DIR, $xml_dir or die "Ne povis malfermi $xml_dir: $!\n";
     for $dos (readdir DIR) {
 
@@ -535,26 +529,81 @@ sub INXSHANGHITAJ {
 	     ($now - $time < $tagoj * 24 * 60 * 60)) {
 	    # metu tempon kaj informon en liston
 	    push @files, [$time, $dos];
-
-#	    if (++$n >= $nmax) { last; }
 	}
-	
     }
     closedir DIR;
 
-    # skribu la liston
-    print "<dl>\n";
+    # traktu la lastajn (lau tempo) nmax dosierojn
+    # kaj ordigu lau redaktantoj, novaj venu krome en apartan liston
+
     for $entry (sort { $b->[0] <=> $a->[0] } @files) {
-	
-	print cvs_log($entry->[1]);
+	my ($autoro, $priskribo) = cvs_log($entry->[1]);
+	push @{$shangh{$autoro}}, ($priskribo);
+	if ($priskribo =~ /<dd>\s*nova\s+artikolo\s*$/) {
+	    $priskribo =~ s/<dd>.*$/<dd>de $autoro\n/s;
+	    push @novaj, ($priskribo);
+        }
+
 	if (++$n >= $nmax) { last; }
     }
-    print "</dl>\n";
+
+    # dosiero "novaj artikoloj"
+    my $target_file = "$dir/novaj.html";
+
+    print "$target_file..." if ($verbose);
+    open OUT, ">$tmp_file" or die "Ne povis malfermi $tmp_file: $!\n";
+    select OUT;
+    index_header("Revo - novaj artikoloj");
+    linkbuttons();
+    print "<h1>novaj artikoloj</h1>\n";
+
+    # skribu la liston
+    if (@novaj) {
+	print "<dl>\n";
+	for $entry (@novaj) { print $entry; }
+	print "</dl>\n";
+    } else {
+	print "neniuj novaj artikoloj en la lastaj $nmax redaktoj";
+    }
 
     index_footer();
     close OUT;
     select STDOUT;
     diff_mv($tmp_file,$target_file);
+
+    # dosiero "shanghitaj artikoloj"
+    $target_file = "$dir/shanghitaj.html";
+
+    print "$target_file..." if ($verbose);
+    open OUT, ">$tmp_file" or die "Ne povis malfermi $tmp_file: $!\n";
+    select OUT;
+    index_header("laste ŝanĝitaj");
+    linkbuttons();
+    print "<h1>laste ŝanĝitaj</h1>\n";
+
+    # skribu la liston de redaktintoj
+    print "<ul>\n";
+    for $aut (sort keys %shangh) {
+	$aut_ = $aut; $aut_ =~ s/\s+/_/g;
+	print "<li><a href=\"#$aut_\">$aut</a>\n";
+    }
+    print "</ul>\n\n";
+    
+    # skribu la listojn de redaktoj lau autoro
+    for $aut (sort keys %shangh) {
+	$aut_ = $aut; $aut_ =~ s/\s+/_/g;
+	print "<a name=\"$aut_\"></a>\n<h2>$aut</h2>\n";
+
+	print "<dl>\n";
+	for $entry ( @{$shangh{$aut}} ) { print $entry; }
+	print "</dl>\n";
+    }
+
+    index_footer();
+    close OUT;
+    select STDOUT;
+    diff_mv($tmp_file,$target_file);
+
 }
 
 # kreas indekson de la bildoj
@@ -833,8 +882,12 @@ sub INX_KTP {
 	    print "<a href=\"inv_$unua_litero{'inv'}.html\">";
 	    print "inversa indekso</a><br>\n";
 	};
+	if ($inx=~/novaj/) {
+	    print "<a href=\"novaj.html\">novaj ",
+	    "artikoloj</a><br>\n";
+	}
 	if ($inx=~/shanghitaj/) {
-	    print "<a href=\"novaj.html\">ŝanĝitaj ",
+	    print "<a href=\"shanghitaj.html\">ŝanĝitaj ",
 	    "artikoloj</a><br>\n";
 	}
 	if ($inx=~/statistiko/) {
@@ -1161,7 +1214,7 @@ sub diff_mv {
 # elprenas informojn el "cvs log"
 sub cvs_log {
     my $dos = shift;
-    my ($art,$log,$rev,$info,$dato);
+    my ($art,$log,$rev,$info,$dato,$aut);
     my $result;
 
     #print "nova: $dos\n" if ($verbose);
@@ -1169,15 +1222,16 @@ sub cvs_log {
     # skribu vorton kaj referencon al la artikolo
     $art = $dos;
     $art =~ s/\.xml$//; 
+
     $result = "<dt><a href=\"$art_dir/$art.html\" ".
-	"target=precipa>$art</a>\n<dd>";
+	"target=precipa><b>$art</b></a>";
 
     # eltiru informojn pri aktuala versio el "cvs log"
     $log = `$cvs_log -r $xml_dir/$dos`;
 
     if ($log) {
 	$log =~ /-{28}\nrevision ([0-9\.]+)\n(.*?)={28}/s;
-	$rev = $1;
+	$rev = $1; # ne uzata nun
 	$info = $2;
 
 	unless ($info) {
@@ -1190,16 +1244,22 @@ sub cvs_log {
 
 	# forigu la retadreson
 	$info =~ s/\s*<[^>]+\@[^>]+>\s*//s;
-	
+
+	# elprenu la autoron
+	if ($info =~ s/^([a-z \.]+)://si) { $aut = $1; }
+	else {$aut = "revo"; }
+
 	# skribu la informojn
 	$info =~ s/\s*$//s;
 	$info =~ s/&/&amp;/g;
 	$info =~ s/</&lt;/g;
 	$info =~ s/>/&gt;/g;
-	$result .= " (versio: $rev $dato; $info)\n";
+	$result .= " <font color=#666666 size=-1>$dato</font>\n<dd>$info\n";
+    } else {
+	$result .= "\n<dd>(mankas informo)\n";
     }
 
-    return $result;
+    return ($aut,$result);
 }
 
 sub read_cfg {
