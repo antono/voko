@@ -13,8 +13,8 @@
 
 $verbose = 1;
 
-$xslbin = "/home/revo/xsl/xsl.jav";
-$xsl = "/home/revo/xsl/revotxt.xsl";
+$xslbin = "/home/revo/voko/bin/xslt.sh";
+$xsl = "/home/revo/voko/xsl/revotxt.xsl";
 $tmp = "/home/revo/tmp";
 $datfile = "/home/revo/dict/revo.dat";
 $inxfile = "/home/revo/dict/revo.inx";

@@ -4,6 +4,8 @@
 $debug=0;
 $tmp_file = '/tmp/'.$$.'voko.art';
 $|=1;
+$xsl = '/home/revo/voko/xsl/revohtml.xsl';
+$xslt = '/home/revo/voko/bin/xslt.sh';
 
 while ($ARGV[0] =~ /^-/) {
     if ($ARGV[0] eq '-v') {
@@ -33,7 +35,7 @@ for $file (readdir(DIR)) {
 	    or $all) {
 
 	    print "$infile -> $outfile..." if ($verbose);
-	    `xml2html.pl $infile > $tmp_file`;
+	    `$xslt $infile $xsl > $tmp_file`;
 	    if ($all) {
 		# aktualigu nur, se shanghite
 		diff_mv($tmp_file,$outfile);
