@@ -92,8 +92,7 @@ modifita de Wolfram Diestel
   <xsl:choose>
     <xsl:when test="snc">
       <xsl:apply-templates select="kap"/>
-      <dl>
-      <xsl:attribute name="compact"/>
+      <dl compact="">
       <xsl:apply-templates select="*[not(self::kap)]"/>
       </dl>
     </xsl:when>
@@ -161,14 +160,9 @@ modifita de Wolfram Diestel
 <!-- derivajhoj -->
 
 <xsl:template match="drv">
-  <a>
-  <xsl:attribute name="name">
-    <xsl:value-of select="@mrk"/>
-  </xsl:attribute>
-  </a>
+  <a name="{@mrk}"></a>
   <xsl:apply-templates select="kap|gra|uzo|fnt"/>
-  <dl>
-  <xsl:attribute name="compact"/>
+  <dl compact="">
   <xsl:apply-templates select="subdrv|snc"/>
   </dl>
   <xsl:apply-templates
@@ -179,9 +173,8 @@ modifita de Wolfram Diestel
   <dt><xsl:number format="A."/></dt>
   <dd>
     <xsl:apply-templates select="dif|gra|uzo|fnt"/>
-    <dl>
-      <xsl:attribute name="compact"/>
-      <xsl:apply-templates select="snc"/>
+    <dl compact="">
+    <xsl:apply-templates select="snc"/>
     </dl>
     <xsl:apply-templates
       select="*[not(self::snc|self::gra|self::uzo|self::fnt|self::dif)]"/>    
@@ -204,11 +197,7 @@ modifita de Wolfram Diestel
 
 <xsl:template match="snc">
   <xsl:if test="@mrk">
-    <a>
-    <xsl:attribute name="name">
-      <xsl:value-of select="@mrk"/>
-    </xsl:attribute>
-    </a>
+    <a name="{@mrk}"></a>
   </xsl:if>
   <dt>
     <xsl:choose>
@@ -225,8 +214,7 @@ modifita de Wolfram Diestel
     <xsl:when test="subsnc">
       <xsl:apply-templates 
         select="*[not(self::subsnc|self::trd|self::trdgrp|self::url)]"/>   
-      <dl>
-      <xsl:attribute name="compact"/>
+      <dl compact="">
       <xsl:apply-templates select="subsnc"/>
       </dl>
     </xsl:when>
@@ -301,14 +289,48 @@ modifita de Wolfram Diestel
   <xsl:call-template name="rim"/>
 </xsl:template>
 
+<xsl:template name="reftip">
+  <xsl:choose>
+    <xsl:when test="@tip='vid'">
+      <xsl:text>VD:</xsl:text>
+    </xsl:when>
+    <xsl:when test="@tip='sin'">
+      <xsl:text>SIN:</xsl:text>
+    </xsl:when>
+    <xsl:when test="@tip='ant'">
+      <xsl:text>ANT:</xsl:text>
+    </xsl:when>
+    <xsl:when test="@tip='super'">
+      <xsl:text>SUP:</xsl:text>
+    </xsl:when>
+    <xsl:when test="@tip='sub'">
+      <xsl:text>SUB:</xsl:text>
+    </xsl:when>
+    <xsl:when test="@tip='prt'">
+      <xsl:text>ERO:</xsl:text>
+    </xsl:when>
+    <xsl:when test="@tip='malprt'">
+      <xsl:text>UJO:</xsl:text>
+    </xsl:when>
+  </xsl:choose>
+</xsl:template>
+
 <xsl:template match="refgrp">
-  <img src="{$smbdir}/{@tip}.gif" alt="{@tip}:"/>
+  <img src="{$smbdir}/{@tip}.gif">
+    <xsl:attribute name="alt">
+      <xsl:call-template name="reftip"/>
+    </xsl:attribute>
+  </img>
   <xsl:apply-templates/>
 </xsl:template>
 
 <xsl:template match="ref">
   <xsl:if test="@tip">
-    <img src="{$smbdir}/{@tip}.gif" alt="{@tip}:"/>  
+    <img src="{$smbdir}/{@tip}.gif">
+      <xsl:attribute name="alt">
+        <xsl:call-template name="reftip"/>
+      </xsl:attribute>
+    </img> 
   </xsl:if>
   <xsl:variable name="file" select="substring-before(@cel,'.')"/>
   <xsl:choose>
@@ -435,10 +457,10 @@ modifita de Wolfram Diestel
 <xsl:template name="lingvo">
   <xsl:param name="lng"/>
   <xsl:param name="lingvo"/>
-  <xsl:if test="//trd[@lng=$lng]|//trdgrp[@lng=$lng]">
+  <xsl:if test="//trd[@lng=$lng and not(ancestor::bld)]|//trdgrp[@lng=$lng]">
     <a name="lng_{$lng}"></a>
     <h3>
-      <img src="{$smbdir}/{$lng}.jpg" width="24" height="16" alt="[{lng}]"/>
+      <img src="{$smbdir}/{$lng}.jpg" width="24" height="16" alt="[{$lng}]"/>
       <xsl:text> </xsl:text>
       <xsl:value-of select="$lingvo"/>
     </h3>
