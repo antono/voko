@@ -517,15 +517,18 @@ sub root {
 
     foreach $node (@$list) {
 
+	print "$node->{'mrk'}\n" if ($node->{'tezrad'});
+
 	if ((not @{$node->{'super'}} and # vorto ne havas supernociojn
 	    not @{$node->{'malprt'}} and
 		( @{$node->{'sub'}} or # vorto havas subnociojn, do ne izolita
 		  @{$node->{'prt'}}
 		  )
 	     # au la vorto estas markita kiel radiko
-	    ) or ($node->{'tezrad'} and ($node->{'tezrad'} == 1))) 
+	    ) or ($node->{'tezrad'} and ($node->{'tezrad'} eq 1))) 
 	{
 	    push @root,($node);
+	    print "--tezrad--\n" if ($node->{'tezrad'});
 	};
     }
 
@@ -828,7 +831,7 @@ sub create_tz {
 	    warn "AVERTO: $word_mrk estas radiko, sed ne havas ".
 		 "indikon <tezrad/>\n";
 	} else {
-	    if ($word->{'tezrad'} == 1) {
+	    if ($word->{'tezrad'} eq 1) {
 		$word_mrk =~ tr/./_/;
 		print "../tez/tz_".$word_mrk.".html;".$word->{'kap'}.";"
 		    .($word->{'h'}*$word->{'c'})." \n";

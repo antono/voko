@@ -84,7 +84,7 @@ name="redcgi">/cgi-bin/vokomail.pl?art=</xsl:variable -->
   <strong>_<xsl:apply-templates/>_</strong>
 </xsl:template>
 
-<xsl:template name="admin"/>
+<xsl:template name="admin">
   <hr />
   <xsl:call-template name="redakto"/>
 </xsl:template>

@@ -248,7 +248,14 @@ sub print_file_list {
         print "</dl>\n";
     }
 
-   
+    if (grep /^reveto_.*\.tgz$/, @files) {
+	print "<h2>Reveto - versio por poŝkomputiloj</h2>\n<ul>\n";
+	if ($f = grepfile ('^reveto_.*\.tgz$')) {
+	    print "<li><a href=\"$f\">$f</a> (".filesize($f).")\n";
+        }
+        print "</ul>\n";
+    }
+ 
     # listigu ceterajn
 #    print "<h2>aliaj pakaĵoj</h2>\n";
 #    foreach $f (@files) {

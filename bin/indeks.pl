@@ -27,7 +27,7 @@ $nmax    = 400;      # maksimume tiom da shanghitajn artikolojn indiku
 $cvs_log = '/usr/bin/cvs log';
 $neliteroj = '0-9\/\s,;\(\)\.\-!:';
 
-$tez_lim1 = 5; # nodoj kun malpli da subnodoj -> grizaj 
+$tez_lim1 = 0; # nodoj kun malpli da subnodoj ne aperas
 $tez_lim2 = 25; # nodoj kun pli da subnodoj -> grasaj
 
 ################## precipa programparto ###################
