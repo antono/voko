@@ -8,18 +8,10 @@
 #
 ################# komenco de la programo ################
 
-BEGIN {
-  # en kiu dosierujo mi estas?
-  $pado = $0;
-  $pado =~ s|\\|/|g; 
-  $pado =~ s/[a-z0-9_]+\.pl$//;
-
-  push @INC, ($pado); #print join(':',@INC);
-  require vokolib;
-  "vokolib"->import();
-}       
-
 use XML::Parser;
+
+use lib "$ENV{'VOKO'}/bin";
+use vokolib;
 
 $debug = 0;
 $show_progress = 0;

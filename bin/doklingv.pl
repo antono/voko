@@ -12,18 +12,8 @@
 
 ##########################################################
 
-BEGIN {
-  # en kiu dosierujo mi estas?
-  $pado = $0;
-  $pado =~ s|\\|/|g; # sub Windows anstatauigu \ per /
-  $pado =~ s/doklingv.pl$//;
-
-  push @INC, ($pado); #print join(':',@INC);
-  require nls;
-  "nls"->import();
-  $nls_cfg = $ENV{"VOKO"}."/cfg/nls.cfg";
-  nls::read_nls_cfg("$nls_cfg");
-}         
+use lib "$ENV{'VOKO'}/bin";
+use nls; read_nls_cfg("$ENV{'VOKO'}/cfg/nls.cfg");
 
 ################### agordejo ##############################
 

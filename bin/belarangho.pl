@@ -15,7 +15,7 @@ $buffer = join('',<>);
 
 #### chiuj traktendajn strukturilojn metu sur propran linion
 
-$traktendaj = 'art|subart|drv|subdrv|snc|subsnc|dif|ekz|refgrp|trdgrp|rim|kap';
+$traktendaj = 'art|subart|drv|subdrv|snc|subsnc|dif|ekz|refgrp|trdgrp|rim';
 
 $buffer =~ s¦\r¦¦sg;
 $buffer =~ s¦\s*<($traktendaj)\b([^>]*)>\s*¦\r<$1$2>\r¦sg;
@@ -32,7 +32,7 @@ $buffer =~ s¦</drv>\s*\n*<drv¦</drv>\n\n<drv¦sg;
 
 #### enmetu deshovojn linikomence
 
-$traktendaj = 'subart|drv|subdrv|snc|subsnc|dif|ekz|refgrp|trdgrp|bld|rim|kap';
+$traktendaj = 'subart|drv|subdrv|snc|subsnc|dif|ekz|refgrp|trdgrp|bld|rim';
 @linioj = split("\n",$buffer);
 $level=0;
 $trd=0;

@@ -1,15 +1,7 @@
 #!/usr/bin/perl
 
-BEGIN {
-  # en kiu dosierujo mi estas?
-  $pado = $0;
-  $pado =~ s|\\|/|g; 
-  $pado =~ s/[a-z0-9_]+\.pl$//;
-
-  push @INC, ($pado); #print join(':',@INC);
-  require vokolib;
-  "vokolib"->import();
-}       
+use lib "$ENV{'VOKO'}/bin";
+use vokolib;
 
 $file = shift @ARGV;
 

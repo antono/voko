@@ -10,21 +10,9 @@
 
 ##########################################################
 
-BEGIN {
-  # en kiu dosierujo mi estas?
-  $pado = $0;
-  $pado =~ s|\\|/|g; # sub Windows anstatauigu \ per /
-#  $pado =~ s/indeks.pl$//;
-  $pado =~ s/[a-z0-9_]+\.pl$//;
-
-  push @INC, ($pado); #print join(':',@INC);
-  require nls;
-  "nls"->import();
-  nls::read_nls_cfg("$pado/../cfg/nls.cfg");
-
-  require vokolib;
-  "vokolib"->import();
-}         
+use lib "$ENV{'VOKO'}/bin";
+use vokolib;
+use nls; read_nls_cfg("$ENV{'VOKO'}/cfg/nls.cfg");
 
 ################### agordejo ##############################
 
