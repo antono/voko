@@ -933,6 +933,9 @@ pluevoluigita de Wolfram Diestel
   <xsl:if test="following-sibling::lok">
     <xsl:text>, </xsl:text>
   </xsl:if>
+  <xsl:if test="following-sibling::vrk">
+    <xsl:text>, </xsl:text>
+  </xsl:if>
 </xsl:template>
 
 <xsl:template match="vrk" mode="bibliogr">
