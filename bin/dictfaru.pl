@@ -1,26 +1,25 @@
 #!/usr/bin/perl
 
 # uzo:
-#   dictfaru.pl -2 <xml-dosierujo>
+#   dictfaru.pl <xml-dosierujo>
 #
 
 # farenda:
 #
-#   indeksoj de nacilingvoj, chiuj derivajhoj - ne nur kapvortoj
-#   por tiu havu liston de la dosiernomoj kaj ekstraktu la
-#   referencinformojn per XSL au simile el indekso.xml
-#
-#
+#   kreu lingvoindeksojn nur de certaj lingvoj
+#   ASCII-konverto por lingvoj ru, bg, ktp.
 
 
 $verbose = 1;
-$nur_indeksoj = 1; # por pli facila testado
+$nur_indeksoj = 0; # por pli facila testado
+
+@lingvoj=('eo','de','en','cs','la','fr','es','tr');
 
 $xslbin = "/home/revo/voko/bin/xslt.sh";
 $xsl = "/home/revo/voko/xsl/revotxt.xsl";
 $tmp = "/home/revo/tmp";
-$datfile = "/home/revo/tmp/revo.dat";
-$inxpref = "/home/revo/tmp/revo";
+$datfile = "/home/revo/dict/revo.dat";
+$inxpref = "/home/revo/dict/revo";
 $indekso = "/home/revo/revo/sgm/indekso.xml~";
 
 $b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
@@ -30,9 +29,10 @@ $b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 #########           indeksdosieron
 
 $pos = 0;
-unlink "$datfile";
 
 unless ($nur_indeksoj) {
+
+    unlink "$datfile"; 
 
     $dir = shift @ARGV;
     opendir DIR, $dir;
@@ -111,7 +111,7 @@ close INX;
 $/ = "\n"; 
 
 # skribu lingvoindeksojn
-foreach $lng (keys %tradukoj) {
+foreach $lng (@lingvoj) {
     my $last0, $last1;
 
     print "$lng...\n" if ($verbose);
