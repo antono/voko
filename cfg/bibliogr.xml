@@ -172,7 +172,26 @@
 
   <vrk mll="Dan&gcirc;Lng">
     <aut><a>Ulrich</a> <n>Lins</n></aut>
-    <tit>La dan&gcirc;era lingvo</tit>
+    <tit>La dan&gcirc;era lingvo, studo pri la persekutoj kontra&ubreve; Esperanto</tit>
+    <eld>
+      <nom>L'omnibuso</nom>
+      <lok>Kioto</lok>
+      <dat>1973</dat>
+      <nro>1a eldono</nro>
+    </eld>
+    <eld>
+      <nom>Bleicher</nom>
+      <lok>Gerlingen</lok>
+      <dat>1988</dat>
+      <nro>2a eldono</nro>
+    </eld>
+    <eld>
+       <nom>eldonejo Progreso</nom>
+       <lok></lok>
+       <dat>1990</dat>
+       <nro>represo de la 2a eldono [?]</nro>
+       <isbn>5-01-003136-1</isbn>
+    </eld>
   </vrk>
 
   <vrk mll="DdH">
@@ -191,6 +210,18 @@
       <nom>Bulgara Esperanto-Asocio</nom>
       <lok>Sofio</lok>
       <dat>1985</dat>
+    </eld>
+  </vrk>
+
+  <vrk mll="DonKihxoto">
+    <aut><a>Miguel</a> <n>de Cervantes Saavedra</n></aut>
+    <trd><a>Fernando</a> <n>de Diego</n></trd>
+    <tit>La ingenia hidalgo Don Quijote de la Mancha</tit>
+    <eld>
+       <nom>HEF - eldono "Fundaci&oacute;n de Esperanto"</nom>
+       <lok>Zaragoza</lok>
+       <dat>1977</dat>
+       <isbn>84-400-3582-9</isbn>
     </eld>
   </vrk>
 
@@ -504,6 +535,16 @@
     </eld>
   </vrk>
 
+  <vrk mll="IntArkeol">
+    <aut><a>Marinko</a> <n>Givoje</n></aut>
+    <tit>Interesa arkeologio</tit>
+    <eld>
+       <nom>SAT, Sennacieca Asocio Tutmonda</nom>
+       <lok>Parizo</lok>
+       <dat>1973</dat>
+    </eld>
+  </vrk>
+
   <vrk mll="IntKui">
     <aut><a>Maria</a> <n>Becker-Meisberger</n></aut>
     <tit>Internacie kuiri</tit>
@@ -624,6 +665,12 @@
       <lok>Frankfurt a.M.</lok>
       <dat>1927</dat>
     </eld>
+  </vrk>
+
+  <vrk mll="LanLin">
+    <url>http://purl.oclc.org/net/lanlin</url>
+    <aut><a>Bertilo</a> <n>Wennergren</n></aut>
+    <tit>Landoj kaj lingvoj de la mondo</tit>
   </vrk>
 
   <vrk mll="Lanti">
@@ -960,6 +1007,17 @@
     <url>http://purl.oclc.org/net/pmeg/</url>
     <aut><a>Bertilo</a> <n>Wennergren</n></aut>
     <tit>Plena Manlibro de Esperanta Gramatiko</tit>
+  </vrk>
+
+  <vrk mll="Po&scirc;Atlas">
+    <aut><a>Ludmila</a> <n>Jirouskov&aacute;</n> (red.)</aut>
+    <aut><a>Bohumil</a> <n>Stehl&iacute;k</n> (red.)</aut>
+    <tit>Po&scirc;atlaso de la mondo</tit>
+    <eld>
+       <nom>Kartografie</nom>
+       <lok>Prago</lok>
+       <dat>1971</dat>
+    </eld>
   </vrk>
 
   <vrk mll="PV">
