@@ -10,7 +10,7 @@
  
 <lingvoj>
   <lingvo kodo="ab">abĥaza</lingvo>
-  <lingvo kodo="af">afrikansa</lingvo>
+  <lingvo kodo="af" flago="../smb/af.png">afrikansa</lingvo>
   <lingvo kodo="am">amhara</lingvo>
   <lingvo kodo="ar">araba</lingvo>
   <lingvo kodo="as">asama</lingvo>
@@ -55,13 +55,13 @@
   <lingvo kodo="hr" flago="../smb/hr.png">kroata</lingvo>
   <lingvo kodo="hu" flago="../smb/hu.png">hungara</lingvo>
   <lingvo kodo="hy">armena</lingvo>
-  <lingvo kodo="ia">interlingvaa</lingvo>
+  <lingvo kodo="ia" flago="../smb/ia.png">interlingvaa</lingvo>
   <lingvo kodo="id">indonezia</lingvo>
-  <lingvo kodo="ie">okcidentala</lingvo>
+  <lingvo kodo="ie" flago="../smb/ie.png">okcidentala</lingvo>
   <lingvo kodo="ik">eskima</lingvo>
   <lingvo kodo="is" flago="../smb/is.png">islanda</lingvo>
   <lingvo kodo="it" flago="../smb/it.png">itala</lingvo>
-  <lingvo kodo="iu">inuita</lingvo>
+  <lingvo kodo="iu" flago="../smb/iu.png">inuita</lingvo>
   <lingvo kodo="ja" flago="../smb/ja.png">japana</lingvo>
   <lingvo kodo="jw">java</lingvo>
   <lingvo kodo="ka">kartvela</lingvo>
@@ -101,7 +101,7 @@
   <lingvo kodo="pl" flago="../smb/pl.png">pola</lingvo>
   <lingvo kodo="ps">paŝtua</lingvo>
   <lingvo kodo="pt" flago="../smb/pt.png">portugala</lingvo>
-  <lingvo kodo="qu">keĉua</lingvo>
+  <lingvo kodo="qu" flago="../smb/qu.png">keĉua</lingvo>
   <lingvo kodo="rm">romanĉa</lingvo>
   <lingvo kodo="rn">burunda</lingvo>
   <lingvo kodo="ro">rumana</lingvo>
@@ -123,7 +123,7 @@
   <lingvo kodo="st">sota</lingvo>
   <lingvo kodo="su">sunda</lingvo>
   <lingvo kodo="sv" flago="../smb/sv.png">sveda</lingvo>
-  <lingvo kodo="sw">svahila</lingvo>
+  <lingvo kodo="sw" flago="../smb/sw.png">svahila</lingvo>
   <lingvo kodo="ta">tamila</lingvo>
   <lingvo kodo="te">telugua</lingvo>
   <lingvo kodo="tg">taĝika</lingvo>
@@ -132,7 +132,7 @@
   <lingvo kodo="tk">turkmena</lingvo>
   <lingvo kodo="tl">filipina</lingvo>
   <lingvo kodo="tn">cvana</lingvo>
-  <lingvo kodo="to">tongaa</lingvo>
+  <lingvo kodo="to" flago="../smb/to.png">tongaa</lingvo>
   <lingvo kodo="tr" flago="../smb/tr.png">turka</lingvo>
   <lingvo kodo="ts">conga</lingvo>
   <lingvo kodo="tt">tatara</lingvo>
@@ -142,12 +142,18 @@
   <lingvo kodo="ur">urduo</lingvo>
   <lingvo kodo="uz">uzbeka</lingvo>
   <lingvo kodo="vi">vjetnama</lingvo>
-  <lingvo kodo="vo">volapuka</lingvo>
+  <lingvo kodo="vo" flago="../smb/vo.png">volapuka</lingvo>
   <lingvo kodo="wo">volofa</lingvo>
   <lingvo kodo="xh">ksosa</lingvo>
   <lingvo kodo="yi">jida</lingvo>
   <lingvo kodo="yo">joruba</lingvo>
   <lingvo kodo="za">ĝuanga</lingvo>
-  <lingvo kodo="zh">ĉina</lingvo>
+  <lingvo kodo="zh" flago="../smb/zh.png">ĉina</lingvo>
   <lingvo kodo="zu">zulua</lingvo>
 </lingvoj>
+
+
+
+
+
+

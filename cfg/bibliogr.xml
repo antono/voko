@@ -3,7 +3,7 @@
 <!DOCTYPE bibliografio [
 
 <!ELEMENT bibliografio (vrk)*>
-<!ELEMENT vrk (url?,aut*,trd?,tit?,isbn?,ald?,eld?)>
+<!ELEMENT vrk (url?,aut*,trd?,tit?,ald?,eld*)>
 <!ATTLIST vrk mll ID #REQUIRED> 
 <!ELEMENT url (#PCDATA)>
 <!ELEMENT aut (#PCDATA|a|n)*>
@@ -13,7 +13,7 @@
 <!ELEMENT tit (#PCDATA)>
 <!ELEMENT isbn (#PCDATA)>
 <!ELEMENT ald (#PCDATA)>
-<!ELEMENT eld (nom?,lok?,dat?,nro?)>
+<!ELEMENT eld (nom?,lok?,dat?,nro?,isbn?)>
 <!ELEMENT nom (#PCDATA)>
 <!ELEMENT lok (#PCDATA)>
 <!ELEMENT dat (#PCDATA)>
@@ -84,6 +84,12 @@
     </eld>
   </vrk>
 
+  <vrk mll="BonaS-ino">
+    <aut><a>E.</a> <n>Orzeszko</n></aut>
+    <trd><a>Karl</a> <n>Bein</n></trd>
+    <tit>La bona sinjorino</tit>
+  </vrk>
+
   <vrk mll="BoT">
     <aut><a>Werner</a> <n>Bormann</n></aut>
     <tit>La Merkato de Trafikservoj</tit>
@@ -92,6 +98,11 @@
        <lok>Hamburg</lok>
        <dat>1992</dat>
     </eld>
+  </vrk>
+
+  <vrk mll="BT">
+    <aut>Douglas A. Portmann</aut>
+    <tit>Biblioteka terminaro</tit>
   </vrk>
 
   <vrk mll="CCT">
@@ -106,12 +117,12 @@
   <vrk mll="CEE">
     <aut><a>Peter J.</a> <n>Benson</n></aut>
     <tit>Comprehensive English-Esperanto Dictionary</tit>
-    <isbn>0-939785-03-X</isbn>
     <eld>
        <nom>ELNA</nom>
        <lok>El Cerrito</lok>
        <dat>1995</dat>
        <nro>1a eldono</nro>
+       <isbn>0-939785-03-X</isbn>
     </eld>
   </vrk>
 
@@ -126,6 +137,34 @@
     </eld>
   </vrk>
 
+  <vrk mll="&Ccirc;A">
+    <tit>&Ccirc;ina Antologio (1919-1949)</tit>
+    <eld>
+      <nom>&Ccirc;ina Esperanto-Eldonejo</nom>
+      <lok>Pekino</lok>
+      <dat>1986</dat>
+    </eld>
+  </vrk>
+
+  <vrk mll="&ccirc;uSn">
+    <aut><a>E.</a> <n>Lanti</n></aut>
+    <tit>&Ccirc;u ili estas sennaciistoj?</tit>
+  </vrk>
+
+  <vrk mll="Dan&gcirc;Lng">
+    <aut><a>Ulrich</a> <n>Lins</n></aut>
+    <tit>La dan&gcirc;era lingvo</tit>
+  </vrk>
+
+  <vrk mll="DdH">
+    <aut><a>L. L.</a> <n>Zamenhof</n></aut>
+    <tit>Aldono al la &leftquot;Dogmoj de Hilelismo&rightquot;</tit>
+    <eld>
+      <nom>Ruslanda Esperantisto</nom>
+      <dat>1906</dat>
+    </eld>
+  </vrk>
+
   <vrk mll="Deneva">
     <aut><a>Daniela</a> <n>Deneva</n></aut>
     <tit>Esperanta-Bulgara-Rusa Matematika Terminaro</tit>
@@ -136,24 +175,36 @@
     </eld>
   </vrk>
 
-   <vrk mll="EBV">
+  <vrk mll="DOz">
+    <url>http://ttt.esperanto.org/esperante/literatur/Baum/doroteo/</url>
+    <aut><a>L. Frank</a> <n>Baum</n></aut>
+    <trd><a>D.</a> <n>Broadribb</n></trd>
+    <tit>Doroteo kaj la Sorcxisto en Oz</tit>
+    <eld>
+      <nom>Bookleaf Publishing</nom>
+      <lok>A&ubreve;stralio</lok>
+      <dat>1996</dat>
+    </eld>
+  </vrk>
+
+  <vrk mll="EBV">
     <aut><a>R&uuml;diger</a> <n>Eichholz</n></aut>
     <tit>Esperanta Bildvortaro</tit>
-    <isbn>0-919186-32-7</isbn>
     <eld>
       <nom>Esperanto press</nom>
       <lok>Bailieboro, Ontario, Kanado</lok>
       <dat>1989</dat>
       <nro>2a eldono</nro>
+      <isbn>0-919186-32-7</isbn>
     </eld>
   </vrk>
 
   <vrk mll="EdE">
     <tit>Enciklopedio de Esperanto</tit>
-    <isbn>963-571-051-8</isbn>
     <eld>
       <lok>Budapest</lok>
       <dat>1979</dat>
+      <isbn>963-571-051-8</isbn>
     </eld>
   </vrk>
 
@@ -201,13 +252,13 @@
     <aut><n>Yashovardhan</n></aut>
     <aut>k.a.</aut>
     <tit>EK-Vortaro de matematikaj terminoj</tit>
-    <isbn>3-88064-080-7</isbn>
     <ald>vol. 4 en E&ubreve;ropa Serio: Sennaciigita Scienco</ald>
     <eld>
       <nom>E&ubreve;ropa Klubo, FEoLL-Institut f&uuml;r 
            Kybernetische P&auml;dagogik</nom>
       <lok>Paderborn</lok>
       <dat>1980</dat>
+      <isbn>3-88064-080-7</isbn>
     </eld>
   </vrk>
 
@@ -216,11 +267,11 @@
     <aut><a>Zhang</a> <n>Meizhi</n></aut>
     <trd>Fan Yizhu, Xu Senrong</trd>
     <tit>Enciklopedieto de &Ccirc;inio</tit>
-    <isbn>7-5052-0086-0/Z.4</isbn>
     <eld>
       <nom>&Ccirc;ina Esperanto-Eldonejo</nom>
       <lok>Beijing</lok>
       <dat>1994</dat>
+      <isbn>7-5052-0086-0/Z.4</isbn>
     </eld>
   </vrk>
 
@@ -331,8 +382,9 @@
     <tit>
       Pri la solvo de l'problemo de internacia lingvo por komerco kaj
       trafiko. Zur L&ouml;sung der Frage einer internationalen Handels- und
-      Verkehrssprache. Amtlicher Sitzungsbericht der Internationalen Konferenz für
-      eine gemeinsame Hilfssprache des Handels und Verkehrs, Venedig, 2.-4. April
+      Verkehrssprache. Amtlicher Sitzungsbericht der 
+      Internationalen Konferenz f&uuml;r eine gemeinsame 
+      Hilfssprache des Handels und Verkehrs, Venedig, 2.-4. April
       1923
     </tit>
     <eld>
@@ -358,11 +410,24 @@
     <tit>Esperanta terminaro de fiziko, Esperanto &dash; japana &dash; angla.
          Reviziita
     </tit>
-    <isbn>0-939785-03-X</isbn>
     <eld>
        <nom>Universitato Chubu</nom>
        <lok>Chubu, Japanio</lok>
        <dat>1992</dat>
+       <isbn>0-939785-03-X</isbn>
+    </eld>
+  </vrk>
+
+  <vrk mll="GDFE">
+    <aut><a>Jacques</a> <n>Le Puil</n></aut>
+    <aut><a>Jean-Pierre</a> <n>Danvy</n></aut>
+    <aut>k.a.</aut>
+    <tit>Grand dictionnaire fran&ccedil;ais esp&eacute;ranto</tit>
+    <eld>
+      <nom>France-Esp&eacute;ranto</nom>
+      <lok>Parizo</lok>
+      <dat>1992</dat>
+      <isbn>2-9507376-0-9</isbn>
     </eld>
   </vrk>
 
@@ -392,30 +457,32 @@
     <aut><a>L. L.</a> <n>Zamenhof</n></aut>
     <tit>Homaranismo</tit>
     <eld>
+      <nom>Ruslanda Esperantisto</nom>
       <lok>Peterburgo</lok>
       <dat>1906</dat>
+      <nro>n-ro 5</nro>
     </eld>
   </vrk>  
 
   <vrk mll="IKEV">
     <aut><a>F.</a> <n>Munniksma</n> (eld.)</aut>
     <tit>Internacia komerca-ekonomika vortaro en 11 lingvoj</tit>
-    <isbn>7-5052-0025-9</isbn>
     <eld>
-       <nom>i&Ccirc;ina Esperanto-eldonejo</nom>
+       <nom>&Ccirc;ina Esperanto-eldonejo</nom>
        <lok>Pekino</lok>
        <dat>1990</dat>
+       <isbn>7-5052-0025-9</isbn>
     </eld>
   </vrk>
 
   <vrk mll="IntKui">
     <aut><a>Maria</a> <n>Becker-Meisberger</n></aut>
     <tit>Internacie kuiri</tit>
-    <isbn>90-71205-70-3</isbn>
     <eld>
       <nom>Flandra Esperanto-Ligo</nom>
       <lok>Antwerpen</lok>
       <dat>2000</dat>
+      <isbn>90-71205-70-3</isbn>
     </eld>
   </vrk>
 
@@ -451,6 +518,10 @@
       <dat>1987</dat>  
     </eld>
   </vrk> 
+
+  <vrk mll="KelS">
+    <tit>Kajeroj el la Sudo</tit>
+  </vrk>
 
   <vrk mll="KompLeks">
     <url>http://purl.oclc.org/NET/voko/URL/KompLeks/</url>
@@ -535,22 +606,65 @@
     <aut><a>Ricardo</a> <n>&Scirc;ulco</n></aut>
     <aut><a>Hermano</a> <n>Bermano</n></aut>
     <tit>Leksara kolekto de ofte uzataj propraj nomoj</tit>
-    <isbn>3-922570-60-7</isbn>
     <eld>
        <nom>ECP</nom>
        <lok>Paderborno</lok>
        <dat>1989</dat>
        <nro>1a eldono</nro>
+       <isbn>3-922570-60-7</isbn>
     </eld>
   </vrk>
 
-  <vrk mll="MEV">
-    <aut><a>Eugen</a> <n>W&uuml;ster</n></aut>
-    <tit>Ma&scirc;infaka Esperanto-vortaro</tit>
+  <vrk mll="LOdE">
+    <url>http://www.esperanto.org/Ondo/</url>
+    <tit>La Ondo de Esperanto</tit>
+    <ald>Gazeto</ald>
     <eld>
-       <nom>Ferdinand Hirt und Sohn</nom>
-       <lok>Leipzig</lok>
-       <dat>1923</dat>
+      <nom>Sezonoj</nom>
+      <lok>Ruslando</lok>
+    </eld>
+  </vrk>
+
+  <vrk mll="LR">
+    <aut><a>L. L.</a> <n>Zamenhof</n></aut>
+    <tit>Lingvaj Respondoj</tit>
+  </vrk>
+
+  <vrk mll="LSF">
+    <aut><n>Kalocsay</n></aut>
+    <tit>Lingvo, Stilo, Formo</tit>
+    <eld>
+      <lok>Budapest</lok>
+      <dat>1931</dat>
+    </eld>
+  </vrk>
+
+  <vrk mll="LSV">
+    <aut><a>E.</a> <n>Lanti</n></aut>
+    <tit>&leftquot;Liberiga Stelo&rightquot; al la
+    Verdru&gcirc;uloj</tit>
+  </vrk>
+
+  <vrk mll="LtE">
+    <aut><a>Henrik</a> <n>Seppik</n></aut>
+    <tit>La tuta Esperanto</tit>
+    <eld>
+      <nom>Hungara Esperanto-Asocio</nom>
+      <lok>Budapest</lok>
+      <dat>1987</dat>
+      <nro>4a eldono</nro>
+      <isbn>963-571-196-4</isbn>
+    </eld>
+  </vrk>
+
+  <vrk mll="Mary">
+    <aut><a>M.</a> <n>Lermontov</n></aut>
+    <trd><a>N.</a> <n>Danovskij</n></trd>
+    <tit>Princidino Mary</tit>
+    <eld>
+      <nom>Ruslanda Esperantisto</nom>
+      <lok>Jekaterinburg</lok>
+      <dat>1996</dat>
     </eld>
   </vrk>
 
@@ -576,14 +690,26 @@
     </eld>
   </vrk>
 
+  <vrk mll="Marta">
+    <aut><a>Eliza</a> <n>Orzeszkowa</n></aut>
+    <trd><a>L. L.</a> <n>Zamenhof</n></trd>
+    <tit>Marta</tit>
+    <eld>
+      <nom>Esperantista Centra Librejo</nom>
+      <lok>Parizo</lok>
+      <dat>1924</dat>
+      <nro>2a eldono</nro>
+    </eld>
+  </vrk>
+
   <vrk mll="MatStokTerm">
     <aut><a>Olav</a> <n>Reiers&#xf8;l</n></aut>
     <tit>Matematika kaj Stokastika Terminaro Esperanta</tit>
-    <isbn>82-553-0894-6</isbn>
     <eld>
       <lok>Oslo</lok>
       <dat>1994</dat>
       <nro>dua eldono</nro>
+      <isbn>82-553-0894-6</isbn>
     </eld>
   </vrk>
 
@@ -635,9 +761,19 @@
     <tit>Metropoliteno</tit>
   </vrk>
 
+  <vrk mll="MEV">
+    <aut><a>Eugen</a> <n>W&uuml;ster</n></aut>
+    <tit>Ma&scirc;infaka Esperanto-vortaro</tit>
+    <eld>
+       <nom>Ferdinand Hirt und Sohn</nom>
+       <lok>Leipzig</lok>
+       <dat>1923</dat>
+    </eld>
+  </vrk>
+
   <vrk mll="MkM">
     <aut><a>Mihail</a> <n>Bulgakov</n></aut>
-    <trd><a>S.</a> <n>Pokrovskij</n></trd>
+    <trd><a>Sergio</a> <n>Pokrovskij</n></trd>
     <tit>La majstro kaj Margarita</tit>
     <eld>
       <nom>Sezonoj</nom>
@@ -678,26 +814,26 @@
   <vrk mll="NeoGlo">
     <aut><a>H.</a> <n>Vatr&eacute;</n></aut>
     <tit>Neologisma glosaro, postrikolto al PIV</tit>
-    <isbn>3-927613-07-X</isbn>
     <ald>tria eldono kun la&ubreve;tema klasifiko kaj rimaro en
         suplemento</ald>
     <eld>
       <nom>Artur E. Iltis</nom>
       <lok>Saarbr&uuml;cken</lok>
       <dat>1989</dat>
+      <isbn>3-927613-07-X</isbn>
     </eld>
   </vrk>
 
   <vrk mll="NePiv">
     <aut><a>A.</a> <n>Cherpillod</n></aut>
     <tit>Nepivaj vortoj</tit>
-    <isbn>2-906134-05-8</isbn>
     <ald>listo de 6800 vortoj ne trovi&gcirc;antaj en la PIV el kiuj kelkaj
          povas esti utilaj</ald>
     <eld>
       <nom>la a&ubreve;toro</nom>
       <lok>Courgenard Francio</lok>
       <dat>1988</dat>
+      <isbn>2-906134-05-8</isbn>
     </eld>
   </vrk>
  
@@ -706,36 +842,19 @@
     <tit>Nova Testamento, Londona Biblio</tit>
   </vrk>
 
-  <vrk mll="Revizoro">
-    <url>http://www.uni-leipzig.de/esperanto/texte/bibl/revizoro/index.html</url>
-    <aut><a>N. V.</a> <n>Gogol</n></aut>
-    <trd><a>L. L.</a> <n>Zamenhof</n></trd>
-    <tit>La Revizoro</tit>
+  <vrk mll="OV">
+    <aut><a>L. L.</a> <n>Zamenhof</n></aut>
+    <tit>Originala Verkaro</tit>
   </vrk>
 
-  <vrk mll="RokPop">
-    <url>http://purl.oclc.org/net/bertilow?d=roko/index.php</url>
-    <aut><a>B.</a> <n>Wennergren</n></aut>
-    <tit>Roko kaj Popo, Popularmuzika Terminaro en Esperanto</tit>
-  </vrk>
-
-  <vrk mll="RugxDom">
-    <aut><a>Cao</a> <n>Xueqin</n></aut>
-    <trd><a>Xie</a> <n>Yuming</n></trd>
-    <tit>Ru&gcirc;doma son&gcirc;o</tit>
-    <isbn>7-5052-0235-9</isbn>
+  <vrk mll="PGl">
+    <aut><n>Kalocyay</n></aut>
+    <aut><n>Waringhien</n></aut>
+    <aut><n>Bernard</n></aut>
+    <tit>Parnasa Gvidlibro</tit>
     <eld>
-      <nom>&Ccirc;ina Esperanto-Eldonejo</nom>
-      <lok>Beijing</lok>
-      <dat>1995</dat>
-    </eld>
-  </vrk>
-
-  <vrk mll="OndEsp">
-    <tit>La Ondo de Esperanto</tit>
-    <eld>
-      <nom>Sezonoj</nom>
-      <lok>Ruslando</lok>
+      <lok>Pisa</lok>
+      <dat>1984</dat>
     </eld>
   </vrk>
 
@@ -784,11 +903,11 @@
     <aut><a>L. L.</a> <n>Zamenhof</n></aut>
     <aut><a>C.</a> <n>Rogister</n> ed.</aut>
     <tit>Proverbaro esperanta</tit>
-    <isbn>400-7609-6</isbn>
     <eld>
       <nom>Stafeto</nom>
       <lok>La Laguna</lok>
       <dat>1974</dat>
+      <isbn>400-7609-6</isbn>
     </eld>
   </vrk>
 
@@ -804,8 +923,40 @@
     <tit>La revadoj de soleca promenanto</tit>
     <ald>Franca Esperantisto, kaj. 414 (09/1990) kaj 420 (04/1991)</ald>
     <eld>
-      <nom>Unui&gcirc;o Franca por Esperanto, &ccirc;e Flandra Esperanto-Ligo</nom>
+      <nom>Unui&gcirc;o Franca por Esperanto, 
+        &ccirc;e Flandra Esperanto-Ligo</nom>
     </eld>
+  </vrk>
+
+  <vrk mll="Revizoro">
+    <url>http://www.uni-leipzig.de/esperanto/texte/bibl/revizoro/index.html</url>
+    <aut><a>N. V.</a> <n>Gogol</n></aut>
+    <trd><a>L. L.</a> <n>Zamenhof</n></trd>
+    <tit>La Revizoro</tit>
+  </vrk>
+
+  <vrk mll="RokPop">
+    <url>http://purl.oclc.org/net/bertilow?d=roko/index.php</url>
+    <aut><a>B.</a> <n>Wennergren</n></aut>
+    <tit>Roko kaj Popo, Popularmuzika Terminaro en Esperanto</tit>
+  </vrk>
+
+  <vrk mll="RugxDom">
+    <aut><a>Cao</a> <n>Xueqin</n></aut>
+    <trd><a>Xie</a> <n>Yuming</n></trd>
+    <tit>Ru&gcirc;doma son&gcirc;o</tit>
+    <eld>
+      <nom>&Ccirc;ina Esperanto-Eldonejo</nom>
+      <lok>Beijing</lok>
+      <dat>1995</dat>
+      <isbn>7-5052-0235-9</isbn>
+    </eld>
+  </vrk>
+
+  <vrk mll="Salamandroj">
+    <aut><a>Karel</a> <n>&Ccaron;apek</n></aut>
+    <trd><a>J.</a> <n>Vondrou&scaron;ek</n></trd>
+    <tit>Milito kontra&ubreve; salamandroj</tit>
   </vrk>
 
   <vrk mll="SPIV">
@@ -814,6 +965,16 @@
       <nom>SAT</nom>
       <lok>Parizo</lok>
       <dat>1987</dat>
+    </eld>
+  </vrk>
+
+  <vrk mll="TermKurs">
+    <aut><a>Jan</a> <n>Werner</n></aut>
+    <tit>Terminologia Kurso</tit>
+    <eld>
+      <nom>Sdru&zcaron;en&yacute; klub ROH</nom>
+      <lok>Roudnice nad Labem</lok>
+      <dat>1986</dat>
     </eld>
   </vrk>
 
@@ -830,22 +991,33 @@
   <vrk mll="UrdHadda">
     <aut><a>Deck</a> <n>Dorval</n></aut>
     <tit>Urd Hadda murdita!</tit>
-    <isbn>90-71205-37-1</isbn>
     <ald>Serio Stafeto, n-ro 13</ald>
     <eld>
       <nom>Flandra Esperanto-Ligo</nom>
       <lok>Antwerpen</lok>
       <dat>1990</dat>
+      <isbn>90-71205-37-1</isbn>
     </eld>
   </vrk>
 
   <vrk mll="VdE">
-    <aut><a>K.</a> <n>Bein</n></aut>
+    <aut><a>Karl</a> <n>Bein</n></aut>
     <tit>Vortaro de Esperanto</tit>
     <eld>
       <nom>Hachette</nom>
       <lok>Parizo</lok>
       <dat>1912</dat>
+    </eld>
+  </vrk>
+
+  <vrk mll="WAPS">
+    <aut><a>William</a> <n>Auld</n></aut>
+    <tit>Pajleroj kaj stoploj</tit>
+    <eld>
+      <nom>Universala Esperanto-Asocio</nom>
+      <lok>Rotterdam</lok>
+      <dat>1997</dat>
+      <isbn>92-9017-052-2</isbn>
     </eld>
   </vrk>
 
