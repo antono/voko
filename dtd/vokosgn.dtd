@@ -88,6 +88,9 @@
 <!ENTITY cubic "&#x00b3;">
 <!ENTITY para "&#x00a7;">
 <!ENTITY dash "&#x2015;">
+<!ENTITY mdash "&#x2015;">
+<!ENTITY ndash "&#x2013;">
+<!ENTITY nbsp "&#x00a0;">
 
 <!ENTITY Euml "&#x00cb;">
 <!ENTITY euml "&#x00eb;">
@@ -576,4 +579,21 @@
 <!ENTITY odblac "&#x0151;">
 <!ENTITY Udblac "&#x0170;">
 <!ENTITY udblac "&#x0171;">
+
+<!-- kimraj -->
+
+<!ENTITY Ycirc  "&#x0176;">
+<!ENTITY ycirc  "&#x0177;">
+<!ENTITY Wgrave "&#x1e80;">
+<!ENTITY wgrave "&#x1e81;">
+<!ENTITY Wacute "&#x1e82;">
+<!ENTITY wacute "&#x1e83;">
+<!ENTITY Wuml   "&#x1e84;">
+<!ENTITY wuml   "&#x1e85;">
+<!ENTITY Ygrave "&#x1ef2;">
+<!ENTITY ygrave "&#x1ef3;">
+<!ENTITY Wcirc  "&#x0174;">
+<!ENTITY wcirc  "&#x0175;">
+<!ENTITY Yuml   "&#x0178;">
+<!ENTITY yuml   "&#x00ff;">
 

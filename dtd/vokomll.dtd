@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
 <!-- autoroj -->
 <!ENTITY Z "Zamenhof">
 <!ENTITY tZ "trad. Zamenhof">
@@ -55,7 +54,7 @@
 <!ENTITY Plo "Plorkanto">
 <!ENTITY Jeh "Je&hcirc;ezkel">
 <!ENTITY Dan "Daniel">
-<!ENTITY Hos "Hosea">
+<!ENTITY Hos "&Hcirc;osea">
 <!ENTITY Joe "Joel">
 <!ENTITY Amo "Amos">
 <!ENTITY Oba "Obadja">

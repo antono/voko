@@ -75,7 +75,7 @@ artikolo estas avantaĝe difini tiun ĉi unuon.-->
 
 <!-- priskribaj elementoj -->
 <!ENTITY % priskribaj-elementoj 
-  "fnt|gra|uzo|dif|ekz|rim|ref|refgrp|trd|trdgrp|bld|adm|url">
+  "fnt|gra|uzo|dif|ekz|rim|ref|refgrp|trd|trdgrp|bld|adm|url|mlg|tez">
 
 <!-- [%tekst-stiloj] La unuo <dfn>tekst-stiloj</dfn> 
 listigas ĉiujn strukturilojn, kiuj donas stilon al tekstoparto,
@@ -111,8 +111,16 @@ pluraj subdividoj <dfn>subdrv</dfn>.-->
 
 <!ELEMENT drv (kap,(subdrv|snc|%priskribaj-elementoj;)*)>
 <!ATTLIST drv
-	mrk ID #IMPLIED
+	mrk ID #REQUIRED
 >
+
+<!-- [var] variaĵo de la vorto, ekz. meĥaniko - mekaniko, pomarbo -
+pomujo. Ĝi povas enhavi fontindikon k.s., sed ankaŭ rimarkojn 
+kaj ekzemplojn, sed ĝi ne havas propran difinon. Ĝi aperas ene
+de kapvorto, ĉar ĝi ja estas ĝia variaĵo.
+-->
+
+<!ELEMENT var (kap,(uzo,klr,ekz,rim)*)>
 
 <!-- [subdrv] Subderivaĵo. Ĝi grupigas plurajn proksimajn sencojn, se la
 priskribita vorto havas tre multajn sencojn. Tio povas
@@ -159,13 +167,13 @@ Ili estas nombrataj per a), b), ... -->
 *****************************************************-->
 
 <!-- [kap] kapvorto okazas en du kuntekstoj - komence de artikolo
-kaj komence de derivajho, en la unua kazo ĝi signas radikon
+kaj komence de derivaĵo, en la unua kazo ĝi signas radikon
 en la dua kazo ĝi konsistas el iuj literoj kaj eble tildo
 refencanta al la kapvorto, krome en la kapvorto povas okazi
 fontindiko.
 -->
 
-<!ELEMENT kap (#PCDATA|rad|ofc|fnt|tld)*>
+<!ELEMENT kap (#PCDATA|rad|ofc|fnt|tld|var)*>
 
 <!-- [rad] Radiko de kapvorto. Ĝi estas bezonata por anstaŭigo
 de tildoj. Sekve la "radiko" de afiksoj kaj finaĵoj estu
@@ -225,9 +233,10 @@ klarigoj kaj fonto.
 <!-- [rim] Rimarko povas enhavi iujn indikojn pri la vorto aŭ
 senco, krome referencojn, ekzemplojn, emfazitajn partojn.
 -->
-<!ELEMENT rim (#PCDATA|ref|refgrp|ekz|aut|%tekst-stiloj;)*>
+<!ELEMENT rim (#PCDATA|ref|refgrp|ekz|aut|fnt|%tekst-stiloj;)*>
 <!ATTLIST rim
         num CDATA #IMPLIED
+	mrk ID #IMPLIED
 > 
 
 <!-- [refgrp] Referencgrupo grupigas plurajn samtipajn
@@ -238,8 +247,7 @@ Tiukaze ne uzu la atributon <dfn>tip</dfn> en la subelementoj
 
 <!ELEMENT refgrp (#PCDATA|ref)*>
 <!ATTLIST refgrp
-	tip (vid|dif|sin|ant|super|sub|prt|malprt) "vid"
-	cel CDATA #IMPLIED
+	tip (vid|hom|dif|sin|ant|super|sub|prt|malprt|lst|ekz) "vid"
 >
 
 <!-- [ref] Referenco montras al alia, simil- aŭ alisignifa vorto,
@@ -255,7 +263,17 @@ aŭtomate por minimumigi erarojn.
 
 <!ELEMENT ref (#PCDATA|tld|klr|sncref)*>
 <!ATTLIST ref
-	tip (vid|dif|sin|ant|super|sub|prt|malprt) #IMPLIED
+	tip (vid|hom|dif|sin|ant|super|sub|prt|malprt|lst|ekz) #IMPLIED
+	cel CDATA #IMPLIED
+>
+
+<!-- [tez] Tezaŭra nodo. Ĝi permesas referenci al tio, same kiel
+ al kap kaj mem povas referenci al alia nodo.
+-->
+<!ELEMENT tez (#PCDATA|tld|klr|ref|refgrp)*>
+<!ATTLIST tez
+        mrk CDATA #REQUIRED
+        tip (super|malprt|listo) #IMPLIED
 	cel CDATA #IMPLIED
 >
 
@@ -291,7 +309,7 @@ kiu rilatas internaj tradukoj ktp.
 atributo <dfn>lok</dfn> ĝi
 referencas al ekstera dosiero, kiu entenas la bildon.
 -->
-<!ELEMENT bld (#PCDATA|tld|klr|ind|trd|trdgrp)*>
+<!ELEMENT bld (#PCDATA|tld|klr|fnt|ind|trd|trdgrp)*>
 <!ATTLIST bld
 	lok CDATA #REQUIRED
 	mrk ID #IMPLIED
@@ -356,6 +374,12 @@ ofte malvalidiĝus. -->
 <!ELEMENT url (#PCDATA)>
 <!ATTLIST url 
           ref CDATA #IMPLIED>
+
+<!-- [mlg] mallongigo de la kapvorto, ekz. che nomoj de organizajhoj. -->
+
+<!ELEMENT mlg (#PCDATA)>
+
+
 
 <!-- *************************************************
                    LITEROJ
