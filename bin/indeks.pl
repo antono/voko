@@ -194,7 +194,7 @@ sub artikolo {
     $tekst =~ s/^.*?<art\s+mrk="([^\"]*)"\s*>//s;
     $mrk = $1;
     unless ($mrk) {
-	# se ne estas vosto de la dosiero, plendu
+	# se ne estas la vosto de la dosiero, plendu
 	if ($tekst =~ /<\/art$/) {
 	    warn "ERARO: marko ne trovighis en $tekst\n";
 	}
@@ -240,14 +240,15 @@ sub artikolo {
     push @{ $invvortoj{$last_lit } }, [$mrk,$kap,reverse_utf8($rad)];
 
     # se la teksto entenas derivajho(j)n,
-    # analizu nur tiujn, alikaze la tutan tekston
+    # analizu unue tiujn
 
     if ($tekst =~/<drv/) {
 	$tekst =~ s/<drv\s*(?:mrk="([^\"]*)")?\s*>(.*?)<\/drv\s*>/
 	    indeksero($mrk,$1,$2)/siegx;
-    } else { 
-	indeksero($mrk,$mrk,$tekst);
-    };
+    } #else {
+    # analizu chion krom la derivajhoj
+    indeksero($mrk,$mrk,$tekst);
+    #};
 
     return '';
 }
