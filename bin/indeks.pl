@@ -1097,7 +1097,9 @@ sub linkbuttons {
 	 "<img src=\"../smb/nav_ktp0.png\" alt=\"[ktp.]\" border=0>\n":
 	 "<a href=\"_ktp.html\" onMouseOver=\"highlight(3)\" ".
 	 "onMouseOut=\"normalize(3)\">".
-	 "<img src=\"../smb/nav_ktp1.png\" alt=\"[ktp.]\" border=0></a>\n");
+	 "<img src=\"../smb/nav_ktp1.png\" alt=\"[ktp.]\" border=0></a>\n"),
+
+	"<br>";
 }
 
 # skribas la supran parton de html-ajho

@@ -740,18 +740,19 @@ sub linkbuttons {
     print 
 
 	"<script src=\"../smb/butonoj.js\"></script>\n",
-	 "<a href=\"_eo.html\" onMouseOver=\"highlight(0)\" ",
-	 "onMouseOut=\"normalize(0)\">",
-	 "<img src=\"../smb/nav_eo1.png\" alt=\"[Esperanto]\" border=0></a>\n"),
-	 "<a href=\"_lng.html\" onMouseOver=\"highlight(1)\" ",
-	 "onMouseOut=\"normalize(1)\">",
-	 "<img src=\"../smb/nav_lng1.png\" alt=\"[Lingvoj]\" border=0></a>\n"),
-	 "<a href=\"_fak.html\" onMouseOver=\"highlight(2)\" ",
-	 "onMouseOut=\"normalize(2)\">",
-	 "<img src=\"../smb/nav_fak1.png\" alt=\"[Fakoj]\" border=0></a>\n"),
-	 "<a href=\"_ktp.html\" onMouseOver=\"highlight(3)\" ",
-	 "onMouseOut=\"normalize(3)\">",
-	 "<img src=\"../smb/nav_ktp1.png\" alt=\"[ktp.]\" border=0></a>\n");
+	"<a href=\"_eo.html\" onMouseOver=\"highlight(0)\" ",
+	"onMouseOut=\"normalize(0)\">",
+	"<img src=\"../smb/nav_eo1.png\" alt=\"[Esperanto]\" border=0></a>\n",
+	"<a href=\"_lng.html\" onMouseOver=\"highlight(1)\" ",
+	"onMouseOut=\"normalize(1)\">",
+	"<img src=\"../smb/nav_lng1.png\" alt=\"[Lingvoj]\" border=0></a>\n",
+	"<a href=\"_fak.html\" onMouseOver=\"highlight(2)\" ",
+	"onMouseOut=\"normalize(2)\">",
+	"<img src=\"../smb/nav_fak1.png\" alt=\"[Fakoj]\" border=0></a>\n",
+	"<a href=\"_ktp.html\" onMouseOver=\"highlight(3)\" ",
+	"onMouseOut=\"normalize(3)\">",
+	"<img src=\"../smb/nav_ktp1.png\" alt=\"[ktp.]\" border=0></a>\n",
+	"<br>";
 }
 
 
