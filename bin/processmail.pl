@@ -562,7 +562,7 @@ sub send_reports {
 	    # alpendigu dosierojn
 	    if ($dos) {
 		for $file (split (/\|/,$dos)) {
-		    if ($file =~ /^\s*([^\s]+)\s+([^\s]+)\s*$/) {
+		    if ($file =~ /^\s*([^\s]+)\s+(.+?)\s*$/) {
 			$file = $1;
 			$art_id = $2;
 
