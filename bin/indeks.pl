@@ -74,6 +74,11 @@ $refdir = '../art/';
 %tradukoj = ();         # %tradukoj{lingvo}->%{litero}->@[mrk,kap,trd]
 @bildoj = ();           # @bildoj->@[mrk,kap,tekst,rad]
 
+
+# legu la fakojn
+%faknomoj = read_cfg($config{"fakoj"});
+delete $fakoj{'KOMUNE'}; # ne estas vera fako       
+
 # legu la tutan indeks-dosieron
 
 print "Legi kaj analizi $inxfn...\n" if ($verbose);
@@ -94,9 +99,6 @@ $/ = "\n";
 
 # fakindeksoj
 if ($indeksoj=~/fak/) {
-    # legu la fakojn
-    %faknomoj = read_cfg($config{"fakoj"});
-    delete $fakoj{'KOMUNE'}; # ne estas vera fako
 
     # kiuj fakoj havas tezauran indekson?
     open TEZ,$config{"tezauro_fakoj"} || 
@@ -281,10 +283,14 @@ sub indeksero {
 
 sub ekzemplo {
     my ($mrk,$kap,$tekst,$rad)=@_;
-    
+    my $ind;
+
     # tio, kio estas radukita
-    $tekst =~ s/<ind\s*>(.*?)<\/ind\s*>//si;
-    my $ind = $1;
+    if ($tekst =~ s/<ind\s*>(.*?)<\/ind\s*>//si) {
+	$ind = $1;
+    } else {
+	$ind = $kap; # referencu al kapvorto, se mankas <ind>...</ind>
+    }
 
     # analizu la fakojn
     $tekst =~ s/<uzo\s*>(.*?)<\/uzo\s*>/fako($1,$mrk,$ind,$rad)/sieg;
@@ -299,7 +305,11 @@ sub ekzemplo {
 # notas unopan fakindikon
 
 sub fako {
-    my ($fak,$mrk,$kap,$rad)=@_;
+   my ($fak,$mrk,$kap,$rad)=@_;
+
+   unless ($faknomoj{uc($fak)}) {
+        warn "Fako \"$fak\" ne difinita ($mrk)\n";
+    }            
 
     $kap =~ s/\///;
     push @{ $fakoj{$fak} }, [$mrk,$kap,$rad];
@@ -311,13 +321,17 @@ sub fako {
 
 sub bildo {
     my ($mrk,$kap,$tekst,$rad)=@_;
+    my $ind;
+
     $kap =~ s/\///;
     push @bildoj, [$mrk,$kap,$tekst,$rad];
 
     # tio, kio estas radukita
-    my $ind;
-    if ($tekst =~ s/<ind\s*>(.*?)<\/ind\s*>//si) { $ind = $1; }
-    else { $ind = $kap; }
+    if ($tekst =~ s/<ind\s*>(.*?)<\/ind\s*>//si) { 
+	$ind = $1; 
+    } else { 
+	$ind = $kap; # referencu al kapvorto, se mankas <ind>...</ind>
+    }
 
     # analizu la fakojn
     $tekst =~ s/<uzo\s*>(.*?)<\/uzo\s*>/fako($1,$mrk,$ind,$rad)/sieg;
@@ -622,7 +636,7 @@ sub INXSHANGHITAJ {
     # skribu la listojn de redaktoj lau autoro
     for $aut (sort keys %shangh) {
 	$aut_ = $aut; $aut_ =~ s/\s+/_/g;
-	print "<a name=\"$aut_\"></a>\n<h2>$aut</h2>\n";
+	print "<hr><a name=\"$aut_\"></a>\n<h2>$aut</h2>\n";
 
 	print "<dl>\n";
 	for $entry ( @{$shangh{$aut}} ) { print $entry; }

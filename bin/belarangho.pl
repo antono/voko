@@ -38,7 +38,7 @@ $buffer =~ s¦\r+¦\n¦sg;
 
 #### forigu kelkajn historiajn aferojn
 
-$buffer =~ s¦\bk\b¦kaj¦sg;
+$buffer =~ s¦(\s)k(\s)¦$1kaj$2¦sg;
 $buffer =~ s¦<snc\s+num="[0-9]+"¦<snc¦sg;
 #$buffer =~ s¦</vortaro>\s*$¦</vortaro>\n \n¦s;
 

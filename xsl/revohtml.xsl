@@ -226,6 +226,9 @@ modifita de Wolfram Diestel
 </xsl:template>  
 
 <xsl:template match="subsnc">
+  <xsl:if test="@mrk">
+    <a name="{@mrk}"></a>
+  </xsl:if>
   <dt><xsl:number format="a)"/></dt>
   <dd>
   <xsl:apply-templates/>
@@ -450,10 +453,6 @@ modifita de Wolfram Diestel
 </xsl:template>
 
 <xsl:template match="dif/trd">
-  <xsl:apply-templates/>
-</xsl:template>
-
-<xsl:template match="ind">
   <xsl:apply-templates/>
 </xsl:template>
 

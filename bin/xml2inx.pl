@@ -63,6 +63,10 @@ print "\n</vortaro>\n";
 sub char_handler {
     my ($xp, $text) = @_;
 
+    # transprenu la tekston ene de la
+    # sekvaj elementoj, radikon ankau memoru
+    # por anstatauigi la tildojn
+
     if  (length($text) and 
 	 (
 	  $xp->in_element('kap') or
@@ -86,6 +90,8 @@ sub start_handler {
     my ($xp,$el,@attrs) = @_;
     my $attr;
 
+
+    # normale transprenendaj elementoj
     if (
 	$el eq 'art' or
 	$el eq 'kap' or
@@ -97,6 +103,8 @@ sub start_handler {
 	$attr = attr_str(@attrs);
 	print "<$el$attr>";
     }
+
+    # tildojn ene de transprenataj elementoj anstatauigu per la radiko
     elsif ( $el eq 'tld' and 
 	    ($xp->in_element('kap') or
 	     $xp->in_element('ref') or
@@ -113,26 +121,38 @@ sub start_handler {
 	}           
 	print $rad;
     }
-    elsif ( $el eq 'uzo' and 
+
+    # fak-uzon transprenu sed ne forlasu la atributon,
+    # uzoj en ekzemploj estas traktataj malsupre
+    elsif ( $el eq 'uzo' and not $xp->in_element('ekz') and
 	    get_attr('tip',@attrs) eq 'fak')
     {
 	$fako = 1;
 	print "<uzo>";
     }
+
+    # bildon transprenu sen atributoj
     elsif ( $el eq 'bld' )
     {
 	print "<bld>";
     }
+
+    # klarigojn transprenu nur, sed tip="ind"
     elsif ( $el eq 'klr' and
 	    get_attr('tip',@attrs) eq 'ind')
     {
 	$ind = 1;
 	print "<klr>";
     }
+
+    # memoru la lingvon che tradukgrupoj, sed ne
+    # transprenu la grupon mem, sed nur la enhavitajn tradukojn
     elsif ( $el eq 'trdgrp' )
     {
 	$lingvo = get_attr('lng',@attrs); # memoru lingvon
     }
+
+    # se necese enmetu la memoritan lingvon che traduko
     elsif ( $el eq 'trd' ) 
     {
 	if ($xp->in_element('trdgrp')) {
@@ -142,18 +162,42 @@ sub start_handler {
 	}
 	print "<$el$attr>";	
     }
+
+    # transprenu ekzemplojn nur, se ili enhavas
+    # elementon <ind> au <uzo>, tiukaze tradukoj kaj uzoj rilatas
+    # al la teksto en <ind>...</ind>.
+    # Char ne eblas rigardi antauen, ni skribas tiun
+    # <ekz> nur en la momento, kiam ni renkontas <ind> au
+    # <uzo>, tradukoj estas supozataj venantaj post <ind>!!
     elsif ($el eq 'ind' and $xp->in_element('ekz'))
     {
-	print "<ekz><ind>";
-	$fermu_ekz = 1;  # funkcias nur, se <ind> venas antau <trd>
-    };
+	unless ($fermu_ekz) {
+	    # ekzemplo ankorau ne malfermita
+	    print "<ekz>";
+	    $fermu_ekz = 1; 
+	}
+	print "<ind>";
+    }
+    elsif ($el eq 'uzo' and $xp->in_element('ekz') and
+	   get_attr('tip',@attrs) eq 'fak')
+    {
+	unless ($fermu_ekz) {
+	    # ekzemplo ankorau ne malfermita
+	    print "<ekz>";
+	    $fermu_ekz = 1; 
+	}
+	print "<uzo>";
+	$fako = 1;
+    }
 
+    # venas nova radiko, forigu la antauan
     $radiko = '' if ($el eq 'rad');
 }
 
 sub end_handler {
     my ($xp, $el) = @_;
 
+    # normale fermendaj elementoj
     if (
 	$el eq 'art' or
 	$el eq 'kap' or
@@ -166,26 +210,37 @@ sub end_handler {
     {
 	print "</$el>\n";
     } 
+
+    # uzon fermu nur, se estas fak-uzo, aliaj ne estas transprenataj
     elsif ($el eq 'uzo' and $fako)   
     {
 	print "</uzo>\n";
 	$fako=0;
     }
+
+    # klarigon fermu nur, se estas indeks-klarigo, aliaj ne estas transprenataj
     elsif ($el eq 'klr' and $ind)
     {
 	print "</klr>\n";
 	$ind=0;
     }
+
+    # forigu lingvon che fermo de tradukgrupo
     elsif ($el eq 'trdgrp') 
     {
 	$lingvo = '';
-    } elsif ($el eq 'ekz' and $fermu_ekz) {
+	
+    }
+
+    # se estas transprenita ekzemplo, fermu ghin
+    elsif ($el eq 'ekz' and $fermu_ekz) {
 	print "</ekz>\n";
 	$fermu_ekz = 0;
     }
 
 }
 
+# faras signovicojn el atributolisto
 sub attr_str {
     my $result='';
 
@@ -201,6 +256,7 @@ sub attr_str {
     return $result;
 }
 
+# prenas unuopan atributon el la atributolisto
 sub get_attr {
     my($attr_name,@attr_list)=@_;
 

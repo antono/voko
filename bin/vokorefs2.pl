@@ -149,9 +149,9 @@ sub start_handler {
     {
 	$snc_subsnc++;
 	unless ($subsnc_mrk = get_attr('mrk',@attrs)) {
-	    $subsnc_mrk = $snc_mrk.".".chr(ord('a')+$snc_subsnc);
+	    $subsnc_mrk = $snc_mrk.".".chr(ord('a')+$snc_subsnc-1);
 	};
-	$subsnc_kap = $drv_kap." ".$drv_snc.$snc_subsnc;
+	$subsnc_kap = $drv_kap." ".$drv_snc.chr(ord('a')+$snc_subsnc-1);
 	@subsnc_uzo = ();
 	@subsnc_dif = ();
 	@subsnc_sin = ();
