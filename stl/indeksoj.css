@@ -1,7 +1,6 @@
-BODY {background: E0FFE0; font-size: medium;
-	font-family: Times SudEuro, Helvetica, Times}
+BODY {background: E0FFE0; font-size: medium}
 H1 {font-size: large; color: darkgreen}
-/*H2 {color: darkgreen}*/
+H2 {font-size: medium; color: darkgreen}
 A {text-decoration: none}
 A:link {color: blue}
 A:visited {color: blue}

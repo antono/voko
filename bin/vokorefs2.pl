@@ -1,7 +1,10 @@
 #!/usr/bin/perl 
 #
-# voku ekz.
-#   vokorefs2.pl [-v] rilatoj.xml 
+# voku 
+#   vokorefs2.pl [-v] [<config-file>]
+#
+# ekz. 
+#   vokorefs2.pl -v vortaro.cfg
 #
 ################# komenco de la programo ################
 
@@ -11,23 +14,33 @@ $debug = 0;
 $show_progress = 0;
 $| = 1;
 
-#$ref_pref='../art';
-$ref_pref='../revo/art';
-$revo_baz='/home/revo/revo';
-$fakcfg = "$revo_baz/cfg/fakoj.cfg"; 
-#$fx_prefix = "$revo_baz/inx/fxs_";
-$tz_prefix = "$revo_baz/../tmp/tz_";
-$fx_prefix = "$revo_baz/../tmp/fxs_";
+# analizi la argumentojn
+
+while (@ARGV) {
+    if ($ARGV[0] eq '-v') {
+	$verbose = 1;
+	shift @ARGV;
+    } else {
+	$cfg_file = shift @ARGV;
+    };
+};
+
+# legu la agordo-dosieron
+unless ($cfg_file) { $cfg_file = "cfg/vortaro.cfg" };
+
+%config = read_cfg($cfg_file);
+%fakoj = read_cfg($config{'fakoj'});
+
+$revo_baz=$config{"vortaro_pado"};
+$fx_prefix = "$revo_baz/inx/fxs_";
+$tz_prefix = "$revo_baz/inx/tz_";
 $smb_dos = '../smb';
 $tmp_file = '/tmp/'.$$.'voko.inx';
+$ref_pref='../art';
 
-if ($debug) {
-    $revo_baz='/home/revo';
-    $fx_prefix = "$revo_baz/tmp/fxs_";
-}
-
-
-%fakoj = read_cfg($fakcfg);
+$tezfak=$config{"tezauro_fakoj"};
+$tezrad=$config{"tezauro_radikoj"};
+$dos=$config{"rilato_dosiero"};
 
 %smb = ('vid' => '&#x2192;',
 	'sin' => '&#x21d2;',
@@ -36,18 +49,6 @@ if ($debug) {
 	'super' => '&#x2282;',
 	'prt' => '&#x220b;',
 	'malprt' => '&#2208;');
-
-
-# analizi la argumentojn
-
-while (@ARGV) {
-    if ($ARGV[0] eq '-v') {
-	$verbose = 1;
-	shift @ARGV;
-    } else {
-	$dos = shift @ARGV;
-    };
-};
 
 die "Ne ekzistas dosierujo \"$dos\""
   unless -f $dos;
@@ -616,9 +617,7 @@ sub create_fx {
     foreach $fako (sort keys %fakoj) {
 
 	my $target_file = "$fx_prefix".lc($fako).".html";
-
 	print "$target_file..." if ($verbose);
-
 
 	my @root = fakroot([values %wordlist],$fako);
 	unless (@root) {
@@ -633,14 +632,29 @@ sub create_fx {
 	open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
 	select OUT;
 
-	print header_fako($fako);
+	header($fako);
+	linkbuttons();
+	print
+	    "<a href=\"fx_".lc($fako).".html\">alfabete</a> ".
+	    "<b>strukture</b>\n<h1>$fakoj{$fako} strukture...</h1>\n";
+
 	html_tree_fako_pre(\@root,$fako,10);
-	print footer();
+	footer();
 
 	close OUT;
 	select STDOUT;
 	diff_mv($tmp_file,$target_file);
     }
+
+    # kreu la liston de chiuj fakoj kun strukturaj indeksoj
+    print "$tezfak...\n" if ($verbose);
+
+    open OUT,">$tezfak" or die "Ne povis krei $tezfak: $!\n";
+    select OUT;
+
+    foreach $fako (sort @uzataj_fakoj) { print "$fako\n"; }
+    close OUT;
+    select STDOUT;
 }
 
 sub create_tz {
@@ -674,9 +688,10 @@ sub create_tz {
 	    open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
 	    select OUT;
 
-	    print header("tezaŭro: ".$word->{'kap'}."...");
+	    header("tezaŭro: ".$word->{'kap'}."...");
+	    linkbuttons();
 	    html_tree_pre([$word],10);
-	    print footer();
+	    footer();
 
 	    close OUT;
 	    select STDOUT;
@@ -691,34 +706,19 @@ sub create_tz {
 	    }
 	}
 
-	# kreu la liston de chiuj fakoj kaj radik-vortoj
-	my $target_file = "$tz_prefix"."index.html";
-	print "$target_file..." if ($verbose);
+    # kreu la liston de chiuj tezauraj radikoj
+    print "$tezrad...\n" if ($verbose);
 
-	open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
-	select OUT;
+    open OUT,">$tezrad" or die "Ne povis krei $tezrad: $!\n";
+    select OUT;
 
-	print header("tezauro");
-
-	print "<h2>fakoj</h2>";
-	foreach $fako (sort @uzataj_fakoj) {
-	    print "<a href=\"$fx_prefix".lc($fako).".html\">",
-	    "<img src=\"../smb/", uc($fako), ".gif\" border=0>",
-	    $fakoj{$fako}, "</a><br>\n";
-	}
-
-	print "<h2>radikvortoj</h2>\n";
-	foreach $word (@root) {
-	    my $word_mrk = $word->{'mrk'};
-	    $word_mrk =~ tr/./_/;
-	    print "<a href=\"$tz_prefix".$word_mrk.".html\">",
-	          $word->{'kap'}."</a><br>\n";
-	}
-	print footer();
-	
-	close OUT;
-	select STDOUT;
-	diff_mv($tmp_file,$target_file);
+    foreach $word (@root) {
+	my $word_mrk = $word->{'mrk'};
+	$word_mrk =~ tr/./_/;
+	print "tz_".$word_mrk.".html;".$word->{'kap'}."\n";
+    }
+    close OUT;
+    select STDOUT;
 }
 
 
@@ -734,43 +734,34 @@ sub diff_mv {
     }
 };
 
+
+sub linkbuttons {
+    print 
+	"<table border=0 cellspacing=1 width=100%>\n",
+	"  <tr bgcolor=silver align=center>\n",
+	"  <td><b><a href=\"_eo.html\">Esperanto</a></b></td>\n",
+        "  <td><b><a href=\"_lng.html\">Lingvoj</a></b></td>",
+        "  <td><b><a href=\"_fak.html\">Fakoj</a></b></td>",
+        "  <td><b><a href=\"_ktp.html\">ktp.</a></b></td>",
+        "  </tr>\n</table>\n";
+}
+
 sub header {
     my $titolo = shift;
 
-    return
+    print
 	"<html>\n<head>\n<meta http-equiv=\"Content-Type\" ".
 	"content=\"text/html; charset=UTF-8\">\n".
 	"<title>$titolo</title>\n".
 	"<link title=\"indekso-stilo\" type=\"text/css\" ".
 	"rel=stylesheet href=\"../stl/indeksoj.css\">\n".
-	"</head>\n<body>\n".
-        "<i><a href=\"indeksoj.html\">indeksoj</a>\n".
-        "<a href=\"tz_index.html\">tezaŭro</a></i>\n".
-	"<h1>$titolo</h1>\n";
+	"</head>\n<body>\n";
 }
 
-sub header_fako {
-    my $fako=shift;
-    my $titolo = "$fakoj{$fako} strukture";
 
-    return
-	"<html>\n<head>\n<meta http-equiv=\"Content-Type\" ".
-	"content=\"text/html; charset=UTF-8\">\n".
-	"<title>$titolo</title>\n".
-	"<link title=\"indekso-stilo\" type=\"text/css\" ".
-	"rel=stylesheet href=\"../stl/indeksoj.css\">\n".
-	"</head>\n<body>\n".
-        "<i><a href=\"indeksoj.html\">indeksoj</a>\n".
-	"<a href=\"tz_index.html\">tezaŭro</a></i>\n".
-        "<a href=\"fx_".lc($fako).".html\">alfabete</a> ".
-	"<b>strukture</b>\n<h1>$titolo...</h1>\n";
-}
 
 sub footer {
-    return 
-	"<p><i><a href=\"indeksoj.html\">indeksoj</a>\n".
-        "<a href=\"tz_index.html\">tezaŭro</a></i>\n".
-        "</body>\n</html>\n";
+    print "</body>\n</html>\n";
 }
 
 ################### sencimigaj funkcioj ###############

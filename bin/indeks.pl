@@ -14,7 +14,8 @@ BEGIN {
   # en kiu dosierujo mi estas?
   $pado = $0;
   $pado =~ s|\\|/|g; # sub Windows anstatauigu \ per /
-  $pado =~ s/indeks.pl$//;
+#  $pado =~ s/indeks.pl$//;
+  $pado =~ s/indeks_test.pl$//;
 
   push @INC, ($pado); #print join(':',@INC);
   require nls;
@@ -59,7 +60,8 @@ unless ($agord_dosiero) { $agord_dosiero = "cfg/vortaro.cfg" };
 $vortaro_pado=$config{"vortaro_pado"} || 
     die "vortaro_pado ne trovighis en la agordodosiero.\n";
 
-$inxfn=$config{"indeks_dosiero"} || "$vortaro_pado/sgm/indekso.xml";
+$inxfn=$config{"inxtmp_dosiero"} || 
+    $config{"indekso_dosiero"} || "$vortaro_pado/sgm/indekso.xml";
 $indeksoj=$config{"indeksoj"} || "kapvortoj,lingvoj,fakoj,inversa,shanghitaj";
 
 $dir="$vortaro_pado/inx";
@@ -92,24 +94,24 @@ $/ = "\n";
 # kreu la html-dosierojn
 
 # fakindeksoj
-if ($indeksoj=~/fakoj/) {
+if ($indeksoj=~/fak/) {
     # legu la fakojn
     %faknomoj = read_cfg($config{"fakoj"});
+    undef $fakonomoj{'KOMUNE'}; # ne estas vera fako
 
-    # kiu fakoj havas strukturajn indeksojn?
-    foreach $fak (sort keys %fakoj) {
-	if (-f "$dir/fxs_".lc($fak).".html") {
-	    push @strukt_fakoj, ($fak);
-	}
-    }
+    # kiuj fakoj havas tezauran indekson?
+    open TEZ,$config{"tezauro_fakoj"} || 
+	die "Ne povis legi ".$config{"tezauro_fakoj"}."\n";
+    @strukt_fakoj = <TEZ>;
+    map { chomp } @strukt_fakoj;
+    close TEZ;
 
     # kreu fakindeksojn
-    foreach $fako (sort keys %fakoj) { FAKINX($fako,$fakoj{$fako}) }
-    FAKINXLIST() if (%fakoj);
+    foreach $fak (sort keys %fakoj) { FAKINX($fak,$fakoj{$fak}) }
 }
 
 # lingvoindeksoj
-if ($indeksoj=~/lingvoj/) {
+if ($indeksoj=~/lng/) {
     # legu la lingvojn
     %lingvoj=read_cfg($config{"lingvoj"});
     # kreu la lingvoindeksojn
@@ -125,7 +127,7 @@ if ($indeksoj=~/lingvoj/) {
 }
 
 # kapvortoj
-if ($indeksoj=~/kapvortoj/) {
+if ($config{"inx_eo"}=~/kapvortoj/) {
     @literoj = sort {cmp_nls($a,$b,'eo')} keys %kapvortoj;
     foreach $lit (@literoj) {
 	$refs = $kapvortoj{$lit};
@@ -135,7 +137,7 @@ if ($indeksoj=~/kapvortoj/) {
 }
 
 # inversa indekso
-if ($indeksoj=~/inversa/) {
+if ($config{"inx_ktp"}=~/inversa/) {
     @invliteroj = sort { cmp_nls($a,$b,'eo')} keys %invvortoj;
     $unua_litero{'inv'} = letter_asci_nls($invliteroj[0],'eo');
     foreach $lit (@invliteroj) {
@@ -146,18 +148,20 @@ if ($indeksoj=~/inversa/) {
 }
 
 # bildindekso
-INXBILDOJ(\@bildoj);
+if ($config{"inx_ktp"}=~/bildoj/) { INXBILDOJ(\@bildoj); }
 
 # statistiko
-INXSTATISTIKO();
+if ($config{"inx_ktp"}=~/statistiko/) { INXSTATISTIKO(); }
 
 # indekso de la shanghitaj artikoloj
-if ($indeksoj=~/shanghitaj/) {
-    INXSHANGHITAJ();
-}
+if ($config{"inx_ktp"}=~/shanghitaj/) { INXSHANGHITAJ(); }
+
 
 # indekso de la indeksoj
-INXLIST();
+if ($indeksoj=~/eo/)  { INX_EO();  }
+if ($indeksoj=~/lng/) { INX_LNG(); }
+if ($indeksoj=~/fak/) { INX_FAK(); }
+if ($indeksoj=~/ktp/) { INX_KTP(); }
 
 unlink($tmp_file);
 
@@ -347,19 +351,17 @@ sub FAKINX {
 	$faknomo='';
     }
 
+    index_header("fakindekso: $faknomo");
+    linkbuttons();
     if (grep /^$fako$/, @strukt_fakoj) {
-	index_header($faknomo,'fx','alfabete',
+	index_letters($faknomo,'fx','alfabete',
 		     ['alfabete','strukture'],
 		     ['_'.lc($fako),'s_'.lc($fako)]);
     } else {
-	index_header($faknomo,'','');
+	index_letters($faknomo,'','');
     }
-    
-#    if (grep /^$fako$/, @strukt_fakoj) {
-#	print 
-#	    "<b>alfabete</b> <a href=\"fxs_".lc($fako).
-#	    ".html\">strukture</a><p>\n";
-#    }
+
+#    print "<h1>$faknomo alfabete...</h1>\n";
     
     # ordigu la vortliston
     @vortoj = sort { cmp_nls($a->[2],$b->[2],'eo') } @$refs;
@@ -377,7 +379,7 @@ sub FAKINX {
     };
 
     # malek
-    index_footer($n > 20);
+    index_footer();
     close OUT;
     select STDOUT;
     diff_mv($tmp_file,$target_file);
@@ -398,8 +400,11 @@ sub LINGVINX {
     print "$target_file..." if ($verbose);
     open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
     select OUT;
-    index_header($lingvoj{$lng},"lx_${lng}_",$lit,$literoj,
+    index_header("lingvoindekso: $lingvoj{$lng}");
+    linkbuttons();
+    index_letters($lingvoj{$lng},"lx_${lng}_",$lit,$literoj,
 		 [map {letter_asci_nls($_,$lng)} @$literoj]);
+#    print "<h1>$lingvoj{$lng} $lit...</h1>\n";
 
     foreach $ref (@$refs) {
 	if (($last1 ne $ref->[1]) or ($last2 ne $ref->[3])) {
@@ -416,7 +421,7 @@ sub LINGVINX {
 	}
     };
     
-    index_footer($n > 20 && "lx_${lng}_",$lng,$lit,@$literoj);
+    index_footer();
     close OUT;
     select STDOUT;
     diff_mv($tmp_file,$target_file);
@@ -432,13 +437,16 @@ sub KAPVORTINX {
     my $last0 = '';
     my $last1 = '';
 
-    my $target_file = "$dir/ix_kap$l_x.html";
+    my $target_file = "$dir/kap_$l_x.html";
 
     print "$target_file..." if ($verbose);
     open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
     select OUT;
-    index_header('kapvortoj ','ix_kap',$lit,$literoj,
+    index_header("kapvortindekso");
+    linkbuttons();
+    index_letters('kapvortoj ','kap',$lit,$literoj,
 		 [map {letter_asci_nls($_,'eo')} @$literoj]);
+#    print "<h1>kapvortoj $lit...</h1>\n";
 
     foreach $ref (@$refs) {
 	if (($last0 ne $ref->[0]) or ($last1 ne $ref->[1])) {
@@ -453,7 +461,7 @@ sub KAPVORTINX {
 	}
     }
 
-    index_footer($n > 20 && 'ix_kap','eo',$lit,@$literoj);
+    index_footer();
     close OUT;
     select STDOUT;
     diff_mv($tmp_file,$target_file);
@@ -470,13 +478,16 @@ sub INVVORTINX {
     my $last1 = '';
     my $n=0;
     
-    my $target_file = "$dir/ix_inv$l_x.html";
+    my $target_file = "$dir/inv_$l_x.html";
     
     print "$target_file..." if ($verbose);
     open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
     select OUT;
-    index_header('inversa','ix_inv',$lit,$literoj,
+    index_header("inversa indekso");
+    linkbuttons();
+    index_letters('inversa','inv_',$lit,$literoj,
 		[map {letter_asci_nls($_,'eo')} @$literoj] );
+#    print "<h1>inversa $lit...</h1>\n";
 
     foreach $ref (@$refs) {
 	if (($last0 ne $ref->[0]) or ($last1 ne $ref->[1])) {
@@ -491,7 +502,7 @@ sub INVVORTINX {
 	};
     };
 
-    index_footer($n > 20 && 'ix_inv','eo',$lit,@$literoj);
+    index_footer();
     close OUT;
     select STDOUT;
     diff_mv($tmp_file,$target_file);
@@ -505,12 +516,14 @@ sub INXSHANGHITAJ {
     my $n = 0;
     my @files = ();
 
-    my $target_file = "$dir/ix_novaj.html";
+    my $target_file = "$dir/novaj.html";
 
     print "$target_file..." if ($verbose);
     open OUT, ">$tmp_file" or die "Ne povis malfermi $tmp_file: $!\n";
     select OUT;
-    index_header("laste ŝanĝitaj",'','');
+    index_header("laste ŝanĝitaj");
+    linkbuttons();
+    print "<h1>lasta ŝanĝitaj</h1>\n";
 
     # malfermu kaj trakribru xml-dosierujon
     opendir DIR, $xml_dir or die "Ne povis malfermi $xml_dir: $!\n";
@@ -529,13 +542,15 @@ sub INXSHANGHITAJ {
     closedir DIR;
 
     # skribu la liston
+    print "<dl>\n";
     for $entry (sort { $b->[0] <=> $a->[0] } @files) {
 	
 	print cvs_log($entry->[1]);
 	if (++$n >= $nmax) { last; }
     }
+    print "</dl>\n";
 
-    index_footer($n>20);
+    index_footer();
     close OUT;
     select STDOUT;
     diff_mv($tmp_file,$target_file);
@@ -550,13 +565,15 @@ sub INXBILDOJ {
     #my $last1 = '';
     my $n = 0;
     my @vortoj;
-    my $target_file = "$dir/ix_bildoj.html";
+    my $target_file = "$dir/bildoj.html";
 
     # ek
     print "$target_file..." if ($verbose);
     open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
     select OUT;
-    index_header('bildoj','','');
+    index_header('bildoj');
+    linkbuttons();
+    print "<h1>bildoj</h1>\n<dl>\n";
     
     # ordigu la vortliston
     @vortoj = sort { cmp_nls($a->[3],$b->[3],'eo') } @$refs;
@@ -565,16 +582,17 @@ sub INXBILDOJ {
     foreach $ref (@vortoj) {
 #	if (($last0 ne $ref->[0]) or ($last1 ne $ref->[1])) {
 	    $r = referenco($ref->[0]);
-	    print "<a href=\"$r\" target=\"precipa\">";
-	    print "$ref->[1]</a>: $ref->[2]<br>\n";
+	    print "<dt><a href=\"$r\" target=\"precipa\">";
+	    print "$ref->[1]</a>\n<dd>$ref->[2]\n";
 	    #$last0 = $ref->[0];
 	    #$last1 = $ref->[1];
 	    $n++;
 #	};
     };
+    print "</dl>\n";
 
     # malek
-    index_footer($n > 20);
+    index_footer();
     close OUT;
     select STDOUT;
     diff_mv($tmp_file,$target_file);
@@ -584,14 +602,16 @@ sub INXBILDOJ {
 
 sub INXSTATISTIKO {
     my $n = 0;
-    my $target_file = "$dir/ix_statistiko.html";
+    my $target_file = "$dir/statistiko.html";
     my (@trdj, @fakj);
 
     # ek
     print "$target_file..." if ($verbose);
     open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
     select OUT;
-    index_header('statistiko','','');
+    index_header('statistiko');
+    linkbuttons();
+    print "<h1>statistiko</h1>\n";
     
     # ordigu la vortliston
 #    @vortoj = sort { cmp_nls($a->[3],$b->[3],'eo') } @$refs;
@@ -609,9 +629,9 @@ sub INXSTATISTIKO {
     foreach $s (sort {$b->[1] <=> $a->[1]} @trdj) {
 	$lng = $s->[0];
 	if (-f "$vortaro_pado/smb/$lng.jpg") {
-		print "<img src=\"../smb/$lng.jpg\" alt=\"\"> ";
+		print "<img src=\"../smb/$lng.jpg\" alt=\"\">&nbsp;";
 	    } else {
-		print "<img src=\"../smb/xx.jpg\" alt = \"\"> ";
+		print "<img src=\"../smb/xx.jpg\" alt = \"\">&nbsp;";
 	    }
 	print "$lingvoj{$lng}j: ".$s->[1];
 	printf(" (%.02f%%)",100*$s->[1]/$statistiko{'drv'});
@@ -625,57 +645,13 @@ sub INXSTATISTIKO {
     }
     foreach $s (sort {$b->[1] <=> $a->[1]} @fakj) {
 	$fak = $s->[0];
-	print "<img src=\"../smb/$fak.gif\" alt=\"\"> ";
+	print "<img src=\"../smb/$fak.gif\" alt=\"\">&nbsp;";
 	print "$faknomoj{$fak}: ".$s->[1]."<br>\n";
 	$n++;
     };
 
     # malek
-    index_footer($n > 20);
-    close OUT;
-    select STDOUT;
-    diff_mv($tmp_file,$target_file);
-}
-
-# kreas liston de fakindeksoj (alfabetaj kaj strukturaj)
-
-sub FAKINXLIST {
-    my $target_file = "$dir/ix_fakoj.html";
-
-    print "$target_file..." if ($verbose);
-    open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
-    select OUT;
-
-    index_header('fakindeksoj','','');
-
-    # fakoj alfabete
-    print "<a name=\"alfabetaj\"></a><h2>alfabetaj</h2>\n";
-
-    foreach $fak (sort keys %fakoj) 
-    {
-	my $faknomo=$faknomoj{uc($fak)};
-	unless ($faknomo) {
-	    warn "Faknomo \"$fak\" ne difinita!\n";
-	    $faknomo = '';
-	}
-	print 
-	    "<a href=\"fx_", lc($fak), ".html\">",
-	    "<img src=\"../smb/", uc($fak), ".gif\" border=0></a> ",
-	    "<a href=\"fx_", lc($fak), ".html\">$faknomo</a><br>\n";
-    };
-
-    # fakoj strukture
-    print "<a name=\"strukturaj\"></a><h2>strukturaj</h2>\n";
-
-    foreach $fak (@strukt_fakoj) {
-	print 
-	    "<a href=\"fxs_", lc($fak), ".html\">",
-	    "<img src=\"../smb/", uc($fak), ".gif\" border=0></a> ",
-	    "<a href=\"fxs_", lc($fak), ".html\">".
-		$faknomoj{uc($fak)}."</a><br>\n";  
-    }
-
-    index_footer(1);
+    index_footer();
     close OUT;
     select STDOUT;
     diff_mv($tmp_file,$target_file);
@@ -683,72 +659,119 @@ sub FAKINXLIST {
 
 # kreas la indekson de la indeksoj
 
-sub INXLIST {
+sub INX_EO {
     my ($lit,$lit1);
-    my $target_file = "$dir/indeksoj.html";
+    my $target_file = "$dir/_eo.html";
 
     print "$target_file..." if ($verbose);
     open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
     select OUT;
 
-    print 
-	"<html>\n<head>\n<meta http-equiv=\"Content-Type\" ",
-	"content=\"text/html; charset=UTF-8\">\n",
-	"<title>indekslisto</title>\n",
-	"<link title=\"indekso-stilo\" type=\"text/css\" ",
-	"rel=stylesheet href=\"../stl/indeksoj.css\">\n",
-	"</head>\n<body>\n",
-	"<h2><a href=\"../titolo.html\" target=\"precipa\">",
-	"titolpa\304\235o</a></h2>\n",
-	"<h2><a href=\"../sercxo.html\" target=\"precipa\">",
-	"ser\304\211o</a></h2>\n<dl>\n";
-
+    index_header("Revo-indekso: Esperanto");
+    linkbuttons("eo");
 
     #kapvortoj
-    if ($indeksoj=~/kapvortoj/) {
-	print "<dt>kapvortindekso\n<dd><b>";
+    if ($config{"inx_eo"}=~/kapvortoj/) {
+	print "<h1>kapvortindekso</h1>\n<font size=+1><b>";
 	for $lit (@literoj) {
 	    $lit1 = utf8_cx($lit);
-	    print "<a href=\"ix_kap$lit1.html\">$lit</a>\n";
+	    print "<a href=\"kap_$lit1.html\">$lit</a>\n";
 	};
-	print "</b>\n";
+	print "</b></font>\n";
     }
 
+    #tezauroradikoj
+    if ($config{"inx_eo"}=~/tezauro/) {
+	print "<h1>tezaŭroradikoj</h1>\n";
+	open TEZ, $config{"tezauro_radikoj"};
+	while (<TEZ>) {
+	    my ($file,$kap) = split(';');
+	    print "<a href=\"$file\">$kap</a><br>\n";
+	}
+    }
+
+    index_footer();
+    close OUT;
+
+    select STDOUT;
+    diff_mv($tmp_file,$target_file);
+}
+
+sub INX_LNG {
+    my $target_file = "$dir/_lng.html";
+
+    print "$target_file..." if ($verbose);
+    open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
+    select OUT;
+
+    index_header("Revo-indekso: Lingvoj");
+    linkbuttons("lng");
+
     #lingvoj
-    if ($indeksoj=~/lingvoj/ && %tradukoj) {
-	print "<dt>lingvoindeksoj\n<dd>";
-	for $lng (sort keys %tradukoj) 
-	{
+    print "<h1>nacilingvaj indeksoj</h1>\n";
+    for $lng (sort keys %tradukoj) 
+    {
+	unless ($lng eq 'la') {
 	    if (-f "$vortaro_pado/smb/$lng.jpg") {
-		print "<img src=\"../smb/$lng.jpg\" alt=\"[$lng]\"> ";
+		print "<img src=\"../smb/$lng.jpg\" alt=\"[$lng]\">&nbsp;";
 	    } else {
-		print "<img src=\"../smb/xx.jpg\" alt = \"[$lng]\"> ";
+		print "<img src=\"../smb/xx.jpg\" alt = \"[$lng]\">&nbsp;";
 	    }
 	    print "<a href=\"lx_${lng}_$unua_litero{$lng}.html\">";
 	    print "$lingvoj{$lng}</a><br>\n";
-	};
+	}
     };
 
+    if (exists $tradukoj{'la'}) {
+	print "<p>\n";
+	$lng = 'la';
+	if (-f "$vortaro_pado/smb/$lng.jpg") {
+	    print "<img src=\"../smb/$lng.jpg\" alt=\"[$lng]\">&nbsp;";
+	} else {
+	    print "<img src=\"../smb/xx.jpg\" alt = \"[$lng]\">&nbsp;";
+	}
+	print "<a href=\"lx_${lng}_$unua_litero{$lng}.html\">";
+	print "$lingvoj{$lng}</a><br>\n";
+    }
+
+    index_footer();
+    close OUT;
+
+    select STDOUT;
+    diff_mv($tmp_file,$target_file);
+
+}
+
+sub INX_FAK {
+    my $target_file = "$dir/_fak.html";
+
+    print "$target_file..." if ($verbose);
+    open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
+    select OUT;
+
+    index_header("Revo-indekso: Fakoj");
+    linkbuttons("fak");
+
     #fakoj
-    if ($indeksoj=~/fakoj/ && %fakoj) {
-	print 
-	    "<dt>fakindeksoj\n<dd>",
-	    "<a href=\"ix_fakoj.html#alfabetaj\">alfabetaj</a><br>\n";
+    if ($config{"inx_fak"}=~/alfabetaj/ && %fakoj) {
+	print "<h1>alfabetaj fakindeksoj</h1>\n";
 	
-	for $fak (sort keys %fakoj) 
-	{
-	    my $faknomo=$faknomoj{uc($fak)};
-	    unless ($faknomo) {
-		warn "Faknomo \"$fak\" ne difinita!\n";
-		$faknomo = '';
+	    for $fak (sort keys %fakoj) 
+	    {
+		my $faknomo=$faknomoj{uc($fak)};
+		unless ($faknomo) {
+		    warn "Faknomo \"$fak\" ne difinita!\n";
+		    $faknomo = '';
+		}
+		print 
+		    "<img src=\"../smb/$fak.gif\" alt=\"$fak\" border=0 ",
+		    "align=middle>&nbsp<a href=\"fx_", 
+		    lc($fak), ".html\">$faknomo</a><br>\n";
 	    }
-	    print 
-		"<a href=\"fx_", lc($fak), ".html\">",
-		"<img src=\"../smb/", uc($fak), ".gif\"",
-		"alt=\"", $faknomo, "\" border=0></a>\n";
-	};
+    }
 	
-	print "<br><a href=\"ix_fakoj.html#strukturaj\">strukturaj</a><br>\n";
+    if ($config{"inx_fak"}=~/tezauro/) {
+	print "<h1>tezaŭraj fakindeksoj</h1>\n";
 	
 	for $fak (@strukt_fakoj) 
 	{
@@ -758,48 +781,102 @@ sub INXLIST {
 		$faknomo = '';
 	    }
 	    print 
-		"<a href=\"fxs_", lc($fak), ".html\">",
-		"<img src=\"../smb/", uc($fak), ".gif\"",
-		"alt=\"", $faknomo, "\" border=0></a>\n";
-	};
-    };
-
-    # aliaj 
-    if ($indeksoj=~/(inversa|shanghitaj|bildoj|statistiko)/) {
-	print "<dt>aliaj indeksoj\n<dd>";
-	if ($indeksoj=~/bildoj/) {
-	    print "<a href=\"ix_bildoj.html\">";
-	    print "bildoj</a><br>\n";
-	};
-	if ($indeksoj=~/inversa/) {
-	    print "<a href=\"ix_inv$unua_litero{'inv'}.html\">";
-	    print "inversa indekso</a><br>\n";
-	};
-	if ($indeksoj=~/shanghitaj/) {
-	    print "<a href=\"ix_novaj.html\">ŝanĝitaj ",
-	    "artikoloj</a><br>\n";
-	}
-	if ($indeksoj=~/statistiko/) {
-	    print "<a href=\"ix_statistiko.html\">statistiko</a><br>\n";
+		"<img src=\"../smb/$fak.gif\" alt=\"$fak\" border=0 ",
+		"align=middle>&nbsp<a href=\"fxs_", 
+		lc($fak), ".html\">$faknomo</a><br>\n";
 	}
     }
 
-    # referecoj
-    @listoj = split(';',$config{"listoj"});
-    if (@listoj) {
-#	print "<dt>referencoj\n<dd>";
-	while (@listoj) {
-	    print "<a href=\"".(shift @listoj)."\">".(shift @listoj)."</a><br>\n";
-	}
-    }
-    print "</dl>\n";
 
-    print "</body></html>\n";
+    index_footer();
     close OUT;
 
     select STDOUT;
     diff_mv($tmp_file,$target_file);
 }
+
+sub INX_KTP {
+    my $target_file = "$dir/_ktp.html";
+
+    print "$target_file..." if ($verbose);
+    open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
+    select OUT;
+
+    index_header("Revo-indekso: ktp.");
+    linkbuttons("ktp");
+
+    # gravaj paghoj
+    my @paghoj = split(';',$config{"inx_ktp_paghoj"});
+    if (@paghoj) {
+	print "<h1>gravaj paĝoj</h1>\n";
+
+	while (@paghoj) {
+	    my $href=shift @paghoj;
+	    my $title=shift @paghoj;
+	    print 
+		"<a href=\"$href\" target=\"",
+		($href=~/^http:/)? "_new" : "precipa",
+		"\">$title</a><br>\n";
+	}
+    }
+
+    # diversaj indeksoj 
+    my $inx = $config{"inx_ktp"};
+    if ($inx=~/(inversa|shanghitaj|bildoj|statistiko)/) {
+	print "<h1>diversaj indeksoj</h1>\n";
+	if ($inx=~/bildoj/) {
+	    print "<a href=\"bildoj.html\">";
+	    print "bildoj</a><br>\n";
+	};
+	if ($inx=~/inversa/) {
+	    print "<a href=\"inv_$unua_litero{'inv'}.html\">";
+	    print "inversa indekso</a><br>\n";
+	};
+	if ($inx=~/shanghitaj/) {
+	    print "<a href=\"novaj.html\">ŝanĝitaj ",
+	    "artikoloj</a><br>\n";
+	}
+	if ($inx=~/statistiko/) {
+	    print "<a href=\"statistiko.html\">statistiko</a><br>\n";
+	}
+    }
+
+    # listoj
+    @paghoj = split(';',$config{"inx_ktp_listoj"});
+    if (@paghoj) {
+
+	while (@paghoj) {
+	    my $href=shift @paghoj;
+	    my $title=shift @paghoj;
+	    print 
+		"<a href=\"$href\" target=\"",
+		($href=~/^http:/)? "_new" : "precipa",
+		"\">$title</a><br>\n";
+	}
+    }
+    
+    # redakto
+    @paghoj = split(';',$config{"inx_ktp_redakto"});
+    if (@paghoj) {
+	print "<h1>redaktado</h1>\n";
+
+	while (@paghoj) {
+	    my $href=shift @paghoj;
+	    my $title=shift @paghoj;
+	    print 
+		"<a href=\"$href\" target=\"",
+		($href=~/^http:/)? "_new" : "precipa",
+		"\">$title</a><br>\n";
+	}
+    }
+
+    index_footer();
+    close OUT;
+
+    select STDOUT;
+    diff_mv($tmp_file,$target_file);
+}
+
 
 ##################### helpfunkcioj por la html-oj ###########
 
@@ -835,19 +912,44 @@ sub utf8_cx {
     return $vort;
 }
 
+# skribas tabelon kun ligoj al precipaj indekspaghoj
+sub linkbuttons {
+    my $self = shift || "";
+    my $bgcolor = 'bgcolor="#AACCAA"';
+
+    print 
+	"<table border=0 cellspacing=1 width=100%>\n",
+	"  <tr bgcolor=silver align=center>\n",
+        (($self eq 'eo')? 
+	"  <td $bgcolor><b>Esperanto</b></td>\n" :
+	"  <td><b><a href=\"_eo.html\">Esperanto</a></b></td>\n"),
+	(($self eq 'lng')?
+	"  <td $bgcolor><b>Lingvoj</b></td>" :
+        "  <td><b><a href=\"_lng.html\">Lingvoj</a></b></td>"),
+        (($self eq 'fak')?
+	"  <td $bgcolor><b>Fakoj</b></td>" :
+        "  <td><b><a href=\"_fak.html\">Fakoj</a></b></td>"),
+        (($self eq 'ktp')?
+	"  <td $bgcolor><b>ktp.</b></td>" :
+        "  <td><b><a href=\"_ktp.html\">ktp.</a></b></td>"),
+        "  </tr>\n</table>\n";
+}
+
 # skribas la supran parton de html-ajho
 sub index_header {
-    my ($title_base,$file_base,$letter,$letters,$files) = @_;
-    my ($l_utf8, $l_x, $file);
-
+    my $title = shift;
     print 
 	"<html>\n<head>\n<meta http-equiv=\"Content-Type\" ",
 	"content=\"text/html; charset=UTF-8\">\n",
-	"<title>$title_base $letter</title>\n",
+	"<title>$title</title>\n",
 	"<link title=\"indekso-stilo\" type=\"text/css\" ",
 	"rel=stylesheet href=\"../stl/indeksoj.css\">\n",
-	"</head>\n<body>\n",
-	"<i><a href=\"indeksoj.html\">indeksoj</a></i>\n";
+	"</head>\n<body>\n";
+}
+
+sub index_letters {
+    my ($title_base,$file_base,$letter,$letters,$files) = @_;
+    my ($l_utf8, $l_x, $file);
 
     for $l (@$letters) {
 #	$l_x    = letter_asci_nls($l,$lng);
@@ -866,23 +968,6 @@ sub index_header {
 
 # skribas la suban parton de html-ajho
 sub index_footer {
-    my ($file_base,$lng,$letter,@letters) = @_;
-    my $l_x;
-
-    if ($file_base) {
-	print "<p><i><a href=\"indeksoj.html\">indeksoj</a></i>\n";
-	for $l (@letters) { 
-
-	    $l_x    = letter_asci_nls($l,$lng);
-
-	    if ($l ne $letter) {
-		print "<a href=\"$file_base$l_x.html\">$l</a>\n"; 
-	    } else { 
-		print "<b>$l</b>\n"; 
-	    };
-	};
-    };
-
     print "</body>\n</html>\n";
 }
 
@@ -915,7 +1000,8 @@ sub cvs_log {
     # skribu vorton kaj referencon al la artikolo
     $art = $dos;
     $art =~ s/\.xml$//; 
-    $result = "<a href=\"$art_dir/$art.html\" target=precipa>$art</a>";
+    $result = "<dt><a href=\"$art_dir/$art.html\" ".
+	"target=precipa>$art</a>\n<dd>";
 
     # eltiru informojn pri aktuala versio el "cvs log"
     $log = `$cvs_log -r $xml_dir/$dos`;
@@ -941,7 +1027,7 @@ sub cvs_log {
 	$info =~ s/&/&amp;/g;
 	$info =~ s/</&lt;/g;
 	$info =~ s/>/&gt;/g;
-	$result .= " (versio: $rev $dato; $info)<p>\n";
+	$result .= " (versio: $rev $dato; $info)\n";
     }
 
     return $result;

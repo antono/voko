@@ -1,10 +1,10 @@
-BODY {background: E8FFE8; font-size: medium; 
-	font-family: Times SudEuro, Helvetica, Times}
+BODY {background: E8FFE8; font-size: medium}
 H1 {color: darkgreen; font-size: x-large}
 H2 {color: darkgreen; font-size: large}
 A {text-decoration: none}
 A:link {color: blue}
 A:visited {color: blue}
+SUP {font-size: smaller}
 
 .ekz {color: darkgreen}
 .drvdif {color: darkred}
@@ -16,3 +16,9 @@ A:visited {color: blue}
 .rimekz {font-style: italic}
 .klr {}
 .trd {color: #104040}
+.trdeo {color: darkgreen}
+.trdnac {color: #104040}
+.fontoj {color: darkgreen; font-size: small}
+
+
+

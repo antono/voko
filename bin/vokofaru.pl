@@ -48,6 +48,13 @@ close CFG;
 $vortaro_pado=$config{"vortaro_pado"} || 
     die "vortaro_pado ne trovighis en la agordodosiero.\n";
 
+$rilato_dos=$config{"rilato_dosiero"} ||
+    die "rilato_dosiero ne trovighis en la agordodosiero.\n";
+
+$indekso = $config{"indeks_dosiero"} || "$vortaro_pado/sgm/indekso.xml";
+
+$inxtmp_dos = $config{"inxtmp_dosiero"} || $indekso;
+
 # iru al dtd, por ke la dtd estu je ../dtd/vokoxml.dtd
 print "cd $vortaro_pado/dtd\n" if ($verbose);
 chdir("$vortaro_pado/dtd");
@@ -63,8 +70,8 @@ while (<LOG>) { print };
 close LOG;
 
 # kreu indeksdosieron
-$indekso = $config{"indeks_dosiero"} || "$vortaro_pado/sgm/indekso.xml";
-$command = "xml2inx.pl $verbose $xml_pado > $indekso";
+
+$command = "xml2inx.pl $verbose $xml_pado > $inxtmp_dos";
 print "$command\n" if ($verbose);
 `$command`;
 
@@ -73,11 +80,11 @@ print "cd $vortaro_pado\n" if ($verbose);
 chdir("$vortaro_pado");
 
 # kreu HTML-indeksojn
-$command="vokorefs.pl $verbose $xml_pado > sgm/rilatoj.xml~";
+$command="vokorefs.pl $verbose $xml_pado > $rilato_dos";
 print "$command\n" if ($verbose);
 open LOG, "$command|"; while (<LOG>) { print }; close LOG;
 
-$command="vokorefs2.pl $verbose sgm/rilatoj.xml~";
+$command="vokorefs2.pl $verbose $agord_dosiero";
 print "$command\n" if ($verbose);
 open LOG, "$command|"; while (<LOG>) { print }; close LOG;
 
@@ -87,10 +94,12 @@ open LOG, "$command|"; while (<LOG>) { print }; close LOG;
 
 # se pasis manpleno da tagoj, shovu la indeks-dosieron, por
 # ke ghi atingu la TTT-servilon (sed ja ne tro ofte)
-$tempdif = (stat "$indekso")[9] - (stat 'sgm/indekso.xml')[9];
-if ($tempdif > 7*24*60*60)  {  # 7 tagoj
-    print "pli ol 7 tagoj pasis: mv $indekso sgm/indekso.xml\n";
-    `mv $indekso sgm/indekso.xml`;
+if ($indekso ne $inxtmp_dos) {
+    $tempdif = (stat "$inxtmp_dos")[9] - (stat "$indekso")[9];
+    if ($tempdif > 7*24*60*60)  {  # 7 tagoj
+	print "pli ol 7 tagoj pasis: mv $inxtmp $indekso\n";
+	`mv $inxtmp $indekso`;
+    }
 }
 
 ######## fino ###########

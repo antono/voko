@@ -34,17 +34,18 @@ my $parser = new XML::Parser(ParseParamEnt => 1,
 				 End   => \&end_handler,
 				 Char  => \&char_handler}
 			     );
-opendir DIR,$dos;
+chdir($dos);
+opendir DIR,'.';
 $letter = '';
 for $file (sort readdir(DIR)) {
-    if ((-f "$dos/$file") and ("$dos/$file" =~ /\.xml$/)) {
+    if ((-f "$file") and ("$file" =~ /\.xml$/)) {
 	# montru progreson...
 	if ($verbose and (substr($file,0,1) ne $letter)) {
 	    $letter = substr($file,0,1);
 	    warn "$letter...\n";
 	};
 	#warn "$dos/$file\n" if ($verbose);
-	eval { $parser->parsefile("$dos/$file") }; warn $@ if ($@);
+	eval { $parser->parsefile("$file") }; warn $@ if ($@);
     }
 };
 closedir DIR;
