@@ -7,6 +7,8 @@
 
 $maxlen = 80; # maksimuma longeco de linio
 
+#### esploru la argumentojn
+
 while (@ARGV) {
     if ($ARGV[0] eq '-v') {
 	$verbose = 1;
@@ -16,60 +18,33 @@ while (@ARGV) {
     };
 };
 
+#### legu la dosieron
 die "Ne ekzistas dosiero \"$dos\""
   unless -f $dos;
-
-
 open DOS,$dos or die "Ne povis malfermi \"$dos\"\n";
-
-#while ($line = <DOS>) {
-
-#    $line =~ s/\s*<(\/)?(subart|drv|subdrv|snc|subsnc|dif|ekz)\b([^>]*)>\s*/
-#	unless ($1) {
-#	    "\n".(" " x (2*$level++))."<$2$3>\n"
-#	} else {
-#	    "\n".(" " x (2*--$level))."<\/$2>\n"
-#	}
-#    /eg;
-
-
-#    print $line;
-#}
-
 $buffer = join('',<DOS>);
-
 close DOS;
 
-# chiujn strukturilojn metu en propran linion
-# se antau kaj poste estas alia strukturilo au
-# spaco
+#### chiuj traktendajn strukturilojn metu sur propran linion
 
-#$buffer =~ s/\s+</\n</sg;
-#$buffer =~ s/></>\n</sg;
-#$buffer =~ s/>\s+/>\n/sg;
-
-# chiuj traktendajn strukturilojn metu sur propran
-# linion
-
-$traktendaj = 'art|subart|drv|subdrv|snc|subsnc|dif|ekz|refgrp|trdgrp';
+$traktendaj = 'art|subart|drv|subdrv|snc|subsnc|dif|ekz|refgrp|trdgrp|rim';
 
 $buffer =~ s¦\r¦¦sg;
 $buffer =~ s¦\s*<($traktendaj)\b([^>]*)>\s*¦\r<$1$2>\r¦sg;
 $buffer =~ s¦\s*</($traktendaj)>\s*¦\r</$1>\r¦sg;
-# forigu troajn spacojn/linifinojn
-#$buffer =~ s¦\s+\n+¦\n¦sg;
+# forigu troajn linifinojn
 $buffer =~ s¦\r+¦\n¦sg;
-# reenmetu linifinojn kelkloke
-#$buffer =~ s¦<vortaro>¦\n$&¦s;
 
 
-# forigu kelkajn historiajn aferojn
+#### forigu kelkajn historiajn aferojn
+
 $buffer =~ s¦\bk\b¦kaj¦sg;
 $buffer =~ s¦<snc\s+num="[0-9]+"¦<snc¦sg;
+#$buffer =~ s¦</vortaro>\s*$¦</vortaro>\n \n¦s;
 
+#### enmetu deshovojn linikomence
 
-# enmetu deshovojn linikomence
-$traktendaj = 'subart|drv|subdrv|snc|subsnc|dif|ekz|refgrp|trdgrp|bld';
+$traktendaj = 'subart|drv|subdrv|snc|subsnc|dif|ekz|refgrp|trdgrp|bld|rim';
 @linioj = split("\n",$buffer);
 $level=0;
 
@@ -94,7 +69,9 @@ foreach (@linioj) {
     print "$line\n";
 }
 
-#print join("\n",@linioj);
+print "\n";
+
+#### helpfunkcioj
 
 sub wrap {
     my $line = shift;

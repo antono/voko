@@ -397,25 +397,25 @@ sub komando {
     # memoru por poste
     $komando = $cmd;
 
-    if ($cmd =~ /^help[oui]$/) {
+    if ($cmd =~ /^help[oui]$/i) {
 	cmd_hlp();
 
-    } elsif ($cmd =~ /^dokumento/) {
+    } elsif ($cmd =~ /^dokumento/i) {
 	cmd_dokument($arg);
 
-    } elsif ($cmd =~ /^redakt[oui]/) {
+    } elsif ($cmd =~ /^redakt[oui]/i) {
 	cmd_redakt($arg, $txt);
 
-    } elsif ($cmd =~ /^aldon[oui]/) {
+    } elsif ($cmd =~ /^aldon[oui]/i) {
 	cmd_aldon($arg, $txt);
 
-    } elsif ($cmd =~ /^historio/) {
+    } elsif ($cmd =~ /^historio/i) {
 	cmd_histori($arg);
 	
-    } elsif ($cmd =~ /^artikolo/) {
+    } elsif ($cmd =~ /^artikolo/i) {
 	cmd_artikol($arg);
 
-    } elsif ($cmd =~ /^propon[oui]/) {
+    } elsif ($cmd =~ /^propon[oui]/i) {
 	cmd_propon($arg, $txt);
     } else {
 	report("ERARO   : nekonata komando $cmd");
