@@ -88,9 +88,12 @@ sub wrap {
 	
 	unless ($word) { last; }
 
-	if ($len + length($word) +1 < $maxlen) {
+	# alpendigu vorton al linio
+	if (($len + length($word) +1 < $maxlen) # la vorto havas lokon en la linio
+	    or ($len == 2*$level)) { # estas la unua vorto en la linio (probl. de longaj vortoj)
 	    $newline .= "$word ";
 	    $len += length($word)+1;
+	# komencu novan linion
 	} else {
 	    $newline =~ s/\s*$//;
 	    $newline .= "\n" . " " x (2*$level) . $word . " ";
