@@ -30,13 +30,13 @@ lingvon. Che xsltproc ekz. per -stringparam lng=fr
            [count(.|key('kapoj',.)[1])=1]">
 
         <xsl:apply-templates select="."/><xsl:text>#KAPO#
-</xsl:text>
+{s}</xsl:text>
 
    <xsl:for-each select="key('kapoj',.)">
-        <xsl:text>{s}</xsl:text>
+        <xsl:text>{ss}</xsl:text>
 	<xsl:apply-templates select="../kap"/>
-        <xsl:text>{/s}</xsl:text>
-   </xsl:for-each><xsl:text>#FINO#
+        <xsl:text>{/ss}</xsl:text>
+   </xsl:for-each><xsl:text>{/s}#FINO#
 </xsl:text>
 
     </xsl:for-each>

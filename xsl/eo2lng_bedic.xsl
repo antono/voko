@@ -26,22 +26,12 @@ reguloj por prezentado de la tradukoj
     <xsl:for-each select="(trdk)
            [count(.|key('kapoj',kap)[1])=1]">
     <xsl:apply-templates select="kap"/><xsl:text>#KAPO#
-</xsl:text>
-
+{s}</xsl:text>
    <xsl:for-each select="key('kapoj',kap)">
-        <xsl:text>{s}</xsl:text>
-  <xsl:choose>
-    <xsl:when test="count(trd)>1">
       <xsl:for-each select="trd">
         <xsl:text>{ss}</xsl:text><xsl:apply-templates/><xsl:text>{/ss}</xsl:text>
       </xsl:for-each>
-    </xsl:when>
-    <xsl:otherwise>
-	<xsl:apply-templates select="trd"/>
-    </xsl:otherwise>
-  </xsl:choose>
-   <xsl:text>{/s}</xsl:text>
-        </xsl:for-each><xsl:text>#FINO#
+        </xsl:for-each><xsl:text>{/s}#FINO#
 </xsl:text>
     </xsl:for-each>
 </xsl:template>
