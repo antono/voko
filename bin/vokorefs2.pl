@@ -89,7 +89,8 @@ my $parser = new XML::Parser(ParseParamEnt => 1,
 				 Char  => \&char_handler}
 			     );
 
-eval { $parser->parsefile("$dos") }; warn $@ if ($@);
+eval { $parser->parsefile("$dos") }; 
+die $@ if ($@); # estas pli bone morti ol kripligi la tezauron!
 print "\n";
 
 # kompletigi la referencojn ambaudirekte
