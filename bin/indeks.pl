@@ -748,7 +748,7 @@ sub INXLIST {
 		"alt=\"", $faknomo, "\" border=0></a>\n";
 	};
 	
-	print "<a href=\"ix_fakoj.html#strukturaj\">strukturaj</a><br>\n";
+	print "<br><a href=\"ix_fakoj.html#strukturaj\">strukturaj</a><br>\n";
 	
 	for $fak (@strukt_fakoj) 
 	{

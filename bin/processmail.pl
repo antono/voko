@@ -55,7 +55,7 @@ $possible_keys= 'komando|teksto|shangho';
 $commands     = 'redakt[oui]|help[oui]|aldon[oui]'; # .'|dokumento|artikolo|historio|propono'
 $revoservo    = '[Revo-Servo]';
 $revo_mailaddr= 'revo@steloj.de';
-$revolist     = 'revo@onelist.com';
+$revolist     = 'wolfram';
 $revo_from    = "Reta Vortaro <$revo_mailaddr>";
 $signature    = "--\nRevo-Servo $revo_mailaddr\n"
     ."retposhta servo por redaktantoj de Reta Vortaro.\n";
