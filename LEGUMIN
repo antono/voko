@@ -1,27 +1,25 @@
 Instali vokon
 -------------
 
-Prefere legu la informojn en docu/ se vi volas
-krei proprajn vortarojn aý kunevoluigi en VoKo-
-projekto.
-
 Por konfiguri vokon en via sistemo vi devas difini
 la mediovariablon VOKO, ekz.:
 
   export $VOKO = /pado/al/voko
 
-kaj adapti la dosieron $VOKO/dsl/catalog. Tie la
-padoj devas montri al la øustaj DTDoj de 'jade'.
+Se vi ne uzas Uniksan sistemon, bezonighas adapto
+de chiuj programoj, aparte tie, kei sistemkomandoj
+estas vokataj, kaj padnomoj kun '/' estas uzataj.
 
-Por rapidemaj:
--------------
 
-Vi kreas propran HTML-vortaron laý la sekva skemo:
+Konciza pasharo por krei vortaron
+---------------------------------
 
-- Preparu dosieron vortaro.sgm kun la enhavo de
-la vortaro. La strukturo konvenu al dtd/vokosgml.dtd
+Vi kreas propran HTML-vortaron lau la sekva skemo:
 
-- Iru al dosierujo, kie instaliøu la vortaro(j):
+- Preparu XML-artikolojn, kiuj estas validaj lau
+  dtd/vokoxml.dtd. Eble kontrolu per XML-analizilo.
+
+- Iru al dosierujo, kie instalighu la vortaro(j):
 
     cd /pado/al/miaj/vortaroj
 
@@ -29,20 +27,40 @@ la vortaro. La strukturo konvenu al dtd/vokosgml.dtd
   
     vokoprep.pl mia_vort
  
-- Þovu la dosieron vortaro.sgm al mia_vort/sgm/vortaro.sgm:
+- Shovu la XML-artikolojn sub dosierujon mia_vort/xml:
 
-    mv /malnova/loko/vortaro.sgm mia_vort/sgm/vortaro.sgm
+    mv /malnova/loko/*.xml mia_vort/xml
+
+- Adaptu la agordo-dosierojn sub cfg, aparte la dosieron
+  vortaro.cfg
 
 - Kreu la HTML-artikoloj kaj indeks-dosierojn ktp.:
 
     cd mia_vort
-    vokofaru.pl
+    vokofaru.pl -v
 
 - Faru postlaborojn, ekz. kopiu bildojn al mia_vort/bld k.a.
 
 
+CVS, retposhta servo k.a.
+-------------------------
 
+Se vi volas uzi CVS por stoki chiujn versiojn de viaj
+artikoloj, vi povas meti la laborkopion de viaj artikoloj
+ankau ie sub la dosierujo xml, sed eble vi bezonas simbolan
+ligon al dtd en tauga loko, se via dosierujo trovighas
+etagho(j)n pli malsupre.
 
+Pri la uzado de CVS legu ties dokumentaron.
+
+Por ekuzi la retposhtan servon mi konsilas sendi
+retposhton al mi pri helpo. Ghi trovighas en la
+programo processmail.pl, sed vi bezonas specifan
+dosierujo-strukturon por ghi, kaj devos adapti 
+kelkajn aferojn en la kapo de la programo.
+
+         18a de Marto 2000, Wolfram Diestel
+         <wolfram@steloj.de>
 
 
 

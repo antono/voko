@@ -22,7 +22,9 @@ $revo_mail = 'mailto:revo@steloj.de';
 if ($eraro = test_params() ) {
     print
 	header,
-	start_html("eraro"),
+	start_html(	-title=>'eraro',
+			-meta=>{'http-equiv'=>'Content-Type',
+				'content'=>'text/html; charset=UTF-8'}),
 	h1("eraro"),
 	$eraro,
 	end_html;
@@ -42,7 +44,7 @@ sub test_params {
 	    ."kaj substrekon.\n";
     }
 
-    # æio en ordo
+    # Ä‰io en ordo
     return;
 }
 
@@ -53,17 +55,19 @@ sub skribu_paghon {
 
     print
 	header,
-	start_html("redakti artikolon $art"),
+        start_html(     -title=>"redakti artikolon $art",
+                        -meta=>{'http-equiv'=>'Content-Type',
+                                'content'=>'text/html; charset=UTF-8'}),  
 	h1("Sendformularo de Revo-servo"),
-	"Tiu æi formularo sendas retmesaøon al ReVo-servo, respondon ",
-	"vi same ricevos retpoþte. ReVo-servo akceptas redaktojn nur ",
-	"de aliøintaj redaktoroj. Necesas, ke via TTT-legilo indikas ",
-	"kiel sendinto tiun retadreson, per kiu vi aliøis al ReVo-servo.";
-    print
-	p({-align=>"right"}),
-	a({-href=>"$dok_dir/helpo.txt"},"helpo pri ReVo-servo"), br,
-	a({-href=>"$dok_dir/dosieroj.html"},
-	  "dosieroj haveblaj per ReVo-servo"), "</p>";
+	"Tiu Ä‰i formularo sendas retmesaÄon al ReVo-servo, respondon\n",
+	"vi same ricevos retpoÅte. ReVo-servo akceptas redaktojn nur\n",
+	"de aliÄintaj redaktoroj. Necesas, ke via TTT-legilo indikas\n",
+	"kiel sendinto tiun retadreson, per kiu vi aliÄis al ReVo-servo.\n";
+#    print
+#	p({-align=>"right"}),
+#	a({-href=>"$dok_dir/helpo.txt"},"helpo pri ReVo-servo"), br,
+#	a({-href=>"$dok_dir/dosieroj.html"},
+#	  "dosieroj haveblaj per ReVo-servo"), "</p>";
 
     if ($art) {
 	# prenu la XML-tekston de la artikolo
@@ -85,7 +89,7 @@ sub skribu_paghon {
 		     -default=>param('teksto'),
 		     -rows=>25,
 		     -columns=>80),br,
-	    "Priskribo de la farita þanøo (nepre necesa):", br,
+	    "Priskribo de la farita ÅanÄo (nepre necesa):", br,
 	    textfield(-name=>'shangho',-size=>80,maxlength=>200), br,
 	    "Sendas la redaktitan artikolon al Revo-servo:", 
 	    submit('ago','Sendu'), p,
