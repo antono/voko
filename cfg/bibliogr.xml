@@ -644,6 +644,16 @@
     </eld>
   </vrk>
 
+  <vrk mll="LF">
+    <url>http://www.esperanto.be/monato/</url>
+    <tit>Literatura Foiro</tit>
+    <ald>kultura revuo</ald>
+    <eld>
+      <nom>Kooperativo de LF</nom>
+      <lok>Svislando?</lok>
+    </eld>
+  </vrk>
+
   <vrk mll="Lkn">
     <aut><a>Ricardo</a> <n>&Scirc;ulco</n></aut>
     <aut><a>Hermano</a> <n>Bermano</n></aut>

@@ -8,6 +8,9 @@ kaj stiloj (em,ctl,sup...)
 
 -->
 
+<!-- fak-informojn memoru en variablo por pli facila aliro -->
+<xsl:variable name="fakoj" select="document($fakoj_cfg)/fakoj"/>
+
 <!-- priskribaj elementoj -->
 
 <xsl:template match="gra">
@@ -130,11 +133,17 @@ kaj stiloj (em,ctl,sup...)
 
 
 <xsl:template match="uzo[@tip='fak']">
+  <xsl:variable name="fak" select="."/>
 
   <xsl:choose>
 
     <xsl:when test="$aspekto='ilustrite'">
-      <img src="{$smbdir}/{.}.gif" alt="{.}" align="absmiddle" />
+       <!-- eltrovu la fakon el fakoj.xml, se la fako ne ekzistas,
+            ellasu ghin -->
+       <xsl:for-each select="$fakoj/fako[(@kodo=$fak)]">
+         <img src="{@vinjeto}" alt="{@kodo}" align="absmiddle" 
+           title="{.}" />
+       </xsl:for-each>
     </xsl:when>
 
     <xsl:otherwise>

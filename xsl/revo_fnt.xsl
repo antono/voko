@@ -26,7 +26,7 @@ reguloj por la prezentado de la fontindikoj
                  ancestor::ekz|
                  ancestor::bld|
                  self::node())[1])}" 
-       href="#fnt_{$n}"><xsl:value-of select="$n"/>
+       href="#fnt_{$n}" title="vidu la fonton"><xsl:value-of select="$n"/>
     </a>
     <xsl:text>]</xsl:text>
   </span>
@@ -61,7 +61,7 @@ reguloj por la prezentado de la fontindikoj
   teksto -->
   <span class="fontoj">
     <a name="fnt_{$n}"></a>
-    <a class="fnt" href="#ekz_{$n}">
+    <a class="fnt" href="#ekz_{$n}" title="reiru al la ekzemplo">
       <xsl:value-of select="$n"/>
     </a>.
   
@@ -81,7 +81,8 @@ reguloj por la prezentado de la fontindikoj
 
   <xsl:choose>
     <xsl:when test="$aspekto='ilustrite'">
-      <a class="fnt" href="{$bibliogrhtml}#{$mll}" target="indekso">
+      <a class="fnt" href="{$bibliogrhtml}#{$mll}" target="indekso"
+        title="al la bibliografio">
         <xsl:apply-templates mode="bibliogr"
         select="document($bibliografio)//vrk[@mll=$mll]"/>
       </a>
@@ -172,7 +173,8 @@ reguloj por la prezentado de la fontindikoj
 <!-- referenco al la verko -->
 
 <xsl:template match="url" mode="fontoj">
-  <a class="fnturl" href="{@ref}" target="_new">
+  <a class="fnturl" href="{@ref}" target="_new"
+     title="al la verko">
   <xsl:apply-templates/>
   </a>
 </xsl:template>

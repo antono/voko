@@ -76,7 +76,8 @@ sub tezauro {
 
     if (-f "$tz_prefix$ref.html") {
 	return "<a href=\"$tz_ref$ref.html\" target=\"indekso\">".
-	    "<img src=\"../smb/tezauro.png\" alt=\"[TEZ]\" border=0></a>";
+	    "<img src=\"../smb/tezauro.png\" alt=\"TEZ\" ".
+            "title=\"al la tezaŭro\" border=\"0\"></a>";
     } else {
 	return '';
     }
