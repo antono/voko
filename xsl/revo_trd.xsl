@@ -18,7 +18,7 @@ reguloj por prezentado de la tradukoj
 
 
 <!-- nur tradukojn ene de difino kaj bildo 
-montru tie, cxar ili estas esenca parto de la tiuj --> 
+montru tie, cxar ili estas esenca parto de tiuj --> 
 
 <xsl:template match="dif/trd|bld/trd">
   <i><xsl:apply-templates/></i>
@@ -31,16 +31,22 @@ montru tie, cxar ili estas esenca parto de la tiuj -->
 <!-- montru flagojn supre de la pagxo pri ekzistantaj lingvoj -->
 
 <xsl:template name="flagoj">
-  <!-- por chiu lingvo elektu reprezentanton -->
-  <xsl:for-each select="(//trdgrp[@lng]|//trd[@lng])
-       [count(.|key('lingvoj',@lng)[1])=1]">
+  <xsl:if test="$aspekto='ilustrite'">
+    <p class="trd_ref">tradukoj:
+      <!-- por chiu lingvo elektu reprezentanton -->
+      <xsl:for-each select="(//trdgrp[@lng]|//trd[@lng])
+           [count(.|key('lingvoj',@lng)[1])=1]">
 
-    <!-- montru la flagon de la lingvo -->
-    <xsl:call-template name="flago">
-      <xsl:with-param name="lng"><xsl:value-of select="@lng"/></xsl:with-param>
-    </xsl:call-template>
+        <!-- montru la flagon de la lingvo -->
+        <xsl:call-template name="flago">
+          <xsl:with-param name="lng">
+            <xsl:value-of select="@lng"/>
+          </xsl:with-param>
+        </xsl:call-template>
 
-  </xsl:for-each>
+      </xsl:for-each>
+    </p>
+  </xsl:if>
 </xsl:template>
 
 
@@ -49,16 +55,14 @@ montru tie, cxar ili estas esenca parto de la tiuj -->
 
   <!-- eltrovu la flagon de la lingvo, se lingvo au flago ne ekzistas,
   ellasu ghin -->
-  <xsl:for-each select="$lingvoj/lingvo[(@kodo=$lng) and @flago]">
+  <xsl:for-each select="$lingvoj/lingvo[(@kodo=$lng)]">
 
     <xsl:text> </xsl:text>
-    <xsl:if test="$aspekto='ilustrite'">
-      <a href="#lng_{$lng}">
-        <img src="{@flago}" alt="{$lng}" 
-          border="0" hspace="3" width="21" height="15" class="flago"/>
-      </a>
-    </xsl:if>
-
+    <a href="#lng_{$lng}" class="trd_ref">
+      <abbr title="{.}">
+        <xsl:value-of select="$lng"/>
+      </abbr>
+    </a>
   </xsl:for-each>
 </xsl:template>
 
@@ -99,13 +103,9 @@ montru tie, cxar ili estas esenca parto de la tiuj -->
 
     <a name="lng_{$lng}"></a>
     <h3>
-      <xsl:if test="$aspekto='ilustrite'">
-        <img src="{@flago}" width="21" height="15"
-             alt="[{$lng}]" class="flago"/>
-      </xsl:if>
       <xsl:text> </xsl:text>
-      <!-- la nomo de la lingvo, anstatauigu a per e -->
-      <xsl:value-of select="concat(substring(.,1,string-length(.)-1),'e')"/>
+      <!-- aldonu j post a -->
+      <xsl:value-of select="concat(.,'j')"/>
     </h3>
 
   </xsl:for-each>

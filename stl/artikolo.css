@@ -46,6 +46,11 @@ A.klr:visited {text-decoration: underline; color: #775533}
 A.klr:active {text-decoration: underline; color: #775533}
 
 /* tradukoj */
+.trd_ref {color: #666666}
+p.trd_ref {text-align: right}
+A.trd_ref:link {text-decoration: underline; color: #666666}
+A.trd_ref:visited {text-decoration: underline; color: #666666}
+A.trd_ref:active {text-decoration: underline; color: black}
 .trd {color: #104040}
 .rimtrd {font-style: italic}
 .diftrd {font-style: italic}

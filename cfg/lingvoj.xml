@@ -10,59 +10,59 @@
  
 <lingvoj>
   <lingvo kodo="ab">abĥaza</lingvo>
-  <lingvo kodo="af" flago="../smb/af.png">afrikansa</lingvo>
+  <lingvo kodo="af">afrikansa</lingvo>
   <lingvo kodo="am">amhara</lingvo>
   <lingvo kodo="ar">araba</lingvo>
   <lingvo kodo="as">asama</lingvo>
   <lingvo kodo="ay">ajmara</lingvo>
   <lingvo kodo="az">azerbajĝana</lingvo>
   <lingvo kodo="ba">baŝkira</lingvo>
-  <lingvo kodo="be" flago="../smb/be.png">belorusa</lingvo>
-  <lingvo kodo="bg" flago="../smb/bg.png">bulgara</lingvo>
+  <lingvo kodo="be">belorusa</lingvo>
+  <lingvo kodo="bg">bulgara</lingvo>
   <lingvo kodo="bh">bihara</lingvo>
   <lingvo kodo="bi">bislama</lingvo>
   <lingvo kodo="bn">bengala</lingvo>
   <lingvo kodo="bo">tibeta</lingvo>
-  <lingvo kodo="br" flago="../smb/br.png">bretona</lingvo>
-  <lingvo kodo="ca" flago="../smb/ca.png">kataluna</lingvo>
+  <lingvo kodo="br">bretona</lingvo>
+  <lingvo kodo="ca">kataluna</lingvo>
   <lingvo kodo="co">korsika</lingvo>
-  <lingvo kodo="cs" flago="../smb/cs.png">ĉeĥa</lingvo>
-  <lingvo kodo="cy" flago="../smb/cy.png">kimra</lingvo>
-  <lingvo kodo="da" flago="../smb/da.png">dana</lingvo>
-  <lingvo kodo="de" flago="../smb/de.png">germana</lingvo>
+  <lingvo kodo="cs">ĉeĥa</lingvo>
+  <lingvo kodo="cy">kimra</lingvo>
+  <lingvo kodo="da">dana</lingvo>
+  <lingvo kodo="de">germana</lingvo>
   <lingvo kodo="dz">dzonka</lingvo>
-  <lingvo kodo="el" flago="../smb/el.png">greka</lingvo>
-  <lingvo kodo="en" flago="../smb/en.png">angla</lingvo>
+  <lingvo kodo="el">greka</lingvo>
+  <lingvo kodo="en">angla</lingvo>
   <lingvo kodo="eo">esperanta</lingvo>
-  <lingvo kodo="es" flago="../smb/es.png">hispana</lingvo>
+  <lingvo kodo="es">hispana</lingvo>
   <lingvo kodo="et">estona</lingvo>
   <lingvo kodo="eu">eŭska</lingvo>
   <lingvo kodo="fa">persa</lingvo>
-  <lingvo kodo="fi" flago="../smb/fi.png">finna</lingvo>
+  <lingvo kodo="fi">finna</lingvo>
   <lingvo kodo="fj">fiĝia</lingvo>
   <lingvo kodo="fo">feroa</lingvo>
-  <lingvo kodo="fr" flago="../smb/fr.png">franca</lingvo>
+  <lingvo kodo="fr">franca</lingvo>
   <lingvo kodo="fy">frisa</lingvo>
   <lingvo kodo="ga">irlanda</lingvo>
-  <lingvo kodo="gd" flago="../smb/gd.png">gaela</lingvo>
+  <lingvo kodo="gd">gaela</lingvo>
   <lingvo kodo="gl">galega</lingvo>
   <lingvo kodo="gn">gvarania</lingvo>
-  <lingvo kodo="grc" flago="../smb/grc.png">malnovgreka</lingvo>
+  <lingvo kodo="grc">malnovgreka</lingvo>
   <lingvo kodo="gu">guĝarata</lingvo>
   <lingvo kodo="ha">haŭsa</lingvo>
-  <lingvo kodo="he" flago="../smb/he.png">hebrea</lingvo>
+  <lingvo kodo="he">hebrea</lingvo>
   <lingvo kodo="hi">hinda</lingvo>
-  <lingvo kodo="hr" flago="../smb/hr.png">kroata</lingvo>
-  <lingvo kodo="hu" flago="../smb/hu.png">hungara</lingvo>
+  <lingvo kodo="hr">kroata</lingvo>
+  <lingvo kodo="hu">hungara</lingvo>
   <lingvo kodo="hy">armena</lingvo>
-  <lingvo kodo="ia" flago="../smb/ia.png">interlingvaa</lingvo>
+  <lingvo kodo="ia">interlingvaa</lingvo>
   <lingvo kodo="id">indonezia</lingvo>
-  <lingvo kodo="ie" flago="../smb/ie.png">okcidentala</lingvo>
+  <lingvo kodo="ie">okcidentala</lingvo>
   <lingvo kodo="ik">eskima</lingvo>
-  <lingvo kodo="is" flago="../smb/is.png">islanda</lingvo>
-  <lingvo kodo="it" flago="../smb/it.png">itala</lingvo>
-  <lingvo kodo="iu" flago="../smb/iu.png">inuita</lingvo>
-  <lingvo kodo="ja" flago="../smb/ja.png">japana</lingvo>
+  <lingvo kodo="is">islanda</lingvo>
+  <lingvo kodo="it">itala</lingvo>
+  <lingvo kodo="iu">inuita</lingvo>
+  <lingvo kodo="ja">japana</lingvo>
   <lingvo kodo="jw">java</lingvo>
   <lingvo kodo="ka">kartvela</lingvo>
   <lingvo kodo="kk">kazaĥa</lingvo>
@@ -73,12 +73,12 @@
   <lingvo kodo="ks">kaŝmira</lingvo>
   <lingvo kodo="ku">kurda</lingvo>
   <lingvo kodo="ky">kirgiza</lingvo>
-  <lingvo kodo="la" flago="../smb/la.png">latina/scienca</lingvo>
-  <lingvo kodo="lat" flago="../smb/lat.png">malnovlatina</lingvo>
+  <lingvo kodo="la">latina/scienca</lingvo>
+  <lingvo kodo="lat">malnovlatina</lingvo>
   <lingvo kodo="ln">lingala</lingvo>
   <lingvo kodo="lo">laŭa</lingvo>
-  <lingvo kodo="lt" flago="../smb/lt.png">litova</lingvo>
-  <lingvo kodo="lv" flago="../smb/lv.png">latva</lingvo>
+  <lingvo kodo="lt">litova</lingvo>
+  <lingvo kodo="lv">latva</lingvo>
   <lingvo kodo="mg">malagasa</lingvo>
   <lingvo kodo="mi">maoria</lingvo>
   <lingvo kodo="mk">makedona</lingvo>
@@ -91,29 +91,29 @@
   <lingvo kodo="my">birma</lingvo>
   <lingvo kodo="na">naura</lingvo>
   <lingvo kodo="ne">nepala</lingvo>
-  <lingvo kodo="nl" flago="../smb/nl.png">nederlanda</lingvo>
-  <lingvo kodo="no" flago="../smb/no.png">norvega</lingvo>
+  <lingvo kodo="nl">nederlanda</lingvo>
+  <lingvo kodo="no">norvega</lingvo>
   <lingvo kodo="oc">okcitana</lingvo>
   <lingvo kodo="om">oroma</lingvo>
   <lingvo kodo="or">orijo</lingvo>
-  <lingvo kodo="os" flago="../smb/os.png">oseta</lingvo>
+  <lingvo kodo="os">oseta</lingvo>
   <lingvo kodo="pa">panĝaba</lingvo>
-  <lingvo kodo="pl" flago="../smb/pl.png">pola</lingvo>
+  <lingvo kodo="pl">pola</lingvo>
   <lingvo kodo="ps">paŝtua</lingvo>
-  <lingvo kodo="pt" flago="../smb/pt.png">portugala</lingvo>
-  <lingvo kodo="qu" flago="../smb/qu.png">keĉua</lingvo>
+  <lingvo kodo="pt">portugala</lingvo>
+  <lingvo kodo="qu">keĉua</lingvo>
   <lingvo kodo="rm">romanĉa</lingvo>
   <lingvo kodo="rn">burunda</lingvo>
   <lingvo kodo="ro">rumana</lingvo>
-  <lingvo kodo="ru" flago="../smb/ru.png">rusa</lingvo>
+  <lingvo kodo="ru">rusa</lingvo>
   <lingvo kodo="rw">ruanda</lingvo>
   <lingvo kodo="sa">sanskrita</lingvo>
   <lingvo kodo="sd">sinda</lingvo>
   <lingvo kodo="sg">sangoa</lingvo>
   <lingvo kodo="sh">serbo-kroata</lingvo>
   <lingvo kodo="si">sinhala</lingvo>
-  <lingvo kodo="sk" flago="../smb/sk.png">slovaka</lingvo>
-  <lingvo kodo="sl" flago="../smb/sl.png">slovena</lingvo>
+  <lingvo kodo="sk">slovaka</lingvo>
+  <lingvo kodo="sl">slovena</lingvo>
   <lingvo kodo="sm">samoa</lingvo>
   <lingvo kodo="sn">ŝona</lingvo>
   <lingvo kodo="so">somala</lingvo>
@@ -122,8 +122,8 @@
   <lingvo kodo="ss">svazia</lingvo>
   <lingvo kodo="st">sota</lingvo>
   <lingvo kodo="su">sunda</lingvo>
-  <lingvo kodo="sv" flago="../smb/sv.png">sveda</lingvo>
-  <lingvo kodo="sw" flago="../smb/sw.png">svahila</lingvo>
+  <lingvo kodo="sv">sveda</lingvo>
+  <lingvo kodo="sw">svahila</lingvo>
   <lingvo kodo="ta">tamila</lingvo>
   <lingvo kodo="te">telugua</lingvo>
   <lingvo kodo="tg">taĝika</lingvo>
@@ -132,8 +132,8 @@
   <lingvo kodo="tk">turkmena</lingvo>
   <lingvo kodo="tl">filipina</lingvo>
   <lingvo kodo="tn">cvana</lingvo>
-  <lingvo kodo="to" flago="../smb/to.png">tongaa</lingvo>
-  <lingvo kodo="tr" flago="../smb/tr.png">turka</lingvo>
+  <lingvo kodo="to">tongaa</lingvo>
+  <lingvo kodo="tr">turka</lingvo>
   <lingvo kodo="ts">conga</lingvo>
   <lingvo kodo="tt">tatara</lingvo>
   <lingvo kodo="tw">akana</lingvo>
@@ -142,13 +142,13 @@
   <lingvo kodo="ur">urduo</lingvo>
   <lingvo kodo="uz">uzbeka</lingvo>
   <lingvo kodo="vi">vjetnama</lingvo>
-  <lingvo kodo="vo" flago="../smb/vo.png">volapuka</lingvo>
+  <lingvo kodo="vo">volapuka</lingvo>
   <lingvo kodo="wo">volofa</lingvo>
   <lingvo kodo="xh">ksosa</lingvo>
   <lingvo kodo="yi">jida</lingvo>
   <lingvo kodo="yo">joruba</lingvo>
   <lingvo kodo="za">ĝuanga</lingvo>
-  <lingvo kodo="zh" flago="../smb/zh.png">ĉina</lingvo>
+  <lingvo kodo="zh">ĉina</lingvo>
   <lingvo kodo="zu">zulua</lingvo>
 </lingvoj>
 

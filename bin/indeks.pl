@@ -843,11 +843,11 @@ sub INXSTATISTIKO {
     }
     foreach $s (sort {$b->[1] <=> $a->[1]} @trdj) {
 	$lng = $s->[0];
-	if (-f "$vortaro_pado/smb/$lng.png") {
-		print "<img src=\"../smb/$lng.png\" alt=\"\" class=\"flago\">&nbsp;";
-	    } else {
-		print "<img src=\"../smb/xx.png\" alt = \"\" class=\"flago\">&nbsp;";
-	    }
+#	if (-f "$vortaro_pado/smb/$lng.png") {
+#		print "<img src=\"../smb/$lng.png\" alt=\"\" class=\"flago\">&nbsp;";
+#	    } else {
+#		print "<img src=\"../smb/xx.png\" alt = \"\" class=\"flago\">&nbsp;";
+#	    }
 	print "$lingvoj{$lng}j: ".$s->[1];
         my $pcnt = 100*$s->[2]/$stattrd{'sumo'};
 	printf(" (~ %.02f%%)",$pcnt>100?100:$pcnt);
@@ -940,11 +940,11 @@ sub INX_LNG {
 	       keys %tradukoj)
     {
 	unless ($lng eq 'la') {
-	    if (-f "$vortaro_pado/smb/$lng.png") {
-		print "<img src=\"../smb/$lng.png\" alt=\"[$lng]\" class=\"flago\">&nbsp;";
-	    } else {
-		print "<img src=\"../smb/xx.png\" alt = \"[$lng]\" class=\"flago\">&nbsp;";
-	    }
+#	    if (-f "$vortaro_pado/smb/$lng.png") {
+#		print "<img src=\"../smb/$lng.png\" alt=\"[$lng]\" class=\"flago\">&nbsp;";
+#	    } else {
+#		print "<img src=\"../smb/xx.png\" alt = \"[$lng]\" class=\"flago\">&nbsp;";
+#	    }
 	    print "<a href=\"lx_${lng}_$unua_litero{$lng}.html\">";
 
 	    if ($statistiko{"lng_$lng"} >= 1000) {
@@ -959,11 +959,11 @@ sub INX_LNG {
     if (exists $tradukoj{'la'}) {
 	print "<p>\n";
 	$lng = 'la';
-	if (-f "$vortaro_pado/smb/$lng.png") {
-	    print "<img src=\"../smb/$lng.png\" alt=\"[$lng]\" class=\"flago\">&nbsp;";
-	} else {
-	    print "<img src=\"../smb/xx.png\" alt = \"[$lng]\" class=\"flago\">&nbsp;";
-	}
+#	if (-f "$vortaro_pado/smb/$lng.png") {
+#	    print "<img src=\"../smb/$lng.png\" alt=\"[$lng]\" class=\"flago\">&nbsp;";
+#	} else {
+#	    print "<img src=\"../smb/xx.png\" alt = \"[$lng]\" class=\"flago\">&nbsp;";
+#	}
 	print "<a href=\"lx_${lng}_$unua_litero{$lng}.html\">";
 	if ($statistiko{"lng_$lng"} >= 1000) {
 	    print "<b>$lingvoj{$lng}</b>";
@@ -1153,11 +1153,11 @@ sub INX_PLENA {
     for $lng (sort keys %tradukoj) 
     {
 	print "<a href=\"lx_${lng}_$unua_litero{$lng}.html\">";
-	if (-f "$vortaro_pado/smb/$lng.png") {
-	    print "<img src=\"../smb/$lng.png\" alt=\"$lng\" class=\"flago\"> ";
-	} else {
-	    print "<img src=\"../smb/xx.png\" alt = \"$lng\" class=\"flago\"> ";
-	}
+#	if (-f "$vortaro_pado/smb/$lng.png") {
+#	    print "<img src=\"../smb/$lng.png\" alt=\"$lng\" class=\"flago\"> ";
+#	} else {
+#	    print "<img src=\"../smb/xx.png\" alt = \"$lng\" class=\"flago\"> ";
+#	}
 	print "</a>\n";
     };
     print "<p>\n";

@@ -24,9 +24,9 @@ $refdir = '../art/';
 $prefix = "mx_";
 
 
-$mankantaj_tradukoj = 12000; # se mankas nur tiom da tradukoj
+$mankantaj_tradukoj = 20000; # se mankas nur tiom da tradukoj (procente)
                            # ili listighas por pli facila aldono
-$maks_mankantaj = 333;     # nur tiom da mankantaj aperu en la listo
+$maks_mankantaj = 777;     # nur tiom da mankantaj aperu en la listo
                            # por ne tro longigi ghin
 
 
@@ -120,7 +120,10 @@ close OUT;
 # kiuj lingvoj havas nur tiom da mankoj au malpli
 my @mankantaj;
 foreach $lng (keys %lingvoj) {
-    my $d = scalar(keys %sencoj) - $lingvoj{$lng}->[0]; 
+    my $t = $lingvoj{$lng}->[0];
+    my $c = scalar(keys %sencoj);
+    my $d = $c-$t; 
+
     if (($d <= $mankantaj_tradukoj) and ($d > 0)) {
 
 	push @mankantaj_lng,($lng);

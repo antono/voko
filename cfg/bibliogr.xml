@@ -64,6 +64,16 @@
     </eld>
   </vrk>
 
+  <vrk mll="BoER">
+    <url>http://www.esperanto.mv.ru/Vortaro/kovril.html</url>
+    <aut><a>E.</a> <n>Bokarev</n></aut>
+    <tit>Esperanta-rusa vortaro</tit>
+    <eld>
+      <lok>Moskvo</lok>
+      <dat>1982</dat>
+    </eld>
+  </vrk>
+
   <vrk mll="BoM">
     <aut><a>Werner</a> <n>Bormann</n></aut>
     <tit>Mondkomerco kaj Lingvo</tit>
@@ -89,6 +99,15 @@
     <trd><a>Karl</a> <n>Bein</n></trd>
     <tit>La bona sinjorino</tit>
   </vrk>
+
+  <vrk mll="BoRE">
+    <aut><a>E.</a> <n>Bokarev</n></aut>
+    <tit>Rusa-esperanta vortaro</tit>
+    <eld>
+      <lok>Moskvo</lok>
+      <dat>1966</dat>
+    </eld>
+  </vrk> 
 
   <vrk mll="BoT">
     <aut><a>Werner</a> <n>Bormann</n></aut>
@@ -440,6 +459,16 @@
     </eld>
   </vrk>
 
+  <vrk mll="Gv">
+    <aut><a>Claus</a> <n>G&uuml;nkel</n> (Nikolao)</aut>
+    <tit>La Gunkela vortaro de vortoj mankantaj en PIV 2002</tit>
+    <eld>
+       <nom>Propra eldono</nom>
+       <lok>Eschweiler</lok>
+       <dat>2002</dat>
+    </eld>
+  </vrk>
+
   <vrk mll="HejmVort">
     <url>http://www.helsinki.fi/~jslindst/hejmvort.html</url>
     <aut><a>Jouko</a> <n>Lindstedt</n></aut>
@@ -518,6 +547,19 @@
       <dat>1987</dat>  
     </eld>
   </vrk> 
+
+  <vrk mll="JV">
+    <aut><n>Horba&ccirc;uk</n>, <a>V.</a></aut>
+    <aut><n>Poddubnij</n>, <a>F.</a></aut>
+    <aut><n>Tu&hcirc;vatullina</n>, <a>L.</a></aut>
+    <aut><n>&Scirc;ilo</n>, <a>G.</a></aut>
+    <tit>Jura Vortaro esperante-ruse-ukraine-angla</tit>
+    <eld>
+       <nom>Akademia Centro de Administro, Entreprenado, Juro</nom>
+       <lok>Slavjansk</lok>
+       <dat>1994</dat>
+    </eld>
+  </vrk>
 
   <vrk mll="KelS">
     <tit>Kajeroj el la Sudo</tit>
@@ -691,6 +733,7 @@
   </vrk>
 
   <vrk mll="Marta">
+    <url>http://www.uni-leipzig.de/esperanto/texte/bibl/marta/</url>
     <aut><a>Eliza</a> <n>Orzeszkowa</n></aut>
     <trd><a>L. L.</a> <n>Zamenhof</n></trd>
     <tit>Marta</tit>
@@ -772,6 +815,7 @@
   </vrk>
 
   <vrk mll="MkM">
+    <url>http://www.esperanto.mv.ru/MM/</url>
     <aut><a>Mihail</a> <n>Bulgakov</n></aut>
     <trd><a>Sergio</a> <n>Pokrovskij</n></trd>
     <tit>La majstro kaj Margarita</tit>
@@ -792,10 +836,14 @@
     </eld>
   </vrk>
 
- <vrk mll="MT">
-    <url>ftp://ftp.esperanto.org/publika/tekstoj/</url>
+  <vrk mll="MT">
+    <url>http://www.uni-leipzig.de/esperanto/texte/bibl/biblio/</url>
     <trd><a>L. L.</a> <n>Zamenhof</n></trd>
-    <tit>Malnova Testamento</tit>
+    <tit>La Malnova Testamento</tit>
+    <eld>
+      <nom>Brita kaj Alilanda Biblia Societo</nom>
+      <lok>Londono</lok>
+    </eld>
   </vrk>
 
   <vrk mll="MuzTerm">
@@ -838,13 +886,29 @@
   </vrk>
  
   <vrk mll="NT">
-    <url>ftp://ftp.esperanto.org/publika/tekstoj/html</url>
-    <tit>Nova Testamento, Londona Biblio</tit>
+    <url>http://www.uni-leipzig.de/esperanto/texte/bibl/biblio</url>
+    <tit>La Nova Testamento</tit>
+    <ald>de nia Sinjoro kaj Savanto Jesuo Kristo</ald>
+    <eld>
+      <nom>Brita kaj Alilanda Biblia Societo</nom>
+      <lok>Londono</lok>
+    </eld>
   </vrk>
 
   <vrk mll="OV">
     <aut><a>L. L.</a> <n>Zamenhof</n></aut>
     <tit>Originala Verkaro</tit>
+  </vrk>
+
+  <vrk mll="PatrojFiloj">
+    <aut><a>I. S.</a> <n>Turgenjev</n></aut>
+    <trd><a>Kazimierz</a> <n>Bein</n></trd>
+    <tit>Patroj kaj filoj</tit> 
+    <eld>
+      <nom>Libroservo Federacio de laboristaj esperantistoj</nom>
+      <lok>Amsterdamo</lok>
+      <dat>[proks. 1938]</dat>
+    </eld>
   </vrk>
 
   <vrk mll="PGl">
@@ -978,6 +1042,17 @@
     </eld>
   </vrk>
 
+  <vrk mll="TK">
+    <aut></aut>
+    <tit>Ilustrita terminaro de kombinita transporto, franca, angla, germana,
+     esperanta, serba</tit>
+    <eld>
+       <nom>Interpres 1847</nom>
+       <lok>Beogrado</lok>
+       <dat>1998</dat>
+    </eld>
+  </vrk>
+
   <vrk mll="TW">
     <aut><a>Rudolf</a> <n>Haferkorn</n></aut>
     <tit>Technisches W&ouml;rterbuch Deutsch-Esperanto</tit>
@@ -1007,6 +1082,22 @@
       <nom>Hachette</nom>
       <lok>Parizo</lok>
       <dat>1912</dat>
+    </eld>
+  </vrk>
+
+  <vrk mll="Viki">
+     <url>http://eo.wikipedia.com/</url>
+     <tit>Vikipedio</tit>
+  </vrk>
+
+  <vrk mll="VivZam">
+    <aut><a>Edmond</a> <n>Privat</n></aut>
+    <tit>Vivo de Zamenhof</tit> 
+    <eld>
+      <nom>The Esperanto publishing co. ltd</nom>
+      <lok>Heronsgate</lok>
+      <dat>1937</dat>
+      <nro>2a eldono</nro>
     </eld>
   </vrk>
 

@@ -21,21 +21,15 @@
     <body>
     <h1>mallongigoj de lingvoj</h1>
     <p>
-    La lingvoj kun flagoj estas rekte uzeblaj en la vortaro. Por
-    ekuzi alian lingvon necesas flageto en grandeco 21x15 kiel
-    PNG aŭ GIF kaj informoj pri alfabeto kaj ordigado.
+    Por aldoni tradukojn en nova lingvo, bonvolu sendi al la
+    administranto de la vortaro informojn pri alfabeto kaj ordigado.
     </p>
 
     <table align="center">
-    <tr><th>kodo</th><th></th><th>lingvo</th></tr>
+    <tr><th>kodo</th><th>lingvo</th></tr>
     <xsl:for-each select="lingvo">
       <tr>
         <td><code><xsl:value-of select="@kodo"/></code></td>
-        <td>
-          <xsl:if test="@flago">
-            <img class="flago" src="{@flago}" alt=""/>
-          </xsl:if>
-        </td>
         <td>
           <xsl:value-of select="."/>
         </td>
