@@ -17,6 +17,8 @@
 
 use XML::Parser;
 
+use bytes;
+
 while (@ARGV) {
     if ($ARGV[0] eq '-v') {
 	$verbose = 1;
@@ -56,6 +58,7 @@ if (html) {
 
 my $parser = new XML::Parser(ParseParamEnt => 1,
 			     ErrorContext => 2,
+                             NoLWP => 1,
 			     Handlers => {
 				 Start => \&start_handler,
 				 End   => \&end_handler,

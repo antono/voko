@@ -24,6 +24,21 @@ s/\274/\304\265/g; #jx
 s/\376/\305\235/g; #sx
 s/\375/\305\255/g; #ux    
 
+# konverti la e-literojn de cx al utf-8
+s/Cx/\304\210/g; #Cx
+s/Gx/\304\234/g; #Gx
+s/Hx/\304\244/g; #Hx
+s/Jx/\304\264/g; #Jx
+s/Sx/\305\234/g; #Sx
+s/Ux/\305\254/g; #Ux
+s/cx/\304\211/g; #cx
+s/gx/\304\235/g; #gx
+s/hx/\304\245/g; #hx
+s/jx/\304\265/g; #jx
+s/sx/\305\235/g; #sx
+s/ux/\305\255/g; #ux
+
+
 # elprenu la titolon
 m/<h1>(.*)<\/h1>/si;
 $title=$1;

@@ -11,7 +11,7 @@
 ################# komenco de la programo ################
 
 use XML::Parser;
-use String::Approx 'amatch';
+#use String::Approx 'amatch';
 
 $debug = 0;
 $|=1;
@@ -418,8 +418,8 @@ sub serchu_ekz {
 
 	    if (index($metodoj,'e')>=0) {
 		trovu_ekzakte($ekz,$frazo);
-	    } elsif (index($metodoj,'a')>=0) { 
-		trovu_approx($ekz,$frazo);
+#	    } elsif (index($metodoj,'a')>=0) { 
+#		trovu_approx($ekz,$frazo);
 	    } elsif (index($metodoj,'3')>=0) {
 		trovu_ngram($ekz,$frazo,3);
 	    } elsif (index($metodoj,'4')>=0) {
@@ -458,14 +458,14 @@ sub trovu_ekzakte {
 }
 
 # chiun frazon per String::Approx::amatch
-sub trovu_approx {
-    my ($ekz,$frazo) = @_;
-
-    if (amatch($ekz,[$lim_approx],($frazo->[1]))) {
-	unshift @trovoj, 
-	[$n_ekz,$frazo->[1],0.0,$serch_dosiero,$frazo->[0],$serch_fonto];
-    }
-}
+#sub trovu_approx {
+#    my ($ekz,$frazo) = @_;
+#
+#    if (amatch($ekz,[$lim_approx],($frazo->[1]))) {
+#	unshift @trovoj, 
+#	[$n_ekz,$frazo->[1],0.0,$serch_dosiero,$frazo->[0],$serch_fonto];
+#    }
+#}
 
 # per n-gramoj
 sub trovu_ngram {

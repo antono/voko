@@ -47,7 +47,7 @@ for $file (sort readdir(DIR)) {
 	    warn "$letter...\n";
 	};
 	#warn "$dos/$file\n" if ($verbose);
-	eval { $parser->parsefile("$dos/$file") }; warn $@ if ($@);
+	eval { $parser->parsefile("$dos/$file") }; warn "$file: $@" if ($@);
     }
 };
 closedir DIR;
@@ -121,9 +121,11 @@ sub start_handler {
 	my $lit = get_attr('lit',@attrs);
 	my $rad = $radiko;
 	if ($lit) {
+            use bytes;
 	    my $len = length($lit); # necesa, æar en UTF-8 supersignaj literoj
 	                            # estas du-bitokaj
 	    $rad =~ s/^.{$len}/$lit/;
+            no bytes;
 	}           
 	print $rad;
     }

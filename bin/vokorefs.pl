@@ -46,7 +46,7 @@ for $file (sort readdir(DIR)) {
 	    warn "$letter...\n";
 	};
 	#warn "$dos/$file\n" if ($verbose);
-	eval { $parser->parsefile("$file") }; warn $@ if ($@);
+	eval { $parser->parsefile("$file") }; warn "$file: $@" if ($@);
     }
 };
 closedir DIR;

@@ -1,33 +1,21 @@
 #!/usr/bin/perl -w
 #
 # voku ekz.
-#   belarangho.pl [-v] <xml-artikolo> 
+#   belarangho.pl < fonta_xml-dosiero > cela_xml-dosiero
+# au:
+#   belarangho.pl fonta_xml-dosiero
 #
 ################# komenco de la programo ################
 
 $maxlen = 80; # maksimuma longeco de linio
 
-#### esploru la argumentojn
-
-#while (@ARGV) {
-#    if ($ARGV[0] eq '-v') {
-#	$verbose = 1;
-#	shift @ARGV;
-#    }; # else {
-#	$dos = shift @ARGV;
-#    };
-#};
-
 #### legu la dosieron
-#die "Ne ekzistas dosiero \"$dos\""
-#  unless -f $dos;
-#open DOS,$dos or die "Ne povis malfermi \"$dos\"\n";
+
 $buffer = join('',<>);
-#close DOS;
 
 #### chiuj traktendajn strukturilojn metu sur propran linion
 
-$traktendaj = 'art|subart|drv|subdrv|snc|subsnc|dif|ekz|refgrp|trdgrp|rim';
+$traktendaj = 'art|subart|drv|subdrv|snc|subsnc|dif|ekz|refgrp|trdgrp|rim|kap';
 
 $buffer =~ s¦\r¦¦sg;
 $buffer =~ s¦\s*<($traktendaj)\b([^>]*)>\s*¦\r<$1$2>\r¦sg;
@@ -36,21 +24,36 @@ $buffer =~ s¦\s*</($traktendaj)>\s*¦\r</$1>\r¦sg;
 $buffer =~ s¦\r+¦\n¦sg;
 
 
-#### forigu kelkajn historiajn aferojn
+#### faru diversajn anstatauigojn kaj enmetojn
 
-$buffer =~ s¦(\s)k(\s)¦$1kaj$2¦sg;
+#$buffer =~ s¦(\s)k(\s)¦$1kaj$2¦sg;
 $buffer =~ s¦<snc\s+num="[0-9]+"¦<snc¦sg;
-#$buffer =~ s¦</vortaro>\s*$¦</vortaro>\n \n¦s;
+$buffer =~ s¦</drv>\s*\n*<drv¦</drv>\n\n<drv¦sg;
 
 #### enmetu deshovojn linikomence
 
-$traktendaj = 'subart|drv|subdrv|snc|subsnc|dif|ekz|refgrp|trdgrp|bld|rim';
+$traktendaj = 'subart|drv|subdrv|snc|subsnc|dif|ekz|refgrp|trdgrp|bld|rim|kap';
 @linioj = split("\n",$buffer);
 $level=0;
+$trd=0;
 
 foreach (@linioj) {
     s/^\s*//;
     s/\s*$//;
+
+    if (m:<trd(\s|>):) {
+        $trd++;
+    }
+
+    # k->kaj chie, krom tradukoj
+    if (not $trd) {
+        s/(\s)k(\s)/$1kaj$2/sg;
+    }
+
+    if (m:</trd>:) {
+        $trd--;
+    }
+
 
     if (m¦</($traktendaj)>$¦) {
 	$level--;
@@ -106,6 +109,7 @@ sub wrap {
 
     return $newline;
 }
+
 
 
 
