@@ -207,6 +207,15 @@ kaj stiloj (em,ctl,sup...)
 </xsl:template>
 
 
+<xsl:template match="k">
+  <i><xsl:apply-templates/></i>
+</xsl:template>
+
+
+<xsl:template match="g">
+  <b><xsl:apply-templates/></b>
+</xsl:template>
+
 
 </xsl:stylesheet>
 

@@ -356,16 +356,24 @@ en la fontoj.
 <!ELEMENT aut (#PCDATA)>
 
 <!-- [frm] Matematika au kemia formulo -->
-<!ELEMENT frm (#PCDATA|sup|sub)*>
+<!ELEMENT frm (#PCDATA|sup|sub|g|k)*>
+
+<!-- [g] Grasa parto de formulo, ekz. vektoro, matrico k.s.,
+  bv. uzi nur en frm -->
+<!ELEMENT g (#PCDATA)*>
+
+<!-- [k] Kursiva parto de formulo, ekz. variablo k.s.,
+  bv. uzi nur en frm -->
+<!ELEMENT k (#PCDATA)*>
 
 <!-- [em] Emfazo. Normale grase skribata vortoj.-->
 <!ELEMENT em (#PCDATA|tld)*>
 
 <!-- [sup] altigita teksto, ekz. en ĥemiaj formuloj -->
-<!ELEMENT sup (#PCDATA)>
+<!ELEMENT sup (#PCDATA|g|k)*>
 
 <!-- [sub] malaltigita teksto, ekz. en ĥemiaj formuloj -->
-<!ELEMENT sub (#PCDATA)>
+<!ELEMENT sub (#PCDATA|g|k)*>
 
 <!-- [ctl] citilita teksto, ekz. memindika uzo de vorto -->
 <!ELEMENT ctl (#PCDATA|tld|em|frm)*>
