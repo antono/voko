@@ -223,7 +223,7 @@ sub letter_nls {
     if (defined &$fnc) {
 	return &$fnc($chr);
     } else {
-	return lc($chr);
+	return lc(substr($chr,0,1));
     }
 }
 
@@ -299,7 +299,7 @@ sub letterval_de {
 
 
 sub letter_de {
-    my $letter = shift;
+    my $letter =  first_utf8char(shift);
     my $chr;
 
     if (ord($letter) >= ord('a') and ord($letter) <= ord('z')) {
@@ -337,7 +337,7 @@ sub letterval_en {
 }
 
 sub letter_en {
-    my $letter = shift;
+    my $letter =  first_utf8char(shift);
     my $chr;
 
     if (ord($letter) >= ord('a') and ord($letter) <= ord('z')) {
@@ -409,7 +409,7 @@ sub letterval_eo {
 }
 
 sub letter_eo {
-    my $letter = shift;
+    my $letter =  first_utf8char(shift);
 
     if (ord($letter) >= ord('a') and ord($letter) <= ord('z')) {
 	return $letter;
@@ -608,7 +608,7 @@ sub letterval_fr {
 }
 
 sub letter_fr {
-    my $letter = shift;
+    my $letter =  first_utf8char(shift);
     my $chr;
 
     if (ord($letter) >= ord('a') and ord($letter) <= ord('z')) {
@@ -683,7 +683,7 @@ sub letterval_ru {
 }
 
 sub letter_ru {
-    my $letter = shift;
+    my $letter =  first_utf8char(shift);
     my $uval = hex(utf8_hex($letter));
     
     if ( 0x410 <= $uval and $uval <= 0x42f ) { #majusklo
@@ -814,7 +814,7 @@ sub letterval_tr {
 }
 
 sub letter_tr {
-    my $letter = shift;
+    my $letter =  first_utf8char(shift);
     my $chr;
 
     if (ord($letter) >= ord('a') and ord($letter) <= ord('z')
@@ -903,7 +903,7 @@ sub letterval_pl {
 
 
 sub letter_pl {
-    my $letter = shift;
+    my $letter =  first_utf8char(shift);
     my $chr;
 
     if (ord($letter) >= ord('a') and ord($letter) <= ord('z')) {
@@ -975,7 +975,7 @@ sub letterval_hu {
 
 
 sub letter_hu {
-    my $letter = shift;
+    my $letter =  first_utf8char(shift);
     my $chr;
 
     if (ord($letter) >= ord('a') and ord($letter) <= ord('z')) {
@@ -1015,7 +1015,8 @@ my %values_cs_1 = (
     to_utf8("\001\107") => 10*ord('n'),
     to_utf8("\001\110") => 10*ord('n'),
     to_utf8("\001\144") => 10*ord('t'),
-    to_utf8("\001\145") => 10*ord('t')
+    to_utf8("\001\145") => 10*ord('t'),
+    "#" => 10*ord('h')+2
     );
 
 my %values_cs_2 = (
@@ -1042,7 +1043,8 @@ my %values_cs_2 = (
     to_utf8("\001\107") => 10*ord('n')+2,
     to_utf8("\001\110") => 10*ord('n')+3,
     to_utf8("\001\144") => 10*ord('t')+2,
-    to_utf8("\001\145") => 10*ord('t')+3
+    to_utf8("\001\145") => 10*ord('t')+3,
+    "#" => 10*ord('h')+2
     );
 
 my %values_cs_3 = (
@@ -1071,6 +1073,19 @@ my %values_cs_3 = (
     to_utf8("\001\144") => 't',
     to_utf8("\001\145") => 't',
     );
+
+
+sub sortprep_cs {
+    my $w = shift;
+
+    print "$w -> " if ($debug);
+
+    $w =~ s/ch/#/ig; # ch sekvas post h
+
+    print "-> $w\n" if ($debug);
+
+    return $w;
+}
 
 sub letterval_cs {
     my ($chr,$level) = @_;
@@ -1102,14 +1117,21 @@ sub letter_cs {
     my $letter = shift;
     my $chr;
 
-    if (ord($letter) >= ord('a') and ord($letter) <= ord('z')) {
-	return $letter;
-    } elsif (ord($letter) >= ord('A') and ord($letter) <= ord('Z')) {
-	return lc($letter);
-    } elsif ( exists $values_cs_3{$letter} ) {
-	return $values_cs_3{$letter};
+    if ( lc($letter) =~ /^ch/ ) {
+	return 'ch';
+
     } else {
-	return '0';
+	$letter =  first_utf8char($letter);
+
+	if (ord($letter) >= ord('a') and ord($letter) <= ord('z')) {
+	    return $letter;
+	} elsif (ord($letter) >= ord('A') and ord($letter) <= ord('Z')) {
+	    return lc($letter);
+	} elsif ( exists $values_cs_3{$letter} ) {
+	    return $values_cs_3{$letter};
+	} else {
+	    return '0';
+	}
     }
 }
 
@@ -1122,6 +1144,7 @@ sub letter_asci_cs {
     elsif ($chr eq to_utf8("\001\141")) { return 'sx'; }
     elsif ($chr eq to_utf8("\001\131")) { return 'rx'; }
     elsif ($chr eq to_utf8("\001\176")) { return 'zx'; }
+    elsif ($chr eq "ch")                { return 'ch'; }
     else                                { return $chr; }
 }
 

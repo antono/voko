@@ -464,7 +464,7 @@ sub traduko {
     $kap =~ s/\///;
 
     # sub kiu litero aperu la vorto?
-    $letter = letter_nls(first_utf8char($trd),$lng);
+    $letter = letter_nls($trd,$lng);
 
     # enmetu la vorton sub $tradukoj{$lng}->{$letter}
     push @{$tradukoj{$lng}->{$letter}}, [$mrk,$kap,$trd];
@@ -637,9 +637,9 @@ sub INXSHANGHITAJ {
 	if ( (-f "$xml_dir/$dos") and
 	     ($now - $time < $tagoj * 24 * 60 * 60)) {
 	    # metu tempon kaj informon en liston
-	    push @files, [$time, $dos];
+	    push @files, [$time, cvs_log($dos)];
 
-#	    if (++$n >= $nmax) { last; }
+	    if (++$n >= $nmax) { last; }
 	}
 	
     }
@@ -647,9 +647,7 @@ sub INXSHANGHITAJ {
 
     # skribu la liston
     for $entry (sort { $b->[0] <=> $a->[0] } @files) {
-	
-	print cvs_log($entry->[1]);
-	if (++$n >= $nmax) { last; }
+	print $entry->[1];
     }
 
     index_footer($n>20);
@@ -671,7 +669,7 @@ sub INXLIST {
 
     print 
 	"<html>\n<head>\n<title>indekslisto</title>\n",
-	"<link title=\"indekso-stilo\" type=\"text/css\" ",
+	"<link titel=\"indekso-stilo\" type=\"text/css\" ",
 	"rel=stylesheet href=\"../stl/indeksoj.css\">\n",
 	"<meta http-equiv=\"Content-Type\" ",
 	"content=\"text/html; charset=UTF-8\">\n",
@@ -773,7 +771,7 @@ sub index_header {
 
     print 
 	"<html>\n<head>\n<title>$title_base $letter</title>\n",
-	"<link title=\"indekso-stilo\" type=\"text/css\" ",
+	"<link titel=\"indekso-stilo\" type=\"text/css\" ",
 	"rel=stylesheet href=\"../stl/indeksoj.css\">\n",
 	"<meta http-equiv=\"Content-Type\" ",
 	"content=\"text/html; charset=UTF-8\">\n",
@@ -837,7 +835,7 @@ sub diff_mv {
 # elprenas informojn el "cvs log"
 sub cvs_log {
     my $dos = shift;
-    my ($art,$log,$rev,$info,$dato);
+    my ($art,$log,$head,$info,$dato);
     my $result;
 
     #print "nova: $dos\n" if ($verbose);
@@ -848,12 +846,15 @@ sub cvs_log {
     $result = "<a href=\"$art_dir/$art.html\" target=precipa>$art</a>";
 
     # eltiru informojn pri aktuala versio el "cvs log"
-    $log = `$cvs_log -r $xml_dir/$dos`;
+    $log = `$cvs_log $xml_dir/$dos`;
 
-    if ($log) {
-	$log =~ /-{28}\nrevision ([0-9\.]+)\n(.*?)={28}/s;
-	$rev = $1;
-	$info = $2;
+    $log =~ /head: ([0-9\.]+)/s;
+    $head = $1;
+    $head =~ s/\./\\./g;
+
+    if ($head) {
+	$log =~ /-{28}\nrevision $head\n(.*?)(?:-{28}|={28})/s;
+	$info = $1;
 
 	unless ($info) {
 	    warn "$dos: Ne povis elpreni versioinformon el $log\n";
@@ -868,10 +869,8 @@ sub cvs_log {
 	
 	# skribu la informojn
 	$info =~ s/\s*$//s;
-	$info =~ s/&/&amp;/g;
-	$info =~ s/</&lt;/g;
-	$info =~ s/>/&gt;/g;
-	$result .= " (versio: $rev $dato; $info)<p>\n";
+	$head =~ s/\\//g;
+	$result .= " (versio: $head $dato; $info)<p>\n";
     }
 
     return $result;
