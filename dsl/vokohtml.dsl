@@ -56,8 +56,9 @@
 ; bildetoj aý nura teksto
 (define *simboloj* #t) ; enmetu simbolojn por lingvoj kaj referenctipoj
 
-; difinas la uzitan tiparon - øi estu Latin-3-tiparo, (momente ne plu uzata)
+; *tiparnomo* difinas la uzitan tiparon - øi estu Latin-3-tiparo, (momente ne plu uzata)
 ; (define *tiparnomo* "Times SudEuro")
+
 
 ;******************* helpfunkcioj *****************
 
@@ -79,11 +80,6 @@
 (define (*children-count* chtype #!optional (nd (current-node)))
 	(node-list-length (select-elements
 		(children nd) chtype)))
-
-; elprenu la kapvorton el artikolo
-
-(define (*kapvorto* #!optional (nodo (current-node)))
-  (data (select-elements (children nodo) "KAP")))
 
 ; redonas la nomon de la grafik-dosiero laý la referenctipo
 
@@ -131,6 +127,20 @@
 		(list "rel" "stylesheet")
 		(list "href" "../stl/artikolo.css"))))
 
+; donas la pozicion de la unua okazo de singo en signaro
+
+(define (*string-pos* chr str #!optional (start 0))
+  (cond ((>= (+ 1 start) (string-length str)) #f)
+	((char=? (string-ref str start) chr) start)
+	(else (*string-pos* chr str (+ 1 start)))))
+
+; transformas referencon en URLon
+(define (*ref->url* ref)
+  (let ((pos (*string-pos* #\. ref)))
+    (if pos
+	(string-append (substring ref 0 pos) ".html#" ref) 
+	(string-append ref ".html"))))
+  
 
 ;*********************************************************************
 ;                           transformreguloj 
@@ -222,7 +232,7 @@
 		      (make element gi: "head"
 			    (*meta-encoding*)
 			    (*link-style-sheet*)
-			    (make element gi: "title" (literal (*kapvorto*))))
+			    (make element gi: "title" (process-matching-children 'KAP)))
 		      (make element gi: "body"))))
 
         ; nur unu dosiero - normale traktu la artikolon
@@ -391,12 +401,14 @@
   (element ref (make sequence
 		 (literal (*refsmb-teksto* (attribute-string "tip")))
 		 (if (attribute-string "cel")
-		     (make sequence 
-		       (make element gi: "a" attributes: 
-			     (list (list "href" 
-					 (string-append "#" 
-							(attribute-string "cel"))))
-			     (process-children)))
+		     (if *pluraj-dosieroj*
+			 (make element gi: "a" attributes:
+			       (list (list "href" 
+					   (*ref->url* (attribute-string "cel")))))
+			 (make element gi: "a" attributes: 
+			       (list (list "href" 
+					   (string-append "#" 
+							  (attribute-string "cel"))))))
 		     (make sequence (make element gi: "a" attributes:
 					  (list (list "href" "#nenien"))
 					  (process-children))))))
@@ -480,7 +492,7 @@
 		      (make element gi: "head"
 			    (*meta-encoding*)
 			    (*link-style-sheet*)
-			    (make element gi: "title" (literal (*kapvorto*))))
+			    (make element gi: "title"  (process-matching-children 'KAP)))
 		      (make element gi: "body"))))
 
         ; nur unu dosiero - normale traktu la artikolon
@@ -674,7 +686,7 @@
   (element refgrp 
     (make sequence 
       (if *simboloj* 
-	  (make element gi: "img" attributes: 
+	  (make empty-element gi: "img" attributes: 
 		(list (list "src" (*refsmb-dosiero* (attribute-string "tip")))
 		      (list "alt" (*refsmb-teksto* (attribute-string "tip")))))
 		(literal (*refsmb-teksto* (attribute-string "tip"))))
@@ -684,17 +696,17 @@
   (element ref 
     (make sequence 
       (if (and *simboloj* (attribute-string "tip"))
-	  (make element gi: "img" attributes: 
+	  (make empty-element gi: "img" attributes: 
 		(list (list "src" (*refsmb-dosiero* (attribute-string "tip")))
 		      (list "alt" (*refsmb-teksto* (attribute-string "tip")))))
 	  (literal (*refsmb-teksto* (attribute-string "tip"))))
       (if (attribute-string "cel") 
-	  (make sequence 
-	    (make element gi: "a" attributes: 
-		  (list (list "href" 
-			      (string-append "#" 
-					     (attribute-string "cel"))))
-		  (process-children)))
+	  (if *pluraj-dosieroj*
+	      (make element gi: "a" attributes:
+		    (list (list "href" (*ref->url* (attribute-string "cel")))))
+	      (make element gi: "a" attributes: 
+		    (list (list "href" (string-append "#" 
+						      (attribute-string "cel"))))))
 	  (make sequence 
 	    (make element gi: "a" attributes:
 		  (list (list "href" "#nenien"))
