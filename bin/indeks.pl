@@ -839,7 +839,8 @@ sub INXSTATISTIKO {
 		print "<img src=\"../smb/xx.png\" alt = \"\">&nbsp;";
 	    }
 	print "$lingvoj{$lng}j: ".$s->[1];
-	printf(" (%.02f%%)",100*$s->[1]/$statistiko{'drv'});
+        my $pcnt = 100*$s->[1]/$statistiko{'drv'};
+	printf(" (~ %.02f%%)",$pcnt>100?100:$pcnt);
 	print "<br>\n";
 	$n++;
     };
