@@ -1,8 +1,12 @@
 #!/usr/bin/perl
 
-# legas unu post la alia mesaghojn el dosiero
-# kaj dispartigas ilin en kapon kaj korpon,
-# che MIME-mesaghoj - elpakas ties unuopajn partojn
+# prenas la redaktitajn artikolojn el la poshtfako
+# au alia dosiero donita en la komandlinio kaj
+# analizas, sintakse kontrolas, metas en la vortaron
+# kaj arkivigas (per CVS) ilin.
+#
+# voku:
+#  processmail.pl [<mesagh-dosiero>]
 
 
 use MIME::Parser;

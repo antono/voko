@@ -73,6 +73,7 @@ sub char_handler {
 	  $xp->in_element('rad') or
 	  $xp->in_element('trd') or
 	  $xp->in_element('ind') or
+	  $xp->in_element('mll') or
 	  ($xp->in_element('klr') and $ind) or
 	  $xp->in_element('ref') or
 	  ($xp->in_element('uzo') and $fako) or
@@ -97,6 +98,7 @@ sub start_handler {
 	$el eq 'kap' or
 	$el eq 'drv' or
 	$el eq 'ref' or
+	$el eq 'mll' or
 	($el eq 'ind' and not $xp->in_element('ekz')) 
 	)
     {
@@ -204,6 +206,7 @@ sub end_handler {
 	$el eq 'drv' or
 	$el eq 'trd' or
 	$el eq 'ref' or
+	$el eq 'mll' or
 	$el eq 'ind' or
         $el eq 'bld'
 	)

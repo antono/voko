@@ -1,8 +1,7 @@
 #!/usr/bin/perl
 
-# konvertas de lat3 al utf8
-# inklude de la linio charset = ... 
-# voku: lat3_utf8.pl <dosieroj>
+# konvertas de c^ al lat3
+# voku: cteg_lat3.pl <dosieroj>
 
 foreach $file (@ARGV) {
 

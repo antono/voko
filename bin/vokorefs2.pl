@@ -653,7 +653,7 @@ sub create_fx {
     open OUT,">$tezfak" or die "Ne povis krei $tezfak: $!\n";
     select OUT;
 
-    foreach $fako (sort @uzataj_fakoj) { print "$fako\n"; }
+    foreach $fako (sort @uzataj_fakoj) { print "fxs_".lc($fako).".html;$fako\n"; }
     close OUT;
     select STDOUT;
 }

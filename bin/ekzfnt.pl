@@ -1,8 +1,8 @@
 #!/usr/bin/perl -w
 #
 # voku ekz.
-#   trovufontojn.pl [-v] [-x art.xml | -e "citajho serchenda"] 
-#       [-m ea345] [-c agordodosiero] [-n trovnombro]
+#   ekzfnt.pl [-v] [-x art.xml | -e "citajho serchenda"] 
+#       [-m ea345] [-c agordodosiero] [-n maks. trovnombro]
 #
 #   metodoj e: ekzakte
 #           a: per String::Approx (per Levenshtein-distanco)

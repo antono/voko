@@ -46,8 +46,8 @@ if (not -e "$nometo") {
 };
 
 # kreu la dosierujojn art,inx,bin,dok,dsl,dtd,inx,rtf,sgm,smb,stl,xml
-for $dos ('art','cfg','cgi','inx','bin','dok','dtd',
-	 'inx','rtf','sgm','smb','stl','xml') {
+for $dos ('art','bld','cfg','cgi','inx','bin','dok','dtd',
+	 'inx','tez','rtf','sgm','smb','stl','xml') {
 
     if (not -e "$nometo/$dos") {
 	`$mkdir $nometo/$dos`;

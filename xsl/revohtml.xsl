@@ -312,10 +312,10 @@ modifita de Wolfram Diestel
       <xsl:text>SUB:</xsl:text>
     </xsl:when>
     <xsl:when test="@tip='prt'">
-      <xsl:text>ERO:</xsl:text>
+      <xsl:text>PRT:</xsl:text>
     </xsl:when>
     <xsl:when test="@tip='malprt'">
-      <xsl:text>UJO:</xsl:text>
+      <xsl:text>TUT:</xsl:text>
     </xsl:when>
   </xsl:choose>
 </xsl:template>
@@ -355,6 +355,7 @@ modifita de Wolfram Diestel
 </xsl:template>
 
 <xsl:template match="dif/refgrp|dif/ref|rim/refgrp|rim/ref|ekz/refgrp|ekz/ref|klr/refgrp|klr/ref">
+  <!-- 
   <xsl:if test="@tip='dif'">
     <img src="{$smbdir}/{@tip}.gif">
       <xsl:attribute name="alt">
@@ -362,16 +363,17 @@ modifita de Wolfram Diestel
       </xsl:attribute>
     </img> 
   </xsl:if>
+  -->
   <xsl:variable name="file" select="substring-before(@cel,'.')"/>
   <xsl:choose>
     <xsl:when test="$file">
-      <a class="{local-name(parent::node())}" 
+      <a class="{local-name((ancestor::rim|ancestor::ekz|ancestor::dif)[last()])}" 
          href="{$file}.html#{$file}.{substring-after(@cel,'.')}">
       <xsl:apply-templates/>
       </a>
     </xsl:when>
     <xsl:otherwise>
-      <a class="{parent::local-name}" href="{@cel}.html">
+      <a class="{local-name((ancestor::rim|ancestor::ekz|ancestor::dif)[last()])}" href="{@cel}.html">
       <xsl:apply-templates/>
       </a>
     </xsl:otherwise>
@@ -389,7 +391,7 @@ modifita de Wolfram Diestel
   <span class="fnt">
     <a name="ekz_{$n}"></a>
     <xsl:text>[</xsl:text>
-    <a class="fnt" href="#fnt_{$n}"><xsl:value-of select="$n"/></a>
+    <a class="{local-name((ancestor::rim|ancestor::ekz|node())[1])}" href="#fnt_{$n}"><xsl:value-of select="$n"/></a>
     <xsl:text>]</xsl:text>
   </span>
 </xsl:template>
@@ -626,7 +628,24 @@ modifita de Wolfram Diestel
 </xsl:template>
 
 <xsl:template match="ind" mode="tradukoj">
+  <xsl:choose>
+    <xsl:when test="mll">
+      <xsl:apply-templates select="mll" mode="tradukoj"/>	
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:apply-templates mode="tradukoj"/>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template match="ind/mll" mode="tradukoj">
+  <xsl:if test="@tip='fin' or @tip='mez'">
+    <xsl:text>...</xsl:text>
+  </xsl:if>
   <xsl:apply-templates mode="tradukoj"/>
+  <xsl:if test="@tip='kom' or @tip='mez'">
+    <xsl:text>...</xsl:text>
+  </xsl:if>
 </xsl:template>
 
 <xsl:template match="trdgrp/trd" mode="tradukoj">

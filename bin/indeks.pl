@@ -103,8 +103,11 @@ if ($indeksoj=~/fak/) {
     # kiuj fakoj havas tezauran indekson?
     open TEZ,$config{"tezauro_fakoj"} || 
 	die "Ne povis legi ".$config{"tezauro_fakoj"}."\n";
-    @strukt_fakoj = <TEZ>;
-    map { chomp } @strukt_fakoj;
+    while (<TEZ>) {
+	chomp;
+	my ($file,$fak) = split(';');
+	$strukt_fakoj{$fak} = $file;
+    }
     close TEZ;
 
     # kreu fakindeksojn
@@ -285,9 +288,19 @@ sub ekzemplo {
     my ($mrk,$kap,$tekst,$rad)=@_;
     my $ind;
 
-    # tio, kio estas radukita
+    # tio, kio estas tradukita
     if ($tekst =~ s/<ind\s*>(.*?)<\/ind\s*>//si) {
 	$ind = $1;
+
+	# mallongigita?
+	if ($ind =~ s/<mll([^>]*)>(.*?)<\/mll\s*>//si) {
+	    $ind = $2;
+	    my $attr = $1;
+	    if ($attr =~ /\"kom\"/) { $ind .= '...'; }
+	    elsif ($attr =~ /\"fin\"/) { $ind = '...'.$ind; }
+	    elsif ($attr =~ /\"mez\"/) { $ind = '...'.$ind.'...'; }
+	}
+
     } else {
 	$ind = $kap; # referencu al kapvorto, se mankas <ind>...</ind>
     }
@@ -355,6 +368,15 @@ sub traduko {
     my ($letter,$ind);
     $kap =~ s/\///;
 
+    # mallongigita?
+    if ($trd =~ s/<mll([^>]*)>(.*?)<\/mll\s*>//si) {
+	$trd = $2;
+	my $attr = $1;
+	if ($attr =~ /\"kom\"/) { $trd .= '...'; }
+	elsif ($attr =~ /\"fin\"/) { $trd = '...'.$trd; }
+	elsif ($attr =~ /\"mez\"/) { $trd = '...'.$trd.'...'; }
+    }
+
     if ($trd =~ /<ind>(.*?)<\/ind>/s) {
 	$ind = $1;
     } else {
@@ -393,7 +415,7 @@ sub FAKINX {
     my $target_file = "$dir/fx_".lc($fako).".html";
 
     # ek
-    print "$target_file..." if ($verbose);
+    #print "$target_file..." if ($verbose);
     open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
     select OUT;
     unless ($faknomo=$faknomoj{uc($fako)}) {
@@ -403,10 +425,12 @@ sub FAKINX {
 
     index_header("fakindekso: $faknomo");
     linkbuttons();
-    if (grep /^$fako$/, @strukt_fakoj) {
-	index_letters($faknomo,'fx','alfabete',
+    if ($strukt_fakoj{$fako}) {
+	$strukt_file = $strukt_fakoj{$fako};
+	$strukt_file =~ s/\.html$//;
+	index_letters($faknomo,'','alfabete',
 		     ['alfabete','strukture'],
-		     ['_'.lc($fako),'s_'.lc($fako)]);
+		     ['fx_'.lc($fako),$strukt_file]);
     } else {
 	index_letters($faknomo,'','');
     }
@@ -447,7 +471,7 @@ sub LINGVINX {
     my $asci = letter_asci_nls($lit,$lng);
     my $target_file = "$dir/lx_${lng}_$asci.html";
  
-    print "$target_file..." if ($verbose);
+    #print "$target_file..." if ($verbose);
     open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
     select OUT;
     index_header("lingvoindekso: $lingvoj{$lng}");
@@ -489,7 +513,7 @@ sub KAPVORTINX {
 
     my $target_file = "$dir/kap_$l_x.html";
 
-    print "$target_file..." if ($verbose);
+    #print "$target_file..." if ($verbose);
     open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
     select OUT;
     index_header("kapvortindekso");
@@ -530,7 +554,7 @@ sub INVVORTINX {
     
     my $target_file = "$dir/inv_$l_x.html";
     
-    print "$target_file..." if ($verbose);
+    #print "$target_file..." if ($verbose);
     open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
     select OUT;
     index_header("inversa indekso");
@@ -599,7 +623,7 @@ sub INXSHANGHITAJ {
     # dosiero "novaj artikoloj"
     my $target_file = "$dir/novaj.html";
 
-    print "$target_file..." if ($verbose);
+    #print "$target_file..." if ($verbose);
     open OUT, ">$tmp_file" or die "Ne povis malfermi $tmp_file: $!\n";
     select OUT;
     index_header("Revo - novaj artikoloj");
@@ -623,7 +647,7 @@ sub INXSHANGHITAJ {
     # dosiero "shanghitaj artikoloj"
     $target_file = "$dir/shanghitaj.html";
 
-    print "$target_file..." if ($verbose);
+    #print "$target_file..." if ($verbose);
     open OUT, ">$tmp_file" or die "Ne povis malfermi $tmp_file: $!\n";
     select OUT;
     index_header("laste ŝanĝitaj");
@@ -667,7 +691,7 @@ sub INXBILDOJ {
     my $target_file = "$dir/bildoj.html";
 
     # ek
-    print "$target_file..." if ($verbose);
+    #print "$target_file..." if ($verbose);
     open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
     select OUT;
     index_header('bildoj');
@@ -705,7 +729,7 @@ sub INXSTATISTIKO {
     my (@trdj, @fakj);
 
     # ek
-    print "$target_file..." if ($verbose);
+    #print "$target_file..." if ($verbose);
     open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
     select OUT;
     index_header('statistiko');
@@ -762,7 +786,7 @@ sub INX_EO {
     my ($lit,$lit1);
     my $target_file = "$dir/_eo.html";
 
-    print "$target_file..." if ($verbose);
+    #print "$target_file..." if ($verbose);
     open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
     select OUT;
 
@@ -784,6 +808,7 @@ sub INX_EO {
 	print "<h1>tezaŭroradikoj</h1>\n";
 	open TEZ, $config{"tezauro_radikoj"};
 	while (<TEZ>) {
+	    chomp;
 	    my ($file,$kap) = split(';');
 	    print "<a href=\"$file\">$kap</a><br>\n";
 	}
@@ -799,7 +824,7 @@ sub INX_EO {
 sub INX_LNG {
     my $target_file = "$dir/_lng.html";
 
-    print "$target_file..." if ($verbose);
+    #print "$target_file..." if ($verbose);
     open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
     select OUT;
 
@@ -844,7 +869,7 @@ sub INX_LNG {
 sub INX_FAK {
     my $target_file = "$dir/_fak.html";
 
-    print "$target_file..." if ($verbose);
+    #print "$target_file..." if ($verbose);
     open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
     select OUT;
 
@@ -872,7 +897,7 @@ sub INX_FAK {
     if ($config{"inx_fak"}=~/tezauro/) {
 	print "<h1>tezaŭraj fakindeksoj</h1>\n";
 	
-	for $fak (@strukt_fakoj) 
+	for $fak (sort keys %strukt_fakoj) 
 	{
 	    my $faknomo=$faknomoj{uc($fak)};
 	    unless ($faknomo) {
@@ -881,8 +906,9 @@ sub INX_FAK {
 	    }
 	    print 
 		"<img src=\"../smb/$fak.gif\" alt=\"$fak\" border=0 ",
-		"align=middle>&nbsp<a href=\"fxs_", 
-		lc($fak), ".html\">$faknomo</a><br>\n";
+		"align=middle>&nbsp<a href=\"",
+		$strukt_fakoj{$fak},
+		"\">$faknomo</a><br>\n";
 	}
     }
 
@@ -897,7 +923,7 @@ sub INX_FAK {
 sub INX_KTP {
     my $target_file = "$dir/_ktp.html";
 
-    print "$target_file..." if ($verbose);
+    #print "$target_file..." if ($verbose);
     open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
     select OUT;
 
@@ -987,7 +1013,7 @@ sub INX_PLENA {
     my ($lit,$lit1);
     my $target_file = "$dir/_plena.html";
 
-    print "$target_file..." if ($verbose);
+    #print "$target_file..." if ($verbose);
     open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
     select OUT;
 
@@ -1254,10 +1280,10 @@ sub diff_mv {
     my ($newfile,$oldfile) = @_;
 
     if ((! -e $oldfile) or (`diff -q $newfile $oldfile`)) {
-	print "farite\n" if ($verbose);
+	print "$oldfile\n" if ($verbose);
 	`mv $newfile $oldfile`;
     } else {
-	print "(senshanghe)\n" if ($verbose);
+	#print "(senshanghe)\n" if ($verbose);
 	unlink($newfile);
     }
 };

@@ -2,7 +2,7 @@
 #
 #
 # prenas la ekzemplojn el chiuj transdonitaj dosieroj
-# kaj serchas la fontojn per trovufontojn.pl
+# kaj serchas la fontojn per ekzfnt.pl
 #
 # Prefere voku tion de la sama dosierujo, kie
 # trovighas la artikoloj, char la DTD devas esti

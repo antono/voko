@@ -270,7 +270,7 @@ sama lingvo.
 <!-- [trd] Traduko kosistas el traduka vorto aŭ frazo
 kaj klarigoj, poste povos sekvi aliaj elementoj.
 -->
-<!ELEMENT trd (#PCDATA|klr|ind)*>
+<!ELEMENT trd (#PCDATA|klr|ind|mll)*>
 <!ATTLIST trd
 	lng CDATA #IMPLIED
 >
@@ -282,8 +282,10 @@ kiu rilatas internaj tradukoj ktp. Vi povas aldoni tipon kom, mez, fin,
 se tio estas nur la komenco, mezo aŭ fino de la ekzemplo kaj tio
 estu signata per punktoj en la indekso.
 -->
-<!ELEMENT ind (#PCDATA|tld|klr)*>
-<!ATTLIST ind
+<!ELEMENT ind (#PCDATA|tld|klr|mll)*>
+
+<!ELEMENT mll (#PCDATA|tld|klr|ind)*>
+<!ATTLIST mll
         tip (kom|mez|fin) #IMPLIED
 >
 
