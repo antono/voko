@@ -18,7 +18,7 @@ BEGIN {
 
   push @INC, ($pado); #print join(':',@INC);
   require nls;
-  nls->import();
+  "nls"->import();
   nls::read_nls_cfg("$pado/../cfg/nls.cfg");
 }         
 
@@ -52,7 +52,7 @@ while (@ARGV) {
 }
 
 # legu la agordo-dosieron
-unless ($agord_dosiero) { $agord_dosiero = "voko.cfg" };
+unless ($agord_dosiero) { $agord_dosiero = "cfg/vortaro.cfg" };
 
 %config = read_cfg($agord_dosiero);
 
@@ -125,12 +125,12 @@ if ($indeksoj=~/kapvortoj/) {
 
 # inversa indekso
 if ($indeksoj=~/inversa/) {
-    @literoj = sort { cmp_nls($a,$b,'eo')} keys %invvortoj;
-    $unua_litero{'inv'} = letter_asci_nls($literoj[0],'eo');
-    foreach $lit (@literoj) {
+    @invliteroj = sort { cmp_nls($a,$b,'eo')} keys %invvortoj;
+    $unua_litero{'inv'} = letter_asci_nls($invliteroj[0],'eo');
+    foreach $lit (@invliteroj) {
 	$refs = $invvortoj{$lit};
 	@$refs = sort { cmp_nls($a->[2],$b->[2],'eo') } @$refs;
-	INVVORTINX($lit,\@literoj,$refs);
+	INVVORTINX($lit,\@invliteroj,$refs);
     }
 }
 
@@ -289,13 +289,18 @@ sub FAKINX {
     my $last1 = '';
     my $n = 0;
     my @vortoj;
+    my $faknomo;
     my $target_file = "$dir/fx_".lc($fako).".html";
 
     # ek
     print "$target_file..." if ($verbose);
     open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
     select OUT;
-    index_header($faknomoj{uc($fako)},'','','');
+    unless ($faknomo=$faknomoj{uc($fako)}) {
+	warn "Fako \"$fako\" ne difinita\n";
+	$faknomo='';
+    }
+    index_header($faknomo,'','','');
     
     # ordigu la vortliston
     @vortoj = sort { cmp_nls($a->[2],$b->[2],'eo') } @$refs;
@@ -508,7 +513,7 @@ sub INXLIST {
 	print "<dt>lingvoindeksoj\n<dd>";
 	for $lng (sort keys %tradukoj) 
 	{
-	    if (-f "$dir/../smb/$lng.jpg") {
+	    if (-f "$vortaro_pado/smb/$lng.jpg") {
 		print "<img src=\"../smb/$lng.jpg\" alt=\"$lng\"> ";
 	    } else {
 		print "<img src=\"../smb/xx.jpg\" alt = \"$lng\"> ";
@@ -523,10 +528,15 @@ sub INXLIST {
 	print "<dt>fakindeksoj\n<dd>";
 	for $fak (sort keys %fakoj) 
 	{
+	    my $faknomo=$faknomoj{uc($fak)};
+	    unless ($faknomo) {
+		warn "Faknomo \"$fak\" ne difinita!\n";
+		$faknomo = '';
+	    }
 	    print 
 		"<a href=\"fx_", lc($fak), ".html\">",
 		"<img src=\"../smb/", uc($fak), ".gif\"",
-		"alt=\"", $faknomoj{uc($fak)}, "\" border=0></a>\n";
+		"alt=\"", $faknomo, "\" border=0></a>\n";
 	};
     };
 

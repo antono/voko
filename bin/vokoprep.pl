@@ -46,7 +46,7 @@ if (not -e "$nometo") {
 };
 
 # kreu la dosierujojn art,inx,bin,dok,dsl,dtd,inx,rtf,sgm,smb,stl,xml
-for $dos ('art','inx','bin','dok','dsl','dtd',
+for $dos ('art','cfg','cgi','inx','bin','dok','dtd',
 	 'inx','rtf','sgm','smb','stl','xml') {
 
     if (not -e "$nometo/$dos") {
@@ -55,25 +55,21 @@ for $dos ('art','inx','bin','dok','dsl','dtd',
 };
 
 # kopiu la necesajn dosierojn
-`$copy $VOKO/dsl/*.* $nometo/dsl/`;
-`$copy $VOKO/dsl/catalog $nometo/dsl/`;
 `$copy $VOKO/dtd/*.dtd $nometo/dtd/`;
 `$copy $VOKO/smb/*.* $nometo/smb/`;
 `$copy $VOKO/stl/*.css $nometo/stl/`;
-`$copy $VOKO/sgm/catalog $nometo/sgm/`;
 `$copy $VOKO/div/*.* $nometo/`;
 `$copy $VOKO/dok/*.htm $nometo/dok/`;
 `$copy $VOKO/dok/*.txt $nometo/dok/`;
-`$copy $VOKO/bin/sercho.pm $nometo/bin/`;
-`$copy $VOKO/bin/serchcgi.pl $nometo/bin/`;
-`$copy $VOKO/bin/vokosrv.pl $nometo/bin/`;
+`$copy $VOKO/cgi/*.* $nometo/cgi/`;
+`$copy $VOKO/cfg/*.* $nometo/cfg/`;
 
 # En sercxo.htm difinu value=$nometo
-open IN,"$VOKO/div/sercxo.htm";
+open IN,"$VOKO/div/sercxo.html";
 $in = join('',<IN>);
 close IN;
 $in =~ s/(<input[^>]*name=\"?vortaro\"?\s+value=\"?)[a-z]*/$1$nometo/s;
-open OUT,">$nometo/sercxo.htm";
+open OUT,">$nometo/sercxo.html";
 print OUT $in;
 close OUT;
 

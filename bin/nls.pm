@@ -130,8 +130,8 @@ sub cmp_nls {
     # komparu krude (sen atento de uskleco kaj similaj diferencoj)
     my ($x,$y) = ($vorto1,$vorto2);
     do {
-	$cmp = ( ${$$letters{pop_utf8char($x)}}[0] || 99999 ) 
-	    <=> ( ${$$letters{pop_utf8char($y)}}[0] || 99999 );
+	$cmp = ( $x? (${$$letters{pop_utf8char($x)}}[0] || 99999) : 0 ) 
+	    <=> ( $y? (${$$letters{pop_utf8char($y)}}[0] || 99999) : 0 );
         } while ($cmp == 0 and ($x or $y));
     
     # se la vortoj egalas, komparu pli subtile
@@ -139,8 +139,8 @@ sub cmp_nls {
 	# komparu krude (sen atento de uskleco kaj similaj diferencoj)
         my ($x,$y) = ($vorto1,$vorto2);
         do {
-	    $cmp = ( ${$$letters{pop_utf8char($x)}}[1] || 99999 ) 
-	        <=> ( ${$$letters{pop_utf8char($y)}}[1] || 99999 );
+	    $cmp = ( $x? (${$$letters{pop_utf8char($x)}}[1] || 99999) : 0 ) 
+	        <=> ( $y? (${$$letters{pop_utf8char($y)}}[1] || 99999) : 0 );
             } while ($cmp == 0 and ($x or $y));
     }
     

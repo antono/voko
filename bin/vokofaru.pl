@@ -32,7 +32,7 @@ while (@ARGV) {
 $|=1;
 
 # legu la agordo-dosieron
-unless ($agord_dosiero) { $agord_dosiero = "voko.cfg" };
+unless ($agord_dosiero) { $agord_dosiero = "cfg/vortaro.cfg" };
 
 open CFG, $agord_dosiero 
     || die "Ne povis malfermi agordodosieron \"$agord_dosiero\".\n";

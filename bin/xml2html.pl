@@ -144,9 +144,12 @@ sub vortaro_ {
 
 sub art {
     shift; shift; # ignoru xp kaj el
-    $cvs_id = get_attr('mrk',@_);
-    $cvs_id =~ /^\044Id:\s+([^,\.]+)\.xml,v.*\044$/;
-    $marko = $1;
+    $marko = get_attr('mrk',@_);
+    if ($marko =~ /^\044Id:/) {
+	$cvs_id=$marko;
+	$cvs_id =~ /^\044Id:\s+([^,\.]+)\.xml,v.*\044$/;
+	$marko = $1;
+    }
 
     $snc_cnt=0;
     $subdrv_cnt=0;
