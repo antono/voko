@@ -107,7 +107,11 @@ while ($file = readmail()) {
 
     # malfermu kaj enlegu la mesaghon
     open ML, $file; 
-    $entity = $parser->read(\*ML) or die "couldn't parse MIME stream";
+    $entity = $parser->read(\*ML);
+    unless ($entity) {
+	warn "Ne eblis analizi la MIME-mesaghon.\n";
+	next;
+    }
 
     # eligu iom da informo pri la mesagho
     $header = $entity->head();
@@ -386,7 +390,22 @@ sub normal_message {
 	komando($cmd,$arg,$xml);
 	
     } else {
-	report("ERARO   : nekonata komando en la poshtajho");
+	# sekurigu la dosieron
+	unless (open MSG,">$tmp/_err_msg") {
+	    warn "Ne povis malfermi $tmp/_err_msg: $!\n";
+	    report("ERARO   : nekonata komando en la poshtajho");
+	    return;
+	}
+	print MSG $text;
+	close MSG;
+
+	# kelkaj pseudaj variabloj necesaj
+	$article_id = "???";
+	$komando = "???";
+	$shangho = "???";
+
+	# raportu eraron
+	report("ERARO   : nekonata komando en la poshtajho","$tmp/_err_msg");
 	return;
     }
 }
@@ -424,7 +443,10 @@ sub komando {
 }
 
 sub save_errmail {
-    open ERRMAIL, ">>$mail_error" or die "Ne povis malfermi $mail_error: $!\n";
+    unless( open ERRMAIL, ">>$mail_error") {
+	warn "Ne povis malfermi $mail_error: $!\n";
+	return;
+    }
     print ERRMAIL $the_mail;
     close ERRMAIL;
     print "erara mesagho sekurigita al $mail_error\n" if ($verbose);
@@ -444,15 +466,22 @@ sub report {
 
 	# enmetu "redakto: $shanghoj" komence
 	if ($file =~ /\.xml$/) {
-	    open FILE, $file or die "Ne povis malfermi $file: $!\n";
+	    unless (open FILE, $file) {
+		warn "Ne povis malfermi $file: $!\n";
+		goto "MOVE_FILE";
+	    }
 	    $text = join('',<FILE>);
 	    close FILE;
-	    open FILE, ">$file" or die "Ne povis malfermi $file: $!\n";
+	    unless (open FILE, ">$file") {
+		warn "Ne povis malfermi $file: $!\n";
+		goto "MOVE_FILE";
+	    }
 	    print FILE "$komando: $shangho\n\n";
 	    print FILE $text;
 	    close FILE;
 	}
 	
+MOVE_FILE:
 	# donu provizoran nomon al la dosiero
 	$file_no++;
 	$attachment = "$attachments$file_no";
@@ -460,7 +489,10 @@ sub report {
     }
 
     # skribu informon en $mail_send por poste sendi raporton al $editor
-    open SMAIL, ">>$mail_send" or die "Ne povis malfermi $mail_send: $!\n";
+    unless (open SMAIL, ">>$mail_send") {
+	warn "Ne povis malfermi $mail_send: $!\n";
+	return;
+    }
 
     print SMAIL "sendinto: $editor\n";
     print SMAIL "dosieroj: $attachment\n" if ($file);
@@ -483,7 +515,10 @@ sub send_reports {
     if (-e $mail_send) {
 	
 	$/ = $separator;
-	open SMAIL, $mail_send or die "Ne povis malfermi $mail_send: $!\n";
+	unless (open SMAIL, $mail_send) {
+	    warn "Ne povis malfermi $mail_send: $!\n";
+	    return;
+	}
 
 	while (<SMAIL>) {
 	    # elprenu la sendinton
@@ -498,7 +533,8 @@ sub send_reports {
 		}
 		$reports{$mail_addr} .= $_;
 	    } else {
-		die "Ne povis elpreni sendinton el $_\n";
+		warn "Ne povis elpreni sendinton el $_\n";
+		next;
 	    }
 	}
 	close SMAIL;
@@ -526,10 +562,18 @@ sub send_reports {
 	    # alpendigu dosierojn
 	    if ($dos) {
 		for $file (split (/\|/,$dos)) {
-		    $file =~ s/^\s*([^\044]+)\s*\044([^\044]+)\044\s*$/$1/;
-		    $art_id = $2;
-		    $art_id =~ /^Id: ([^ ,\.]+\.xml),v/;
-		    $marko = $1;
+		    if ($file =~ /^\s*([^\s]+)\s+([^\s]+)\s*$/) {
+			$file = $1;
+			$art_id = $2;
+
+			if ($art_id =~ /^\044([^\044]+)\044$/) {
+			    $art_id = $1;
+			    $art_id =~ /^Id: ([^ ,\.]+\.xml),v/;
+			    $marko = $1;
+			} else {
+			    $marko=$art_id;
+			}
+		    } else { $art_id = $file; $marko=$file; }
 		    
 		    print "attach: $file\n" if ($debug);
 		    if ($file) {
@@ -544,8 +588,10 @@ sub send_reports {
 	    }
 	    
 	    # forsendu
-	    open SENDMAIL, "|$sendmail" 
-		or die "Ne povas dukti al $sendmail: $!\n";
+	    unless (open SENDMAIL, "|$sendmail") {
+		warn "Ne povas dukti al $sendmail: $!\n";
+		next;
+	    }
 	    $mail_handle->print(\*SENDMAIL);
 	    close SENDMAIL;
 	}
@@ -579,8 +625,10 @@ sub send_newarts_report {
 					  Data=>$message);
 	    
 	# forsendu
-	open SENDMAIL, "|$sendmail" 
-	    or die "Ne povas dukti al $sendmail: $!\n";
+	unless (open SENDMAIL, "|$sendmail") {
+	    warn "Ne povas dukti al $sendmail: $!\n";
+	    return;
+	}
 	$mail_handle->print(\*SENDMAIL);
 	close SENDMAIL;
     }
@@ -614,8 +662,10 @@ sub cmd_help {
 			 Description=>"helpo pri Revo-servo");
 
     # forsendu
-    open SENDMAIL, "|$sendmail" 
-	or die "Ne povas dukti al $sendmail: $!\n";
+    unless (open SENDMAIL, "|$sendmail") {
+	warn "Ne povas dukti al $sendmail: $!\n";
+	return;
+    }
     $mail_handle->print(\*SENDMAIL);
     close SENDMAIL;
 }
@@ -658,14 +708,20 @@ sub checkxml {
     my $teksto = shift;
     my $err;
 
-    # enmetu Log...
+    # enmetu Log se ankorau mankas...
     unless ($teksto =~ /<!--\s+\044Log/s) {
 	$teksto =~ s/(<\/vortaro>)/\n<!--\n\044Log\044\n-->\n$1/s;
     }
 
+    # mallongigu Log al 20 linioj
+    $teksto =~ s/(<!--\s+\044Log(?:[^\n]*\n){20})(?:[^\n]*\n)*(-->)/$1$2/s;
+
     # skribu la dosieron provizore al ~/tmp
-    open XML,">$tmp/xml.xml"
-	or die "Ne povis malfermi $tmp/xml.xml: $!\n";
+    unless (open XML,">$tmp/xml.xml") {
+	warn "Ne povis malfermi $tmp/xml.xml: $!\n";
+	return;
+    }
+
     print XML $teksto;
     close XML;
 
@@ -938,8 +994,11 @@ sub xml_context {
 	$line = $1;
 	$char = $2;
 
-	open XML,$file or die "Ne povis malfermi $file:$!\n";
-	
+	unless (open XML,$file) {
+	    warn "Ne povis malfermi $file:$!\n";
+	    return '';
+	}
+
 	# la linio antau la eraro
 	if ($line > 1) {
 	    for ($n=1; $n<$line-1; $n++) {
@@ -972,7 +1031,11 @@ sub get_archive_version {
     my $xmlfile = "$xml_dir/$art.xml";
 
     # legu la ghisnunan artikolon
-    open XMLFILE, $xmlfile or die "Ne povis legi $xmlfile: $!\n";
+    unless (open XMLFILE, $xmlfile) {
+	warn "Ne povis legi $xmlfile: $!\n";
+	return;
+    }
+
     my $txt = join('',<XMLFILE>);
     close XMLFILE;
 
