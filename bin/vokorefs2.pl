@@ -11,13 +11,21 @@ $debug = 0;
 $show_progress = 0;
 $| = 1;
 
-$ref_pref='../art';
+#$ref_pref='../art';
+$ref_pref='../revo/art';
 $revo_baz='/home/revo/revo';
 $fakcfg = "$revo_baz/cfg/fakoj.cfg"; 
-$fx_prefix = "$revo_baz/inx/fxs_";
-#$fx_alfabetaj = "$revo_baz/inx/fx_";
+#$fx_prefix = "$revo_baz/inx/fxs_";
+$tz_prefix = "$revo_baz/../tmp/tz_";
+$fx_prefix = "$revo_baz/../tmp/fxs_";
 $smb_dos = '../smb';
 $tmp_file = '/tmp/'.$$.'voko.inx';
+
+if ($debug) {
+    $revo_baz='/home/revo';
+    $fx_prefix = "$revo_baz/tmp/fxs_";
+}
+
 
 %fakoj = read_cfg($fakcfg);
 
@@ -64,12 +72,15 @@ complete_refs();
 # faru la fakindeksojn
 
 create_fx();
-
-#print "\n";
-#start_loop();
+create_tz();
 
 
-################## traktantoj de analiz-eventoj ################
+if ($debug) {
+    print "\n";
+    start_loop();
+}
+
+################## traktantoj de XML-analiz-eventoj ################
  
 sub char_handler {
     my ($xp, $text) = @_;
@@ -253,6 +264,9 @@ sub delete_entry {
     delete $wordlist{${$el.'_mrk'}};
 }
 
+#################### plektado de la vortreto ##################
+
+
 sub complete_refs {
 
     my $mrk;
@@ -297,7 +311,7 @@ sub cmpl_refs_aux {
 	    # la referencita vorto
 	    my $distant=$wordlist{$word};
 	    unless ($distant) {
-		warn "\nAVERTO: \"$word\" ne ekzistas.\n";
+		warn "\nAVERTO: \"$word\" ne ekzistas (".$near->{'mrk'}.").\n";
 		splice @$refs, $i, 1; $i--;
 		next;
 	    }
@@ -320,47 +334,7 @@ sub cmpl_refs_aux {
     }
 }
 
-sub start_loop {
-
-    while (1) {
-	print ">";
-	my $mrk = <STDIN>;
-
-#	print "\n",join(', ',%{$wordlist{$mrk}}),"\n";
-
-	print eval $mrk;
-    }
-}
-
-sub match {
-    my $what=shift;
-
-    print join(' ',grep /^$what/, (keys %wordlist)), "\n";
-    
-}
-
-sub show {
-    my $what=shift;
-    
-    my $entry = $wordlist{$what};
-    
-    unless ($entry) {
-	print "ne difinita\n";
-	return;
-    }
-
-    print "kap   : ", $$entry{'kap'}, "\n";
-    print "uzo   : ", join(' ',@{$entry->{'uzo'}}), "\n";
-    print "dif   : ", join(' ',@{$entry->{'sin'}}), "\n";
-    print "sin   : ", join(' ',@{$entry->{'sin'}}), "\n";
-    print "ant   : ", join(' ',@{$entry->{'ant'}}), "\n";
-    print "super : ", join(' ',@{$entry->{'super'}}), "\n";
-    print "sub   : ", join(' ',@{$entry->{'sub'}}), "\n";
-    print "prt   : ", join(' ',@{$entry->{'prt'}}), "\n";
-    print "malprt: ", join(' ',@{$entry->{'malprt'}}), "\n";
-}
-
-sub root {
+sub fakroot {
     my $list = shift;
     my $fako = shift;
     my @root = ();
@@ -368,14 +342,14 @@ sub root {
 
     foreach $entry (@$list) {
 
-	if (in_list($fako,$entry->{'uzo'}) and
-	    not (map { 
-		in_list($fako,$_->{'uzo'})?1:() 
+	if (in_list($fako,$entry->{'uzo'}) and # vorto apartenas al fako
+	    not (map {  # ne estas supernocio de l'fako
+		in_list($fako,$_->{'uzo'})?1:()
 		} @{$entry->{'super'}}) and
-	    not (map {
+	    not (map {  # ne estas ujonocio de l'fako
 		in_list($fako,$_->{'uzo'})?1:()
 		} @{$entry->{'malprt'}}) and
-	    ( @{$entry->{'sub'}} or
+	    ( @{$entry->{'sub'}} or # vorto havas subnociojn, do ne izolita
 	      @{$entry->{'prt'}} )) 
 	{
 	    push @root,($entry);
@@ -385,12 +359,36 @@ sub root {
     return @root;
 }
 
+sub root {
+    my $list = shift;
+    my @root = ();
+    my $entry;
+
+    foreach $entry (@$list) {
+
+	if (not @{$entry->{'super'}} and # vorto ne havas supernociojn
+	    not @{$entry->{'malprt'}} and
+		( @{$entry->{'sub'}} or # vorto havas subnociojn, do ne izolita
+		  @{$entry->{'prt'}}
+		  )
+	    ) 
+	{
+	    push @root,($entry);
+	};
+    }
+
+    return @root;
+}
+
+
 sub in_list {
     my $what=shift;
     my $list=shift;
 
     return (map {$_ eq $what? 1:()} @$list);
 }
+
+#################### tekst-eligo (neuzata nun) ###############
 
 sub tree {
     my $list = shift;
@@ -404,8 +402,10 @@ sub tree {
 	}
     }
 }
+
+#################### HTML-eligo de la indeksoj ############
 	
-sub html_tree {
+sub html_tree_fako_dl { # fako momente ignorata, dependas de la radiko
     my $list = shift;
     my $fako = shift;
 #    my $reftype = shift;
@@ -415,7 +415,7 @@ sub html_tree {
 
     return unless (@$list);
 
-    print STDERR join(' ',@$list), "\n" if ($debug);
+#    print STDERR join(' ',@$list), "\n" if ($debug);
 
     print "<dl>\n";
 
@@ -468,7 +468,7 @@ sub html_tree {
     print "</dl>";
 }
 
-sub html_tree2 {
+sub html_tree_fako_pre { # fako momente ignorata, dependas de la radiko
     my $list = shift;
     my $fako = shift;
     my $max_depth = shift;
@@ -477,7 +477,7 @@ sub html_tree2 {
 
     return unless (@$list);
 
-    print STDERR join(' ',@$list), "\n" if ($debug);
+#    print STDERR join(' ',@$list), "\n" if ($debug);
 
     print "<pre>\n" if ($depth == 0);
 
@@ -515,12 +515,68 @@ sub html_tree2 {
 
 	# la subvortoj
 	if ($depth < $max_depth -1) {
-	    html_tree2($entry->{'sub'},$fako,$max_depth,$depth+1,'sub');
+	    html_tree_fako_pre($entry->{'sub'},$fako,$max_depth,$depth+1,'sub');
 	}
 
         # la partoj
 	if ($depth < $max_depth -1) {
-	    html_tree2($entry->{'prt'},$fako,$max_depth,$depth+1,'prt');
+	    html_tree_fako_pre($entry->{'prt'},$fako,$max_depth,$depth+1,'prt');
+	}
+
+    }
+    print "</pre>" if ($depth == 0);
+}
+
+sub html_tree_pre {
+    my $list = shift;
+    my $max_depth = shift;
+    my $depth = shift || 0;
+    my $symbol = shift || '';
+
+    return unless (@$list);
+
+#    print STDERR join(' ',@$list), "\n" if ($debug);
+
+    print "<pre>\n" if ($depth == 0);
+
+    foreach $entry (sort {$a->{'mrk'} cmp $b->{'mrk'}} @$list) {
+
+	# la vorto
+	print " " x (2*$depth);
+	print "<b>" if ($depth < 1);
+	print "$smb{$symbol} " if ($symbol);
+	print "<a href=\"".word_ref($entry)."\" target=\"precipa\">";
+	print $entry->{'kap'};
+	print "</a>";
+	print "</b>" if ($depth < 1);
+
+	# la sinonimoj
+	my @sinonimoj = map {
+	    $smb{'sin'}.
+	    " <a href=\"".word_ref($_)."\" target=\"precipa\"><i>"
+	    .$_->{'kap'}."</i></a>";
+	} @{$entry->{'sin'}}; 
+
+	# la antonimoj
+	my @antonimoj = map {
+	    $smb{'ant'}.
+	    " <a href=\"".word_ref($_)."\" target=\"precipa\"><i>"
+	    .$_->{'kap'}."</i></a>";
+	} @{$entry->{'ant'}};
+	
+	push @sinonimoj, @antonimoj;
+	if (@sinonimoj) { print " (", join(', ',@sinonimoj), ")" };
+
+	print "\n";
+
+	# la subvortoj
+	if ($depth < $max_depth -1) {
+	    html_tree_pre($entry->{'sub'},$max_depth,$depth+1,'sub');
+	}
+
+        # la partoj
+	if ($depth < $max_depth -1) {
+	    html_tree_pre($entry->{'prt'},$max_depth,$depth+1,'prt');
 	}
 
     }
@@ -531,7 +587,7 @@ sub word_ref {
     my $entry = shift;
     my $ref;
 
-    print STDERR ">>> ",$entry->{'mrk'},"\n" if ($debug);
+#    print STDERR ">>> ",$entry->{'mrk'},"\n" if ($debug);
 
     $entry->{'mrk'} =~ /^([^.]+)(\..*)?$/;
     $ref = "$ref_pref/$1.html"; $ref .= "#$1$2" if ($2);
@@ -557,14 +613,14 @@ sub read_cfg {
 }
 
 sub create_fx {
-    foreach $fako (keys %fakoj) {
+    foreach $fako (sort keys %fakoj) {
 
 	my $target_file = "$fx_prefix".lc($fako).".html";
 
 	print "$target_file..." if ($verbose);
 
 
-	my @root = root([values %wordlist],$fako);
+	my @root = fakroot([values %wordlist],$fako);
 	unless (@root) {
 	    print "neniuj radikaj nocioj\n"
 		if ($verbose);
@@ -572,12 +628,13 @@ sub create_fx {
 	    next;
 	}
 	print STDERR join(' ',map {$_->{'mrk'}} @root), "\n" if ($debug);
+	push @uzataj_fakoj, ($fako);
 
 	open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
 	select OUT;
 
-	print header($fako);
-	html_tree2(\@root,$fako,10);
+	print header_fako($fako);
+	html_tree_fako_pre(\@root,$fako,10);
 	print footer();
 
 	close OUT;
@@ -585,6 +642,85 @@ sub create_fx {
 	diff_mv($tmp_file,$target_file);
     }
 }
+
+sub create_tz {
+    my @tz_files;
+#    foreach $fako (keys %fakoj) {
+
+#	my $target_file = "$tz_prefix"."index.html";
+
+#	print "$target_file...\n" if ($verbose);
+
+	my @root = sort {$a->{'mrk'} cmp $b->{'mrk'}} root([values %wordlist]);
+	print STDERR join(' ',map {$_->{'mrk'}} @root), "\n" if ($debug);
+
+	unless (@root) {
+	    print "neniuj radikaj nocioj\n"
+		if ($verbose);
+	    exit;
+#	    unlink "$target_file";
+#	    next;
+	}
+
+	# kreu por chiu radik-vorto HTML-dosieron kun ghia arbo
+	foreach $word (@root) {
+
+	    my $word_mrk = $word->{'mrk'};
+	    $word_mrk =~ tr/./_/;
+	    my $target_file = "$tz_prefix".$word_mrk.".html";
+	    print "$target_file..." if ($verbose);
+	    push @tz_files, ($target_file);
+
+	    open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
+	    select OUT;
+
+	    print header("tezaŭro: ".$word->{'kap'}."...");
+	    html_tree_pre([$word],10);
+	    print footer();
+
+	    close OUT;
+	    select STDOUT;
+	    diff_mv($tmp_file,$target_file);
+	}
+
+        # forigu chiujn dosierojn ne plu aktualajn
+        foreach $file (glob("$tz_prefix*")) {
+	    unless (in_list($file,\@tz_files)) {
+		print "forigas $file\n";
+		unlink($file);
+	    }
+	}
+
+	# kreu la liston de chiuj fakoj kaj radik-vortoj
+	my $target_file = "$tz_prefix"."index.html";
+	print "$target_file..." if ($verbose);
+
+	open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
+	select OUT;
+
+	print header("tezauro");
+
+	print "<h2>fakoj</h2>";
+	foreach $fako (sort @uzataj_fakoj) {
+	    print "<a href=\"$fx_prefix".lc($fako).".html\">",
+	    "<img src=\"../smb/", uc($fako), ".gif\" border=0>",
+	    $fakoj{$fako}, "</a><br>\n";
+	}
+
+	print "<h2>radikvortoj</h2>\n";
+	foreach $word (@root) {
+	    my $word_mrk = $word->{'mrk'};
+	    $word_mrk =~ tr/./_/;
+	    print "<a href=\"$tz_prefix".$word_mrk.".html\">",
+	          $word->{'kap'}."</a><br>\n";
+	}
+	print footer();
+	
+	close OUT;
+	select STDOUT;
+	diff_mv($tmp_file,$target_file);
+}
+
 
 sub diff_mv {
     my ($newfile,$oldfile) = @_;
@@ -599,6 +735,21 @@ sub diff_mv {
 };
 
 sub header {
+    my $titolo = shift;
+
+    return
+	"<html>\n<head>\n<meta http-equiv=\"Content-Type\" ".
+	"content=\"text/html; charset=UTF-8\">\n".
+	"<title>$titolo</title>\n".
+	"<link title=\"indekso-stilo\" type=\"text/css\" ".
+	"rel=stylesheet href=\"../stl/indeksoj.css\">\n".
+	"</head>\n<body>\n".
+        "<i><a href=\"indeksoj.html\">indeksoj</a>\n".
+        "<a href=\"tz_index.html\">tezaŭro</a></i>\n".
+	"<h1>$titolo</h1>\n";
+}
+
+sub header_fako {
     my $fako=shift;
     my $titolo = "$fakoj{$fako} strukture";
 
@@ -609,15 +760,59 @@ sub header {
 	"<link title=\"indekso-stilo\" type=\"text/css\" ".
 	"rel=stylesheet href=\"../stl/indeksoj.css\">\n".
 	"</head>\n<body>\n".
-        "<i><a href=\"indeksoj.html\">indeksoj</a></i>\n".
+        "<i><a href=\"indeksoj.html\">indeksoj</a>\n".
+	"<a href=\"tz_index.html\">tezaŭro</a></i>\n".
         "<a href=\"fx_".lc($fako).".html\">alfabete</a> ".
 	"<b>strukture</b>\n<h1>$titolo...</h1>\n";
 }
 
 sub footer {
     return 
-	"<i><a href=\"indeksoj.html\">indeksoj</a></i>\n".
+	"<p><i><a href=\"indeksoj.html\">indeksoj</a>\n".
+        "<a href=\"tz_index.html\">tezaŭro</a></i>\n".
         "</body>\n</html>\n";
 }
 
+################### sencimigaj funkcioj ###############
 
+sub start_loop {
+
+    while (1) {
+	print ">";
+	my $mrk = <STDIN>;
+
+#	print "\n",join(', ',%{$wordlist{$mrk}}),"\n";
+
+	print eval $mrk;
+    }
+}
+
+sub match {
+    my $what=shift;
+
+    print join(' ',grep /^$what/, (keys %wordlist)), "\n";
+    
+}
+
+sub show {
+    my $what=shift;
+    
+    my $entry = $wordlist{$what};
+    
+    unless ($entry) {
+	print "ne difinita\n";
+	return;
+    }
+
+    print "kap   : ", $$entry{'kap'}, "\n";
+    print "uzo   : ", join(' ',@{$entry->{'uzo'}}), "\n";
+    print "dif   : ", join(' ',@{$entry->{'sin'}}), "\n";
+    print "sin   : ", join(' ',@{$entry->{'sin'}}), "\n";
+    print "ant   : ", join(' ',@{$entry->{'ant'}}), "\n";
+    print "super : ", join(' ',@{$entry->{'super'}}), "\n";
+    print "sub   : ", join(' ',@{$entry->{'sub'}}), "\n";
+    print "prt   : ", join(' ',@{$entry->{'prt'}}), "\n";
+    print "malprt: ", join(' ',@{$entry->{'malprt'}}), "\n";
+}
+
+#################################################
