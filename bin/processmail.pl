@@ -586,10 +586,13 @@ sub checkxml {
     my $err;
 
     # enmetu $Log$
+    # enmetu Revision 1.7  1999/11/24 17:05:33  revo
+    # enmetu *** empty log message ***
+    # enmetu
     # enmetu Revision 1.6  1999/11/22 17:18:25  revo
     # enmetu sendu raportojn anstatau unuopajn respondojn
     # enmetu en la tekston, se ankorau ne estas
-    unless ($teksto =~ /<!--\s+\044Log\044/) {
+    unless ($teksto =~ /<!--\s+\044Log/s) {
 	$teksto =~ s/(<\/vortaro>)/\n<!--\n\044Log\044\n-->\n$1/s;
     }
 
