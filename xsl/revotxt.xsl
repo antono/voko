@@ -119,7 +119,8 @@
 </xsl:template>
 
 <xsl:template match="sncref">
-  /<xsl:apply-templates mode="number-of-ref-snc" select="id(@ref)"/>/
+  /<xsl:apply-templates mode="number-of-ref-snc" select=
+    "document(concat(substring-before($ref,'.'),'.xml'),/)//node()[@mrk=$ref]"/>/
 </xsl:template>
 
 <xsl:template match="snc">

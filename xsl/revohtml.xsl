@@ -22,6 +22,7 @@ pluevoluigita de Wolfram Diestel
 <xsl:variable name="cssdir">../stl</xsl:variable>
 <xsl:variable name="redcgi">/cgi-bin/vokomail.pl?art=</xsl:variable>
 <xsl:variable name="bibliografio">../dok/bibliogr.xml</xsl:variable>
+<xsl:variable name="revo">/home/revo/revo</xsl:variable>
 
 <!-- kruda artikolstrukturo -->
 
@@ -274,7 +275,12 @@ pluevoluigita de Wolfram Diestel
 </xsl:template>
 
 <xsl:template match="sncref">
-  <sup><i><xsl:apply-templates mode="number-of-ref-snc" select="id(@ref)"/></i></sup>
+  <xsl:variable name="ref" select="@ref"/>
+  <sup><i>
+    <xsl:apply-templates mode="number-of-ref-snc"
+    select=
+      "document(concat(substring-before($ref,'.'),'.xml'),/)//node()[@mrk=$ref]"/>
+  </i></sup>
 </xsl:template>
 
 <xsl:template match="snc">
