@@ -74,6 +74,7 @@ sub char_handler {
 	  $xp->in_element('trd') or
 	  $xp->in_element('ind') or
 	  $xp->in_element('mll') or
+	  $xp->in_element('mlg') or
 	  ($xp->in_element('klr') and $ind) or
 	  $xp->in_element('ref') or
 	  ($xp->in_element('uzo') and $fako) or
@@ -99,6 +100,7 @@ sub start_handler {
 	$el eq 'drv' or
 	$el eq 'ref' or
 	$el eq 'mll' or
+	$el eq 'mlg' or
 	($el eq 'ind' and not $xp->in_element('ekz')) 
 	)
     {
@@ -112,7 +114,7 @@ sub start_handler {
 	     $xp->in_element('ref') or
 	     $xp->in_element('bld') or
 	     $xp->in_element('ind') or
-	     $xp->in_element('mll'))
+	     $xp->in_element('mll')) 
 	    ) 
     {
 	my $lit = get_attr('lit',@attrs);
@@ -209,6 +211,7 @@ sub end_handler {
 	$el eq 'trd' or
 	$el eq 'ref' or
 	$el eq 'mll' or
+	$el eq 'mlg' or
 	$el eq 'ind' or
         $el eq 'bld'
 	)

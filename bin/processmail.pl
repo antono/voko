@@ -404,7 +404,7 @@ sub normal_message {
 	close MSG;
 
 	# kelkaj pseudaj variabloj necesaj
-	$article_id = "???";
+	$article_id = "???.xml";
 	$komando = "???";
 	$shangho = "???";
 

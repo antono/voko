@@ -79,7 +79,7 @@ $refdir = '../art/';
 %fakoj = ();            # %fakoj{fako}->@[mrk,kap,rad]
 %tradukoj = ();         # %tradukoj{lingvo}->%{litero}->@[mrk,kap,trd]
 @bildoj = ();           # @bildoj->@[mrk,kap,tekst,rad]
-
+@mallongigoj = ();      # @mallongigoj->@[mrk,kap,mll]
 
 # legu la fakojn
 %faknomoj = read_cfg($config{"fakoj"});
@@ -141,7 +141,7 @@ if ($config{"inx_eo"}=~/kapvortoj/) {
     @literoj = sort {cmp_nls($a,$b,'eo')} keys %kapvortoj;
     foreach $lit (@literoj) {
 	$refs = $kapvortoj{$lit};
-	@$refs = sort { cmp_nls($a->[2],$b->[2],'eo') } @$refs;
+	@$refs = sort { cmp_nls($a->[1],$b->[1],'eo') } @$refs;
 	KAPVORTINX($lit,\@literoj,$refs);
     }
 }
@@ -159,6 +159,9 @@ if ($config{"inx_ktp"}=~/inversa/) {
 
 # bildindekso
 if ($config{"inx_ktp"}=~/bildoj/) { INXBILDOJ(\@bildoj); }
+
+# mallongigoindekso
+if ($config{"inx_ktp"}=~/mallongigoj/) { INXMALLONGIGOJ(\@mallongigoj); }
 
 # statistiko
 if ($config{"inx_ktp"}=~/statistiko/) { INXSTATISTIKO(); }
@@ -221,8 +224,12 @@ sub artikolo {
     $rad =~ s/\/(?:[aeio]|oj)$//; # forigu finajhon
     $rad =~ s/[$neliteroj]//g;
 
+    # forigu ankau / el la kapvorto por esti komparebla kun
+    # derivajhoj
+ #   $kap =~ s/\///g;
+
     # unua kaj lasta litero
-    $first_lit = letter_nls(first_utf8char($rad),'eo');
+    $first_lit = letter_nls($rad,'eo');
     $last_lit  = letter_nls(last_utf8char($rad),'eo');
 
     print "1a: $first_lit; l-a: $last_lit\n" if ($debug);
@@ -236,18 +243,19 @@ sub artikolo {
     }
 
     # aldonu al kapvortlistoj
-    push @{ $kapvortoj{$first_lit} }, [$mrk,$kap,$rad];
     push @{ $invvortoj{$last_lit } }, [$mrk,$kap,reverse_utf8($rad)];
+    $kap =~ s/\///g;
+    push @{ $kapvortoj{$first_lit} }, [$mrk,$kap,$rad];
 
     # se la teksto entenas derivajho(j)n,
     # analizu unue tiujn
 
     if ($tekst =~/<drv/) {
 	$tekst =~ s/<drv\s*(?:mrk="([^\"]*)")?\s*>(.*?)<\/drv\s*>/
-	    indeksero($mrk,$1,$2)/siegx;
+	    indeksero($mrk,$kap,$1,$2)/siegx;
     } #else {
     # analizu chion krom la derivajhoj
-    indeksero($mrk,$mrk,$tekst);
+    indeksero($mrk,$kap,$mrk,$tekst);
     #};
 
     return '';
@@ -256,7 +264,7 @@ sub artikolo {
 # analizas unuopan indekseron
 
 sub indeksero {
-    my ($mrk1,$mrk2,$tekst) = @_;
+    my ($mrk1,$kap1,$mrk2,$tekst) = @_;
     my ($kap,$rad);
     my $mrk = ($mrk2 or $mrk1);
 
@@ -270,15 +278,27 @@ sub indeksero {
     $kap =~ s/\/$//;
     $kap =~ s/^\s+//;
 
+    $kap =~ s/\///g;
+
     # prenu radikon
     $rad = $kap;
     $rad =~ s/\/(?:[aeio]|oj)$//; # forigu finajhon
     $rad =~ s/[$neliteroj]//g;
 
-    # aldonu al kapvortlisto
-#    push @kapvortoj, [$mrk,$kap];
+    if (($kap1 ne $kap) and $rad) {
 
-    # unue analizu de bildoj kaj ekzemploj
+	# aldonu al kapvortlistoj
+	my $first_lit = letter_nls($rad,'eo');
+
+	unless ($first_lit) {
+	    die "$rad ne komencighas je e-a litero\n";
+	}
+
+	push @{ $kapvortoj{$first_lit} }, [$mrk,$kap,$rad];
+    }
+
+    # unue analizu de bildoj kaj ekzemploj, char ili mem povas enhavi tradukoj
+    # kaj fakindikoj
     $tekst =~ s/<ekz\s*>(.*?)<\/ekz\s*>/ekzemplo($mrk,$kap,$1,$rad)/sieg;
     $tekst =~ s/<bld\s*>(.*?)<\/bld>/bildo($mrk,$kap,$1,$rad)/sieg;
 
@@ -287,6 +307,9 @@ sub indeksero {
     # analizu la tradukojn
     $tekst =~ s/<trd\s+lng="([^\"]*)"\s*>(.*?)<\/trd\s*>/
 	traduko($2,$1,$mrk,$kap)/siegx;
+
+    # analizu mallongigojn
+    $tekst =~s/<mlg\s*>(.*?)><\/mlg\s*>/mallongigo($mrk,$kap,$1)/sieg;
 
     return '';
 }
@@ -317,6 +340,9 @@ sub ekzemplo {
     # analizu la tradukojn
     $tekst =~ s/<trd\s+lng="([^\"]*)"\s*>(.*?)<\/trd\s*>/
 	traduko($2,$1,$mrk,$ind)/siegx;
+
+    # analizu mallongigojn
+    $tekst =~s/<mlg\s*>(.*?)><\/mlg\s*>/mallongigo($mrk,$ind,$1)/sieg;
 
     return '';
 }
@@ -364,9 +390,19 @@ sub bildo {
     $tekst =~ s/<trd\s+lng="([^\"]*)"\s*>(.*?)<\/trd\s*>/
 	traduko($2,$1,$mrk,$ind)/siegx;
 
+    # analizu mallongigojn
+    $tekst =~s/<mlg\s*>(.*?)><\/mlg\s*>/mallongigo($mrk,$ind,$1)/sieg;
     
     return '';
 };
+
+sub mallongigo {
+    my ($mrk,$kap,$mll)=@_;
+
+    push @mallongigoj, [$mrk,$kap,$mll];
+
+    return '';
+}
     
 
 # notas unuopan tradukon
@@ -518,13 +554,13 @@ sub LINGVINX {
 
 sub KAPVORTINX {
     my ($lit,$literoj,$refs) = @_;
-    my $l_x = utf8_cx($lit);
+    my $asci = letter_asci_nls($lit,'eo');
     my ($unua,$r,$a);
     my $n = 0;
     my $last0 = '';
     my $last1 = '';
 
-    my $target_file = "$dir/kap_$l_x.html";
+    my $target_file = "$dir/kap_$asci.html";
 
     #print "$target_file..." if ($verbose);
     open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
@@ -537,7 +573,7 @@ sub KAPVORTINX {
 
     foreach $ref (@$refs) {
 	if (($last0 ne $ref->[0]) or ($last1 ne $ref->[1])) {
-	    $r="$refdir$ref->[0].html";
+	    $r=referenco($ref->[0]);
 
 	    print "<a href=\"$r\" target=\"precipa\">";
 	    print "$ref->[1]</a><br>\n";
@@ -559,13 +595,13 @@ sub KAPVORTINX {
 
 sub INVVORTINX {
     my ($lit,$literoj,$refs) = @_;
-    my $l_x = utf8_cx($lit);
+    my $asci = letter_asci_nls($lit,'eo');   # my $l_x = utf8_cx($lit);
     my $r;
     my $last0 = '';
     my $last1 = '';
     my $n=0;
     
-    my $target_file = "$dir/inv_$l_x.html";
+    my $target_file = "$dir/inv_$asci.html";
     
     #print "$target_file..." if ($verbose);
     open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
@@ -734,7 +770,49 @@ sub INXBILDOJ {
     diff_mv($tmp_file,$target_file,$verbose);
 }
 
-# kreas indekson de la bildoj
+# kreas indekson de la mallongigoj
+
+sub INXMALLONGIGOJ {
+    my ($refs) = @_;
+    my $r;
+    #my $last0 = '';
+    #my $last1 = '';
+    my $n = 0;
+    my @vortoj;
+    my $target_file = "$dir/mallong.html";
+
+    # ek
+    #print "$target_file..." if ($verbose);
+    open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
+    select OUT;
+    index_header('mallongigoj');
+    index_buttons();
+    print "<h1>mallongigoj</h1>\n<dl>\n";
+    
+    # ordigu la vortliston
+    @vortoj = sort { cmp_nls($a->[2],$b->[2],'eo') } @$refs;
+
+    # skribu la liston kiel html 
+    foreach $ref (@vortoj) {
+	if (($last0 ne $ref->[0]) or ($last1 ne $ref->[1])) {
+	    $r = referenco($ref->[0]);
+	    print "<dt><b>$ref->[2]</b>\n<dd><a href=\"$r\" target=\"precipa\">";
+	    print "$ref->[1]</a>\n";
+	    $last0 = $ref->[0];
+	    $last1 = $ref->[1];
+	    $n++;
+	};
+    };
+    print "</dl>\n";
+
+    # malek
+    index_footer();
+    close OUT;
+    select STDOUT;
+    diff_mv($tmp_file,$target_file,$verbose);
+}
+
+# kreas la statistikon
 
 sub INXSTATISTIKO {
     my $n = 0;
@@ -810,7 +888,7 @@ sub INX_EO {
     if ($config{"inx_eo"}=~/kapvortoj/) {
 	print "<h1>kapvortindekso</h1>\n<font size=+1><b>";
 	for $lit (@literoj) {
-	    $lit1 = utf8_cx($lit);
+	    $lit1 = letter_asci_nls($lit,'eo');
 	    print "<a href=\"kap_$lit1.html\">$lit</a>\n";
 	};
 	print "</b></font>\n";
@@ -986,6 +1064,10 @@ sub INX_KTP {
 	    print "<a href=\"bildoj.html\">";
 	    print "bildoj</a><br>\n";
 	}
+	if ($inx=~/mallongigoj/) {
+	    print "<a href=\"mallong.html\">";
+	    print "mallongigoj</a><br>\n";
+	}
 	if ($inx=~/inversa/) {
 	    print "<a href=\"inv_$unua_litero{'inv'}.html\">";
 	    print "inversa indekso</a><br>\n";
@@ -1132,6 +1214,10 @@ sub INX_PLENA {
 	if ($inx=~/bildoj/) {
 	    print "<a href=\"bildoj.html\">";
 	    print "bildoj</a>,\n";
+	};
+	if ($inx=~/mallongigoj/) {
+	    print "<a href=\"mallong.html\">";
+	    print "mallongigoj</a>,\n";
 	};
 	if ($inx=~/inversa/) {
 	    print "<a href=\"inv_$unua_litero{'inv'}.html\">";
