@@ -275,7 +275,9 @@ pluevoluigita de Wolfram Diestel
 </xsl:template>
 
 <xsl:template match="sncref">
-  <xsl:variable name="ref" select="@ref"/>
+  <!-- Se ne ekzistas la XML-dosiero, la tuta transformado fiaskas cxe
+  xt -->
+  <xsl:variable name="ref" select="(@ref|ancestor::ref/@cel)[last()]"/>
   <sup><i>
     <xsl:apply-templates mode="number-of-ref-snc"
     select=
