@@ -1,0 +1,43 @@
+#!/usr/bin/perl
+
+BEGIN {
+  # en kiu dosierujo mi estas?
+  $pado = $0;
+  $pado =~ s|\\|/|g; # sub Windows anstatauigu \ per /
+  $pado =~ s/nls\.test$//;
+  # shargu la funkcio-bibliotekon
+#  require $pado."nls_sort.pl";
+#  import nls_sort qw(cmp_nls);
+
+  push @INC, ($pado); #print join(':',@INC);
+  require nls;
+  nls->import();
+}
+
+nls::read_nls_cfg("/home/revo/voko/cfg/nls.cfg");
+nls::dump_nls_info("ru");
+
+$ruvort="ÐºÐ¾Ð¼Ð¿Ñ\214Ñ\216Ñ\202ÐµÑ\200";
+
+$c_A = "\x04\x10";
+$c_a = nls::letter_nls(nls::to_utf8($c_A),'ru');
+
+print "[ru]\n";
+print "utf8: ", $c_a, "\n";
+print "asci: ", letter_asci_nls($c_a,'ru'), "\n";
+print "hex : ", nls::utf8_hex($c_a), "\n";         
+print "vort: ", $ruvort, "\n";
+print "xxxx: ", ord(substr($ruvort,0,1)), "\n";
+print "unua: ", nls::first_utf8char($ruvort), "\n";
+print "utf8: ", nls::letter_nls($ruvort,"ru"), "\n";
+print "asci: ", letter_asci_nls(nls::letter_nls($ruvort,"ru"),"ru"), "\n";
+
+print "[de]\n";
+print "utf8: ", "a", "\n";
+print "asci: ", letter_asci_nls('a','de'), "\n";
+print "hex : ", nls::utf8_hex('a'), "\n";     
+
+#print "[eo]\n";
+#$jx =     
+
+
