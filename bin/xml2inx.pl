@@ -111,7 +111,8 @@ sub start_handler {
 	    ($xp->in_element('kap') or
 	     $xp->in_element('ref') or
 	     $xp->in_element('bld') or
-	     $xp->in_element('ind'))
+	     $xp->in_element('ind') or
+	     $xp->in_element('mll'))
 	    ) 
     {
 	my $lit = get_attr('lit',@attrs);

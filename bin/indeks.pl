@@ -841,7 +841,9 @@ sub INX_LNG {
 
     #lingvoj
     print "<h1>nacilingvaj indeksoj</h1>\n";
-    for $lng (sort keys %tradukoj) 
+    for $lng ( sort 
+	       { cmp_nls($lingvoj{$a},$lingvoj{$b},'eo') } 
+	       keys %tradukoj)
     {
 	unless ($lng eq 'la') {
 	    if (-f "$vortaro_pado/smb/$lng.png") {

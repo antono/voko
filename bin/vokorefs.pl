@@ -82,6 +82,7 @@ sub start_handler {
 
     if (
 	$el eq 'art' or
+	$el eq 'subart' or
 	$el eq 'kap' or
 	$el eq 'drv' or
 #	$el eq 'snc' or
@@ -141,6 +142,7 @@ sub end_handler {
 
     if (
 	$el eq 'art' or
+	$el eq 'subart' or
 	$el eq 'kap' or
 	$el eq 'drv' or
 #	$el eq 'snc' or
