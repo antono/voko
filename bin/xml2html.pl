@@ -7,6 +7,7 @@ $lng_simboloj = 1; # enmetu simbolojn por lingvoj
 $ref_simboloj = 1; # enmetu simbolojn por referenctipoj
 $fak_simboloj = 1; # enmetu simbolojn por fakoj
 $redakto_cgi  = '/cgi-bin/vokomail.pl'; # ligo al redakto-programo
+$xml_dosierujo = '../xml';
 
 # kie troviøas simboletoj (rilate al la artikoloj)
 $smb_dosierujo = "../smb";
@@ -124,7 +125,8 @@ sub vortaro_ {
 #    my $title = $file; $title =~ s/\.xml//i;
 
     if ($redakto_cgi) {
-	print "<hr><a href=\"$redakto_cgi?art=$marko\">redakti...</a>\n";
+	print "<hr>[<a href=\"$xml_dosierujo/$marko.xml\">$marko.xml</a>]\n";
+	print "[<a href=\"$redakto_cgi?art=$marko\">redakti...</a>]\n";
     }
 
     print "</body>\n</html>\n";
