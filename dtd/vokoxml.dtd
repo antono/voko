@@ -282,7 +282,7 @@ kiu rilatas internaj tradukoj ktp. Vi povas aldoni tipon kom, mez, fin,
 se tio estas nur la komenco, mezo aŭ fino de la ekzemplo kaj tio
 estu signata per punktoj en la indekso.
 -->
-<!ELEMENT ind (#PCDATA|tld)*>
+<!ELEMENT ind (#PCDATA|tld|klr)*>
 <!ATTLIST ind
         tip (kom|mez|fin) #IMPLIED
 >

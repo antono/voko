@@ -250,7 +250,7 @@ modifita de Wolfram Diestel
 </xsl:template>
 
 <xsl:template match="ekz/tld|ind/tld">
-  <u>
+  <span class="ekztld">
   <xsl:choose>
     <xsl:when test="@lit">
       <xsl:value-of select="concat(@lit,substring(ancestor::art/kap/rad,2))"/>
@@ -259,7 +259,7 @@ modifita de Wolfram Diestel
       <xsl:value-of select="ancestor::art/kap/rad"/>
     </xsl:otherwise>
   </xsl:choose>
-  </u>
+  </span>
 </xsl:template>
 
 <xsl:template match="rim/ekz">
@@ -338,18 +338,20 @@ modifita de Wolfram Diestel
     </img> 
   </xsl:if>
   <xsl:variable name="file" select="substring-before(@cel,'.')"/>
+  <span class="ref">
   <xsl:choose>
     <xsl:when test="$file">
-      <a href="{$file}.html#{$file}.{substring-after(@cel,'.')}">
+      <a class="ref" href="{$file}.html#{$file}.{substring-after(@cel,'.')}">
       <xsl:apply-templates/>
       </a>
     </xsl:when>
     <xsl:otherwise>
-      <a href="{@cel}.html">
+      <a class="ref" href="{@cel}.html">
       <xsl:apply-templates/>
       </a>
     </xsl:otherwise>
   </xsl:choose>
+  </span>
 </xsl:template>
 
 <xsl:template match="dif/refgrp|dif/ref|rim/refgrp|rim/ref|ekz/refgrp|ekz/ref|klr/refgrp|klr/ref">
@@ -363,12 +365,13 @@ modifita de Wolfram Diestel
   <xsl:variable name="file" select="substring-before(@cel,'.')"/>
   <xsl:choose>
     <xsl:when test="$file">
-      <a href="{$file}.html#{$file}.{substring-after(@cel,'.')}">
+      <a class="{local-name(parent::node())}" 
+         href="{$file}.html#{$file}.{substring-after(@cel,'.')}">
       <xsl:apply-templates/>
       </a>
     </xsl:when>
     <xsl:otherwise>
-      <a href="{@cel}.html">
+      <a class="{parent::local-name}" href="{@cel}.html">
       <xsl:apply-templates/>
       </a>
     </xsl:otherwise>
@@ -376,7 +379,7 @@ modifita de Wolfram Diestel
 </xsl:template>
 
 <xsl:template match="sup|fnt|ofc">
-  <sup class="{local-name}"><xsl:value-of select="."/></sup>
+  <sup class="{local-name()}"><xsl:value-of select="."/></sup>
 </xsl:template>
 
 <xsl:template match="fnt[aut|vrk|lok]">
@@ -385,7 +388,9 @@ modifita de Wolfram Diestel
   </xsl:variable>
   <span class="fnt">
     <a name="ekz_{$n}"></a>
-    [<a href="#fnt_{$n}"><xsl:value-of select="$n"/></a>]
+    <xsl:text>[</xsl:text>
+    <a class="fnt" href="#fnt_{$n}"><xsl:value-of select="$n"/></a>
+    <xsl:text>]</xsl:text>
   </span>
 </xsl:template>
 
@@ -426,7 +431,7 @@ modifita de Wolfram Diestel
 <xsl:template match="url">
   <br />
   <img src="{$smbdir}/url.gif" alt="URL:" />
-  <a href="{@ref}">
+  <a class="url" href="{@ref}">
   <xsl:apply-templates/>
   </a>
 </xsl:template>
@@ -549,7 +554,7 @@ modifita de Wolfram Diestel
   <!-- rigardu, al kiu subarbo apartenas la traduko,
     KOREKTU: se la traduko apartenas rekte al art okazas
              reeniro de la antaua sxablono -->
-  <a href="#{ancestor::node()[@mrk][1]/@mrk}">
+  <a class="trdeo" href="#{ancestor::node()[@mrk][1]/@mrk}">
   <xsl:apply-templates 
     select="ancestor::node()[self::drv or self::snc or self::subsnc or
       self::subdrv or self::subart or self::art or self::ekz or self::bld][1]" mode="tradukoj"/>:</a>
@@ -643,7 +648,7 @@ modifita de Wolfram Diestel
   </xsl:variable>
   <span class="fontoj">
   <a name="fnt_{$n}"></a>
-  <a href="#ekz_{$n}"><xsl:value-of select="$n"/></a>.
+  <a class="fnt" href="#ekz_{$n}"><xsl:value-of select="$n"/></a>.
   <xsl:apply-templates mode="fontoj" select="aut|vrk|lok"/>
   </span>
   <br />
@@ -668,7 +673,7 @@ modifita de Wolfram Diestel
 </xsl:template>
 
 <xsl:template match="url" mode="fontoj">
-  <a href="{@ref}">
+  <a class="fnturl" href="{@ref}">
   <xsl:apply-templates/>
   </a>
 </xsl:template>
@@ -749,10 +754,12 @@ modifita de Wolfram Diestel
 <xsl:template name="redakto">
   <xsl:variable name="xml"
     select="substring-before(substring-after(@mrk,'$Id: '),',v')"/>
-  [<a href="{$xmldir}/{$xml}"><xsl:value-of select="$xml"/></a>]
-  [<a href="{$redcgi}{substring-before($xml,'.xml')}">redakti...</a>]
+  <span class="redakto">
+  [<a class="redakto" href="{$xmldir}/{$xml}"><xsl:value-of select="$xml"/></a>]
+  [<a class="redakto" href="{$redcgi}{substring-before($xml,'.xml')}">redakti...</a>]
   versio: <xsl:value-of 
     select="substring-before(substring-after(@mrk,',v'),'revo')"/>
+  </span>
   <br />
 </xsl:template>
 

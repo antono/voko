@@ -1,24 +1,70 @@
+/* HTML-elementoj */
 BODY {background: E8FFE8; font-size: medium}
 H1 {color: darkgreen; font-size: x-large}
 H2 {color: darkgreen; font-size: large}
-A {text-decoration: none}
+/*A {text-decoration: none}*/
 A:link {color: blue}
 A:visited {color: blue}
 SUP {font-size: smaller}
 
+/* ekzemploj */
 .ekz {color: darkgreen}
+.rimekz {font-style: italic}
+A.ekz:link {text-decoration: underline; color: darkgreen}
+A.ekz:visited {text-decoration: underline; color: darkgreen}
+A.ekz:active {text-decoration: underline; color: green}
+
+/* difinoj */
 .drvdif {color: darkred}
 .sncgrpdif {color: darkred}
 .dif {color: darkred}
-.diftrd {font-style: italic}
+A.dif:link {text-decoration: underline; color: darkred}
+A.dif:visited {text-decoration: underline; color: darkred}
+A.dif:active {text-decoration: underline; color: red}
+
+/* rimarkoj */
 .rim {color: darkblue}
-.rimtrd {font-style: italic}
-.rimekz {font-style: italic}
-.klr {}
+A.rim:link {text-decoration: underline; color: darkblue}
+A.rim:visited {text-decoration: underline; color: darkblue}
+A.rim:active {text-decoration: underline; color: blue}
+
+/* referencoj */
+.ref {color: brown}
+A.ref:link {text-decoration: underline; color: #775533}
+A.ref:visited {text-decoration: underline; color: #775533}
+A.ref:active {text-decoration: underline; color: yellow}
+
+/* klarigo */
+.klr {font-style: normal}
+A.klr:link {text-decoration: underline; color: #775533}
+A.klr:visited {text-decoration: underline; color: #775533}
+A.klr:active {text-decoration: underline; color: #775533}
+
+/* tradukoj */
 .trd {color: #104040}
-.trdeo {color: darkgreen}
+.rimtrd {font-style: italic}
+.diftrd {font-style: italic}
+.trdeo {color: darkgreen; font-weight: bold}
 .trdnac {color: #104040}
+A.trdeo:link {text-decoration: underline; font-weight: bold; color: darkgreen}
+A.trdeo:visited {text-decoration: underline; font-weight: bold; color: darkgreen}
+A.trdeo:active {text-decoration: underline; font-weight: bold; color: green}
+
+/* fontindikoj en la teksto */
+.fnt {font-style: normal}
+A.fnt:link {text-decoration: underline; color: darkgreen}
+A.fnt:visited {text-decoration: underline; color: darkgreen}
+A.fnt:active {text-decoration: underline; color: green}
+
+/* fontindikaj piednotoj */
 .fontoj {color: darkgreen; font-size: small}
 
+/* tildoj en ekzemploj */
+.ekztld {}
 
+/* redaktolinio malsupre de la artikolo */
+.redakto {color: #104040}
+A.redakto:link {text-decoration: underline; color: black}
+A.redakto:visited {text-decoration: underline; color: black}
+A.redakto:active {text-decoration: underline; color: gray}
 
