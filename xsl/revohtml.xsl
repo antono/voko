@@ -5,7 +5,7 @@
 
 <xsl:output method="html" version="4.0" encoding="utf-8"/>
 
-<xsl:strip-space elements="trdgrp"/>
+<xsl:strip-space elements="trdgrp refgrp kap"/>
 
 <!--
 
@@ -46,7 +46,7 @@ pluevoluigita de Wolfram Diestel
     <xsl:when test="subart|snc">
       <xsl:apply-templates select="kap"/>
       <dl>
-      <xsl:apply-templates select="*[not(self::kap)]"/>
+      <xsl:apply-templates select="node()[not(self::kap)]"/>
       </dl>
     </xsl:when>
     <xsl:otherwise>
@@ -94,7 +94,7 @@ pluevoluigita de Wolfram Diestel
     <xsl:when test="snc">
       <xsl:apply-templates select="kap"/>
       <dl>
-      <xsl:apply-templates select="*[not(self::kap)]"/>
+      <xsl:apply-templates select="node()[not(self::kap)]"/>
       </dl>
     </xsl:when>
     <xsl:otherwise>
@@ -224,7 +224,7 @@ pluevoluigita de Wolfram Diestel
   <xsl:apply-templates select="subdrv|snc"/>
   </dl>
   <xsl:apply-templates
-    select="*[not(self::subdrv|self::snc|self::gra|self::uzo|self::fnt|self::kap|self::dif|self::mlg)]"/>
+    select="node()[not(self::subdrv|self::snc|self::gra|self::uzo|self::fnt|self::kap|self::dif|self::mlg)]"/>
 </xsl:template>  
 	
 <xsl:template match="subdrv">
@@ -241,7 +241,7 @@ pluevoluigita de Wolfram Diestel
     <xsl:apply-templates select="snc"/>
     </dl>
     <xsl:apply-templates
-      select="*[not(self::snc|self::gra|self::uzo|self::fnt|self::dif)]"/>    
+      select="node()[not(self::snc|self::gra|self::uzo|self::fnt|self::dif)]"/>    
   </dd>
 </xsl:template>
 
@@ -302,7 +302,7 @@ pluevoluigita de Wolfram Diestel
       </dl>
     </xsl:if>
     <xsl:apply-templates
-        select="*[not(self::gra|self::uzo|self::fnt|self::dif|self::subsnc)]"/>
+        select="node()[not(self::gra|self::uzo|self::fnt|self::dif|self::subsnc)]"/>
   </dd>
 </xsl:template>  
 
@@ -462,16 +462,7 @@ pluevoluigita de Wolfram Diestel
   </span>
 </xsl:template>
 
-<xsl:template match="dif/refgrp|dif/ref|rim/refgrp|rim/ref|ekz/refgrp|ekz/ref|klr/refgrp|klr/ref">
-  <!-- 
-  <xsl:if test="@tip='dif'">
-    <img src="{$smbdir}/{@tip}.gif">
-      <xsl:attribute name="alt">
-        <xsl:call-template name="reftip"/>
-      </xsl:attribute>
-    </img> 
-  </xsl:if>
-  -->
+<xsl:template match="dif/ref|dif/refgrp/ref|rim/ref|rim/refgrp/ref|ekz/ref|ekz/refgrp/ref|klr/ref|klr/refgrp/ref">
   <xsl:variable name="file" select="substring-before(@cel,'.')"/>
   <xsl:choose>
     <xsl:when test="$file">
@@ -486,6 +477,12 @@ pluevoluigita de Wolfram Diestel
       </a>
     </xsl:otherwise>
   </xsl:choose>
+</xsl:template>
+
+<xsl:template match="dif/refgrp|rim/refgrp|ekz/refgrp|klr/refgrp">
+  <span class="{local-name((ancestor::rim|ancestor::ekz|ancestor::dif)[last()])}"> 
+   <xsl:apply-templates/>
+  </span>
 </xsl:template>
 
 <xsl:template match="sup|fnt|ofc">
@@ -783,7 +780,6 @@ pluevoluigita de Wolfram Diestel
   </span>
   <xsl:text> </xsl:text>
   <span class="trdnac">
-	<!-- xsl:value-of select="normalize-space(.)"/ -->
     <xsl:apply-templates mode="tradukoj"/>
   </span>
   <xsl:choose>
@@ -819,15 +815,22 @@ pluevoluigita de Wolfram Diestel
         <xsl:text> </xsl:text>
         <xsl:number from="drv|subart" level="any" count="snc" format="1"/>
       </xsl:when>
+      <xsl:otherwise>
+        <xsl:text> </xsl:text>
+      </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
 
 <xsl:template match="subsnc" mode="tradukoj">
   <xsl:apply-templates select="ancestor::snc" mode="tradukoj"/>
-  <xsl:if test="@num">
-    <xsl:value-of select="@num"/>
-  </xsl:if>
-  <xsl:number format="a"/>
+  <xsl:choose>
+    <xsl:when test="@num">
+      <xsl:value-of select="@num"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:number format="a"/>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <xsl:template match="subart" mode="tradukoj">

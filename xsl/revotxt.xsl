@@ -458,6 +458,9 @@
         <xsl:text> </xsl:text>
         <xsl:number from="drv|subart" level="any" count="snc" format="1"/>
       </xsl:when>
+      <xsl:otherwise>
+       <xsl:text> </xsl:text>
+      </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
 
