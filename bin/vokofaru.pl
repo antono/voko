@@ -25,48 +25,64 @@ while (@ARGV) {
     } elsif ($ARGV[0] eq '-a') {
 	$xml_html_cxiujn = shift @ARGV;
     } else {
-	$vortaro = shift @ARGV; # momente ne plu uzata parametro
+	$agord_dosiero = shift @ARGV; 
     }
 };
 
 $|=1;
 
-unless($vortaro) { $vortaro = "sgm/vortaro.xml" };
+# legu la agordo-dosieron
+unless ($agord_dosiero) { $agord_dosiero = "voko.cfg" };
 
-# chu splitigi la HTML-tekston en unuopajn
-# artikolojn?
+open CFG, $agord_dosiero 
+    || die "Ne povis malfermi agordodosieron \"$agord_dosiero\".\n";
 
-# iru al xml, por ke la dtd estu en ../dtd/vokoxml
-print "cd cvs\n" if ($verbose);
-chdir(cvs);
+while ($line = <CFG>) {
+    if ($line !~ /^#|^\s*$/) {
+	$line =~ /^([^=]+)=(.*)$/;
+	$config{$1} = $2;
+    }
+}
+close CFG;
+
+$vortaro_pado=$config{"vortaro_pado"} || 
+    die "vortaro_pado ne trovighis en la agordodosiero.\n";
+
+# iru al dtd, por ke la dtd estu je ../dtd/vokoxml.dtd
+print "cd $vortaro_pado/dtd\n" if ($verbose);
+chdir("$vortaro_pado/dtd");
 
 # transformu la dosierojn al HTML
-print "xml2html_all.pl $verbose $xml_html_cxiujn revo ../art\n" if ($verbose);
-open LOG, "xml2html_all.pl $verbose $xml_html_cxiujn revo ../art |"
-    or die "Ne povis dukti\n";
+$xml_pado="$vortaro_pado/xml";
+$art_pado="$vortaro_pado/art";
+
+print $command = "xml2html_all.pl $verbose $xml_html_cxiujn $xml_pado $art_pado", "\n" if ($verbose);
+open LOG, "$command |" || die "Ne povis dukti\n";
 while (<LOG>) { print };
 close LOG;
 
 # kreu indeksdosieron
-print "xml2inx.pl $verbose revo > ../sgm/indekso.xml~\n" if ($verbose);
-`xml2inx.pl $verbose revo > ../sgm/indekso.xml~`;
+$indekso = $config{"indeks_dosiero"} || "$vortaro_pado/sgm/indekso.xml";
+
+print $command = "xml2inx.pl $verbose $xml_pado > $indekso", "\n" if ($verbose);
+`$command`;
 
 # cd ..
-print "cd ..\n" if ($verbose);
-chdir('..');
+print "cd $vortaro_pado\n" if ($verbose);
+chdir("$vortaro_pado");
 
 # kreu HTML-indeksojn
-print "indeks.pl $verbose -dinx -r../art/ sgm/indekso.xml~\n" if ($verbose);
-open LOG, "indeks.pl $verbose -dinx -r../art/ sgm/indekso.xml~|";
+print $command="indeks.pl $verbose $agord_dosiero", "\n" if ($verbose);
+open LOG, "$command|";
 while (<LOG>) { print };
 close LOG;
 
 # se pasis manpleno da tagoj, shovu la indeks-dosieron, por
 # ke ghi atingu la TTT-servilon (sed ja ne tro ofte)
-$tempdif = (stat 'sgm/indekso.xml~')[9] - (stat 'sgm/indekso.xml')[9];
+$tempdif = (stat "$indekso")[9] - (stat 'sgm/indekso.xml')[9];
 if ($tempdif > 7*24*60*60)  {  # 7 tagoj
-    print "pli ol 7 tagoj pasis: mv sgm/indekso.xml~ sgm/indekso.xml\n";
-    `mv sgm/indekso.xml~ sgm/indekso.xml`;
+    print "pli ol 7 tagoj pasis: mv $indekso sgm/indekso.xml\n";
+    `mv $indekso sgm/indekso.xml`;
 }
 
 ######## fino ###########
@@ -77,7 +93,7 @@ vokofaru.pl (c) VOKO, 1997-1998 - libera softvaro
   
 uzo:
    cd /pado/al/mia/vortaro/
-   vokofaru.pl ([-a] [-v] | [-h])
+   vokofaru.pl ([-a] [-v] | [-h]) [<agord-dosiero>]
 
    Tio faras el la artikoloj en la subdosierujo xml 
    la indeksojn en HTML-formo en la subdosierujo inx

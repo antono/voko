@@ -37,225 +37,6 @@ $nmax    = 200;      # maksimume tiom da shanghitajn artikolojn indiku
 $cvs_log = '/usr/bin/cvs log';
 $neliteroj = '0-9\/\s,;\(\)\.\-!:';
 
-%faknomoj=(
-	'2MAN'=>'komunuza senco',
-	'AGR'=>'agrikulturo',
-	'ANA'=>'anatomio, histologio',
-	'ARKE'=>'arkeologio',
-	'ARKI'=>'arkitekturo',
-	'AST'=>'astronomio',
-	'AUT'=>'aŭtomobiloj',
-	'AVI'=>'aviado',
-	'BAK'=>'bakteriologio, virusologio',
-	'BELA'=>'belartoj',
-	'BELE'=>'beletro',
-	'BIB'=>'biblio',
-	'BIO'=>'biologio, biontologio',
-	'BOT'=>'botaniko',
-	'BUD'=>'budhismo',
-	'EKON'=>'ekonomiko, financo',
-	'EKOL'=>'ekologio',
-	'ELE'=>'elektro',
-	'ELET'=>'elektrotekniko',
-	'FAR'=>'farmacio',
-	'FER'=>'fervojoj',
-	'FIL'=>'filozofio',
-	'FIZL'=>'fiziologio',
-	'FIZ'=>'fiziko',
-	'FON'=>'fonetiko',
-	'FOT'=>'fotografio, optiko',
-	'GEOD'=>'geodezio, topografio',
-	'GEOG'=>'geografio',
-	'GEOM'=>'geometrio',
-	'GEOL'=>'geologio',
-	'GRA'=>'gramatiko',
-	'HER'=>'heraldiko',
-	'HIS'=>'historio',
-	'HOR'=>'hortikulturo, arbokulturo, silvikulturo',
-	'ISL'=>'islamo',
-	'JUR'=>'juro',
-	'KAT'=>'katolikismo',
-	'KEM'=>'kemio, biokemio',
-	'KIN'=>'kinoarto',
-	'KIR'=>'kirurgio',
-	'KOME'=>'komerco',
-	'KOMP'=>'komputiko',
-	'KON'=>'konstrutekniko',
-	'KRI'=>'kristanismo',
-	'KUI'=>'kuirarto',
-	'LIN'=>'lingvistiko, filologio',
-	'MAR'=>'maraferoj',
-	'MAS'=>'maŝinoj, mekaniko',
-	'MAT'=>'matematiko',
-	'MAH'=>'materialismo historia',
-	'MED'=>'medicino',
-	'MET'=>'meteologio',
-	'MIL'=>'militaferoj',
-	'MIN'=>'mineralogio',
-	'MIT'=>'mitologio',
-	'MUZ'=>'muziko',
-	'NEO'=>'neologismo',
-	'PAL'=>'paleontologio',
-	'POE'=>'poetiko, poezio',
-	'POL'=>'politiko, sociologio',
-	'PRA'=>'prahistorio',
-	'PSI'=>'psikologio, psikiatrio',
-	'RAD'=>'radiofonio',
-	'REL'=>'religioj',
-	'SCI'=>'sciencoj',
-	'SPO'=>'sporto, ludoj',
-	'STA'=>'statistiko',
-	'SHI'=>'ŝipkonstruado, navigado',
-	'TEA'=>'teatro',
-	'TEK'=>'teknikoj',
-	'TEKS'=>'teksindustrio, vestoj',
-	'TEL'=>'telekomunikoj',
-	'TIP'=>'tipografarto, libroj',
-	'TRA'=>'trafiko',
-	'ZOO'=>'zoologio',
-	);
-
-%lingvoj = (
-	    'aa'=>'afara',
-	    'ab'=>'abĥaza',
-	    'af'=>'afrikansa',
-	    'am'=>'amhara',
-	    'ar'=>'araba',
-	    'as'=>'asama',
-	    'ay'=>'ajmara',
-	    'az'=>'azerbajĝana',
-	    'ba'=>'baŝkira',
-	    'be'=>'belorusa',
-	    'bg'=>'bulgara',
-	    'bh'=>'bihara',
-	    'bi'=>'bislama',
-	    'bn'=>'bengala',
-	    'bo'=>'tibeta',
-	    'br'=>'bretona',
-	    'ca'=>'kataluna',
-	    'co'=>'korsika',
-	    'cs'=>'ĉeĥa',
-	    'cy'=>'kimra',
-	    'da'=>'dana',
-	    'de'=>'germana',
-	    'dz'=>'dzonka',
-	    'el'=>'greka',
-	    'en'=>'angla',
-	    'eo'=>'esperanta',
-	    'es'=>'hispana',
-	    'et'=>'estona',
-	    'eu'=>'eŭska',
-	    'fa'=>'persa',
-	    'fi'=>'finna',
-	    'fj'=>'fiĝia',
-	    'fo'=>'feroa',
-	    'fr'=>'franca',
-	    'fy'=>'frisa',
-	    'ga'=>'irlanda',
-	    'gd'=>'gaela',
-	    'gl'=>'galega',
-	    'gn'=>'gvarania',
-	    'gu'=>'guĝarata',
-	    'ha'=>'haŭsa',
-	    'he'=>'hebrea',
-	    'hi'=>'hinda',
-	    'hr'=>'kroata',
-	    'hu'=>'hungara',
-	    'hy'=>'armena',
-	    'ia'=>'interlingvaa',
-	    'id'=>'indonezia',
-	    'ie'=>'okcidentala',
-	    'ik'=>'eskima',
-	    'is'=>'islanda',
-	    'it'=>'itala',
-	    'iu'=>'inuita',
-	    'ja'=>'japana',
-	    'jw'=>'java',
-	    'ka'=>'kartvela',
-	    'kk'=>'kazaĥa',
-	    'kl'=>'gronlanda',
-	    'km'=>'kmera',
-	    'kn'=>'kanara',
-	    'ko'=>'korea',
-	    'ks'=>'kaŝmira',
-	    'ku'=>'kurda',
-	    'ky'=>'kirgiza',
-	    'la'=>'latina',
-	    'ln'=>'lingala',
-	    'lo'=>'laŭa',
-	    'lt'=>'litova',
-	    'lv'=>'latva',
-	    'mg'=>'malagasa',
-	    'mi'=>'maoria',
-	    'mk'=>'makedona',
-	    'ml'=>'malajalama',
-	    'mn'=>'mongola',
-	    'mo'=>'moldava',
-	    'mr'=>'marata',
-	    'ms'=>'malaja',
-	    'mt'=>'malta',
-	    'my'=>'birma',
-	    'na'=>'naura',
-	    'ne'=>'nepala',
-	    'nl'=>'nederlanda',
-	    'no'=>'norvega',
-	    'oc'=>'okcitana',
-	    'om'=>'oroma',
-	    'or'=>'orijo',
-	    'pa'=>'panĝaba',
-	    'pl'=>'pola',
-	    'ps'=>'paŝtua',
-	    'pt'=>'portugala',
-	    'qu'=>'keĉua',
-	    'rm'=>'romanĉa',
-	    'rn'=>'burunda',
-	    'ro'=>'rumana',
-	    'ru'=>'rusa',
-	    'rw'=>'ruanda',
-	    'sa'=>'sanskrita',
-	    'sd'=>'sinda',
-	    'sg'=>'sangoa',
-	    'sh'=>'serbo-kroata',
-	    'si'=>'sinhala',
-	    'sk'=>'slovaka',
-	    'sl'=>'slovena',
-	    'sm'=>'samoa',
-	    'sn'=>'ŝona',
-	    'so'=>'somala',
-	    'sq'=>'albana',
-	    'sr'=>'serba',
-	    'ss'=>'svazia',
-	    'st'=>'sota',
-	    'su'=>'sunda',
-	    'sv'=>'sveda',
-	    'sw'=>'svahila',
-	    'ta'=>'tamila',
-	    'te'=>'telugua',
-	    'tg'=>'taĝika',
-	    'th'=>'taja',
-	    'ti'=>'tigraja',
-	    'tk'=>'turkmena',
-	    'tl'=>'filipina',
-	    'tn'=>'cvana',
-	    'to'=>'tongaa',
-	    'tr'=>'turka',
-	    'ts'=>'conga',
-	    'tt'=>'tatara',
-	    'tw'=>'akana',
-	    'ug'=>'ujgura',
-	    'uk'=>'ukrajna',
-	    'ur'=>'urduo',
-	    'uz'=>'uzbeka',
-	    'vi'=>'vjetnama',
-	    'vo'=>'volapuka',
-	    'wo'=>'volofa',
-	    'xh'=>'ksosa',
-	    'yi'=>'jida',
-	    'yo'=>'joruba',
-	    'za'=>'ĝuanga',
-	    'zh'=>'ĉina',
-	    'zu'=>'zulua'
-);    
 
 ################## precipa programparto ###################
 
@@ -267,19 +48,24 @@ while (@ARGV) {
     if ($ARGV[0] eq '-v') {
 	$verbose = 1;
 	shift @ARGV;
-    } elsif ($ARGV[0] =~ /^\-d/) {
-	$dir = shift @ARGV;
-	$dir =~ s/^\-d//;
-    } elsif ($ARGV[0] =~ /^\-r/) {
-	$refdir = shift @ARGV;
-	$refdir =~ s/^\-r//;
     } else {
-	$inxfn=shift @ARGV;
+	$agord_dosiero=shift @ARGV;
     }
 }
 
-$dir ='.' unless $dir;
-$refdir = '../art/' unless $refdir;
+# legu la agordo-dosieron
+unless ($agord_dosiero) { $agord_dosiero = "voko.cfg" };
+
+%config = read_cfg($agord_dosiero);
+
+$vortaro_pado=$config{"vortaro_pado"} || 
+    die "vortaro_pado ne trovighis en la agordodosiero.\n";
+
+$inxfn=$config{"indeks_dosiero"} || "$vortaro_pado/sgm/indekso.xml";
+$indeksoj=$config{"indeksoj"} || "kapvortoj,lingvoj,fakoj,inversa,shanghitaj";
+
+$dir="$vortaro_pado/inx";
+$refdir = '../art/';
 
 # enhavos post analizo la informojn de la indeks-dosiero
 %kapvortoj = ();        # %kapvortoj{litero}->@[mrk,kap,rad]
@@ -296,6 +82,7 @@ while (<INX>) {
     artikolo($_);
 }
 close INX;
+$/ = "\n";
 
 # traktu cxiujn unuopajn indekserojn
 
@@ -305,39 +92,54 @@ close INX;
 # kreu la html-dosierojn
 
 # fakindeksoj
-foreach $fako (sort keys %fakoj) { FAKINX($fako,$fakoj{$fako}) }
+if ($indeksoj=~/fakoj/) {
+    # legu la fakojn
+    %faknomoj = read_cfg($config{"fakoj"});
+    # kreu fakindeksojn
+    foreach $fako (sort keys %fakoj) { FAKINX($fako,$fakoj{$fako}) }
+}
 
 # lingvoindeksoj
-foreach $lng (sort keys %tradukoj) { 
-    @literoj = sort { cmp_nls($a,$b,$lng) } keys %{$tradukoj{$lng}};
-    $unua_litero{$lng} = letter_asci_nls($literoj[0],$lng);
-    foreach $lit (@literoj) {
-	$refs = $tradukoj{$lng}->{$lit};
-	@$refs = sort { cmp_nls($a->[2],$b->[2],$lng) } @$refs;
-	LINGVINX($lng,$lit,\@literoj,$refs);
+if ($indeksoj=~/lingvoj/) {
+    # legu la lingvojn
+    %lingvoj=read_cfg($config{"lingvoj"});
+    # kreu la lingvoindeksojn
+    foreach $lng (sort keys %tradukoj) { 
+	@literoj = sort { cmp_nls($a,$b,$lng) } keys %{$tradukoj{$lng}};
+	$unua_litero{$lng} = letter_asci_nls($literoj[0],$lng);
+	foreach $lit (@literoj) {
+	    $refs = $tradukoj{$lng}->{$lit};
+	    @$refs = sort { cmp_nls($a->[2],$b->[2],$lng) } @$refs;
+	    LINGVINX($lng,$lit,\@literoj,$refs);
+	}
     }
 }
 
-
 # kapvortoj
-@literoj = sort {cmp_nls($a,$b,'eo')} keys %kapvortoj;
-foreach $lit (@literoj) {
-    $refs = $kapvortoj{$lit};
-    @$refs = sort { cmp_nls($a->[2],$b->[2],'eo') } @$refs;
-    KAPVORTINX($lit,\@literoj,$refs);
+if ($indeksoj=~/kapvortoj/) {
+    @literoj = sort {cmp_nls($a,$b,'eo')} keys %kapvortoj;
+    foreach $lit (@literoj) {
+	$refs = $kapvortoj{$lit};
+	@$refs = sort { cmp_nls($a->[2],$b->[2],'eo') } @$refs;
+	KAPVORTINX($lit,\@literoj,$refs);
+    }
 }
 
 # inversa indekso
-@literoj = sort { cmp_nls($a,$b,'eo')} keys %invvortoj;
-$unua_litero{'inv'} = letter_asci_nls($literoj[0],'eo');
-foreach $lit (@literoj) {
-    $refs = $invvortoj{$lit};
-    @$refs = sort { cmp_nls($a->[2],$b->[2],'eo') } @$refs;
-    INVVORTINX($lit,\@literoj,$refs);
+if ($indeksoj=~/inversa/) {
+    @literoj = sort { cmp_nls($a,$b,'eo')} keys %invvortoj;
+    $unua_litero{'inv'} = letter_asci_nls($literoj[0],'eo');
+    foreach $lit (@literoj) {
+	$refs = $invvortoj{$lit};
+	@$refs = sort { cmp_nls($a->[2],$b->[2],'eo') } @$refs;
+	INVVORTINX($lit,\@literoj,$refs);
+    }
 }
 
 # indekso de la shanghitaj artikoloj
-INXSHANGHITAJ();
+if ($indeksoj=~/shanghitaj/) {
+    INXSHANGHITAJ();
+}
 
 # indekso de la indeksoj
 INXLIST();
@@ -520,6 +322,8 @@ sub LINGVINX {
     my ($lng,$lit,$literoj,$refs) = @_;
     my $r;
     my $n=0;
+    my $last1 = '';
+    my $last2 = '';
     my $asci = letter_asci_nls($lit,$lng);
     my $target_file = "$dir/lx_${lng}_$asci.html";
  
@@ -529,10 +333,14 @@ sub LINGVINX {
     index_header($lingvoj{$lng},"lx_${lng}_",$lng,$lit,@$literoj);
 
     foreach $ref (@$refs) {
-	$r=referenco($ref->[0]);    
-	print "$ref->[2] = <a href=\"$r\" ";
-	print "target=\"precipa\">$ref->[1]</a><br>\n";
-	$n++;
+	if (($last1 ne $ref->[1]) or ($last2 ne $ref->[2])) {
+	    $r=referenco($ref->[0]);    
+	    print "$ref->[2] = <a href=\"$r\" ";
+	    print "target=\"precipa\">$ref->[1]</a><br>\n";
+	    $last1 = $ref->[1];
+	    $last2 = $ref->[2];
+	    $n++;
+	}
     };
     
     index_footer($n > 20 && "lx_${lng}_",$lng,$lit,@$literoj);
@@ -683,15 +491,17 @@ sub INXLIST {
 
 
     #kapvortoj
-    print "<dt>kapvortindekso\n<dd><b>";
-    for $lit (@literoj) {
-	$lit1 = utf8_cx($lit);
-	print "<a href=\"ix_kap$lit1.html\">$lit</a>\n";
-    };
-    print "</b>\n";
+    if ($indeksoj=~/kapvortoj/) {
+	print "<dt>kapvortindekso\n<dd><b>";
+	for $lit (@literoj) {
+	    $lit1 = utf8_cx($lit);
+	    print "<a href=\"ix_kap$lit1.html\">$lit</a>\n";
+	};
+	print "</b>\n";
+    }
 
     #lingvoj
-    if (%tradukoj) {
+    if ($indeksoj=~/lingvoj/ && %tradukoj) {
 	print "<dt>lingvoindeksoj\n<dd>";
 	for $lng (sort keys %tradukoj) 
 	{
@@ -706,7 +516,7 @@ sub INXLIST {
     };
 
     #fakoj
-    if (%fakoj) {
+    if ($indeksoj=~/fakoj/ && %fakoj) {
 	print "<dt>fakindeksoj\n<dd>";
 	for $fak (sort keys %fakoj) 
 	{
@@ -718,11 +528,26 @@ sub INXLIST {
     };
 
     # aliaj 
-    print "<dt>aliaj indeksoj\n<dd>";
-    print "<a href=\"ix_inv$unua_litero{'inv'}.html\">";
-    print "inversa indekso</a><br>\n";
-    print "<a href=\"ix_novaj.html\">ŝanĝitaj artikoloj</a>\n";
+    if ($indeksoj=~/(inversa|shanghitaj)/) {
+	print "<dt>aliaj indeksoj\n<dd>";
+	if ($indeksoj=~/inversa/) {
+	    print "<a href=\"ix_inv$unua_litero{'inv'}.html\">";
+	    print "inversa indekso</a><br>\n";
+	};
+	if ($indeksoj=~/shanghitaj/) {
+	    print "<a href=\"ix_novaj.html\">ŝanĝitaj ",
+	    "artikoloj</a>\n";
+	}
+    }
 
+    # referecoj
+    @listoj = split(';',$config{"listoj"});
+    if (@listoj) {
+	print "<dt>referencoj\n<dd>";
+	while (@listoj) {
+	    print "<a href=\"".(shift @listoj)."\">".(shift @listoj)."</a>\n";
+	}
+    }
     print "</dl>\n";
 
     print "</body></html>\n";
@@ -875,6 +700,23 @@ sub cvs_log {
     }
 
     return $result;
+}
+
+sub read_cfg {
+    $cfgfile = shift;
+    my %hash = ();
+
+    open CFG, $cfgfile 
+	|| die "Ne povis malfermi dosieron \"$cfgfile\": $!\n";
+
+    while ($line = <CFG>) {
+	if ($line !~ /^#|^\s*$/) {
+	    $line =~ /^([^=]+)=(.*)$/;
+	    $hash{$1} = $2;
+	}
+    }
+    close CFG;
+    return %hash;
 }
 
 #################################################################
