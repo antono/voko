@@ -2,6 +2,7 @@
 
 use lib "$ENV{'VOKO'}/bin";
 use vokolib;
+use nls; read_nls_cfg("$ENV{'VOKO'}/cfg/nls.cfg");
 
 $file = shift @ARGV;
 
@@ -25,7 +26,7 @@ print "<h1>$stir{'titolo'}</h1>\n";
 
 if ($stir{'listo'} eq 'dl') {
     print "<dl compact>\n";
-    foreach $key (sort keys %entries) {
+    foreach $key (sort  { cmp_nls($a,$b,'eox') } keys %entries) {
 	print "<a name=\"$key\"></a>";
 	print "<dt>$key</dt>\n";
 	print "<dd>$entries{$key}</dd>\n";
@@ -33,7 +34,7 @@ if ($stir{'listo'} eq 'dl') {
     print "</dl>\n";
 } else {
     print "<pre>\n";
-    foreach $key (sort keys %entries) {
+    foreach $key (sort { cmp_nls($a,$b,'eox') } keys %entries) {
 	print " " x $stir{'x1'};
 	print "$key" . " " x ($stir{'x2'} - length($key));
 	print "$entries{$key}\n";
@@ -43,3 +44,9 @@ if ($stir{'listo'} eq 'dl') {
 
 index_footer();
 	
+
+
+
+
+
+

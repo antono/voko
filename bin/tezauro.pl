@@ -92,9 +92,6 @@ print "\n";
 
 make_net();
 
-#show("uj.0.estrata");
-#show("prefek.0ujo");
-
 # elkalkuli altecojn kaj ero-nombrojn
 
 cnt_and_depth();
@@ -530,9 +527,12 @@ sub in_list {
 
 sub html_tree {
     my $list = shift;
-    local @subs = ();
+#    my $depth = shift; $depth++;
+#    local @subs = ();
     my $node;
-    my $cnt;
+
+           # iam rekte prilaboru la vortliston kaj ne transdonu
+           # kiel argumento $list.
 
     sub ero {
 	my $list = shift;
@@ -551,119 +551,128 @@ sub html_tree {
 	    if ($v->{'h'}*$v->{'c'}>$tez_lim) { print "</b>"; }
 	    print "\n<br>\n";
 
-	    unless ($tip eq 'super' or $tip eq 'malprt'
-		    or $tz_files{tez_file($v)}) {
-		push @subs, ($v);
-	    }
+#	    unless ($tip eq 'super' or $tip eq 'malprt'
+#		    or $tz_files{tez_file($v)}) {
+#		push @subs, ($v);
+#	    }
 	}
 	print "<p>\n";
     }
 
-    return unless (@$list);
+#    return unless (@$list);
 
     foreach $node (@$list) { 
-	@subs = ();
-
-	my $word_mrk = $node->{'mrk'};
-	my $target_file = tez_file($node);
-
-	#print "$target_file..." if ($verbose);
-	$tz_files{$target_file} = 1;
-
-	open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
-	select OUT;
 	
-	index_header("tezaŭro: ".$node->{'kap'});
-	index_buttons();
+	if (@{$node->{'super'}} or @{$node->{'malprt'}} or
+	    @{$node->{'sub'}} or @{$node->{'prt'}} or
+	    @{$node->{'dif'}} or @{$node->{'sin'}} or
+	    @{$node->{'ant'}} or @{$node->{'vid'}} or
+	    @{$node->{'ekz'}}) {
 
-	print "<p>\n";
-	if ($node->{'uzo'}) {
-	    for $fak (sort @{$node->{'uzo'}}) {
-		# eble testu antaue, chu la fako havas tezauran indekson
-		print "<a href=\"fxs_".lc($fak).".html\">";
-		print "<img src=\"../smb/$fak.gif\" alt=\"$fak\" border=0>";
-		print "</a>\n";
-	    }
-	   # print "<p>\n";
-	}
+#	@subs = ();
 
-	# la vorto
-	print "<h1><a href=\"".word_ref($node)."\" target=\"precipa\">";
-	print $node->{'kap'};
-	print "</a></h1>\n";
+	    my $word_mrk = $node->{'mrk'};
+	    my $target_file = tez_file($node);
 
-	if ($node->{'nodspc'} eq 'kap') {
-	
-	    # la supernocioj
-	    if (@{$node->{'super'}}) {
-		print "<i class=griza>speco de</i><br>\n";
-		ero($node->{'super'},'super');
-	    }
-
-	    # la tutoj
-	    if (@{$node->{'malprt'}}) {
-		print "<i class=griza>parto de</i><br>\n";
-		ero($node->{'malprt'},'malprt');
-	    }
-
-	    # la difino
-	    if (@{$node->{'dif'}}) {
-		print "<i class=griza>difinito</i><br>\n";
-		ero($node->{'dif'},'dif');
-	    } 
-
-
-	    # la sinonimoj
-	    if (@{$node->{'sin'}}) {
-		print "<i class=griza>sinonimoj</i><br>\n";
-		ero($node->{'sin'},'sin');
-	    } 
-
-	    # la antonimoj
-	    if (@{$node->{'ant'}}) {
-		print "<i class=griza>antonimoj</i><br>\n";
-		ero($node->{'ant'},'ant');
-	    }
-
-	    # la subnocioj
-	    if (@{$node->{'sub'}}) {
-		print "<i class=griza>specoj</i><br>\n";
-		ero($node->{'sub'},'sub');
-	    }
-
-	    # la partoj
-	    if (@{$node->{'prt'}}) {
-		print "<i class=griza>partoj</i><br>\n";
-		ero($node->{'prt'},'prt');
-	    }
+	    #print "$target_file..." if ($verbose);
+	    $tz_files{$target_file} = 1;
 	    
-	    # vidu ankau
-	    if (@{$node->{'vid'}}) {
-		print "<i class=griza>vidu</i><br>\n";
-		ero($node->{'vid'},'vid');
-	    }
-	} else {
-	    # la listeroj
-	    if (@{$node->{'ekz'}}) {
-		#print "<i class=griza>speco de</i><br>\n";
-		ero($node->{'ekz'},'ekz');
-	    }
-	}
-        
-	index_footer();
+	    if ($file_cnt < $maks_novaj_dosieroj) {
+		open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
+		select OUT;
 	
-	close OUT;
-	select STDOUT;
-	if ($file_cnt < $maks_novaj_dosieroj) {
-	    $file_cnt += diff_mv($tmp_file,$target_file,$verbose);
-	}
+		index_header("tezaŭro: ".$node->{'kap'});
+		index_buttons();
+		
+		print "<p>\n";
+		if ($node->{'uzo'}) {
+		    for $fak (sort @{$node->{'uzo'}}) {
+			# eble testu antaue, chu la fako havas tezauran indekson
+			print "<a href=\"fxs_".lc($fak).".html\">";
+			print "<img src=\"../smb/$fak.gif\" alt=\"$fak\" border=0>";
+			print "</a>\n";
+		    }
+		    # print "<p>\n";
+		}
+		
+		# la vorto
+		print "<h1><a href=\"".word_ref($node)."\" target=\"precipa\">";
+		print $node->{'kap'};
+		print "</a></h1>\n";
+		
+		if ($node->{'nodspc'} eq 'kap') {
+		    
+		    # la supernocioj
+		    if (@{$node->{'super'}}) {
+			print "<i class=griza>speco de</i><br>\n";
+			ero($node->{'super'},'super');
+		    }
+		    
+		    # la tutoj
+		    if (@{$node->{'malprt'}}) {
+			print "<i class=griza>parto de</i><br>\n";
+			ero($node->{'malprt'},'malprt');
+		    }
+		    
+		    # la difino
+		    if (@{$node->{'dif'}}) {
+			print "<i class=griza>difinito</i><br>\n";
+			ero($node->{'dif'},'dif');
+		    } 
+		    
+		    
+		    # la sinonimoj
+		    if (@{$node->{'sin'}}) {
+			print "<i class=griza>sinonimoj</i><br>\n";
+			ero($node->{'sin'},'sin');
+		    } 
+		    
+		    # la antonimoj
+		    if (@{$node->{'ant'}}) {
+			print "<i class=griza>antonimoj</i><br>\n";
+			ero($node->{'ant'},'ant');
+		    }
+		    
+		    # la subnocioj
+		    if (@{$node->{'sub'}}) {
+			print "<i class=griza>specoj</i><br>\n";
+			ero($node->{'sub'},'sub');
+		    }
+		    
+		    # la partoj
+		    if (@{$node->{'prt'}}) {
+			print "<i class=griza>partoj</i><br>\n";
+			ero($node->{'prt'},'prt');
+		    }
+		    
+		    # vidu ankau
+		    if (@{$node->{'vid'}}) {
+			print "<i class=griza>vidu</i><br>\n";
+			ero($node->{'vid'},'vid');
+		    }
+		} else {
+		    # la listeroj
+		    if (@{$node->{'ekz'}}) {
+			#print "<i class=griza>speco de</i><br>\n";
+			ero($node->{'ekz'},'ekz');
+		    }
+		}
+		
+		index_footer();
+		
+		close OUT;
+		select STDOUT;
 
+		$file_cnt += diff_mv($tmp_file,$target_file,$verbose);
+	    };
+	};
+
+	
 	# tezauro-dosieroj por la subnocioj
-	html_tree(\@subs);
+#	warn "$depth: ".$node->{'mrk'}."(".$node->{'h'}.")\n";
+#join(',',map {%{$_}->{'mrk'}."(".%{$_}->{'h'}.")"} @subs)."\n";
+#	html_tree(\@subs, $depth);
     }
-
-    return $cnt;
-    
 }
 
 sub ekzistas_referencoj {
@@ -764,16 +773,16 @@ sub create_fx {
 
 sub create_tz {
     my @root = sort {$a->{'mrk'} cmp $b->{'mrk'}} root([values %wordlist]);
-    print STDERR join(' ',map {$_->{'mrk'}} @root), "\n" if ($debug);
+#    print STDERR join(' ',map {$_->{'mrk'}} @root), "\n" if ($debug);
     
-    unless (@root) {
-	print "neniuj radikaj nocioj\n"
-	    if ($verbose);
-	exit;
-    }
-    
-    html_tree(\@root);
-
+#    unless (@root) {
+#	print "neniuj radikaj nocioj\n"
+#	    if ($verbose);
+#	exit;
+#    }
+ 
+    html_tree([values %wordlist]);
+####
     # forigu chiujn dosierojn ne plu aktualajn
     foreach $file (glob("$tz_prefix*")) {
 	unless ($tz_files{$file}) {
