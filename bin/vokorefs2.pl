@@ -253,6 +253,7 @@ sub end_handler {
     if (($el eq 'drv') and ($drv_snc == 1)) {
 	append_entry('drv','snc');
 	delete_entry('snc');
+	$kunigitaj{${'snc_mrk'}}=${'drv_mrk'};
     }
 }
 
@@ -309,6 +310,9 @@ sub append_entry {
     foreach $a ('uzo','dif','sin','ant','vid','super','sub','prt','malprt') {
 	push @{$entry->{$a}}, @{$from.'_'.$a};
     }
+
+    # memoru ankaı la markon de la senco tamen
+    #$entry{'mrk1'} = ${$from.'_mrk'}
 }
 
 sub delete_entry {
@@ -360,6 +364,14 @@ sub cmpl_refs_aux {
 	    
 	    # la referencita vorto
 	    my $distant=$wordlist{$word};
+	    
+	    # eble estas snc kunigita kun drv
+	    unless ($distant) {
+		my $d = $kunigitaj{$word};
+		$distant = $wordlist{$d} if ($d);
+	    }
+		
+	    # se ankorau ne trovita, la vorto shajne ne ekzistas
 	    unless ($distant) {
 		warn "\nAVERTO: \"$word\" ne ekzistas (".$near->{'mrk'}.").\n";
 		splice @$refs, $i, 1; $i--;
