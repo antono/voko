@@ -1,5 +1,5 @@
 <!--****************************************************
-          PRECIPA STRUKTURO DE VORTARO
+          KADRA STRUKTURO DE VORTARO
 ********************************************************-->
 
 <!-- [vortaro] Radiko de la strukturarbo de vortaro. La elemento ampleksas
@@ -7,7 +7,7 @@ la tutan vortaron.<p>
 Øi entenas aý prologon, precipan parton kaj epilogon aý plurajn
 artikolojn. Prologo kaj epilogo estas nedevigaj. La ebleco de rekta
 enteno de artikolo ne estas destinita por kompletaj vortaroj, sed por
-eltiroj aý simpla listo de unuopaj artikoloj.-->
+eltiroj aý unuopa artikolo.-->
 
 <!ELEMENT vortaro - - ((prologo?,precipa-parto,epilogo?)|art+)>
 
@@ -26,8 +26,8 @@ prologo. Pluraj titoloj estas permesitaj.-->
 
 <!ELEMENT titolo - - (#PCDATA)>
 
-<!-- [autoro] Indiko de aýtoro(j) de la vortaro. Øi estas enhavata en la prologo kaj
-povas okazi tie plurfoje.-->
+<!-- [autoro] Indiko de aýtoro(j) de la vortaro. 
+Øi estas enhavata en la prologo kaj povas okazi tie plurfoje.-->
 
 <!ELEMENT autoro - - (#PCDATA)>
 
@@ -35,7 +35,7 @@ povas okazi tie plurfoje.-->
 
 <!ELEMENT alineo - - (#PCDATA|url)*>
 
-<!-- [url] Referenco al iu dosiero. En la HTML-versio de vortaro
+<!-- [url] Referenco al iu ekstera dosiero. En la HTML-versio de vortaro
 tio fariøas &lt;a href=...&gt; -->
 
 <!ELEMENT url - - (#PCDATA)>
@@ -52,22 +52,22 @@ Sekcioj grupigas vortojn komencighantajn je sama litero.
 
 <!-- [parto] Vortaroparto. Øi estas entenata en la precipa parto. Parto normale
 prezentas unu lingvon en plurlingva vortaro aý lingvodirekton en
-dulingva vortaro. Øia atributo <dfn>lingvo</dfn> indikas la lingvon de
+dulingva vortaro. Øia atributo <dfn>lng</dfn> indikas la lingvon de
 la kapvortoj en la parto.-->
 
 <!ELEMENT parto - - (sekcio+|art+)>
 <!ATTLIST parto
-	lingvo CDATA #IMPLIED
+	lng CDATA #IMPLIED
 >
 
 <!-- [sekcio] Sekcio en vortaro. Øi estas entenata en la precipa parto aý en
-parto de øi kaj normala entenas æiujn artikolojn, kies kapvorto
-komenciøas je sama litero. La atributo <dfn>litero</dfn> indikas tiun
+parto de øi kaj normale entenas æiujn artikolojn, kies kapvorto
+komenciøas je sama litero. La atributo <dfn>lit</dfn> indikas tiun
 komencliteron.-->
 
 <!ELEMENT sekcio - - (art+)>
 <!ATTLIST sekcio
-	litero CDATA #IMPLIED
+	lit CDATA #IMPLIED
 >
 
 <!-- ******************************************************
@@ -82,41 +82,50 @@ artikolo estas avantaøe difini tiun æi unuon.-->
 <!-- priskribaj elementoj -->
 <!ENTITY % priskribaj-elementoj "fnt|gra|uzo|dif|ekz|rim|ref|refgrp|trd|bld|adm">
 
+<!-- [%tekst-stiloj] La unuo <dfn>tekst-stiloj</dfn> 
+listigas æiujn strukturilojn, kiuj donas stilon al tekstoparto,
+ekz. emfazita, altigita aý malaltigita teksto.
+Aliaj du elementoj klarigo kaj tildo same povas esti
+multloke, do ankaý ili estas listigitaj tie æi. -->
+
+<!-- tekst-stiloj -->
+<!ENTITY % tekst-stiloj "tld|klr|em|sup|sub">
+
 <!-- [art] Unuopa artikolo de la vortaro. Øi povas okazi en
 <dfn>vortaro</dfn> (se ne ekzistas precipa-parto),
 <dfn>precipa-parto</dfn>, <dfn>parto</dfn> aý <dfn>sekcio</dfn>. Tio
 dependas de la konkreta strukturo de la vortaro. Æiu artikolo
 entenas unue kapvorton kaj poste aý priskribajn elementojn aý plurajn
-deriva¼ojn aý plurajn sencojn de la kapvorto.-->
-
-<!ELEMENT art - - (kap,(drv+|snc+|(%priskribaj-elementoj;)*))>
+deriva¼ojn aý plurajn sencojn de la kapvorto aý subartikolojn. -->
+<!--ELEMENT art - - (kap,artdif?,(subart+|drv+|snc+|(%priskribaj-elementoj;)*))-->
+<!ELEMENT art - - (kap,(subart|drv|snc|%priskribaj-elementoj;)*)>
 <!ATTLIST art
 	mrk ID #IMPLIED
 >
 
+<!-- [subart] Subartikolo. Øi povas okazi en <dfn>artikolo</dfn>,
+se la signifoj de vorto (ofte æe prepozicioj kaj afiksoj) estas
+tre diversaj. -->
+
+<!--ELEMENT subart - - (artdif?,(drv+|snc+|(%priskribaj-elementoj;)*))-->
+<!ELEMENT subart - - (drv|snc|%priskribaj-elementoj;)*>
+
 <!-- [drv] Deriva¼o ene de artikolo. Unu artikolo povas priskribi plurajn
 deriva¼ojn de la kapvorto. Deriva¼o komenciøas ja kapvorto kaj
 priskribaj elementoj pri øi aý el unu aý pluraj sencoj aý el unu aý
-pluraj sencgrupoj.-->
+pluraj subdividoj <dfn>subdrv</dfn>.-->
 
-<!ELEMENT drv - - (kap,(snc|sncgrp|%priskribaj-elementoj;)*)>
+<!ELEMENT drv - - (kap,(subdrv|snc|%priskribaj-elementoj;)*)>
 <!ATTLIST drv
 	mrk ID #IMPLIED
 >
 
-<!-- [sncgrp] Sencogrupo. Øi grupigas plurajn proksimajn sencojn, se la
+<!-- [subdrv] Subderiva¼o. Øi grupigas plurajn proksimajn sencojn, se la
 priskribita vorto havas tre multajn sencojn. Tio povas
-rezulti en pli klara strukturo de la artikolo. Komparu la
-romiajn numerojn en PIV, art. <em>de</em>, <emfari</em> k.a.-->
+rezulti en pli klara strukturo de la artikolo. La subdivida¼oj
+estas nombrataj per A), B), ... -->
 
-<!ELEMENT sncgrp - - (snc|subsncgrp|%priskribaj-elementoj;)*>
-
-<!-- [subsncgrp] Subsencogrupo. Æe tre multsencaj vortoj povas esti avantaøe,
-divid la sencogrupojn denove en subsencogrupojn por ricevi
-klaran artikolostrukturon. Komparu la majusklajn A), B) ...
-en PIV, art. <em>de</em> k.a.-->
-
-<!ELEMENT subsncgrp - - (snc|%priskribaj-elementoj;)*>
+<!ELEMENT subdrv - - (snc|%priskribaj-elementoj;)*>
 
 <!-- [snc] Senco de unuopa vorto en artikolo. Komparu la latinajn ciferojn en
 la artikoloj de PIV.-->
@@ -128,7 +137,7 @@ la artikoloj de PIV.-->
 >
 
 <!-- [subsnc] Subsenco ene de senco. Øi redonas subtila¼ojn ene de unu senco.
-Komparu la uzon de a), b), ... en kelkaj artikoloj de PIV.-->
+Ili estas nombrataj per a), b), ... -->
 
 <!ELEMENT subsnc - - (%priskribaj-elementoj;)*>
 <!ATTLIST subsnc
@@ -141,7 +150,7 @@ Komparu la uzon de a), b), ... en kelkaj artikoloj de PIV.-->
 
 <!-- [kap] kapvorto okazas en du kuntekstoj - komence de artikolo
 kaj komence de derivajho, en la unua kazo øi signas radikon
-en la dua kazo øi kosistas el iuj literoj kaj eble tildo
+en la dua kazo øi konsistas el iuj literoj kaj eble tildo
 refencanta al la kapvorto, krome en la kapvorto povas okazi
 fontindiko.
 -->
@@ -179,12 +188,16 @@ uzi iun vorton.
 	tip (fak|reg|klr) #IMPLIED
 >
 
+<!-- [artdif] enkonduka difino de artikolo aý subartikolo. -->
+
+<!ELEMENT artdif - - (#PCDATA|trd|ref|refgrp|ekz|%tekst-stiloj;)*>
+
 <!-- [dif] Difino estas la frazo difinanta la vorton, sencon aý
 subsencon. Øi povas esti ankaý en alia(j) lingvo(j) ol la vorto
 mem. La lingvon indikas la atributo <dfn>lng</dfn>.
 -->
 
-<!ELEMENT dif - - (#PCDATA|klr|trd|ref|ekz|tld|em|sup|sub)*>
+<!ELEMENT dif - - (#PCDATA|trd|ref|refgrp|ekz|%tekst-stiloj;)*>
 <!ATTLIST dif
 	lng CDATA #IMPLIED
 >
@@ -193,12 +206,12 @@ mem. La lingvon indikas la atributo <dfn>lng</dfn>.
 klarigoj kaj fonto.
 -->
 
-<!ELEMENT ekz - - (#PCDATA|klr|tld|fnt|sup|sub)*>
+<!ELEMENT ekz - - (#PCDATA|fnt|ref|refgrp|%tekst-stiloj;)*>
 
 <!-- [rim] Rimarko povas enhavi iujn indikojn pri la vorto aý
 senco, krome referencojn, ekzemplojn, emfazitajn partojn.
 -->
-<!ELEMENT rim - - (#PCDATA|ref|ekz|tld|em|sup|sub)*>
+<!ELEMENT rim - - (#PCDATA|ref|refgrp|ekz|%tekst-stiloj;)*>
 <!ATTLIST rim
         num CDATA #IMPLIED
 > 
@@ -266,12 +279,12 @@ minuskligo.
             lit CDATA #IMPLIED>       
 
 <!-- [klr] Klarigo pri vorto, difino, ekzemplo ktp.-->
-<!ELEMENT klr - - (#PCDATA|tld|trd|ekz|em|sup|sub)*>
+<!ELEMENT klr - - (#PCDATA|trd|ekz|ref|refgrp|%tekst-stiloj;)*>
 
-<!-- [vrk] Verko, en kiu troviøas citita frazo -->
+<!-- [vrk] Verko, en kiu troviøas citita frazo aý vorto -->
 <!ELEMENT vrk - - (#PCDATA)>
 
-<!-- [lok] Loko, kie troviøas citita frazo en verko -->
+<!-- [lok] Loko, kie troviøas citita frazo aý vorto en verko -->
 <!ELEMENT lok - - (#PCDATA)>
 
 <!-- [em] Emfazo. Normale grase skribata vortoj.-->
@@ -288,7 +301,7 @@ minuskligo.
 ******************************************************
 -->
 
-<!-- La sekvaj difinoj necesas por msxml
+<!-- La sekvaj difinoj necesas por XML
 <!ENTITY Ccirc "&#x0108;">
 <!ENTITY ccirc "&#x0109;">
 <!ENTITY Gcirc "&#x011c;">
@@ -303,20 +316,6 @@ minuskligo.
 <!ENTITY ubreve "&#x016d;">
 -->
 
-<!-- le sekvaj estas lau XML-normo (por NXP)
-<!ENTITY Ccirc "&u-0108;">
-<!ENTITY ccirc "&u-0109;">
-<!ENTITY Gcirc "&u-011c;">
-<!ENTITY gcirc "&u-011d;">
-<!ENTITY Hcirc "&u-0124;">
-<!ENTITY hcirc "&u-0125;">
-<!ENTITY Jcirc "&u-0134;">
-<!ENTITY jcirc "&u-0135;">
-<!ENTITY Scirc "&u-015c;">
-<!ENTITY scirc "&u-015d;">
-<!ENTITY Ubreve "&u-016c;">
-<!ENTITY ubreve "&u-016d;">
--->
 <!-- Mi ne scias, chu kaj se jes kiel en SGML oni
      povas kodi Unikodajn signojn -->
 <!ENTITY Ccirc "Æ">
@@ -392,6 +391,14 @@ minuskligo.
 
 <!ENTITY lt "&#60;">
 <!ENTITY gt "&#62;">
+
+
+
+
+
+
+
+
 
 
 
