@@ -451,6 +451,17 @@ pluevoluigita de Wolfram Diestel
   </span>
 </xsl:template>
 
+<xsl:template match="tez">
+  <br/>
+  <a name="{@mrk}"/>
+  <xsl:comment>[[
+      ref="<xsl:value-of select="@mrk"/>"
+    ]]</xsl:comment>
+  <span class="tez">
+    <xsl:apply-templates/>
+  </span>
+</xsl:template>
+
 <xsl:template match="dif/refgrp|dif/ref|rim/refgrp|rim/ref|ekz/refgrp|ekz/ref|klr/refgrp|klr/ref">
   <!-- 
   <xsl:if test="@tip='dif'">
