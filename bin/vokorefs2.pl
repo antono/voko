@@ -7,7 +7,7 @@
 
 use XML::Parser;
 
-$debug = 1;
+$debug = 0;
 $| = 1;
 
 $ref_pref='../revo/art';
@@ -22,6 +22,7 @@ $header="<html>\n<head>\n<meta http-equiv=\"Content-Type\" ".
 $footer = "</body>\n</html>\n";
 $fakcfg = '/home/revo/revo/cfg/fakoj.cfg'; 
 $fx_prefix = '/home/revo/tmp/fxs_';
+$smb_dos = '../revo/smb';
 
 %fakoj = read_cfg($fakcfg);
 
@@ -51,32 +52,17 @@ my $parser = new XML::Parser(ParseParamEnt => 1,
 			     );
 
 eval { $parser->parsefile("$dos") }; warn $@ if ($@);
+print "\n";
 
 # kompletigi la referencojn ambaudirekte
 
 complete_refs();
 
-# ...
+# faru la fakindeksojn
 
-root_super('BOT');
+create_fx();
 
-open OUT, '>/home/revo/tmp/bot_sub.html';
-select OUT;
-print "$header";
-html_tree([root([keys %wordlist],'BOT','super')],'BOT','sub',5);
-print "$footer";
-select STDOUT;
-close OUT;
-
-open OUT, '>/home/revo/tmp/bot_prt.html';
-select OUT;
-print "$header";
-html_tree([root([keys %wordlist],'BOT','malprt')],'BOT','prt',5);
-print "$footer";
-select STDOUT;
-close OUT;
-
-print "\n";
+#print "\n";
 #start_loop();
 
 
@@ -281,38 +267,52 @@ sub complete_refs {
 	print '+' if ($verbose);
 	print "\n" if ($verbose and ($art_no++ % 80 == 0));
 
-	cmpl_refs_aux($mrk,'sin',$entry->{'dif'}); # dif alidirkete estu sin!
-	cmpl_refs_aux($mrk,'sin',$entry->{'sin'});
-	cmpl_refs_aux($mrk,'ant',$entry->{'ant'});
-	cmpl_refs_aux($mrk,'sub',$entry->{'super'});
-	cmpl_refs_aux($mrk,'super',$entry->{'sub'});
-	cmpl_refs_aux($mrk,'prt',$entry->{'malprt'});
-	cmpl_refs_aux($mrk,'malprt',$entry->{'prt'});
+	print "$mrk\n" if ($debug);
+
+	cmpl_refs_aux($entry,'sin',$entry->{'dif'}); # 'dif' alidirekte estu 'sin'!
+	cmpl_refs_aux($entry,'sin',$entry->{'sin'});
+	cmpl_refs_aux($entry,'ant',$entry->{'ant'});
+	cmpl_refs_aux($entry,'sub',$entry->{'super'});
+	cmpl_refs_aux($entry,'super',$entry->{'sub'});
+	cmpl_refs_aux($entry,'prt',$entry->{'malprt'});
+	cmpl_refs_aux($entry,'malprt',$entry->{'prt'});
     }
+    print "\n";
 }
 
 sub cmpl_refs_aux {
-    my $mrk = shift;
+    my $near = shift;
     my $reftype = shift;
     my $refs = shift;
 
-#    print "$mrk/$reftype: ", join(" ",@$refs), "\n" if ($debug and $mrk eq 'aster.0o');
+    for ($i = 0; $i < scalar @$refs; $i++) { 
 
-    for $word (@$refs) {
+	$word = @$refs->[$i];
 
-#	print "x"  if ($debug and $word eq 'aster.0acoj');
+	unless (ref($word) eq "HASH") {
 
-	my $entry=$wordlist{$word};
+	    # la referencita vorto
+	    my $distant=$wordlist{$word};
+	    unless ($distant) {
+		warn "\nAVERTO: \"$word\" ne ekzistas.\n";
+		splice @$refs, $i, 1; $i--;
+		next;
+	    }
 	
-	unless ($entry) {
-	    warn "\nAVERTO: \"$word\" ne ekzistas.\n";
-	    return;
-	}
-	
-	unless (grep /^$mrk$/, @{$entry->{$reftype}}) {
-	    push @{$entry->{$reftype}}, ($mrk);
+	    # se la vorto "word" ankorau ne trovighas
+	    # en la listo de la referencita vorto, enmetu
+	    # la retroreferencon
+	    unless (map { 
+		(ref($_) eq "HASH" ? $near == $_ : $near->{'mrk'} eq $_)?
+		  1:() 
+	        }
+		@{$distant->{$reftype}}) 
+	    {
+		push @{$distant->{$reftype}}, ($near);
+	    }
 
-#	    show ($word) if ($debug and $word eq 'aster.0acoj');
+	    # anstatauigu la signovicon "word" per montrilo al ghi
+	    @$refs->[$i] = $distant;
 	}
     }
 }
@@ -357,55 +357,36 @@ sub show {
     print "malprt: ", join(' ',@{$entry->{'malprt'}}), "\n";
 }
 
-sub root_super {
-    my $fako=shift;
-
-    print join(' ',root([keys %wordlist],$fako,'super'));
-    print "\n";
-}
-
 sub root {
     my $list = shift;
     my $fako = shift;
-    my $reftype = shift;
-    my $reftype2;
     my @root = ();
+    my $entry;
 
-    if ($reftype eq 'super') {
-	$reftype2 = 'sub';
-    } elsif ($reftype eq 'malprt') {
-	$reftype2 = 'prt';
-    } else {
-	warn "Nur 'super' kaj 'malprt' permesita kiel 3a argumento.\n";
-	return;
-    }
+    foreach $entry (@$list) {
 
-    foreach $word (@$list) {
-
-	my $entry = $wordlist{$word};
-	unless ($entry) {
-	    warn "\"$word\" ne ekzistas!\n";
-	    last;
-	}
-
-	if (map {$_ eq $fako} @{$entry->{'uzo'}} and
-	    not @{$entry->{$reftype}} and
-	    @{$entry->{$reftype2}}) {
-
-		    push @root,($word);
-		    
-		};
+	if (in_list($fako,$entry->{'uzo'}) and
+	    not (map { 
+		in_list($fako,$_->{'uzo'})?1:() 
+		} @{$entry->{'super'}}) and
+	    not (map {
+		in_list($fako,$_->{'uzo'})?1:()
+		} @{$entry->{'malprt'}}) and
+	    ( @{$entry->{'sub'}} or
+	      @{$entry->{'prt'}} )) 
+	{
+	    push @root,($entry);
+	};
     }
 
     return @root;
 }
 
-sub successors {
-    my $word = shift;
-#    my $fako = shift;
-    my $reftype = shift;
+sub in_list {
+    my $what=shift;
+    my $list=shift;
 
-    return @{$wordlist{$word}->{$reftype}};
+    return (map {$_ eq $what? 1:()} @$list);
 }
 
 sub tree {
@@ -413,10 +394,10 @@ sub tree {
     my $fako = shift;
     my $max_depth = shift;
 
-    foreach $word (sort @$list) {
-	print " " x (2*(5-$max_depth)), ($wordlist{$word}->{'kap'} or "[$word]"), "\n";
+    foreach $entry (sort {$a->{'mrk'} cmp $b->{'mrk'}} @$list) {
+	print " " x (2*(5-$max_depth)), ($entry->{'kap'}), "\n";
 	if ($max_depth > 1) {
-	    tree($wordlist{$word}->{'sub'},$fako,$max_depth-1);
+	    tree($entry->{'sub'},$fako,$max_depth-1);
 	}
     }
 }
@@ -424,33 +405,47 @@ sub tree {
 sub html_tree {
     my $list = shift;
     my $fako = shift;
-    my $reftype = shift;
+#    my $reftype = shift;
     my $max_depth = shift;
     my $depth = shift || 0;
+    my $symbol = shift || '';
 
-    return unless ($list);
+    return unless (@$list);
+
+    print STDERR join(' ',@$list), "\n" if ($debug);
 
     print "<dl>\n";
 
-    foreach $word (sort @$list) {
+    foreach $entry (sort {$a->{'mrk'} cmp $b->{'mrk'}} @$list) {
 
-	my $entry = $wordlist{$word};
+#	my $entry = $wordlist{$word};
 	
 	# la vorto
 	print "<dt>";
-	print "<u>" if ($depth < 1);
-	print "<b>" if ($depth < 2);
-	print "<a href=\"".word_ref($word)."\">";
-	print ($entry->{'kap'} or "[$word]");
+#	print "<u>" if ($depth < 1);
+	print "<b>" if ($depth < 1);
+	print "<img src=\"$smb_dos/$symbol.gif\" alt=\"$symbol\"> " 
+	    if ($symbol);
+	print "<a href=\"".word_ref($entry)."\">";
+	print $entry->{'kap'};
 	print "</a>";
-	print "</b>" if ($depth < 2);
-	print "</u>" if ($depth < 1);
+	print "</b>" if ($depth < 1);
+#	print "</u>" if ($depth < 1);
 
 	# la sinonimoj
 	my @sinonimoj = map {
-	    "<a href=\"".word_ref($_)."\"><i>".
-            ($wordlist{$_}->{'kap'} or $_)."</i></a>";
+	    "<img src=\"$smb_dos/sin.gif\" alt=\"sin\"><a href=\"".
+		word_ref($_)."\"><i>".$_->{'kap'}."</i></a>";
 	} @{$entry->{'sin'}}; 
+#	if (@sinonimoj) { print " (", join(', ',@sinonimoj), ")" };
+
+	# la antonimoj
+	my @antonimoj = map {
+	    "<img src=\"$smb_dos/ant.gif\" alt=\"sin\"><a href=\"".
+		word_ref($_)."\"><i>".$_->{'kap'}."</i></a>";
+	} @{$entry->{'ant'}};
+	
+	push @sinonimoj, @antonimoj;
 	if (@sinonimoj) { print " (", join(', ',@sinonimoj), ")" };
 
 	print "</dt>\n";
@@ -458,20 +453,31 @@ sub html_tree {
 	# la subvortoj
 	if ($depth < $max_depth -1) {
 	    print "<dd>\n";
-	    html_tree($wordlist{$word}->{$reftype},
-		      $fako,$reftype,$max_depth,$depth+1);
+	    html_tree($entry->{'sub'},$fako,$max_depth,$depth+1,'sub');
 	    print "</dd>\n";
 	}
+
+        # la partoj
+	if ($depth < $max_depth -1) {
+	    print "<dd>\n";
+	    html_tree($entry->{'prt'},$fako,$max_depth,$depth+1,'prt');
+	    print "</dd>\n";
+	}
+
     }
     print "</dl>";
 }
 
 sub word_ref {
-    my $word = shift;
+    my $entry = shift;
     my $ref;
 
-    $word =~ /^([^.]+)(\..*)?$/;
+    print STDERR ">>> ",$entry->{'mrk'},"\n" if ($debug);
+
+    $entry->{'mrk'} =~ /^([^.]+)(\..*)?$/;
     $ref = "$ref_pref/$1.html"; $ref .= "#$1$2" if ($2);
+
+    return $ref;
 }
 
 sub read_cfg {
@@ -493,12 +499,22 @@ sub read_cfg {
 
 sub create_fx {
     foreach $fako (keys %fakoj) {
-	open OUT, ">$fx_prefix$fako.html";
+#    foreach $fako ('BOT','ZOO') {
+	print "$fx_prefix".lc($fako).".html...\n" if ($verbose);
+	my @root = root([values %wordlist],$fako);
+	unless (@root) {
+	    print "Neniuj radikaj nocioj\n";
+	    next;
+	}
+	print STDERR join(' ',map {$_->{'mrk'}} @root), "\n" if ($debug);
+
+	open OUT, ">$fx_prefix".lc($fako).".html";
 	select OUT;
 	print "$header";
-	html_tree([root([keys %wordlist],$fako,'super')],$fako,'sub',5);
+	html_tree(\@root,$fako,10);
 	print "$footer";
 	select STDOUT;
 	close OUT;
     }
 }
+
