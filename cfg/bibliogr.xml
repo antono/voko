@@ -28,6 +28,16 @@
  
 <bibliografio>
 
+  <vrk mll="Aventuroj">
+    <aut><a>Privat</a> <n>Edmond</n></aut>
+    <tit>Aventuroj de pioniro</tit>
+    <eld>
+      <nom>J. R&eacute;gulo</nom>
+      <lok>La Laguna</lok>
+      <dat>1963</dat>
+    </eld>
+  </vrk>
+
   <vrk mll="BazRad">
     <url>http://www.xs4all.nl/~pilger/breo-al3.htm</url>
     <aut><a>Wouter F.</a> <n>Pilger</n></aut>
@@ -96,7 +106,7 @@
 
   <vrk mll="BonaS-ino">
     <aut><a>E.</a> <n>Orzeszko</n></aut>
-    <trd><a>Karl</a> <n>Bein</n></trd>
+    <trd><a>Kazimierz</a> <n>Bein</n></trd>
     <tit>La bona sinjorino</tit>
   </vrk>
 
@@ -216,7 +226,7 @@
   <vrk mll="DonKihxoto">
     <aut><a>Miguel</a> <n>de Cervantes Saavedra</n></aut>
     <trd><a>Fernando</a> <n>de Diego</n></trd>
-    <tit>La ingenia hidalgo Don Quijote de la Mancha</tit>
+    <tit>La in&gcirc;enia hidalgo Don Quijote de la Mancha</tit>
     <eld>
        <nom>HEF - eldono "Fundaci&oacute;n de Esperanto"</nom>
        <lok>Zaragoza</lok>
@@ -229,7 +239,7 @@
     <url>http://ttt.esperanto.org/esperante/literatur/Baum/doroteo/</url>
     <aut><a>L. Frank</a> <n>Baum</n></aut>
     <trd><a>D.</a> <n>Broadribb</n></trd>
-    <tit>Doroteo kaj la Sorcxisto en Oz</tit>
+    <tit>Doroteo kaj la Sor&ccirc;isto en Oz</tit>
     <eld>
       <nom>Bookleaf Publishing</nom>
       <lok>A&ubreve;stralio</lok>
@@ -335,6 +345,16 @@
     </eld>
   </vrk>
 
+  <vrk mll="Esperanto">
+    <url>http://www.uea.org/revuo/</url>
+    <tit>Esperanto</tit>
+    <eld>
+      <nom>Universala Esperanto-Asocio</nom>
+      <lok>Roterdamo</lok>
+      <dat>1905-</dat>
+    </eld>
+  </vrk>
+
   <vrk mll="F">
     <url>ftp://ftp.esperanto.org/publika/tekstoj/</url>
     <aut><a>L. L.</a> <n>Zamenhof</n></aut>
@@ -395,7 +415,7 @@
   <vrk mll="Far1">
     <url>http://www.uni-leipzig.de/esperanto/texte/bibl/faraono1/</url>
     <aut><a>B.</a> <n>Prus</n></aut>
-    <trd><a>K.</a> <n>Bein</n></trd>
+    <trd><a>Kazimierz</a> <n>Bein</n></trd>
     <tit>La Faraono, vol. 1</tit>
     <eld>
       <nom>Esp. Centra Librejo</nom>
@@ -407,7 +427,7 @@
   <vrk mll="Far2">
     <url>http://www.uni-leipzig.de/esperanto/texte/bibl/faraono2/</url>
     <aut><a>B.</a> <n>Prus</n></aut>
-    <trd><a>K.</a> <n>Bein</n></trd>
+    <trd><a>Kazimierz</a> <n>Bein</n></trd>
     <tit>La Faraono, vol. 2</tit>
     <eld>
       <nom>Esp. Centra Librejo</nom>
@@ -419,7 +439,7 @@
   <vrk mll="Far3">
     <url>http://www.uni-leipzig.de/esperanto/texte/bibl/faraono3/</url>
     <aut><a>B.</a> <n>Prus</n></aut>
-    <trd><a>K.</a> <n>Bein</n></trd>
+    <trd><a>Kazimierz</a> <n>Bein</n></trd>
     <tit>La Faraono, vol. 3</tit>
     <eld>
       <nom>Esp. Centra Librejo</nom>
@@ -602,6 +622,17 @@
     </eld>
   </vrk>
 
+  <vrk mll="Kalendaro">
+    <aut><a>Cherpillod</a> <n>Andr&eacute;</n></aut>
+    <tit>La kalendaro tra la tempo, tra la spaco</tit>
+    <eld>
+      <nom>La Blancheti&egrave;re</nom>
+      <lok>Courgenard (Francio)</lok>
+      <dat>2002</dat>
+      <isbn>2-906134-56-2</isbn>
+    </eld>
+  </vrk>
+
   <vrk mll="KelS">
     <tit>Kajeroj el la Sudo</tit>
   </vrk>
@@ -753,6 +784,17 @@
       <dat>1987</dat>
       <nro>4a eldono</nro>
       <isbn>963-571-196-4</isbn>
+    </eld>
+  </vrk>
+
+  <vrk mll="Lusin">
+    <aut>Lusin (<n>Zhou Shuren</n>)</aut>
+    <trd><a>S. J.</a> <n>Zee</n> k.a.</trd>
+    <tit>Noveloj de Lusin</tit>
+    <eld>
+      <nom>&Ccirc;ina Esperanto-Ligo</nom>
+      <lok>Pekino</lok>
+      <dat>1963</dat>
     </eld>
   </vrk>
 
@@ -952,6 +994,17 @@
     </eld>
   </vrk>
 
+  <vrk mll="Oomoto">
+    <url>http://www.oomoto.or.jp/Esperanto/esRevuo/</url>
+    <tit>Oomoto</tit>
+    <ald>Oficiala organo de Oomoto kaj UHA</ald>
+    <eld>
+      <nom>Oomoto</nom>
+      <lok>Kioto</lok>
+      <dat>1925-</dat>
+    </eld>
+  </vrk>
+
   <vrk mll="OV">
     <aut><a>L. L.</a> <n>Zamenhof</n></aut>
     <tit>Originala Verkaro</tit>
@@ -1100,6 +1153,18 @@
     </eld>
   </vrk>
 
+  <vrk mll="&Scirc;talrato">
+    <url>http://ttt.esperanto.org/Ondo/Rato01.htm</url>
+    <aut><a>Harry</a> <n>Harrison</n></aut>
+    <trd><a>Reinhard</a> <n>F&ouml;ssmeier</n> k.a.</trd>
+    <tit>Naski&gcirc;o de la rustimuna &scirc;talrato</tit>
+    <eld>
+       <nom>Sezonoj</nom>
+       <lok>Jekaterinburg</lok>
+       <dat>1996</dat>
+    </eld>
+  </vrk>
+
   <vrk mll="TermKurs">
     <aut><a>Jan</a> <n>Werner</n></aut>
     <tit>Terminologia Kurso</tit>
@@ -1144,7 +1209,7 @@
   </vrk>
 
   <vrk mll="VdE">
-    <aut><a>Karl</a> <n>Bein</n></aut>
+    <aut><a>Kazimierz</a> <n>Bein</n></aut>
     <tit>Vortaro de Esperanto</tit>
     <eld>
       <nom>Hachette</nom>
@@ -1166,6 +1231,17 @@
       <lok>Heronsgate</lok>
       <dat>1937</dat>
       <nro>2a eldono</nro>
+    </eld>
+  </vrk>
+
+  <vrk mll="Voja&gcirc;o">
+    <aut><a>Boris</a> <n>Kolker</n></aut>
+    <tit>Voja&gcirc;o en Esperanto-lando</tit>
+    <eld>
+      <nom>Universala Esperanto-Asocio</nom>
+      <lok>Rotterdam</lok>
+      <dat>2002</dat>
+      <isbn>92-9017-078-6</isbn>
     </eld>
   </vrk>
 
