@@ -1,8 +1,9 @@
 #!/usr/bin/perl -w
 
-# AGENDO:
-#   - resendo de respondo al la sendinto
-#   - kontrolo pri aktuala versio de la artikolo
+# lanchu:
+#    processmail.pl
+# au
+#    processmail.pl <maildosiero>
 
 
 # kiom da informoj
@@ -12,9 +13,11 @@ $debug = 1;
 # dosier(uj)oj
 $mail_folder = '/var/spool/mail/revo';
 $mail_local  = '/home/revo/tmp/mail';
+$mail_error  = '/home/revo/tmp/mailerr';
 $old_mail    = '/home/revo/oldmail';
+$err_mail    = '/home/revo/errmail';
 $tmp         = '/home/revo/tmp';
-$xml_dir     = '/kde/voko/revo/cvs/revo';
+$xml_dir     = '/home/revo/revo/cvs/revo';
 $cvs         = '/usr/bin/cvs';
 $editor_file = '/home/revo/etc/redaktoroj';
 
@@ -37,6 +40,10 @@ $vokomail_url = 'http://www.uni-leipzig.de/cgi-bin/vokomail.pl';
 
 ####### start
 
+if ($ARGV[0]) {
+    $mail_folder = shift @ARGV;
+}
+
 %senditajho = (); # enhavas informojn pri la sendita poshtajho
 
 
@@ -48,6 +55,8 @@ if (not -s $mail_folder) {
 
 # shovu la poshtdosieron
 `mv $mail_folder $mail_local`;
+#`cp $mail_folder $mail_local`;
+
 #open MAIL,">$mail_folder";
 #close MAIL;
 
@@ -61,7 +70,12 @@ close MAIL;
 
 # arkivigu la poshtdosieron
 $filename = `date +%Y%m%d_%H%M%S`;  
+print "shovas $mail_local al $old_mail/$filename\n" if ($verbose);
 `mv $mail_local $old_mail/$filename`;
+if (-e $mail_error) {
+    print "shovas $mail_error al $err_mail/$filename\n" if ($verbose);
+    `mv $mail_error $err_mail/$filename`;
+}
 
 ########
 
@@ -87,6 +101,7 @@ sub readmail {
 }		
 		
 sub processmail {
+    my $mail = $_[0];
     my (%header, %content);
     my ($key, $value);
 
@@ -114,9 +129,15 @@ sub processmail {
 	}
     }
 
+    print "Date: $header{'date'}\nFrom: $header{'from'}\n",
+          "Content-type: $header{'content-type'}\n",
+          "Subject: $header{'subject'}\nSender: $header{'sender'}\n" 
+	      if ($verbose);
+
     $senditajho{'senddato'}=$header{'date'};
 
     print "---\n" if ($debug);
+    print "testas $header{'from'}\n" if ($debug);
 
     # kontrolu, chu temas pri redaktoro au helpkrio
     unless ($editor = is_editor($header{'from'})) { 
@@ -132,6 +153,7 @@ sub processmail {
 		."\tsubject: $header{'subject'}\n"
 		."\tstart of mail: ".substr($mail,0,100)."\n---\n";
 	}
+	save_errmail();
 	return; # ne respondu al SPAMo
     }
 
@@ -141,11 +163,12 @@ sub processmail {
     # analizu la korpon de la mesagho
 
     # chu temas pri mesagho sendita de la TTT-formularo?
-    if ($header{'content-type'} =~ /^application\/x-www-form-urlencoded/) {
+    if ($header{'content-type'} =~ /^application\/x-www-form-urlencoded/i) {
 
 	print "temas pri: mesagho de TTT-formularo\n" if ($debug);
 	# mesagho sendita de la TTT-formularo?
 
+	$mail =~ s/!?\n//sg;
 	foreach $pair (split ('&',$mail)) {
 	    if ($pair =~ /(.*)=(.*)/) {
                 ($key,$value) = ($1,$2);
@@ -156,17 +179,97 @@ sub processmail {
                 };
 	    }
 	};           
-    } else {
+
+    } elsif ($header{'content-type'} =~ /^multipart\/mixed/i) {
+
+	print "temas pri: mesagho plurparta (MIME)\n" if ($debug);
+	
+	# kio estas la limo inter la mesaghoj?
+	if ($header{'content-type'} =~ /boundary="([^\"]+)"/i) {
+	    $boundary = $1;
+	} else {
+	    warn "ne trovis MIME-limon en la mesagho\n";
+	    error("Ne sukcesis trakti la MIME-koditan mesaghon. Ne trovis "
+		."MIME-limon komence de la mesagho.");
+	    return;
+	};
+	$boundary =~ s/\-/\\-/g;
+	
+	# mesagho sendita de la TTT-formularo?
+	if ($mail=~ /komando=redakto&/s) {
+
+	    print "  sendita de TTT-formularo\n" if ($debug);
+	    
+	    # simple ignoru chion, kio ne interesas
+	    $mail =~ s/^.*(komando=redakto&.*?)$boundary.*$/$1/s;
+
+	    unless ($mail) {
+		warn "ne trovis la enhavon de la MIME-mesagho\n";
+		error("Ne trovis la enhavon de la MIME-kodita mesagho.");
+		return;
+	    };
+
+	    $mail =~ s/!?\n//sg;
+	    foreach $pair (split ('&',$mail)) {
+		if ($pair =~ /(.*)=(.*)/) {
+		    ($key,$value) = ($1,$2);
+		    if ($key =~ /^(?:$possible_keys)$/) {
+			$value =~ s/\+/ /g; # anstatauigu '+' per ' '
+			$value =~ s/%(..)/pack('c',hex($1))/seg;
+			$content{$key} = $value;
+		    };
+		}
+	    };    
+
+	} else {
+
+	    # MIME-mesagho normale sendita
+
+	    print "  sendita normale\n" if ($debug);
+	    
+	    # simple forigu chion neinteresan el la mesagho
+	    $mail =~ s/.*(komando:.*?)$boundary.*$/$1/s;
+
+	    if ($mail =~ s/^[\s\n]*($commands)[ \t]*:[ \t]*(.*?)\n//i) {
+		$key = $1;
+		$value = $2;
+
+		# legu chion ghis malplena linio au "<?xml..."
+		while (($mail !~ /^\s*\n/) and ($mail !~ /^\s*<\?xml/i)) {
+		    $mail =~ s/^[ \t]*(.*?)\n//;
+		    $value .= $1;
+		}
+		
+		$content{'komando'}=$key;
+		$content{'priskribo'}=$value;
+		
+		# la resto povus esti la artikolo
+		$mail =~ s/^[\s\n]*//;
+		
+		# kaze, ke iu subskribo finas la mesaghon, forigu
+		# chion post </vortaro>
+		$mail =~ s/(<\/vortaro>).*$/$1/s; 
+
+		if ($mail) {
+		    $content{'teksto'} = $mail;
+		}
+	    } else {
+		error("nekonata komando en la poshtajho");
+		return;
+	    }
+	};
+
+    } elsif ($header{'content-type'} =~ /^text\/plain/i) {
 
 	# normala retmesagho
 
 	print "temas pri: normala mesagho\n" if ($debug);
-	if ($mail =~ s/^($commands)[ \t]*\:[ \t]*(.*?)\n//i) {
+	if ($mail =~ s/^[\s\n]*($commands)[ \t]*:[ \t]*(.*?)\n//i) {
 	    $key = $1;
 	    $value = $2;
 
 	    # legu chion ghis malplena linio au "<?xml..."
-	    while (($mail !~ /^\s*\n/) and ($mail !~ /^\s*<?xml/i)) {
+	    while (($mail !~ /^\s*\n/) and ($mail !~ /^\s*<\?xml/i)) {
 		$mail =~ s/^[ \t]*(.*?)\n//;
 		$value .= $1;
 	    }
@@ -177,6 +280,10 @@ sub processmail {
 	    # la resto povus esti la artikolo
 	    $mail =~ s/^[\s\n]*//;
 	    
+            # kaze, ke iu subskribo finas la mesaghon, forigu
+            # chion post </vortaro>
+            $mail =~ s/(<\/vortaro>).*$/$1/s; 
+
 	    if ($mail) {
 		$content{'teksto'} = $mail;
 	    }
@@ -185,6 +292,9 @@ sub processmail {
 	    return;
 	}
 
+    } else {
+	error("nekonata enhavtipo $header{'content-type'}");
+	return;
     }
 
     # procedu lau la enhavo de la mesagho
@@ -337,6 +447,9 @@ sub cmd_redakt {
     my ($email_addr,$shangho,$teksto) = @_;
     my $err;
 
+    # uniksajn linirompojn!
+    $teksto =~ s/\r\n/\n/sg;
+
     # pri kiu artikolo temas, trovighas en <art mrk="...">
     $teksto =~ /(<art[^>]*>)/s;
     $1 =~ /mrk="([^\"]*)"/s; 
@@ -434,7 +547,7 @@ sub cmd_redakt {
 	      ."la aktuala versio.");
 	return;
     } elsif (($log =~ /aborting\s*$/s) 
-	     or ($err !~ /^ \s*$/s)) {
+	     or ($err !~ /^\s*$/s)) {
 	error("Eraro dum arkivado de la nova artikolversio:\n"
 	      ."$log\n$err");
 	return;
@@ -495,13 +608,13 @@ sub xml_context {
     return '';
 }
 
-get_old_version {
+sub get_old_version {
     my ($art) = @_;
     my $xmlfile = "$xml_dir/$art.xml";
 
     # legu la ghisnunan artikolon
     open XMLFILE, $xmlfile or die "Ne povis legi $xmlfile: $!\n";
-    my $txt = join('',XMLFILE);
+    my $txt = join('',<XMLFILE>);
     close XMLFILE;
 
     # pri kiu artikolo temas, trovighas en <art mrk="...">
@@ -513,4 +626,10 @@ get_old_version {
     return $id;
 }
 
+sub save_errmail {
+    open ERRMAIL, ">>$mail_error" or die "Ne povis malfermi $mail_error: $!\n";
+    print ERRMAIL $mail;
+    close ERRMAIL;
 
+    print "mesagho sekurigita al $mail_error\n" if ($verbose);
+}
