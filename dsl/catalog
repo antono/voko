@@ -1,4 +1,0 @@
-PUBLIC "-//James Clark//DTD DSSSL Flow Object Tree//EN" "/usr/share/sgml/jade_dsl/fot.dtd"
-PUBLIC "ISO/IEC 10179:1996//DTD DSSSL Architecture//EN" "/usr/share/sgml/jade_dsl/dsssl.dtd"
-PUBLIC "-//James Clark//DTD DSSSL Style Sheet//EN" "/usr/share/sgml/jade_dsl/style-sheet.dtd"
-PUBLIC "-//VoKo//DTD vortaro//EO" "/home/wolfram/work/voko/dtd/vokosgml.dtd"
