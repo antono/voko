@@ -1066,8 +1066,8 @@ my %values_cs_3 = (
     to_utf8("\001\131") => to_utf8("\001\131"),
     to_utf8("\001\175") => to_utf8("\001\176"),
     to_utf8("\001\176") => to_utf8("\001\176"),
-    to_utf8("\001\116") => 'd',
-    to_utf8("\001\117") => 'd',
+    to_utf8("\001\016") => 'd',
+    to_utf8("\001\017") => 'd',
     to_utf8("\001\107") => 'n',
     to_utf8("\001\110") => 'n',
     to_utf8("\001\144") => 't',
@@ -1144,8 +1144,145 @@ sub letter_asci_cs {
     elsif ($chr eq to_utf8("\001\141")) { return 'sx'; }
     elsif ($chr eq to_utf8("\001\131")) { return 'rx'; }
     elsif ($chr eq to_utf8("\001\176")) { return 'zx'; }
-    elsif ($chr eq "ch")                { return 'ch'; }
+    #elsif ($chr eq "ch")                { return 'ch'; }
     else                                { return $chr; }
+}
+
+
+########################## hispana ###########################
+
+# á é í ó ú kaj ü devas aperi kun iliaj a e i o u
+# hispana alfabeto estas: a b c ch d e f g h i j k l ll m n ñ 
+# o p q r s t u v x y z 
+
+my %values_es_1 = (
+    to_utf8("\000Á") => 10*ord('a'),    # Á egalas a
+    to_utf8("\000á") => 10*ord('a'),    # á egalas a
+    to_utf8("\000É") => 10*ord('e'),    # É egalas a
+    to_utf8("\000é") => 10*ord('e'),    # é egalas a
+    to_utf8("\000Í") => 10*ord('i'),    # Í egalas a
+    to_utf8("\000í") => 10*ord('i'),    # i egalas a
+    to_utf8("\000Ñ") => 10*ord('n')+1,  # Ñ post n
+    to_utf8("\000ñ") => 10*ord('n')+1,  # ñ post n
+    to_utf8("\000Ó") => 10*ord('o'),    # Ó egalas o
+    to_utf8("\000ó") => 10*ord('o'),    # ó egalas o
+    to_utf8("\000Ú") => 10*ord('u'),    # Ú egalas u
+    to_utf8("\000ú") => 10*ord('u'),    # ú egalas u
+    to_utf8("\000Ü") => 10*ord('u'),    # Ü egalas u
+    to_utf8("\000ü") => 10*ord('u'),    # ü egalas u
+    "#" => 10*ord('c')+2,               # ch post c
+    "%" => 10*ord('l')+2                # ll post l    
+    );
+
+my %values_es_2 = (
+    to_utf8("\000Á") => 10*ord('a')+3,    # Á egalas a
+    to_utf8("\000á") => 10*ord('a')+2,    # á egalas a
+    to_utf8("\000É") => 10*ord('e')+3,    # É egalas a
+    to_utf8("\000é") => 10*ord('e')+2,    # é egalas a
+    to_utf8("\000Í") => 10*ord('i')+3,    # Í egalas a
+    to_utf8("\000í") => 10*ord('i')+2,    # i egalas a
+    to_utf8("\000Ñ") => 10*ord('n')+3,    # Ñ post n
+    to_utf8("\000ñ") => 10*ord('n')+2,    # ñ post n
+    to_utf8("\000Ó") => 10*ord('o')+3,    # Ó egalas o
+    to_utf8("\000ó") => 10*ord('o')+2,    # ó egalas o
+    to_utf8("\000Ú") => 10*ord('u')+3,    # Ú egalas u
+    to_utf8("\000ú") => 10*ord('u')+2,    # ú egalas u
+    to_utf8("\000Ü") => 10*ord('u')+3,    # Ü egalas u
+    to_utf8("\000ü") => 10*ord('u')+2,    # ü egalas u
+    "#" => 10*ord('c')+2,                 # ch post c
+    "%" => 10*ord('l')+2                  # ll post l  
+    );
+
+my %values_es_3 = (
+    to_utf8("\000Á") => 'a', 
+    to_utf8("\000á") => 'a',
+    to_utf8("\000É") => 'e',
+    to_utf8("\000é") => 'e',
+    to_utf8("\000Í") => 'i',
+    to_utf8("\000í") => 'i',
+    to_utf8("\000Ó") => 'o',
+    to_utf8("\000ó") => 'o', 
+    to_utf8("\000Ú") => 'u', 
+    to_utf8("\000ú") => 'u',
+    to_utf8("\000Ü") => 'u',
+    to_utf8("\000ü") => 'u'
+    );
+
+
+sub sortprep_es {
+    my $w = shift;
+
+    print "$w -> " if ($debug);
+
+    $w =~ s/ch/#/ig; # ch sekvas post c
+    $w =~ s/ll/%/ig; # ll sekvas post l
+
+    print "-> $w\n" if ($debug);
+
+    return $w;
+}
+
+sub letterval_es {
+    my ($chr,$level) = @_;
+    my ($offset,$values);
+    
+    if ($level == 1) {
+	$values = \%values_es_1; # kruda
+	$offset = 0;
+    } else {
+	$values = \%values_es_2; # subtila
+	$offset = 1;
+    };
+    
+    if (! $chr) {
+	return 0;
+    } elsif (ord($chr) >= ord('a') and ord($chr) <= ord('z')) {
+	return 10 * ord($chr);
+    } elsif (ord($chr) >= ord('A') and ord($chr) <= ord('Z')) {
+	return 10 * ord(lc($chr)) + $offset;
+    } elsif ( exists $$values{$chr} ) {
+	return $$values{$chr};
+    } else {
+	return 9999;
+    }
+}
+
+
+sub letter_es {
+    my $letter = shift;
+    my $chr;
+
+
+    if ( lc($letter) =~ /^ch/ ) {
+	return 'ch';
+    } elsif ( lc($letter) =~ /^ll/ ) {
+	return 'll';
+    } else {
+
+	$letter = first_utf8char($letter);
+
+	if (ord($letter) >= ord('a') and ord($letter) <= ord('z')) {
+	    return $letter;
+	} elsif (ord($letter) >= ord('A') and ord($letter) <= ord('Z')) {
+	    return lc($letter);
+	} elsif ( exists $values_es_3{$letter} ) {
+	    return $values_es_3{$letter};
+	} else {
+	    return '0';
+	}
+    }
+}
+
+
+sub letter_asci_es {
+    my $chr = shift;
+
+    $chr = letter_cs($chr);
+    
+    if ($chr eq to_utf8("ñ"))     { return 'nx'; }
+    #elsif ($chr eq to_utf8("ch")) { return 'ch'; }
+    #elsif ($chr eq "ll")          { return 'll'; }
+    else                          { return $chr; }
 }
 
 
