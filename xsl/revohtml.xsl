@@ -3,6 +3,8 @@
 		version="1.0"
                 extension-element-prefixes="xt">
 
+<!-- xsl:output method="html" version="3.2"/ -->
+
 <!--
 
 origine kreita de Donald Rogers
@@ -59,6 +61,11 @@ modifita de Wolfram Diestel
     <hr />
     <h2>fontoj</h2>
     <xsl:apply-templates select="//fnt[aut|vrk|lok]" mode="fontoj"/>
+  </xsl:if>
+  <xsl:if test="//adm">
+    <hr />
+    <h2>administraj notoj</h2>
+    <xsl:apply-templates select="//adm" mode="admin"/>
   </xsl:if>
   <hr />
   <xsl:call-template name="redakto"/>
@@ -260,6 +267,12 @@ modifita de Wolfram Diestel
     <xsl:apply-templates/></span>
 </xsl:template>
 
+<xsl:template match="rim/aut">
+  <xsl:text>[</xsl:text>
+  <xsl:apply-templates/>
+  <xsl:text>]</xsl:text>
+</xsl:template>
+
 <xsl:template
   match="art/rim|subart/rim|drv/rim|subdrv/rim|snc/rim|subsnc/rim">
   <xsl:call-template name="rim"/>
@@ -325,8 +338,19 @@ modifita de Wolfram Diestel
 </xsl:template>
 
 <xsl:template match="bld">
-  <br />
-  <img src="{@lok}" />
+  <br/>
+  <center>
+  <img src="{@lok}"/>
+  <br/>
+  <i>
+  <xsl:apply-templates select="text()|tld|trd"/>
+  </i>
+  <br/>
+  </center>
+</xsl:template>
+
+<xsl:template match="bld/trd">
+  <xsl:apply-templates/>
 </xsl:template>
 
 <xsl:template match="uzo[@tip='fak']">
@@ -363,12 +387,20 @@ modifita de Wolfram Diestel
   </strong>
 </xsl:template>
 
+<xsl:template match="ctl">
+  <xsl:text>"</xsl:text>
+  <xsl:apply-templates/>
+  <xsl:text>"</xsl:text>
+</xsl:template>
+
 <xsl:template match="trdgrp|trd">
 </xsl:template>
 
 <xsl:template match="dif/trd">
   <xsl:apply-templates/>
 </xsl:template>
+
+<xsl:template match="adm"/>
 
 <!-- teksto -->
 
@@ -389,7 +421,7 @@ modifita de Wolfram Diestel
       <xsl:value-of select="$lingvo"/>
     </h3>
     <xsl:apply-templates mode="tradukoj"
-      select="//trd[@lng=$lng]|//trdgrp[@lng=$lng]"/>
+      select="//trd[@lng=$lng and not(ancestor::bld)]|//trdgrp[@lng=$lng]"/>
   </xsl:if>
 </xsl:template>  
 
@@ -450,6 +482,9 @@ modifita de Wolfram Diestel
 
 <xsl:template match="trd[@lng]|trdgrp" mode="tradukoj">
   <span class="trdeo">
+  <!-- rigardu, al kiu subarbo apartenas la traduko,
+    KOREKTU: se la traduko apartenas rekte al art okazas
+             reeniro de la antaua sxablono -->
   <a href="#{ancestor::node()[@mrk][1]/@mrk}">
   <xsl:apply-templates 
     select="ancestor::node()[self::drv or self::snc or self::subsnc or
@@ -473,6 +508,12 @@ modifita de Wolfram Diestel
   <xsl:apply-templates select="kap" mode="tradukoj"/>
 </xsl:template>
 
+<xsl:template match="subdrv" mode="tradukoj">
+  <xsl:apply-templates select="ancestor::drv/kap" mode="tradukoj"/>
+  <xsl:text> </xsl:text>
+  <xsl:number format="A"/>
+</xsl:template>
+
 <xsl:template match="snc" mode="tradukoj">
   <xsl:apply-templates select="ancestor::node()[self::drv or
     self::art][1]/kap" mode="tradukoj"/>
@@ -480,6 +521,17 @@ modifita de Wolfram Diestel
     <xsl:text> </xsl:text>
     <xsl:value-of select="@num"/>
   </xsl:if>
+</xsl:template>
+
+<xsl:template match="subsnc" mode="tradukoj">
+  <xsl:apply-templates select="ancestor::node()[self::drv or
+    self::art][1]/kap" mode="tradukoj"/>
+  <xsl:if test="@num">
+    <xsl:text> </xsl:text>
+    <xsl:value-of select="@num"/>
+  </xsl:if>
+  <xsl:text> </xsl:text>
+  <xsl:number format="a"/>
 </xsl:template>
 
 <xsl:template match="subart" mode="tradukoj">
@@ -497,6 +549,7 @@ modifita de Wolfram Diestel
 </xsl:template>
 
 <xsl:template match="tld" mode="tradukoj">
+  <xsl:value-of select="@lit"/>
   <xsl:text>~</xsl:text>
 </xsl:template>
 
@@ -512,38 +565,94 @@ modifita de Wolfram Diestel
   <a name="fnt_{$n}"></a>
   <sup><a href="#ekz_{$n}">
     <xsl:value-of select="$n"/></a>) </sup>
-  <xsl:variable name="fnt" select="normalize-space(text()[position()=1])"/>
-  <xsl:choose>
-    <xsl:when test="starts-with($fnt,'(')">
-      <xsl:value-of 
-        select="substring($fnt,2,string-length($fnt)-2)"/>
-    </xsl:when>
-    <xsl:otherwise>
-      <xsl:value-of select="$fnt"/>
-    </xsl:otherwise>
-  </xsl:choose>
-  <xsl:apply-templates
-    select="node()[not (self::text() and (position()=1 or position()=last()))]"/>
-  <xsl:variable name="fnt"
-    select="normalize-space(text()[position()=last()])"/>
-  <xsl:choose>
-    <xsl:when test="substring($fnt,string-length($fnt),1)=')'">
-      <xsl:value-of 
-        select="substring($fnt,1,string-length($fnt)-1)"/>
-    </xsl:when>
-    <xsl:otherwise>
-      <xsl:value-of select="$fnt"/>
-    </xsl:otherwise>
-  </xsl:choose>
+  <xsl:apply-templates mode="fontoj" select="aut|vrk|lok"/>
   </span>
   <br />
 </xsl:template>
 
-<xsl:template match="lok/url">
+<xsl:template match="aut" mode="fontoj">
+  <xsl:apply-templates mode="fontoj"/>
+  <xsl:if test="following-sibling::vrk">
+    <xsl:text>: </xsl:text>
+  </xsl:if>
+</xsl:template>
+
+<xsl:template match="vrk" mode="fontoj">
+  <xsl:apply-templates mode="fontoj"/>
+  <xsl:if test="following-sibling::lok">
+    <xsl:text>, </xsl:text>
+  </xsl:if>
+</xsl:template>  
+
+<xsl:template match="lok" mode="fontoj">
+  <xsl:apply-templates mode="fontoj"/>
+</xsl:template>
+
+<xsl:template match="url" mode="fontoj">
   <a href="{@ref}">
   <xsl:apply-templates/>
   </a>
 </xsl:template>
+
+<!-- administraj notoj -->
+
+<xsl:template match="adm" mode="admin">
+  <pre>
+  <b>pri <xsl:apply-templates 
+    select="ancestor::node()[self::drv or self::snc or self::subsnc or
+      self::subdrv or self::subart or self::art][1]"
+    mode="admin"/></b>
+  <xsl:text>:
+</xsl:text>
+  <xsl:apply-templates/>
+  </pre>
+</xsl:template>
+
+<xsl:template match="art|drv" mode="admin">
+  <xsl:apply-templates select="kap" mode="admin"/>
+</xsl:template>
+
+<xsl:template match="snc" mode="admin">
+  <xsl:apply-templates select="ancestor::node()[self::drv or
+    self::art][1]/kap" mode="admin"/>
+  <xsl:if test="@num">
+    <xsl:text> </xsl:text>
+    <xsl:value-of select="@num"/>
+  </xsl:if>
+</xsl:template>
+
+<xsl:template match="subsnc" mode="admin">
+  <xsl:apply-templates select="ancestor::node()[self::drv or
+    self::art][1]/kap" mode="admin"/>
+  <xsl:if test="@num">
+    <xsl:text> </xsl:text>
+    <xsl:value-of select="@num"/>
+  </xsl:if>
+  <xsl:text> </xsl:text>
+  <xsl:number format="a"/>
+</xsl:template>
+
+<xsl:template match="subart" mode="admin">
+  <xsl:apply-templates select="ancestor::art/kap" mode="admin"/>
+  <xsl:text> </xsl:text>
+  <xsl:number format="I"/>
+</xsl:template>
+
+<xsl:template match="subdrv" mode="admin">
+  <xsl:apply-templates select="ancestor::drv/kap" mode="admin"/>
+  <xsl:text> </xsl:text>
+  <xsl:number format="A"/>
+</xsl:template>
+
+<xsl:template match="kap" mode="admin">
+  <xsl:apply-templates select="tld|rad|text()" mode="admin"/>
+</xsl:template>
+
+<xsl:template match="tld" mode="admin">
+  <xsl:value-of select="@lit"/>
+  <xsl:text>~</xsl:text>
+</xsl:template>
+
 
 <!-- redakto -->
 

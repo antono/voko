@@ -69,6 +69,7 @@
 </xsl:template>
 
 <xsl:template match="ekz/tld">
+  <xsl:value-of select="@lit"/>
   <xsl:text>~</xsl:text>
 </xsl:template>
 
@@ -351,6 +352,7 @@
 </xsl:template>
 
 <xsl:template match="tld" mode="tradukoj">
+  <xsl:value-of select="@lit"/>
   <xsl:text>~</xsl:text>
 </xsl:template> 
 
