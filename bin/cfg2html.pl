@@ -14,7 +14,7 @@ BEGIN {
 $file = shift @ARGV;
 
 # legu la dosieron
-%entries = read_cfg($file);
+%entries = read_cfg($file,1); # 1 = stir-informoj
 
 # analizu la stirinformojn
 if ($entries{'_#!_'}) {

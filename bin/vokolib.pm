@@ -60,6 +60,7 @@ sub index_buttons {
 
 sub read_cfg {
     $cfgfile = shift;
+    $stir_lin = shift || 0;
     my %hash = ();
 
     open CFG, $cfgfile 
@@ -67,7 +68,7 @@ sub read_cfg {
 
     while ($line = <CFG>) {
 	# linio komencighanta per #! entenas stir-informojn
-	if ($line =~ /^#!/) {
+	if ($line =~ /^#!/ and $stir_lin) {
 	    $line =~ s/^#!//; chomp $line;
 	    $hash{'_#!_'} = $line;
 	} elsif ($line !~ /^#|^\s*$/) {
@@ -85,7 +86,7 @@ sub read_cfg {
 # la novan dosieron
 
 sub diff_mv {
-    my ($newfile,$oldfile) = @_;
+    my ($newfile,$oldfile,$verbose) = @_;
 
     if ((! -e $oldfile) or (`diff -q $newfile $oldfile`)) {
 	print "$oldfile\n" if ($verbose);

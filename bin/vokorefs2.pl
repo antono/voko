@@ -8,6 +8,17 @@
 #
 ################# komenco de la programo ################
 
+BEGIN {
+  # en kiu dosierujo mi estas?
+  $pado = $0;
+  $pado =~ s|\\|/|g; 
+  $pado =~ s/[a-z0-9_]+\.pl$//;
+
+  push @INC, ($pado); #print join(':',@INC);
+  require vokolib;
+  "vokolib"->import();
+}       
+
 use XML::Parser;
 
 $debug = 0;
@@ -210,10 +221,6 @@ sub start_handler {
 	    ($tip eq 'prt') or ($tip eq 'malprt'));
 	push @{$xp->current_element()."_".$tip}, (get_attr('cel',@attrs));
 
-#	    print $xp->current_element()."_".$tip, ": ",
-#	          @{$xp->current_element()."_".$tip}, "\n" if ($debug);
-
-	
     }
     elsif ($el eq 'uzo') 
     {
@@ -358,19 +365,17 @@ sub cmpl_refs_aux {
 		next;
 	    }
 	    
-#	    unless ($reftype eq 'vid') {
-		# se la vorto "word" ankorau ne trovighas
-		# en la listo de la referencita vorto, enmetu
-		# la retroreferencon
-		unless (map { 
-		    (ref($_) eq "HASH" ? $near == $_ : $near->{'mrk'} eq $_)?
-		      1:() 
-		      }
-			@{$distant->{$reftype}}) 
+	    # se la vorto "word" ankorau ne trovighas
+	    # en la listo de la referencita vorto, enmetu
+	    # la retroreferencon
+	    unless (map { 
+		(ref($_) eq "HASH" ? $near == $_ : $near->{'mrk'} eq $_)?
+		  1:() 
+		  }
+		    @{$distant->{$reftype}}) 
 		{
 		    push @{$distant->{$reftype}}, ($near);
 		}
-#	    }
 
 	    # anstatauigu la signovicon "word" per montrilo al ghi
 	    @$refs->[$i] = $distant;
@@ -506,36 +511,30 @@ sub html_tree {
     local @subs = ();
     my $cnt;
 
-#  sub ordigu {
-#    my $list = shift;
+    sub ero {
+	my $list = shift;
+	my $tip = shift;
 
-#    return sort {$a->{'mrk'} cmp $b->{'mrk'}} @$list;
-#  }
-
-  sub ero {
-    my $list = shift;
-    my $tip = shift;
-
-    for $v ( sort {$a->{'mrk'} cmp $b->{'mrk'}} @$list ) {
+	for $v ( sort {$a->{'mrk'} cmp $b->{'mrk'}} @$list ) {
 	
-	print
-	    "<a href=\"".tez_link($v)."\">",
-	    "<img src=\"../smb/$img{$tip}\" alt=\"$smb{$tip}\" border=0>",
-	    "</a>\n";
-	if ($v->{'h'}*$v->{'c'}>$tez_lim) { print "<b>"; }
-	print
-	    "<a href=\"".word_ref($v)."\" target=\"precipa\">",
-	    $v->{'kap'}."</a>";
-	if ($v->{'h'}*$v->{'c'}>$tez_lim) { print "</b>"; }
-	print "\n<br>\n";
+	    print
+		"<a href=\"".tez_link($v)."\">",
+		"<img src=\"../smb/$img{$tip}\" alt=\"$smb{$tip}\" border=0>",
+		"</a>\n";
+	    if ($v->{'h'}*$v->{'c'}>$tez_lim) { print "<b>"; }
+	    print
+		"<a href=\"".word_ref($v)."\" target=\"precipa\">",
+		$v->{'kap'}."</a>";
+	    if ($v->{'h'}*$v->{'c'}>$tez_lim) { print "</b>"; }
+	    print "\n<br>\n";
 
-	unless ($tip eq 'super' or $tip eq 'malprt'
-		or $tz_files{tez_file($v)}) {
-	    push @subs, ($v);
+	    unless ($tip eq 'super' or $tip eq 'malprt'
+		    or $tz_files{tez_file($v)}) {
+		push @subs, ($v);
+	    }
 	}
+	print "<p>\n";
     }
-    print "<p>\n";
-  }
 
     return unless (@$list);
 
@@ -551,8 +550,8 @@ sub html_tree {
 	open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
 	select OUT;
 	
-	header("tezaŭro: ".$word->{'kap'});
-	linkbuttons();
+	index_header("tezaŭro: ".$word->{'kap'});
+	index_buttons();
 
 	print "<p>\n";
 	if (@{$entry->{'uzo'}}) {
@@ -575,54 +574,18 @@ sub html_tree {
 	    print "<i class=griza>speco de</i><br>\n";
 
 	    ero($entry->{'super'},'super');
-#	    for $v (ordigu($entry->{'super'})) {
-#		print 
-#		    "<a href=\"".tez_link($v)."\">",
-#		    "<img src=\"../smb/super.gif\" alt=\"".$smb{'super'}."\" border=0>",
-#		    "</a>\n";
-#		print "<a href=\"".word_ref($v)."\" target=\"precipa\">"
-#		    .$v->{'kap'}."</a>";
-#		print "<br>\n";
-#	    }
-#	    print "<p>\n";
 	}
 
         # la tutoj
 	if (@{$entry->{'malprt'}}) {
 	    print "<i class=griza>parto de</i><br>\n";
 	    ero($entry->{'malprt'},'malprt');
-#	    for $v (ordigu($entry->{'malprt'})) {
-#		print
-#		"<a href=\"".tez_link($v)."\">",
-#		"<img src=\"../smb/super.gif\" alt=\"".$smb{'super'}."\"  border=0>",
-#		"</a>\n";
-#		print "<a href=\"".word_ref($v)."\" target=\"precipa\">"
-#		    .$v->{'kap'}."</a>";
-#		print "<br>\n";
-#	    }
-#
-#	   print "<p>\n"; 
 	}
 
         # la difino
 	if (@{$entry->{'dif'}}) {
 	    print "<i class=griza>difinito</i><br>\n";
 	    ero($entry->{'dif'},'dif');
-#	    for $v (ordigu($entry->{'dif'})) {
-#		print
-#		"<a href=\"".tez_link($v)."\">",
-#		"<img src=\"../smb/dif.gif\" alt=\"=\" border=0>",
-#		"</a>\n";
-#
-#		print "<a href=\"".word_ref($v)."\" target=\"precipa\">"
-#		    .$v->{'kap'}."</a>\n";
-#		
-#		unless ($tz_files{tez_file($v)}){ # se ne jam ekzistas
-#		#	or not ekzistas_referencoj($v)) { # estos iu enhavo
-#		    push @subs, ($v)};
-#		print "<br>\n";
-#	    }
-#	    print "<p>\n";
 	} 
 
 
@@ -630,118 +593,40 @@ sub html_tree {
 	if (@{$entry->{'sin'}}) {
 	    print "<i class=griza>sinonimoj</i><br>\n";
 	    ero($entry->{'sin'},'sin');
-#	    for $v (ordigu($entry->{'sin'})) {
-#		print
-#		"<a href=\"".tez_link($v)."\">",
-#		"<img src=\"../smb/sin.gif\"  alt=\"".$smb{'sin'}."\" border=0>",
-#		"</a>\n";
-#
-#		print "<a href=\"".word_ref($v)."\" target=\"precipa\">"
-#		    .$v->{'kap'}."</a>\n";
-#		
-#		unless ($tz_files{tez_file($v)}){ # se ne jam ekzistas
-#		    push @subs, ($v)};
-#		print "<br>\n";
-#	    }
-#	    print "<p>\n";
 	} 
 
 	# la antonimoj
 	if (@{$entry->{'ant'}}) {
 	    print "<i class=griza>antonimoj</i><br>\n";
 	    ero($entry->{'ant'},'ant');
-#	    for $v (ordigu($entry->{'ant'})) {
-#		print
-#		"<a href=\"".tez_link($v)."\">",
-#		"<img src=\"../smb/ant.gif\"  alt=\"".$smb{'ant'}."\" border=0>",
-#		"</a>\n";
-#		print "<a href=\"".word_ref($v)."\" target=\"precipa\">"
-#		    .$v->{'kap'}."</a>\n";
-#		
-#		unless ($tz_files{tez_file($v)}){ # se ne jam ekzistas
-#		    push @subs, ($v)};
-#
-#		print "<br>\n";
-#	    }
-#	    print "<p>\n";
 	}
 
 	# la subnocioj
 	if (@{$entry->{'sub'}}) {
 	    print "<i class=griza>specoj</i><br>\n";
 	    ero($entry->{'sub'},'sub');
-#	    for $v (ordigu($entry->{'sub'})) {
-#		print
-#		"<a href=\"".tez_link($v)."\">",
-#		"<img src=\"../smb/sub.gif\"  alt=\"".$smb{'sub'}."\" border=0>",
-#		"</a>\n";
-#		print "<a href=\"".word_ref($v)."\" target=\"precipa\">"
-#		    .$v->{'kap'}."</a>\n";
-		
-
-#		unless ($tz_files{tez_file($v)}){ # se ne jam ekzistas
-#		    push @subs, ($v)};
-
-#		print "<br>\n";
-#	    }
-#	    print "<p>\n";
 	}
 
         # la partoj
 	if (@{$entry->{'prt'}}) {
 	    print "<i class=griza>partoj</i><br>\n";
 	    ero($entry->{'prt'},'prt');
-#	    for $v (ordigu($entry->{'prt'})) {
-#		print
-#		"<a href=\"".tez_link($v)."\">",
-#		"<img src=\"../smb/sub.gif\"  alt=\"".$smb{'sub'}."\" border=0>",
-#		"</a>\n";
-
-#		print "<a href=\"".word_ref($v)."\" target=\"precipa\">"
-#		    .$v->{'kap'}."</a>\n";
-
-#		unless ($tz_files{tez_file($v)}){ # se ne jam ekzistas
-#		    push @subs, ($v)};
-#
-#		print "<br>\n";
-#	    }
-#	    print "<p>\n";
 	}
 
 	# vidu ankau
 	if (@{$entry->{'vid'}}) {
 	    print "<i class=griza>vidu</i><br>\n";
 	    ero($entry->{'vid'},'vid');
-#	    for $v (ordigu($entry->{'vid'})) {
-#		print
-#		"<a href=\"".tez_link($v)."\">",
-#		"<img src=\"../smb/vid.gif\"  alt=\"".$smb{'vid'}."\" border=0>",
-#		"</a>\n";
-#		print "<a href=\"".word_ref($v)."\" target=\"precipa\">"
-#		    .$v->{'kap'}."</a>";
-
-#		unless ($tz_files{tez_file($v)}){ # se ne jam ekzistas
-#		    push @subs, ($v)};
-#		print "<br>\n";
-#	    }
-#	    print "<p>\n";
 	}
         
-	footer();
+	index_footer();
 	
 	close OUT;
 	select STDOUT;
-	diff_mv($tmp_file,$target_file);
+	diff_mv($tmp_file,$target_file,$verbose);
 
 	# tezauro-dosieroj por la subnocioj
-#	$entry->{'cnt'} =
 	html_tree(\@subs);
-#	$cnt += $entry->{'cnt'} + 1; # chiuj suberoj + 1 por la ero mem
-
-#	if ($debug) {
-#	    warn $entry->{'mrk'}.", valoro: $cnt\n";
-#	}
-
     }
 
     return $cnt;
@@ -758,8 +643,6 @@ sub ekzistas_referencoj {
 sub word_ref {
     my $entry = shift;
     my $ref;
-
-#    print STDERR ">>> ",$entry->{'mrk'},"\n" if ($debug);
 
     $entry->{'mrk'} =~ /^([^.]+)(\..*)?$/;
     $ref = "$ref_pref/$1.html"; $ref .= "#$1$2" if ($2);
@@ -819,8 +702,8 @@ sub create_fx {
 	open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
 	select OUT;
 
-	header($fako);
-	linkbuttons();
+	index_header($fako);
+	index_buttons();
 	print
 	    "<a href=\"../inx/fx_".lc($fako).".html\">alfabete</a> ",
 	    "<b>strukture</b>\n<h1>$fakoj{$fako} strukture...</h1>\n";
@@ -839,11 +722,11 @@ sub create_fx {
 	    print "<br>\n";
 	}
 
-	footer();
+	index_footer();
 
 	close OUT;
 	select STDOUT;
-	diff_mv($tmp_file,$target_file);
+	diff_mv($tmp_file,$target_file,$verbose);
     }
 
     # kreu la liston de chiuj fakoj kun strukturaj indeksoj
@@ -896,57 +779,6 @@ sub create_tz {
 }
 
 
-sub diff_mv {
-    my ($newfile,$oldfile) = @_;
-
-    if ((! -e $oldfile) or (`diff -q $newfile $oldfile`)) {
-	print "$oldfile\n" if ($verbose);
-	`mv $newfile $oldfile`;
-    } else {
-	#print "(senshanghe)\n" if ($verbose);
-	unlink($newfile);
-    }
-};
-
-
-sub linkbuttons {
-    print 
-
-	"<script src=\"../smb/butonoj.js\"></script>\n",
-	"<a href=\"../inx/_eo.html\" onMouseOver=\"highlight(0)\" ",
-	"onMouseOut=\"normalize(0)\">",
-	"<img src=\"../smb/nav_eo1.png\" alt=\"[Esperanto]\" border=0></a>\n",
-	"<a href=\"../inx/_lng.html\" onMouseOver=\"highlight(1)\" ",
-	"onMouseOut=\"normalize(1)\">",
-	"<img src=\"../smb/nav_lng1.png\" alt=\"[Lingvoj]\" border=0></a>\n",
-	"<a href=\"../inx/_fak.html\" onMouseOver=\"highlight(2)\" ",
-	"onMouseOut=\"normalize(2)\">",
-	"<img src=\"../smb/nav_fak1.png\" alt=\"[Fakoj]\" border=0></a>\n",
-	"<a href=\"../inx/_ktp.html\" onMouseOver=\"highlight(3)\" ",
-	"onMouseOut=\"normalize(3)\">",
-	"<img src=\"../smb/nav_ktp1.png\" alt=\"[ktp.]\" border=0></a>\n",
-	"<br>";
-}
-
-
-sub header {
-    my $titolo = shift;
-
-    print
-	"<html>\n<head>\n<meta http-equiv=\"Content-Type\" ".
-	"content=\"text/html; charset=UTF-8\">\n".
-	"<title>$titolo</title>\n".
-	"<link title=\"indekso-stilo\" type=\"text/css\" ".
-	"rel=stylesheet href=\"../stl/indeksoj.css\">\n".
-	"</head>\n<body>\n";
-}
-
-
-
-sub footer {
-    print "</body>\n</html>\n";
-}
-
 ################### sencimigaj funkcioj ###############
 
 sub start_loop {
@@ -990,3 +822,10 @@ sub show {
 }
 
 #################################################
+
+
+
+
+
+
+

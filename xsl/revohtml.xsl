@@ -752,9 +752,18 @@ modifita de Wolfram Diestel
   <span class="fontoj">
   <a name="fnt_{$n}"></a>
   <a class="fnt" href="#ekz_{$n}"><xsl:value-of select="$n"/></a>.
-  <xsl:apply-templates mode="fontoj" select="aut|vrk|lok"/>
+  <xsl:apply-templates mode="fontoj" select="bib|aut|vrk|lok"/>
   </span>
   <br />
+</xsl:template>
+
+<xsl:template match="bib" mode="fontoj">
+  <a  class="fnt" href="../dok/bibliogr.html#{.}">
+  <b><xsl:apply-templates mode="fontoj"/></b>
+  </a>
+  <xsl:if test="following-sibling::lok">
+    <xsl:text>, </xsl:text>
+  </xsl:if>
 </xsl:template>
 
 <xsl:template match="aut" mode="fontoj">

@@ -14,12 +14,16 @@ BEGIN {
   # en kiu dosierujo mi estas?
   $pado = $0;
   $pado =~ s|\\|/|g; # sub Windows anstatauigu \ per /
-  $pado =~ s/indeks.pl$//;
+#  $pado =~ s/indeks.pl$//;
+  $pado =~ s/[a-z0-9_]+\.pl$//;
 
   push @INC, ($pado); #print join(':',@INC);
   require nls;
   "nls"->import();
   nls::read_nls_cfg("$pado/../cfg/nls.cfg");
+
+  require vokolib;
+  "vokolib"->import();
 }         
 
 ################### agordejo ##############################
@@ -432,7 +436,7 @@ sub FAKINX {
     }
 
     index_header("fakindekso: $faknomo");
-    linkbuttons();
+    index_buttons();
     if ($strukt_fakoj{$fako}) {
 	$strukt_file = $strukt_fakoj{$fako};
 	$strukt_file =~ s/\.html$//;
@@ -464,7 +468,7 @@ sub FAKINX {
     index_footer();
     close OUT;
     select STDOUT;
-    diff_mv($tmp_file,$target_file);
+    diff_mv($tmp_file,$target_file,$verbose);
 }
 
 # kreas lingvoindekson por unuopa lingvo
@@ -483,7 +487,7 @@ sub LINGVINX {
     open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
     select OUT;
     index_header("lingvoindekso: $lingvoj{$lng}");
-    linkbuttons();
+    index_buttons();
     index_letters($lingvoj{$lng},"lx_${lng}_",$lit,$literoj,
 		 [map {letter_asci_nls($_,$lng)} @$literoj]);
 #    print "<h1>$lingvoj{$lng} $lit...</h1>\n";
@@ -506,7 +510,7 @@ sub LINGVINX {
     index_footer();
     close OUT;
     select STDOUT;
-    diff_mv($tmp_file,$target_file);
+    diff_mv($tmp_file,$target_file,$verbose);
 }
 
 # kreas la indekson de la kapvortoj
@@ -525,7 +529,7 @@ sub KAPVORTINX {
     open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
     select OUT;
     index_header("kapvortindekso");
-    linkbuttons();
+    index_buttons();
     index_letters('kapvortoj ','kap_',$lit,$literoj,
 		 [map {letter_asci_nls($_,'eo')} @$literoj]);
 #    print "<h1>kapvortoj $lit...</h1>\n";
@@ -546,7 +550,7 @@ sub KAPVORTINX {
     index_footer();
     close OUT;
     select STDOUT;
-    diff_mv($tmp_file,$target_file);
+    diff_mv($tmp_file,$target_file,$verbose);
 }
 
 
@@ -566,7 +570,7 @@ sub INVVORTINX {
     open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
     select OUT;
     index_header("inversa indekso");
-    linkbuttons();
+    index_buttons();
     index_letters('inversa','inv_',$lit,$literoj,
 		[map {letter_asci_nls($_,'eo')} @$literoj] );
 #    print "<h1>inversa $lit...</h1>\n";
@@ -587,7 +591,7 @@ sub INVVORTINX {
     index_footer();
     close OUT;
     select STDOUT;
-    diff_mv($tmp_file,$target_file);
+    diff_mv($tmp_file,$target_file,$verbose);
 }
 
 # kreas indekson de la laste shanghitaj artikoloj
@@ -635,7 +639,7 @@ sub INXSHANGHITAJ {
     open OUT, ">$tmp_file" or die "Ne povis malfermi $tmp_file: $!\n";
     select OUT;
     index_header("Revo - novaj artikoloj");
-    linkbuttons();
+    index_buttons();
     print "<h1>novaj artikoloj</h1>\n";
 
     # skribu la liston
@@ -650,7 +654,7 @@ sub INXSHANGHITAJ {
     index_footer();
     close OUT;
     select STDOUT;
-    diff_mv($tmp_file,$target_file);
+    diff_mv($tmp_file,$target_file,$verbose);
 
     # dosiero "shanghitaj artikoloj"
     $target_file = "$dir/shanghitaj.html";
@@ -659,7 +663,7 @@ sub INXSHANGHITAJ {
     open OUT, ">$tmp_file" or die "Ne povis malfermi $tmp_file: $!\n";
     select OUT;
     index_header("laste ŝanĝitaj");
-    linkbuttons();
+    index_buttons();
     print "<h1>laste ŝanĝitaj</h1>\n";
 
     # skribu la liston de redaktintoj
@@ -683,7 +687,7 @@ sub INXSHANGHITAJ {
     index_footer();
     close OUT;
     select STDOUT;
-    diff_mv($tmp_file,$target_file);
+    diff_mv($tmp_file,$target_file,$verbose);
 
 }
 
@@ -703,7 +707,7 @@ sub INXBILDOJ {
     open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
     select OUT;
     index_header('bildoj');
-    linkbuttons();
+    index_buttons();
     print "<h1>bildoj</h1>\n<dl>\n";
     
     # ordigu la vortliston
@@ -726,7 +730,7 @@ sub INXBILDOJ {
     index_footer();
     close OUT;
     select STDOUT;
-    diff_mv($tmp_file,$target_file);
+    diff_mv($tmp_file,$target_file,$verbose);
 }
 
 # kreas indekson de la bildoj
@@ -741,7 +745,7 @@ sub INXSTATISTIKO {
     open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
     select OUT;
     index_header('statistiko');
-    linkbuttons();
+    index_buttons();
     print "<h1>statistiko</h1>\n";
     
     # ordigu la vortliston
@@ -785,7 +789,7 @@ sub INXSTATISTIKO {
     index_footer();
     close OUT;
     select STDOUT;
-    diff_mv($tmp_file,$target_file);
+    diff_mv($tmp_file,$target_file,$verbose);
 }
 
 # kreas la precipajn indeksojn
@@ -799,7 +803,7 @@ sub INX_EO {
     select OUT;
 
     index_header("Revo-indekso: Esperanto");
-    linkbuttons("eo");
+    index_buttons("eo");
 
     #kapvortoj
     if ($config{"inx_eo"}=~/kapvortoj/) {
@@ -833,7 +837,7 @@ sub INX_EO {
     close OUT;
 
     select STDOUT;
-    diff_mv($tmp_file,$target_file);
+    diff_mv($tmp_file,$target_file,$verbose);
 }
 
 sub INX_LNG {
@@ -844,7 +848,7 @@ sub INX_LNG {
     select OUT;
 
     index_header("Revo-indekso: Lingvoj");
-    linkbuttons("lng");
+    index_buttons("lng");
 
     #lingvoj
     print "<h1>nacilingvaj indeksoj</h1>\n";
@@ -879,7 +883,7 @@ sub INX_LNG {
     close OUT;
 
     select STDOUT;
-    diff_mv($tmp_file,$target_file);
+    diff_mv($tmp_file,$target_file,$verbose);
 
 }
 
@@ -891,7 +895,7 @@ sub INX_FAK {
     select OUT;
 
     index_header("Revo-indekso: Fakoj");
-    linkbuttons("fak");
+    index_buttons("fak");
 
     #fakoj
     if ($config{"inx_fak"}=~/alfabetaj/ && %fakoj) {
@@ -934,7 +938,7 @@ sub INX_FAK {
     close OUT;
 
     select STDOUT;
-    diff_mv($tmp_file,$target_file);
+    diff_mv($tmp_file,$target_file,$verbose);
 }
 
 sub INX_KTP {
@@ -945,7 +949,7 @@ sub INX_KTP {
     select OUT;
 
     index_header("Revo-indekso: ktp.");
-    linkbuttons("ktp");
+    index_buttons("ktp");
 
     # gravaj paghoj
     my @paghoj = split(';',$config{"inx_ktp_paghoj"});
@@ -1021,7 +1025,7 @@ sub INX_KTP {
     close OUT;
 
     select STDOUT;
-    diff_mv($tmp_file,$target_file);
+    diff_mv($tmp_file,$target_file,$verbose);
 }
 
 sub INX_PLENA {
@@ -1033,7 +1037,7 @@ sub INX_PLENA {
     select OUT;
 
     index_header("Revo - Plena indekso");
-    linkbuttons();
+    index_buttons();
 
     #kapvortoj
     if ($config{"inx_eo"}=~/kapvortoj/) {
@@ -1180,7 +1184,7 @@ sub INX_PLENA {
     close OUT;
 
     select STDOUT;
-    diff_mv($tmp_file,$target_file);
+    diff_mv($tmp_file,$target_file,$verbose);
 }
 
 
@@ -1218,53 +1222,6 @@ sub utf8_cx {
     return $vort;
 }
 
-# skribas tabelon kun ligoj al precipaj indekspaghoj
-sub linkbuttons {
-    my $self = shift || "";
-    my $bgcolor = 'bgcolor="#AACCAA"';
-
-    print 
-	"<script src=\"../smb/butonoj.js\"></script>\n",
-
-        (($self eq 'eo')? 
-	 "<img src=\"../smb/nav_eo0.png\" alt=\"[Esperanto]\" border=0>\n":
-	 "<a href=\"_eo.html\" onMouseOver=\"highlight(0)\" ".
-	 "onMouseOut=\"normalize(0)\">".
-	 "<img src=\"../smb/nav_eo1.png\" alt=\"[Esperanto]\" border=0></a>\n"),
-
-	(($self eq 'lng')?
-	 "<img src=\"../smb/nav_lng0.png\" alt=\"[Lingvoj]\" border=0>\n":
-	 "<a href=\"_lng.html\" onMouseOver=\"highlight(1)\" ".
-	 "onMouseOut=\"normalize(1)\">".
-	 "<img src=\"../smb/nav_lng1.png\" alt=\"[Lingvoj]\" border=0></a>\n"),
-
-        (($self eq 'fak')?
-	 "<img src=\"../smb/nav_fak0.png\" alt=\"[Fakoj]\" border=0>\n":
-	 "<a href=\"_fak.html\" onMouseOver=\"highlight(2)\" ".
-	 "onMouseOut=\"normalize(2)\">".
-	 "<img src=\"../smb/nav_fak1.png\" alt=\"[Fakoj]\" border=0></a>\n"),
-
-        (($self eq 'ktp')?
-	 "<img src=\"../smb/nav_ktp0.png\" alt=\"[ktp.]\" border=0>\n":
-	 "<a href=\"_ktp.html\" onMouseOver=\"highlight(3)\" ".
-	 "onMouseOut=\"normalize(3)\">".
-	 "<img src=\"../smb/nav_ktp1.png\" alt=\"[ktp.]\" border=0></a>\n"),
-
-	"<br>";
-}
-
-# skribas la supran parton de html-ajho
-sub index_header {
-    my $title = shift;
-    print 
-	"<html>\n<head>\n<meta http-equiv=\"Content-Type\" ",
-	"content=\"text/html; charset=UTF-8\">\n",
-	"<title>$title</title>\n",
-	"<link title=\"indekso-stilo\" type=\"text/css\" ",
-	"rel=stylesheet href=\"../stl/indeksoj.css\">\n",
-	"</head>\n<body>\n";
-}
-
 sub index_letters {
     my ($title_base,$file_base,$letter,$letters,$files) = @_;
     my ($l_utf8, $l_x, $file);
@@ -1283,29 +1240,6 @@ sub index_letters {
     print " $letter..." if ($letter);
     print "</h1>\n";
 }
-
-# skribas la suban parton de html-ajho
-sub index_footer {
-    print "\n</body>\n</html>\n";
-}
-
-
-# komparas novan dosieron kun ekzistanta,
-# kaj nur che shanghoj au neekzisto alshovas
-# la novan dosieron
-
-sub diff_mv {
-    my ($newfile,$oldfile) = @_;
-
-    if ((! -e $oldfile) or (`diff -q $newfile $oldfile`)) {
-	print "$oldfile\n" if ($verbose);
-	`mv $newfile $oldfile`;
-    } else {
-	#print "(senshanghe)\n" if ($verbose);
-	unlink($newfile);
-    }
-};
-
 
 # elprenas informojn el "cvs log"
 sub cvs_log {
@@ -1356,23 +1290,6 @@ sub cvs_log {
     }
 
     return ($aut,$result);
-}
-
-sub read_cfg {
-    $cfgfile = shift;
-    my %hash = ();
-
-    open CFG, $cfgfile 
-	or die "Ne povis malfermi dosieron \"$cfgfile\": $!\n";
-
-    while ($line = <CFG>) {
-	if ($line !~ /^#|^\s*$/) {
-	    $line =~ /^([^=]+)=(.*)$/;
-	    $hash{$1} = $2;
-	}
-    }
-    close CFG;
-    return %hash;
 }
 
 #################################################################
