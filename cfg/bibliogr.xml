@@ -756,6 +756,7 @@
   </vrk>
 
   <vrk mll="LR">
+    <url>http://ttt.esperanto.org/Ondo/L-lr.htm</url>
     <aut><a>L. L.</a> <n>Zamenhof</n></aut>
     <tit>Lingvaj Respondoj</tit>
   </vrk>
@@ -1151,6 +1152,26 @@
       <lok>Parizo</lok>
       <dat>1987</dat>
     </eld>
+  </vrk>
+
+  <vrk mll="SPV">
+     <aut><a>Gaston</a> <n>Waringhien</n></aut>
+     <tit>Plena Vortaro de Esperanto, Suplemento</tit>
+     <eld>
+       <nom>SAT</nom>
+       <lok>Parizo</lok>
+       <dat>1953</dat>
+     </eld>
+  </vrk>
+
+  <vrk mll="Studoj">
+     <aut><a>Vilmos</a> <n>Benczik</n></aut>
+     <tit>Studoj pri la Esperanta Literaturo</tit>
+     <eld>
+       <nom>La Kritikanto</nom>
+       <lok>Takasago-si</lok>
+       <dat>1980</dat>
+     </eld>
   </vrk>
 
   <vrk mll="&Scirc;talrato">

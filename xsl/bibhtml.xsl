@@ -126,7 +126,7 @@ kreita de Wolfram Diestel
 </xsl:template>
 
 <xsl:template match="eld">
-  <xsl:apply-templates/>
+  <xsl:apply-templates/><br/>
 </xsl:template>
 
 <xsl:template match="nom">

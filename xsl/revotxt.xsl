@@ -37,6 +37,7 @@ name="redcgi">/cgi-bin/vokomail.pl?art=</xsl:variable -->
 <xsl:variable name="bibliogrhtml">../dok/bibliogr.xml</xsl:variable>
 <xsl:variable name="revo">/home/revo/revo</xsl:variable>
 <xsl:variable name="lingvoj_cfg" select="'../cfg/lingvoj.xml'"/>
+<xsl:variable name="fakoj_cfg" select="'../cfg/fakoj.xml'"/>
 
 <!-- ilustrite por HTML kun grafikoj ktp.
      simple por HTML tauga por konverto al simpla teksto -->
@@ -73,6 +74,10 @@ name="redcgi">/cgi-bin/vokomail.pl?art=</xsl:variable -->
   <xsl:text>[</xsl:text>
   <xsl:number level="any" count="fnt[bib|aut|vrk|lok]"/>
   <xsl:text>]</xsl:text>
+</xsl:template>
+
+<xsl:template match="ref">
+{<xsl:apply-templates/>}
 </xsl:template>
 
 <xsl:template match="url">

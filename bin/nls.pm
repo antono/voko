@@ -7,7 +7,8 @@ require Exporter;
 
 @EXPORT = qw(read_nls_cfg defined_nls cmp_nls reverse_utf8 
 	     letter_nls letter_asci_nls dump_nls_info
-             convert_non_ascii replace nls_lingvoj); 
+             convert_non_ascii replace nls_lingvoj
+	     read_minuskl_cfg lowercase); 
 
 
 $debug=0;
@@ -360,6 +361,36 @@ sub defined_nls {
   }
 
   return %letr;
+}
+
+sub read_minuskl_cfg {
+    my $cfgfile = shift;
+
+    open CFG,$cfgfile;
+
+    while (<CFG>) {
+	unless (/^#/ or /^\s*$/) {
+		chomp($_);
+		my ($min,$maj) = split(/\s/,$_);
+
+		$minuskl{convert_non_ascii($maj)}=convert_non_ascii($min);
+	    }
+    }
+    close CFG;
+}
+
+
+sub lowercase {
+  my $vorto = shift;
+  my $res='';
+
+  # certigu UTF8-kodon
+  $vorto = pack("U*",unpack("U*",$vorto));
+
+  for ($i=0; $i<length($vorto); $i++) {
+    $res .= $minuskl{substr($vorto,$i,1)} || lc(substr($vorto,$i,1));
+  }
+  return $res;
 }
 
 

@@ -57,7 +57,14 @@ $refdir = '../art/';
 
 # enhavos post analizo la informojn de la indeks-dosiero
 %kapvortoj = ();
-%tradukoj = ();         # %tradukoj{lingvo}->%{litero}->@[mrk,kap,trd]
+$kv_mrk = 0;
+$kv_kap = 1;
+#XX$kv_rad = 2;
+%tradukoj = ();         # %tradukoj{lingvo}->%{litero}->@[mrk,kap,ind,trd]
+$tr_mrk = 0;
+$tr_kap = 1;
+$tr_ind = 2;
+$tr_trd = 3;
 %radDeDosiero = ();
 
 # legu la fakojn
@@ -165,7 +172,7 @@ sub artikolo {
     print "rad: $rad reversed ".reverse($rad)."\n" if ($debug);
 
     $kap =~ s/\///g;
-    push @{ $kapvortoj{$first_lit} }, [$mrk,$kap,$rad];
+    push @{ $kapvortoj{$first_lit} }, [$mrk,$kap];#XX,$rad];
     $radDeDosiero{$mrk} = $rad;
 
     # se la teksto entenas derivajho(j)n,
@@ -215,7 +222,7 @@ sub indeksero {
 	    die "$rad ne komencighas je e-a litero\n";
 	}
 
-	push @{ $kapvortoj{$first_lit} }, [$mrk,$kap,$rad];
+	push @{ $kapvortoj{$first_lit} }, [$mrk,$kap];#XX,$rad];
     }
 
     # unue analizu de bildoj kaj ekzemploj, char ili mem povas enhavi tradukoj
@@ -497,8 +504,10 @@ sub javaskriptoDosieroj {
       %eoKunTraduko = ();
       foreach $lit (@literoj) {
         $refs = $tradukoj{$lng}->{$lit};
-        @$refs = sort { cmp_nls($a->[2],$b->[2],$lng) } @$refs;
+        @$refs = sort { cmp_nls($a->[$tr_ind],$b->[$tr_ind],$lng) } @$refs;
         &jx_lng_lit_js($lng,$lit,\@literoj,$refs);
+        undef $refs;
+        undef $tradukoj{$lng}->{$lit};
       }
       &jx_lng_js($lng,\@literoj);
       print "PRETA js $lng\n" if ($verbose);
@@ -507,6 +516,11 @@ sub javaskriptoDosieroj {
     }
   }
   print ".\n" if ($verbose);
+  print "atendi\n";
+  $j = 0;
+  for ($i = 0; $i < 50000000; $i++)
+  { $j = $i; }
+  print "finatendi\n";
 }
 
 # Konstruu Javaskriptdosieron kun la listo de Esperantaj vortoj kaj
@@ -527,28 +541,28 @@ sub jx_lng_lit_js {
   ++$nombroListoj;
   $n = 0;
   foreach $ref (@$refs) {
-    if (($last1 ne $ref->[1]) or ($last2 ne $ref->[3])) {
-      $r=referenco($ref->[0]);    
-      $kap = $ref->[1];
-      $trd = $ref->[3];
+    if (($last1 ne $ref->[$tr_kap]) or ($last2 ne $ref->[$tr_trd])) {
+      $r=referenco($ref->[$tr_mrk]);    
+      $kap = $ref->[$tr_kap];
+      $trd = $ref->[$tr_trd];
       #$trd =~ s/(<\/?)ind>/$1u>/sg;
       $trd =~ s/[\r\n\f]/ /g;
       $trd =~ s/ *$//g;
       $trd =~ s/  / /g;
       if ($r =~ /\#([^.]*)\.([^"]*)$/)
       {
-        &NovaEro($trd, $1, $2, $ref->[1], $kap);
+        &NovaEro($trd, $1, $2, $ref->[$tr_kap], $kap);
       }
       elsif ($r =~ /art\/([^.]*)\.html$/)
       {
-        &NovaEro($trd, $1, '', $ref->[1], $kap);
+        &NovaEro($trd, $1, '', $ref->[$tr_kap], $kap);
       }
       else
       {
-        print STDERR "ne trovighas eroj en: $trd: $r $ref->[1]\n";
+        print STDERR "ne trovighas eroj en: $trd: $r $ref->[$tr_kap]\n";
       }
-      $last1 = $ref->[1];
-      $last2 = $ref->[3];
+      $last1 = $ref->[$tr_kap];
+      $last2 = $ref->[$tr_trd];
     }
   }
   print "'');";
@@ -598,8 +612,9 @@ sub jx_lng_js {
   @literoj2 = sort {cmp_nls($a,$b,'eo')} keys %kapvortoj;
   foreach $lit (@literoj2) {
     $refs = $kapvortoj{$lit};
-    @$refs = sort { cmp_nls($a->[1],$b->[1],'eo') } @$refs;
+    @$refs = sort { cmp_nls($a->[$kv_kap],$b->[$kv_kap],'eo') } @$refs;
     &jx_lng_eo_lit_js($lng,$lit,\@literoj,$refs);
+    undef $refs;
   }
 }
 
@@ -621,25 +636,25 @@ sub jx_lng_eo_lit_js {
   ++$nombroListoj;
   $n = 0;
   foreach $ref (@$refs) {
-    if (($last0 ne $ref->[0]) or ($last1 ne $ref->[1])) {
-      $r=referenco($ref->[0]);
-      $kap = $ref->[1];
+    if (($last0 ne $ref->[$kv_mrk]) or ($last1 ne $ref->[$kv_kap])) {
+      $r=referenco($ref->[$kv_mrk]);
+      $kap = $ref->[$kv_kap];
       if ($r =~ /\#([^.]*)\.([^"]*)$/)
       {
-        if (!exists($eoKunTraduko{$ref->[1]}))
-        { &NovaEro('', $1, $2, $ref->[1], $kap); }
+        if (!exists($eoKunTraduko{$ref->[$kv_kap]}))
+        { &NovaEro('', $1, $2, $ref->[$kv_kap], $kap); }
       }
       elsif ($r =~ /art\/([^.]*)\.html$/)
       {
-        if (!exists($eoKunTraduko{$ref->[1]}))
-        { &NovaEro('', $1, '', $ref->[1], $kap); }
+        if (!exists($eoKunTraduko{$ref->[$kv_kap]}))
+        { &NovaEro('', $1, '', $ref->[$kv_kap], $kap); }
       }
       else
       {
-        print STDERR "ne trovas eroj en: $r $ref->[1]\n";
+        print STDERR "ne trovas eroj en: $r $ref->[$kv_kap]\n";
       }
-      $last0 = $ref->[0];
-      $last1 = $ref->[1];
+      $last0 = $ref->[$kv_mrk];
+      $last1 = $ref->[$kv_kap];
     }
   }
   print "'');";
@@ -756,6 +771,7 @@ sub NovaEro()
   {
     print '"'.$traduko.'",';
   }
+  #if ($loko ne '') {$js_marko .= '.' . $loko;} elsif ($loko eq '') {} elsif(1)
   if ($loko eq '')
   {
     if ($esperanto =~ /^$dosiero.$/i)

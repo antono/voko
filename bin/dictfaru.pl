@@ -9,11 +9,13 @@
 #   kreu lingvoindeksojn nur de certaj lingvoj
 #   ASCII-konverto por lingvoj ru, bg, ktp.
 
+use lib "$ENV{'VOKO'}/bin";
+use nls; read_minuskl_cfg("$ENV{'VOKO'}/cfg/minuskl.cfg");
 
 $verbose = 1;
 $nur_indeksoj = 0; # por pli facila testado
 
-@lingvoj=('eo','de','en','cs','la','fr','es','tr');
+@lingvoj=('eo','de','en','cs','la','fr','es','ru','tr');
 
 $xslbin = "/home/revo/voko/bin/xslt.sh";
 $xsl = "/home/revo/voko/xsl/revotxt.xsl";
@@ -23,6 +25,13 @@ $inxpref = "/home/revo/dict/revo";
 $indekso = "/home/revo/tmp/indekso.xml";
 
 $b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+
+
+%header = (
+	   "00-database-utf8" => "",
+	   "00-database-url" => "http://purl.org/net/voko/revo/",
+	   "00-database-short" => "Reta Vortaro",
+           "00-database-info" => "Dosiero estas kreita el la fontoj de la Reta Vortaro je ".`date`);
 
 ######### 1a pasho: chiujn XML-artikolojn skribu en grandan tekstdosieron
 #########           kaj skribu la pozicion kaj longon de la artikoloj en
@@ -44,6 +53,21 @@ unless ($nur_indeksoj) {
 
     my $n = 1;
 
+    # output header info
+    open OUT,">$datfile";
+
+    foreach $h (keys %header) {
+	my $str = "$h\n ".$header{$h}."\n";
+	print OUT $str;
+	$len = length($str);
+	    	
+	print "[$pos\t$len]\n" if ($verbose);
+
+	print INX $h,"\t",b64_encode($pos),"\t",b64_encode($len),"\n";
+	$pos += $len;
+    }
+    close OUT;
+
     while ($file = readdir DIR) {
 	
 	if (-f "$dir/$file" and $file =~ /\.xml$/) {
@@ -64,6 +88,8 @@ unless ($nur_indeksoj) {
     }
     closedir DIR;
     close INX;
+
+    system("/usr/local/bin/dictzip $datfile");
 }
 
 
@@ -98,8 +124,16 @@ foreach $lng (@lingvoj) {
     $refs = $tradukoj{$lng};
 
     open INX, ">$inxpref.$lng.inx";
+
+    foreach $h (keys %header) {
+	$pos = $positions{$h};
+	print INX "$h\t", $pos->[0], "\t", $pos->[1], "\n";
+    }
+
     $refs = $tradukoj{$lng};
-    for $entry (sort { compare($a->[0],$b->[0]) } @$refs) {
+#    for $entry (sort { compare($a->[0],$b->[0]) } @$refs) {
+    use bytes;
+    for $entry (sort { $a->[0] cmp $b->[0] } @$refs) {
 	if (($pos = $positions{$entry->[1]})
 	    and (($last0 ne $entry->[0]) or ($last1 ne $entry->[1]))) { 
 	    print INX $entry->[0], "\t", $pos->[0], "\t", $pos->[1], "\n";
@@ -155,12 +189,17 @@ sub compare {
     $x = shift;
     $y = shift;
  
-    $x =~ s/[^a-zA-Z0-9 ]//g;
-    $y =~ s/[^a-zA-Z0-9 ]//g;
- 
+#    $x =~ s/[^a-zA-Z0-9 ]//g;
+#    $y =~ s/[^a-zA-Z0-9 ]//g;
+
+    use utf8;
+    $x =~ s/[^[:alnum:]]//g;
+    $y =~ s/[^[:alnum:]]//g;
+
     $x = lc($x);
     $y = lc($y);
- 
+
+    use bytes;
     return $x cmp $y;
 }               
 
@@ -198,10 +237,8 @@ sub traduko {
     my ($trd,$lng,$mrk)=@_;
     my $ind;
 
-    # forigu eblajn klr-ojn kaj aliajn ghenajn signojn
-    $trd =~ s/<klr[^>]>.*?<\/klr>//sg;
-    $trd =~ s/\///sg;
-    $trd =~ s/\n/ /sg;
+    # forigu eblajn klr-ojn 
+    $trd =~ s/<klr[^>]*>.*?<\/klr>//sg;
 
     # kio estas la indeksenda vorto?
     if ($trd =~ /<ind>(.*?)<\/ind>/s) {
@@ -209,11 +246,17 @@ sub traduko {
     } else {
         $ind = $trd;
     }
- 
+    
+    # forigu aliajn ghenajn signojn
+    $ind =~ s/\///sg;
+    $ind =~ s/\n/ /sg;
+
     # forigu komencajn/finajn spacojn
-    $ind=~s/\s*$//s;
-    $ind=~s/^\s*//s;
+#    $ind=~s/\s*$//s;
+#    $ind=~s/^\s*//s;
  
+    $ind = normigu($ind);
+
     # metu la vorton en la indekson
     push @{$tradukoj{$lng}}, [$ind,$mrk];
  
@@ -221,7 +264,20 @@ sub traduko {
 };          
 
 
+sub normigu {
+    my $txt=shift;
+   
+    use utf8;
 
+    # perforte certigu, ke txt estas konsiderata UTF-8
+    $txt = pack("U*",unpack("U*",$txt));
+  #utf8::upgrade($txt);
+    use locale;
+    $txt =~ s/[^[:alnum:]]//g;
+    $txt = lc($txt); #lowercase($txt);
+
+    return $txt;
+}
 
 
 
