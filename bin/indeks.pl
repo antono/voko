@@ -77,7 +77,6 @@ $refdir = '../art/';
 
 # legu la fakojn
 %faknomoj = read_cfg($config{"fakoj"});
-delete $fakoj{'KOMUNE'}; # ne estas vera fako       
 
 # legu la tutan indeks-dosieron
 
@@ -1345,7 +1344,7 @@ sub read_cfg {
     my %hash = ();
 
     open CFG, $cfgfile 
-	|| die "Ne povis malfermi dosieron \"$cfgfile\": $!\n";
+	or die "Ne povis malfermi dosieron \"$cfgfile\": $!\n";
 
     while ($line = <CFG>) {
 	if ($line !~ /^#|^\s*$/) {

@@ -24,14 +24,22 @@ while (@ARGV) {
     } elsif ($ARGV[0] eq '-H') {
 	$html = 1;
 	shift @ARGV;
+    } elsif ($ARGV[0] eq '-c') {
+	shift @ARGV;
+	$agord_dosiero = shift @ARGV;
     } else {
 	$dos = shift @ARGV;
     };
 };
 
-die "Ne ekzistas dosiero \"$dos\""
+die "Ne ekzistas dosierujo \"$dos\""
   unless -d $dos;
 
+# legu la agordo-dosieron, fakojn kaj stilojn
+unless ($agord_dosiero) { $agord_dosiero = "cfg/vortaro.cfg" };
+%config = read_cfg($agord_dosiero);
+%fakoj = read_cfg($config{"fakoj"});
+%stiloj = read_cfg($config{"stiloj"});
 
 # HTML-kapo
 if (html) {
@@ -92,7 +100,13 @@ sub char_handler {
 	$text = $xp->xml_escape($text);
 	$radiko .= $text;
     } 
+    if ($xp->in_element('uzo'))
+    {
+	$text = $xp->xml_escape($text);
+	$uzo .= $text;
+    } 
 } 
+
 
 sub start_handler {
     ($xp,$el,@attrs) = @_;
@@ -162,6 +176,10 @@ sub start_handler {
 		}
 	    }
 	}
+    } 
+    elsif ($el eq 'uzo') {
+	$uzo_tip = get_attr('tip',@attrs);
+	$uzo = '';
     }
 }
 
@@ -169,6 +187,18 @@ sub start_handler {
 
 sub end_handler {
     my ($xp, $el) = @_;
+
+    if ($el eq 'uzo') {
+	if ($uzo_tip eq 'fak') {
+	    unless ($fakoj{$uzo}) {
+		avertu("Fako \"$uzo\" ne ekzistas");
+		}
+	} elsif ($uzo_tip eq 'stl') {
+	    unless ($stiloj{$uzo}) {
+		avertu("Stilo \"$uzo\" ne ekzistas");
+	    }
+	}
+    }
 }
 
 # faras signovicojn el atributolisto
@@ -245,9 +275,22 @@ sub linkbuttons {
 	"<br>";
 }
 
+sub read_cfg {
+    $cfgfile = shift;
+    my %hash = ();
 
+    open CFG, $cfgfile 
+	or die "Ne povis malfermi dosieron \"$cfgfile\": $!\n";
 
-
+    while ($line = <CFG>) {
+	if ($line !~ /^#|^\s*$/) {
+	    $line =~ /^([^=]+)=(.*)$/;
+	    $hash{$1} = $2;
+	}
+    }
+    close CFG;
+    return %hash;
+}
 
 
 

@@ -86,7 +86,7 @@ $command="indeks.pl $verbose $agord_dosiero";
 print "$command\n" if ($verbose);
 open LOG, "$command|"; while (<LOG>) { print }; close LOG;
 
-$command="tajperaroj.pl $verbose -H $xml_pado > $vortaro_pado/inx/eraroj.html";
+$command="tajperaroj.pl $verbose -H $xml_pado -c $agord_dosiero > $vortaro_pado/inx/eraroj.html";
 print "$command\n" if ($verbose);
 open LOG, "$command|"; while (<LOG>) { print }; close LOG;
 
