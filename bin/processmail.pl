@@ -212,7 +212,7 @@ sub process_ent {
 
 	# TTT-formularo?
         if (($entity->head->get('subject')
-                 =~ /Internet\s+Explorer/)
+                 =~ /Microsoft.*Internet.*xplorer/s)
                 and ($parttxt =~ /^\s*komando=redakto&/)
                 or ($entity->mime_type
                     =~ m|application/x-www-form-urlencoded|)) { 
@@ -596,16 +596,7 @@ sub checkxml {
     my $teksto = shift;
     my $err;
 
-    # enmetu $Log$
-    # enmetu Revision 1.8  1999/12/07 20:20:15  revo
-    # enmetu uskleco che retposhtaj adresoj ne rolas; rekonu IE-mesaghon ankau che unuparta mesagho
-    # enmetu
-    # enmetu Revision 1.7  1999/11/24 17:05:33  revo
-    # enmetu *** empty log message ***
-    # enmetu
-    # enmetu Revision 1.6  1999/11/22 17:18:25  revo
-    # enmetu sendu raportojn anstatau unuopajn respondojn
-    # enmetu en la tekston, se ankorau ne estas
+    # enmetu Log en la tekston, se ankorau ne estas
     unless ($teksto =~ /<!--\s+\044Log/s) {
 	$teksto =~ s/(<\/vortaro>)/\n<!--\n\044Log\044\n-->\n$1/s;
     }
