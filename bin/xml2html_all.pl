@@ -21,7 +21,7 @@ $fromdir = shift @ARGV;
 $todir = shift @ARGV;
 
 opendir DIR,$fromdir;
-for $file (readdir(DIR)) {
+for $file (sort readdir(DIR)) {
 
     $infile = "$fromdir/$file";
 

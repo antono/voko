@@ -401,6 +401,12 @@ sub in_list {
 
 #################### HTML-eligo de la indeksoj ############
 	
+sub ordigu {
+    my $list = shift;
+
+    return sort {$a->{'mrk'} cmp $b->{'mrk'}} @$list;
+}
+
 sub html_tree {
     my $list = shift;
     my @subs = ();
@@ -424,7 +430,7 @@ sub html_tree {
 
 	print "<p>\n";
 	if (@{$entry->{'uzo'}}) {
-	    for $fak (@{$entry->{'uzo'}}) {
+	    for $fak (ordigu ($entry->{'uzo'})) {
 		# eble testu antaue, chu la fako havas tezauran indekson
 		print "<a href=\"fxs_".lc($fak).".html\">";
 		print "<img src=\"../smb/$fak.gif\" alt=\"$fak\" border=0>";
@@ -441,12 +447,12 @@ sub html_tree {
         # la supernocioj
 	if (@{$entry->{'super'}}) {
 	    print "<i class=griza>speco de</i><br>\n";
-	    for $v (@{$entry->{'super'}}) {
+	    for $v (ordigu($entry->{'super'})) {
 		print 
-		    "<a href=\"".tez_file($v)."\">",
-		    "<img src=\"../smb/s1.gif\" alt=\"".$smb{'super'}."\" border=0>",
+		    "<a href=\"".tez_link($v)."\">",
+		    "<img src=\"../smb/super.gif\" alt=\"".$smb{'super'}."\" border=0>",
 		    "</a>\n";
-#		print "[<a href=\"".tez_file($v)."\">...</a>]\n";
+#		print "[<a href=\"".tez_link($v)."\">...</a>]\n";
 		print "<a href=\"".word_ref($v)."\" target=\"precipa\">"
 		    .$v->{'kap'}."</a>";
 		print "<br>\n";
@@ -457,12 +463,12 @@ sub html_tree {
         # la tutoj
 	if (@{$entry->{'malprt'}}) {
 	    print "<i class=griza>parto de</i><br>\n";
-	    for $v (@{$entry->{'malprt'}}) {
+	    for $v (ordigu($entry->{'malprt'})) {
 		print
-		"<a href=\"".tez_file($v)."\">",
-		"<img src=\"../smb/s1.gif\" alt=\"".$smb{'super'}."\"  border=0>",
+		"<a href=\"".tez_link($v)."\">",
+		"<img src=\"../smb/super.gif\" alt=\"".$smb{'super'}."\"  border=0>",
 		"</a>\n";
-#		print "[<a href=\"".tez_file($v)."\">...</a>]\n";
+#		print "[<a href=\"".tez_link($v)."\">...</a>]\n";
 		print "<a href=\"".word_ref($v)."\" target=\"precipa\">"
 		    .$v->{'kap'}."</a>";
 		print "<br>\n";
@@ -475,9 +481,9 @@ sub html_tree {
 	if (@{$entry->{'dif'}}) {
 	    print "<i class=griza>difinito</i><br>\n";
 	    
-	    for $v (@{$entry->{'dif'}}) {
+	    for $v (ordigu($entry->{'dif'})) {
 		print
-		"<a href=\"".tez_file($v)."\">",
+		"<a href=\"".tez_link($v)."\">",
 		"<img src=\"../smb/dif.gif\" alt=\"=\" border=0>",
 		"</a>\n";
 
@@ -487,7 +493,7 @@ sub html_tree {
 		unless ($tz_files{tez_file($v)}){ # se ne jam ekzistas
 		#	or not ekzistas_referencoj($v)) { # estos iu enhavo
 		    push @subs, ($v)};
-		#print "[<a href=\"".tez_file($v)."\">...</a>]<br>\n";
+		#print "[<a href=\"".tez_link($v)."\">...</a>]<br>\n";
 		print "<br>\n";
 	    }
 	    print "<p>\n";
@@ -498,9 +504,9 @@ sub html_tree {
 	if (@{$entry->{'sin'}}) {
 	    print "<i class=griza>sinonimoj</i><br>\n";
 	    
-	    for $v (@{$entry->{'sin'}}) {
+	    for $v (ordigu($entry->{'sin'})) {
 		print
-		"<a href=\"".tez_file($v)."\">",
+		"<a href=\"".tez_link($v)."\">",
 		"<img src=\"../smb/sin.gif\"  alt=\"".$smb{'sin'}."\" border=0>",
 		"</a>\n";
 
@@ -510,7 +516,7 @@ sub html_tree {
 		unless ($tz_files{tez_file($v)}){ # se ne jam ekzistas
 		#	or not ekzistas_referencoj($v)) { # estos iu enhavo
 		    push @subs, ($v)};
-		#print "[<a href=\"".tez_file($v)."\">...</a>]<br>\n";
+		#print "[<a href=\"".tez_link($v)."\">...</a>]<br>\n";
 		print "<br>\n";
 	    }
 	    print "<p>\n";
@@ -520,9 +526,9 @@ sub html_tree {
 	if (@{$entry->{'ant'}}) {
 	    print "<i class=griza>antonimoj</i><br>\n";
 	    
-	    for $v (@{$entry->{'ant'}}) {
+	    for $v (ordigu($entry->{'ant'})) {
 		print
-		"<a href=\"".tez_file($v)."\">",
+		"<a href=\"".tez_link($v)."\">",
 		"<img src=\"../smb/ant.gif\"  alt=\"".$smb{'ant'}."\" border=0>",
 		"</a>\n";
 		print "<a href=\"".word_ref($v)."\" target=\"precipa\">"
@@ -531,7 +537,7 @@ sub html_tree {
 		unless ($tz_files{tez_file($v)}){ # se ne jam ekzistas
 		#	or not ekzistas_referencoj($v)) { # estos iu enhavo
 		    push @subs, ($v)};
-		#print "[<a href=\"".tez_file($v)."\">...</a>]<br>\n";
+		#print "[<a href=\"".tez_link($v)."\">...</a>]<br>\n";
 
 		print "<br>\n";
 	    }
@@ -541,10 +547,10 @@ sub html_tree {
 	# la subnocioj
 	if (@{$entry->{'sub'}}) {
 	    print "<i class=griza>specoj</i><br>\n";
-	    for $v (@{$entry->{'sub'}}) {
+	    for $v (ordigu($entry->{'sub'})) {
 		print
-		"<a href=\"".tez_file($v)."\">",
-		"<img src=\"../smb/s2.gif\"  alt=\"".$smb{'sub'}."\" border=0>",
+		"<a href=\"".tez_link($v)."\">",
+		"<img src=\"../smb/sub.gif\"  alt=\"".$smb{'sub'}."\" border=0>",
 		"</a>\n";
 		print "<a href=\"".word_ref($v)."\" target=\"precipa\">"
 		    .$v->{'kap'}."</a>\n";
@@ -553,7 +559,7 @@ sub html_tree {
 		unless ($tz_files{tez_file($v)}){ # se ne jam ekzistas
 		#	or not ekzistas_referencoj($v)) { # estos iu enhavo
 		    push @subs, ($v)};
-		#print "[<a href=\"".tez_file($v)."\">...</a>]<br>\n";
+		#print "[<a href=\"".tez_link($v)."\">...</a>]<br>\n";
 		#}
 		print "<br>\n";
 	    }
@@ -563,10 +569,10 @@ sub html_tree {
         # la partoj
 	if (@{$entry->{'prt'}}) {
 	    print "<i class=griza>partoj</i><br>\n";
-	    for $v (@{$entry->{'prt'}}) {
+	    for $v (ordigu($entry->{'prt'})) {
 		print
-		"<a href=\"".tez_file($v)."\">",
-		"<img src=\"../smb/s2.gif\"  alt=\"".$smb{'sub'}."\" border=0>",
+		"<a href=\"".tez_link($v)."\">",
+		"<img src=\"../smb/sub.gif\"  alt=\"".$smb{'sub'}."\" border=0>",
 		"</a>\n";
 
 		print "<a href=\"".word_ref($v)."\" target=\"precipa\">"
@@ -575,7 +581,7 @@ sub html_tree {
 		unless ($tz_files{tez_file($v)}){ # se ne jam ekzistas
 		    #	or not ekzistas_referencoj($v)) { # estos iu enhavo
 		    push @subs, ($v)};
-		#print "[<a href=\"".tez_file($v)."\">...</a>]";
+		#print "[<a href=\"".tez_link($v)."\">...</a>]";
 		#}
 		print "<br>\n";
 	    }
@@ -585,9 +591,9 @@ sub html_tree {
 	# vidu ankau
 	if (@{$entry->{'vid'}}) {
 	    print "<i class=griza>vidu</i><br>\n";
-	    for $v (@{$entry->{'vid'}}) {
+	    for $v (ordigu($entry->{'vid'})) {
 		print
-		"<a href=\"".tez_file($v)."\">",
+		"<a href=\"".tez_link($v)."\">",
 		"<img src=\"../smb/vid.gif\"  alt=\"".$smb{'vid'}."\" border=0>",
 		"</a>\n";
 		print "<a href=\"".word_ref($v)."\" target=\"precipa\">"
@@ -596,7 +602,7 @@ sub html_tree {
 		unless ($tz_files{tez_file($v)}){ # se ne jam ekzistas
 		#	or not ekzistas_referencoj($v)) { # estos iu enhavo
 		    push @subs, ($v)};
-		#print "[<a href=\"".tez_file($v)."\">...</a>]<br>\n";
+		#print "[<a href=\"".tez_link($v)."\">...</a>]<br>\n";
 		print "<br>\n";
 	    }
 	    print "<p>\n";
@@ -605,9 +611,9 @@ sub html_tree {
         # referencita de
 	if (@{$entry->{'malvid'}}) {
 	    print "<i class=griza>referencita de</i><br>\n";
-	    for $v (@{$entry->{'malvid'}}) {
+	    for $v (ordigu($entry->{'malvid'})) {
 		print
-		"<a href=\"".tez_file($v)."\">",
+		"<a href=\"".tez_link($v)."\">",
 		"<img src=\"../smb/vid.gif\"  alt=\"".$smb{'vid'}."\" border=0>",
 		"</a>\n";
 		print "<a href=\"".word_ref($v)."\" target=\"precipa\">"
@@ -616,7 +622,7 @@ sub html_tree {
 		unless ($tz_files{tez_file($v)}){ # se ne jam ekzistas
 		#	or not ekzistas_referencoj($v)) { # estos iu enhavo
 		    push @subs, ($v)};
-		#print "[<a href=\"".tez_file($v)."\">...</a>]<br>\n";
+		#print "[<a href=\"".tez_link($v)."\">...</a>]<br>\n";
 		print "<br>\n";
 	    }
 	    print "<p>\n";
@@ -663,6 +669,14 @@ sub tez_file {
     return "$tz_prefix".$mrk.".html";
 }
 
+sub tez_link {
+    my $entry = shift;
+    
+    my $mrk = $entry->{'mrk'};
+    $mrk =~ tr/./_/;
+    return "tz_$mrk.html";
+}
+
 sub read_cfg {
     $cfgfile = shift;
     my %hash = ();
@@ -707,7 +721,7 @@ sub create_fx {
 
 	foreach $entry (@root) {
 	    print 
-		"<a href=\"".tez_file($entry)."\">",
+		"<a href=\"".tez_link($entry)."\">",
 		"<img src=\"../smb/vid.gif\"   alt=\"".$smb{'vid'}."\" border=0></a>\n",
 	        "<a href=\"".word_ref($entry)."\" target=\"precipa\">",
 	        $entry->{'kap'}."</a><br>\n";
