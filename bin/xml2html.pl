@@ -284,10 +284,11 @@ sub subsnc {
 ############### priskribaj elementoj #################
 
 sub refgrp {
-    shift; shift; # ignoru la argumentojn xp kaj el
+    $xp = shift; 
+    shift; # ignoru la argumenton el
     my $tip = get_attr('tip',@_);
     
-    if ($tip) { 
+    if ($tip and ! $xp->in_element('dif')) { 
 	my $smb = "$smb_dosierujo/$refsmb_bildo{$tip}";
 	my $txt = $refsmb_teksto{$tip};
 
@@ -300,11 +301,12 @@ sub refgrp {
 }
 
 sub ref {
-    shift; shift; # ignoru la argumentojn xp kaj el
+    $xp = shift; 
+    shift; # ignoru la argumenton el
     my $cel = get_attr('cel',@_);
     my $tip = get_attr('tip',@_);
  
-    if ($tip) { 
+    if ($tip and ! $xp->in_element('dif')) { 
 	my $smb = "$smb_dosierujo/$refsmb_bildo{$tip}";
 	my $txt = $refsmb_teksto{$tip};
 
