@@ -113,6 +113,150 @@ $cntdecl = "<meta http-equiv=\"Content-Type\" content=\"text/html; ".
 	'ZOO'=>'zoologio',
 	);
 
+%lingvoj = (
+	    'aa'=>'afara',
+	    'ab'=>'ab¶aza',
+	    'af'=>'afrikansa',
+	    'am'=>'amhara',
+	    'ar'=>'araba',
+	    'as'=>'asama',
+	    'ay'=>'ajmara',
+	    'az'=>'azerbajøana',
+	    'ba'=>'baþkira',
+	    'be'=>'belorusa',
+	    'bg'=>'bulgara',
+	    'bh'=>'bihara',
+	    'bi'=>'bislamo',
+	    'bn'=>'bengala',
+	    'bo'=>'tibeta',
+	    'br'=>'bretona',
+	    'ca'=>'kataluna',
+	    'co'=>'korsika',
+	    'cs'=>'æe¶a',
+	    'cy'=>'kimra',
+	    'da'=>'dana',
+	    'de'=>'germana',
+	    'dz'=>'dzonko',
+	    'el'=>'greka',
+	    'en'=>'angla',
+	    'eo'=>'esperanto',
+	    'es'=>'hispana',
+	    'et'=>'estona',
+	    'eu'=>'eýska',
+	    'fa'=>'persa',
+	    'fi'=>'finna',
+	    'fj'=>'fiøia',
+	    'fo'=>'feroa',
+	    'fr'=>'franca',
+	    'fy'=>'frisa',
+	    'ga'=>'irlanda',
+	    'gd'=>'gaela',
+	    'gl'=>'galega',
+	    'gn'=>'gvarania',
+	    'gu'=>'guøarata',
+	    'ha'=>'haýsa',
+	    'he'=>'hebrea',
+	    'hi'=>'hinda',
+	    'hr'=>'kroata',
+	    'hu'=>'hungara',
+	    'hy'=>'armena',
+	    'ia'=>'interlingvao',
+	    'id'=>'indonezia',
+	    'ie'=>'okcidentalo',
+	    'ik'=>'eskima',
+	    'is'=>'islanda',
+	    'it'=>'itala',
+	    'iu'=>'inuita',
+	    'ja'=>'japana',
+	    'jw'=>'java',
+	    'ka'=>'kartvela',
+	    'kk'=>'kaza¶a',
+	    'kl'=>'gronlanda',
+	    'km'=>'kmera',
+	    'kn'=>'kanara',
+	    'ko'=>'korea',
+	    'ks'=>'kaþmira',
+	    'ku'=>'kurda',
+	    'ky'=>'kirgiza',
+	    'la'=>'latino',
+	    'ln'=>'lingala',
+	    'lo'=>'laýa',
+	    'lt'=>'litova',
+	    'lv'=>'latva',
+	    'mg'=>'malagasa',
+	    'mi'=>'maoria',
+	    'mk'=>'makedona',
+	    'ml'=>'malajalama',
+	    'mn'=>'mongola',
+	    'mo'=>'moldava',
+	    'mr'=>'marata',
+	    'ms'=>'malaja',
+	    'mt'=>'malta',
+	    'my'=>'birma',
+	    'na'=>'naura',
+	    'ne'=>'nepala',
+	    'nl'=>'nederlanda',
+	    'no'=>'norvega',
+	    'oc'=>'okcitana',
+	    'om'=>'oroma',
+	    'or'=>'orijo',
+	    'pa'=>'panøaba',
+	    'pl'=>'pola',
+	    'ps'=>'paþtua',
+	    'pt'=>'portugala',
+	    'qu'=>'keæua',
+	    'rm'=>'romanæa',
+	    'rn'=>'burunda',
+	    'ro'=>'rumana',
+	    'ru'=>'rusa',
+	    'rw'=>'ruanda',
+	    'sa'=>'sanskrito',
+	    'sd'=>'sinda',
+	    'sg'=>'sangoa',
+	    'sh'=>'serbo-kroata',
+	    'si'=>'sinhala',
+	    'sk'=>'slovaka',
+	    'sl'=>'slovena',
+	    'sm'=>'samoa',
+	    'sn'=>'þona',
+	    'so'=>'somala',
+	    'sq'=>'albana',
+	    'sr'=>'serba',
+	    'ss'=>'svazia',
+	    'st'=>'sota',
+	    'su'=>'sunda',
+	    'sv'=>'sveda',
+	    'sw'=>'svahila',
+	    'ta'=>'tamila',
+	    'te'=>'telugua',
+	    'tg'=>'taøika',
+	    'th'=>'taja',
+	    'ti'=>'tigraja',
+	    'tk'=>'turkmena',
+	    'tl'=>'filipina',
+	    'tn'=>'cvana',
+	    'to'=>'tongaa',
+	    'tr'=>'turka',
+	    'ts'=>'conga',
+	    'tt'=>'tatara',
+	    'tw'=>'akana',
+	    'ug'=>'ujgura',
+	    'uk'=>'ukrajna',
+	    'ur'=>'urduo',
+	    'uz'=>'uzbeka',
+	    'vi'=>'vjetnama',
+	    'vo'=>'volapuko',
+	    'wo'=>'volofa',
+	    'xh'=>'ksosa',
+	    'yi'=>'jida',
+	    'yo'=>'joruba',
+	    'za'=>'øuanga',
+	    'zh'=>'æina',
+	    'zu'=>'zulua'
+);    
+
+#	   print "$lingvoj{'de'}; $lingvoj{'he'}\n";
+
 @alfabeto = ('a','b','c',"\346",'d','e','f','g',"\370",'h',"\266",'i','j',
 	      "\274",'k','l','m','n','o','p','r','s',"\376",'t','u',"\375",
 	     'v','z');
@@ -298,16 +442,18 @@ sub LINGVINX {
     $lng = lc($lng);
     my $r;
     my $ln = substr($lng,0,5);
+    my $lingvo = $lingvoj{$lng};  
+ 
     open OUT,">$dir/lx_$ln$html" or die "Ne povis krei $dir/lx_$ln$html\n";
 
     select STDOUT;
     print "Skribi $dir/lx_$ln$html\n";
     select OUT;
 
-    $lng =~ s/[oe]$/a/;
-    print "<html><head><title>$lng indekso</title>\n";
+    $lingvo =~ s/[oe]$/a/;
+    print "<html><head><title>indekso $lingvo</title>\n";
     print "$inxstl\n$cntdecl</head>\n<body>\n";    
-    print "$inxref\n<h1>$lng indekso</h1>\n";
+    print "$inxref\n<h1>indekso $lingvo</h1>\n";
 
     foreach $ref (sort { LIT($a->[2]) cmp LIT($b->[2]) } @$refs) {
 	$r=REFERENCO($ref->[0]);    
@@ -549,7 +695,7 @@ sub INXLIST {
 	    $lng=lc($lng);
 	    my $ln=substr($lng,0,5);
 	    print "<a href=\"lx_$ln.htm\">";
-	    print "$lng</a><br>\n";
+	    print "$lingvoj{$lng}</a><br>\n";
 	};
     };
 
