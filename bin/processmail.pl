@@ -227,8 +227,10 @@ sub process_ent {
         $parttxt = $entity->bodyhandle->as_string;   
 
 	# TTT-formularo?
-        if (($entity->head->get('subject')
-                 =~ /Microsoft.*Internet.*xplorer/s)
+        if ((($entity->head->get('subject')
+                 =~ /Microsoft.*Internet.*xplorer/s) 
+                or ($entity->head->get('content-type')
+		 =~  /POSTDATA\.ATT/s))
                 and ($parttxt =~ /^\s*komando=redakto&/)
                 or ($entity->mime_type
                     =~ m|application/x-www-form-urlencoded|)) { 
@@ -319,7 +321,7 @@ sub is_editor {
 	unless (/^#/) {
 		if (index(lc($_),lc($email_addr)) >= 0) {
 		    print "retadreso trovita en: $_\n" if ($debug);
-		    /^([a-z\s]*<[a-z\@0-9\._]*>)/i;
+		    /^([a-z\s]*<[a-z\@0-9\.\-_]*>)/i;
 		    $res_addr = $1;
 		    unless ($res_addr) {
 			print "ne povis ekstrakti la adreson el $_\n";
@@ -984,7 +986,9 @@ sub extract_version {
     my $id = shift;
     # ekstraktu version el $Id: ...
     unless ($id =~ /^\044Id: [^ ,\.]+\.xml,v\s+([0-9\.]+)/) {
-	die "$id ne enhavas version\n";
+	report ("ERARO   : Artikol-marko havas malghustan sintakson\n");
+	warn "$id ne enhavas version\n";
+	return '???';
     } else {
 	return $1;
     }
@@ -994,7 +998,9 @@ sub extract_article {
     my $id = shift;
     # ekstraktu dosiernomon el $Id: ...
     unless ($id =~ /^\044Id: ([^ ,\.]+)\.xml,v\s+[0-9\.]+/) {
-	die "$id ne enhavas version\n";
+	report ("ERARO   : Artikol-marko havas malghustan sintakson\n");
+	warn "$id ne enhavas dosiernomon\n";
+	return '???';
     } else {
 	return $1;
     }

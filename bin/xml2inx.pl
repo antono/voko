@@ -67,8 +67,11 @@ sub char_handler {
 	  $xp->in_element('kap') or
 	  $xp->in_element('rad') or
 	  $xp->in_element('trd') or
+	  $xp->in_element('ind') or
+	  ($xp->in_element('klr') and $ind) or
 	  $xp->in_element('ref') or
-	  ($xp->in_element('uzo') and $fako)
+	  ($xp->in_element('uzo') and $fako) or
+          $xp->in_element('bld')
 	  )
 	 )
     {
@@ -86,7 +89,8 @@ sub start_handler {
 	$el eq 'art' or
 	$el eq 'kap' or
 	$el eq 'drv' or
-	$el eq 'ref' 
+	$el eq 'ref' or
+	$el eq 'ind' 
 	)
     {
 	$attr = attr_str(@attrs);
@@ -94,7 +98,8 @@ sub start_handler {
     }
     elsif ( $el eq 'tld' and 
 	    ($xp->in_element('kap') or
-	     $xp->in_element('ref'))
+	     $xp->in_element('ref') or
+	     $xp->in_element('bld'))
 	    ) 
     {
 	#$attr = attr_str(@attrs);
@@ -114,11 +119,21 @@ sub start_handler {
 	$fako = 1;
 	print "<uzo>";
     }
+    elsif ( $el eq 'bld' )
+    {
+	print "<bld>";
+    }
+    elsif ( $el eq 'klr' and
+	    get_attr('tip',@attrs) eq 'ind')
+    {
+	$ind = 1;
+	print "<klr>";
+    }
     elsif ( $el eq 'trdgrp' )
     {
 	$lingvo = get_attr('lng',@attrs); # memoru lingvon
     }
-    elsif ( $el eq 'trd' ) 
+    elsif ( $el eq 'trd' and not $xp->in_element('bld')) 
     {
 	if ($xp->in_element('trdgrp')) {
 	    $attr = " lng=\"$lingvo\""; # la lingvo venas de trdgrp 
@@ -138,8 +153,10 @@ sub end_handler {
 	$el eq 'art' or
 	$el eq 'kap' or
 	$el eq 'drv' or
-	$el eq 'trd' or
-	$el eq 'ref'
+	($el eq 'trd' and not $xp->in_element('bld')) or
+	$el eq 'ref' or
+	$el eq 'ind' or
+        $el eq 'bld'
 	)
     {
 	print "</$el>\n";
@@ -148,6 +165,11 @@ sub end_handler {
     {
 	print "</uzo>\n";
 	$fako=0;
+    }
+    elsif ($el eq 'klr' and $ind)
+    {
+	print "</klr>\n";
+	$ind=0;
     }
     elsif ($el eq 'trdgrp') 
     {
@@ -181,6 +203,18 @@ sub get_attr {
     };
     return ''; # atributo ne trovita;
 };           
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

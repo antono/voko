@@ -75,7 +75,7 @@ sub print_elem {
     if ($level == 1) {
 	local($tmp) = ($elem);
 	$tmp =~ tr/A-Z/a-z/;
-	print($TREEFILE qq|<A NAME="$tmp" HREF="#$tmp">|,
+	print($TREEFILE qq|<A HREF="#$tmp">|,
 			qq|<STRONG>$elem</STRONG></A>\n|);
     } else {
 	for ($i=2; $i < $level; $i++) {
@@ -90,7 +90,7 @@ sub print_elem {
 		    if ($2) {
 			$elem = qq|<A HREF="#$1">$1</A>$2|;
 		    } else {
-			$elem = qq|<A NAME="$1" HREF="#$1">| .
+			$elem = qq|<A HREF="#$1">| .
 				qq|<STRONG>$1</STRONG></A>|;
 		    }
 		}
@@ -160,6 +160,10 @@ if (!$TREEONLY) {
     }
 }
 &print_end();
+
+# konvertu al UTF8
+`lat3_utf8.pl dtd.html`;
+
 exit 0;
 }
 			    ##----------##

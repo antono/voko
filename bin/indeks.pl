@@ -66,10 +66,12 @@ $dir="$vortaro_pado/inx";
 $refdir = '../art/';
 
 # enhavos post analizo la informojn de la indeks-dosiero
+%statistiko =();
 %kapvortoj = ();        # %kapvortoj{litero}->@[mrk,kap,rad]
-%invvortoj = ();     # sama strukturo
+%invvortoj = ();        # sama strukturo
 %fakoj = ();            # %fakoj{fako}->@[mrk,kap,rad]
 %tradukoj = ();         # %tradukoj{lingvo}->%{litero}->@[mrk,kap,trd]
+@bildoj = ();           # @bildoj->@[mrk,kap,tekst,rad]
 
 # legu la tutan indeks-dosieron
 
@@ -134,6 +136,12 @@ if ($indeksoj=~/inversa/) {
     }
 }
 
+# bildindekso
+INXBILDOJ(\@bildoj);
+
+# statistiko
+INXSTATISTIKO();
+
 # indekso de la shanghitaj artikoloj
 if ($indeksoj=~/shanghitaj/) {
     INXSHANGHITAJ();
@@ -151,6 +159,13 @@ unlink($tmp_file);
 sub artikolo {
     my $tekst = shift;
     my ($mrk,$kap,$rad,$first_lit,$last_lit);
+
+    # statistikaj informoj
+    $statistiko{'art'}++;
+    while ($tekst =~ m/<drv\b/g) { $statistiko{'drv'}++ };
+    while ($tekst =~ m/<bld\b/g) { $statistiko{'bld'}++ };
+    while ($tekst =~ m/lng="([a-z]{2})"/g) { $statistiko{"lng_$1"}++ };
+    while ($tekst =~ m/<uzo>([A-Z]+)<\/uzo>/g) { $statistiko{"fak_$1"}++ };
 
     # elprenu la markon
     $tekst =~ s/^.*?<art\s+mrk="([^\"]*)"\s*>//s;
@@ -244,6 +259,8 @@ sub indeksero {
     # analizu la tradukojn
     $tekst =~ s/<trd\s+lng="([^\"]*)"\s*>(.*?)<\/trd\s*>/
 	traduko($2,$1,$mrk,$kap)/siegx;
+    # analizu la bildojn
+    $tekst =~ s/<bld\s*>(.*?)<\/bld>/bildo($mrk,$kap,$1,$rad)/sieg;
 
     return '';
 }
@@ -259,20 +276,40 @@ sub fako {
     return '';
 };
 
+# notas unuopan bildon
+
+sub bildo {
+    my ($mrk,$kap,$tekst,$rad)=@_;
+    $kap =~ s/\///;
+    push @bildoj, [$mrk,$kap,$tekst,$rad];
+    
+    return '';
+};
+    
+
 # notas unuopan tradukon
 
 sub traduko {
     my ($trd,$lng,$mrk,$kap)=@_;
-    my $letter;
+    my ($letter,$ind);
     $kap =~ s/\///;
 
+    if ($trd =~ /<ind>(.*?)<\/ind>/s) {
+	$ind = $1;
+    } else {
+	$ind = $trd;
+    }
+
+    # komencaj spacoj ghenus ordigadon
+    $ind=~s/^\s*//s;
+
     # sub kiu litero aperu la vorto?
-    $letter = letter_nls($trd,$lng);
+    $letter = letter_nls($ind,$lng);
 
     print "trd: $trd ($letter)\n" if ($debug);
 
     # enmetu la vorton sub $tradukoj{$lng}->{$letter}
-    push @{$tradukoj{$lng}->{$letter}}, [$mrk,$kap,$trd];
+    push @{$tradukoj{$lng}->{$letter}}, [$mrk,$kap,$ind,$trd];
 
     return '';
 };
@@ -332,6 +369,7 @@ sub LINGVINX {
     my $n=0;
     my $last1 = '';
     my $last2 = '';
+    my $trd;
     my $asci = letter_asci_nls($lit,$lng);
     my $target_file = "$dir/lx_${lng}_$asci.html";
  
@@ -341,12 +379,16 @@ sub LINGVINX {
     index_header($lingvoj{$lng},"lx_${lng}_",$lng,$lit,@$literoj);
 
     foreach $ref (@$refs) {
-	if (($last1 ne $ref->[1]) or ($last2 ne $ref->[2])) {
+	if (($last1 ne $ref->[1]) or ($last2 ne $ref->[3])) {
 	    $r=referenco($ref->[0]);    
-	    print "$ref->[2] = <a href=\"$r\" ";
+
+	    $trd = $ref->[3];
+	    $trd =~ s/(<\/?)ind>/$1u>/sg;
+
+	    print "$trd = <a href=\"$r\" ";
 	    print "target=\"precipa\">$ref->[1]</a><br>\n";
 	    $last1 = $ref->[1];
-	    $last2 = $ref->[2];
+	    $last2 = $ref->[3];
 	    $n++;
 	}
     };
@@ -474,6 +516,101 @@ sub INXSHANGHITAJ {
     diff_mv($tmp_file,$target_file);
 }
 
+# kreas indekson de la bildoj
+
+sub INXBILDOJ {
+    my ($refs) = @_;
+    my $r;
+    #my $last0 = '';
+    #my $last1 = '';
+    my $n = 0;
+    my @vortoj;
+    my $target_file = "$dir/ix_bildoj.html";
+
+    # ek
+    print "$target_file..." if ($verbose);
+    open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
+    select OUT;
+    index_header('bildoj','','','');
+    
+    # ordigu la vortliston
+    @vortoj = sort { cmp_nls($a->[3],$b->[3],'eo') } @$refs;
+
+    # skribu la liston kiel html 
+    foreach $ref (@vortoj) {
+#	if (($last0 ne $ref->[0]) or ($last1 ne $ref->[1])) {
+	    $r = referenco($ref->[0]);
+	    print "<a href=\"$r\" target=\"precipa\">";
+	    print "$ref->[1]</a>: $ref->[2]<br>\n";
+	    #$last0 = $ref->[0];
+	    #$last1 = $ref->[1];
+	    $n++;
+#	};
+    };
+
+    # malek
+    index_footer($n > 20);
+    close OUT;
+    select STDOUT;
+    diff_mv($tmp_file,$target_file);
+}
+
+# kreas indekson de la bildoj
+
+sub INXSTATISTIKO {
+    my $n = 0;
+    my $target_file = "$dir/ix_statistiko.html";
+    my (@trdj, @fakj);
+
+    # ek
+    print "$target_file..." if ($verbose);
+    open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
+    select OUT;
+    index_header('statistiko','','','');
+    
+    # ordigu la vortliston
+#    @vortoj = sort { cmp_nls($a->[3],$b->[3],'eo') } @$refs;
+
+    print "<h2>kapvortoj</h2>\n";
+    print "artikoloj: ".$statistiko{'art'}."<br>\n";
+    print "derivaĵoj: ".$statistiko{'drv'}."<br>\n";
+    print "bildoj: ".$statistiko{'bld'}."<br>\n";
+    $n=3;
+
+    print "<h2>tradukoj</h2>\n";
+    foreach $s (grep(/^lng_/,keys %statistiko)) {
+	push @trdj, [substr($s,4),$statistiko{$s}];
+    }
+    foreach $s (sort {$b->[1] <=> $a->[1]} @trdj) {
+	$lng = $s->[0];
+	if (-f "$vortaro_pado/smb/$lng.jpg") {
+		print "<img src=\"../smb/$lng.jpg\" alt=\"\"> ";
+	    } else {
+		print "<img src=\"../smb/xx.jpg\" alt = \"\"> ";
+	    }
+	print "$lingvoj{$lng}j: ".$s->[1];
+	printf(" (%.02f%%)",100*$s->[1]/$statistiko{'drv'});
+	print "<br>\n";
+	$n++;
+    };
+
+    print "<h2>fakoj</h2>\n";
+    foreach $s (grep(/^fak_/,keys %statistiko)) {
+	push @fakj, [substr($s,4),$statistiko{$s}];
+    }
+    foreach $s (sort {$b->[1] <=> $a->[1]} @fakj) {
+	$fak = $s->[0];
+	print "<img src=\"../smb/$fak.gif\" alt=\"\"> ";
+	print "$faknomoj{$fak}: ".$s->[1]."<br>\n";
+	$n++;
+    };
+
+    # malek
+    index_footer($n > 20);
+    close OUT;
+    select STDOUT;
+    diff_mv($tmp_file,$target_file);
+}
 
 # kreas la indekson de la indeksoj
 
@@ -514,9 +651,9 @@ sub INXLIST {
 	for $lng (sort keys %tradukoj) 
 	{
 	    if (-f "$vortaro_pado/smb/$lng.jpg") {
-		print "<img src=\"../smb/$lng.jpg\" alt=\"$lng\"> ";
+		print "<img src=\"../smb/$lng.jpg\" alt=\"[$lng]\"> ";
 	    } else {
-		print "<img src=\"../smb/xx.jpg\" alt = \"$lng\"> ";
+		print "<img src=\"../smb/xx.jpg\" alt = \"[$lng]\"> ";
 	    }
 	    print "<a href=\"lx_${lng}_$unua_litero{$lng}.html\">";
 	    print "$lingvoj{$lng}</a><br>\n";
@@ -541,24 +678,31 @@ sub INXLIST {
     };
 
     # aliaj 
-    if ($indeksoj=~/(inversa|shanghitaj)/) {
+    if ($indeksoj=~/(inversa|shanghitaj|bildoj|statistiko)/) {
 	print "<dt>aliaj indeksoj\n<dd>";
+	if ($indeksoj=~/bildoj/) {
+	    print "<a href=\"ix_bildoj.html\">";
+	    print "bildoj</a><br>\n";
+	};
 	if ($indeksoj=~/inversa/) {
 	    print "<a href=\"ix_inv$unua_litero{'inv'}.html\">";
 	    print "inversa indekso</a><br>\n";
 	};
 	if ($indeksoj=~/shanghitaj/) {
 	    print "<a href=\"ix_novaj.html\">ŝanĝitaj ",
-	    "artikoloj</a>\n";
+	    "artikoloj</a><br>\n";
+	}
+	if ($indeksoj=~/statistiko/) {
+	    print "<a href=\"ix_statistiko.html\">statistiko</a><br>\n";
 	}
     }
 
     # referecoj
     @listoj = split(';',$config{"listoj"});
     if (@listoj) {
-	print "<dt>referencoj\n<dd>";
+#	print "<dt>referencoj\n<dd>";
 	while (@listoj) {
-	    print "<a href=\"".(shift @listoj)."\">".(shift @listoj)."</a>\n";
+	    print "<a href=\"".(shift @listoj)."\">".(shift @listoj)."</a><br>\n";
 	}
     }
     print "</dl>\n";

@@ -4,7 +4,8 @@
 #   trovufontojn.pl [-v] [-x art.xml | -e "citajho serchenda"] 
 #       [-m ea345] [-c agordodosiero]
 #
-#   metodoj a: per String::Approx (per Levenshtein-distanco)
+#   metodoj e: ekzakte
+#           a: per String::Approx (per Levenshtein-distanco)
 #           3,4,5: per 3-, 4-, 5-gramoj
 #
 ################# komenco de la programo ################
@@ -59,6 +60,7 @@ while (@ARGV) {
     } elsif ($ARGV[0] eq '-e') {
 	shift @ARGV;
 	$ekz = shift @ARGV;
+        $ekz_min_lit=3; 	
     } elsif ($ARGV[0] eq '-m') {
 	shift @ARGV;
 	$metodoj = shift @ARGV;
