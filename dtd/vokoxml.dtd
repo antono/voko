@@ -181,7 +181,7 @@ ili mem, sen la streketoj antaŭe aŭ malantaŭe.-->
 <!-- [fnt] Fonto enhavas informojn pri autoro, verko, trovloko
 au aliajn informojn.-->
 
-<!ELEMENT fnt (#PCDATA|aut|vrk|lok|url)*>
+<!ELEMENT fnt (#PCDATA|bib|aut|vrk|lok|url)*>
 
 <!-- [gra] kiel grammatikaj informoj momente estas permesataj
 nur indiko de la vortspeco.-->
@@ -278,9 +278,7 @@ kaj klarigoj, poste povos sekvi aliaj elementoj.
 <!-- [ind] Parto de traduko, kiu liveras la kapvorton en la
 indekso, do &lt;trd&gt;sich &lt;ind&gt;bem&uuml;hen&lt;/ind&gt;&lt;/trd&gt;
 aperas sub bem&uuml;hen. Aŭ parto de ekzemplo aŭ bildpriskribo, al
-kiu rilatas internaj tradukoj ktp. Vi povas aldoni tipon kom, mez, fin,
-se tio estas nur la komenco, mezo aŭ fino de la ekzemplo kaj tio
-estu signata per punktoj en la indekso.
+kiu rilatas internaj tradukoj ktp.
 -->
 <!ELEMENT ind (#PCDATA|tld|klr|mll)*>
 
@@ -293,7 +291,7 @@ estu signata per punktoj en la indekso.
 atributo <dfn>lok</dfn> ĝi
 referencas al ekstera dosiero, kiu entenas la bildon.
 -->
-<!ELEMENT bld (#PCDATA|tld|ind|trd|trdgrp)*>
+<!ELEMENT bld (#PCDATA|tld|klr|ind|trd|trdgrp)*>
 <!ATTLIST bld
 	lok CDATA #REQUIRED
 	mrk ID #IMPLIED
@@ -319,6 +317,12 @@ minuskligo.
 <!ELEMENT klr (#PCDATA|trd|trdgrp|ekz|ref|refgrp|%tekst-stiloj;)*>
 <!ATTLIST klr
             tip (ind) #IMPLIED>
+
+<!-- [bib] Bibliografia indiko por fonto, estas mallongigo el
+listo de difinitaj bibliografieroj kaj anstataŭas verko- kaj aŭtoroindikon
+en la fontoj.
+-->
+<!ELEMENT bib (#PCDATA)*>
 
 <!-- [vrk] Verko, en kiu troviĝas citita frazo aŭ vorto -->
 <!ELEMENT vrk (#PCDATA|url)*>
