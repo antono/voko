@@ -59,7 +59,7 @@ $revolist     = 'revo@onelist.com';
 $revo_from    = "Reta Vortaro <$revo_mailaddr>";
 $signature    = "--\nRevo-Servo $revo_mailaddr\n"
     ."retposhta servo por redaktantoj de Reta Vortaro.\n";
-$separator    = "-" x 50 . "\n";
+$separator    = "=" x 50 . "\n";
 
 ################ la precipa masho de la programo ##############
 
@@ -228,7 +228,7 @@ sub process_ent {
 
 	# TTT-formularo?
         if ((($entity->head->get('subject')
-                 =~ /Microsoft.*Internet.*xplorer/s) 
+                 =~ /Microsoft.*Internet.*lorer/s) 
                 or ($entity->head->get('content-type')
 		 =~  /POSTDATA\.ATT/s))
                 and ($parttxt =~ /^\s*komando=redakto&/)
@@ -321,7 +321,7 @@ sub is_editor {
 	unless (/^#/) {
 		if (index(lc($_),lc($email_addr)) >= 0) {
 		    print "retadreso trovita en: $_\n" if ($debug);
-		    /^([a-z\s]*<[a-z\@0-9\.\-_]*>)/i;
+		    /^([a-z'"\-\.\s]*<[a-z\@0-9\.\-_]*>)/i;
 		    $res_addr = $1;
 		    unless ($res_addr) {
 			print "ne povis ekstrakti la adreson el $_\n";
@@ -628,6 +628,9 @@ sub cmd_redakt {
     # uniksajn linirompojn!
     $teksto =~ s/\r\n/\n/sg;
 
+    # aldonu finon, kiun Netskapo foje fortranchas
+    $teksto =~ s/<\/vortaro>?$/<\/vortaro>\n/s;
+
     # pri kiu artikolo temas, trovighas en <art mrk="...">
     $teksto =~ /(<art[^>]*>)/s;
     $1 =~ /mrk="([^\"]*)"/s; 
@@ -817,9 +820,9 @@ sub cmd_aldon {
     $art =~ s/^\s+//s;
     $art =~ s/\s+$//s;
     
-    unless ($art =~ /^[a-z0-9]+$/s) {
+    unless ($art =~ /^[a-z0-9_]+$/s) {
 	report("ERARO   : Ne valida nomo por artikolo. \"$art\".\n"
-	       ."Ghi konsistu nur el minuskloj kaj ciferoj.\n");
+	       ."Ghi konsistu nur el minuskloj, substrekoj kaj ciferoj.\n");
 	return;
     }
     $shangho = $art; # memoru por poste

@@ -623,11 +623,11 @@ sub INXLIST {
     select OUT;
 
     print 
-	"<html>\n<head>\n<title>indekslisto</title>\n",
+	"<html>\n<head>\n<meta http-equiv=\"Content-Type\" ",
+	"content=\"text/html; charset=UTF-8\">\n",
+	"<title>indekslisto</title>\n",
 	"<link title=\"indekso-stilo\" type=\"text/css\" ",
 	"rel=stylesheet href=\"../stl/indeksoj.css\">\n",
-	"<meta http-equiv=\"Content-Type\" ",
-	"content=\"text/html; charset=UTF-8\">\n",
 	"</head>\n<body>\n",
 	"<h2><a href=\"../titolo.html\" target=\"precipa\">",
 	"titolpa\304\235o</a></h2>\n",
@@ -754,11 +754,11 @@ sub index_header {
     my ($l_utf8, $l_x);
 
     print 
-	"<html>\n<head>\n<title>$title_base $letter</title>\n",
+	"<html>\n<head>\n<meta http-equiv=\"Content-Type\" ",
+	"content=\"text/html; charset=UTF-8\">\n",
+	"<title>$title_base $letter</title>\n",
 	"<link title=\"indekso-stilo\" type=\"text/css\" ",
 	"rel=stylesheet href=\"../stl/indeksoj.css\">\n",
-	"<meta http-equiv=\"Content-Type\" ",
-	"content=\"text/html; charset=UTF-8\">\n",
 	"</head>\n<body>\n",
 	"<i><a href=\"indeksoj.html\">indeksoj</a></i>\n";
 
