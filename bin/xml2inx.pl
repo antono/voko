@@ -72,19 +72,19 @@ select STDOUT;
 close OUT;
 
 # nombru la tradukitajn sencojn por chiu lingvo
-foreach $trdj (values %sencoj) {
-    foreach $l (@$trdj) {
-	$lingvoj{$l}++;
-    }
-}
+#foreach $trdj (values %sencoj) {
+#    foreach $l (@$trdj) {
+#	$lingvoj{$l}++;
+#    }
+#}
 
-$trdfile = $config{'statistiko_tradukoj'};
-open OUT, ">$trdfile" or die "Ne povas skribi al \"$trdfile\": $!\n";
-print OUT "sumo=".scalar(keys %sencoj)."\n";
-while (($l,$n)=each(%lingvoj)) {
-    print OUT "$l=$n\n";
-}
-close OUT;
+#$trdfile = $config{'statistiko_tradukoj'};
+#open OUT, ">$trdfile" or die "Ne povas skribi al \"$trdfile\": $!\n";
+#print OUT "sumo=".scalar(keys %sencoj)."\n";
+#while (($l,$n)=each(%lingvoj)) {
+#    print OUT "$l=$n\n";
+#}
+#close OUT;
 
 #################### fino de la programo ####################
 
@@ -233,29 +233,29 @@ sub start_handler {
     $radiko = '' if ($el eq 'rad');
 
     # kalkulado de la tradukitaj sencoj
-    if ($el eq 'drv') {
-	$drvmrk = get_attr('mrk',@attrs);
-	warn "Mankas mrk en drv ($file)\n" unless ($drvmrk); 
-	@drvsnc = ();
-	$snccnt = 0;
-    }
-    elsif ($el eq 'snc')
-    {
-	$snccnt++; 
-	$sncmrk = "$drvmrk.$snccnt";
-	push @drvsnc, ($sncmrk);
-	$sencoj{$sncmrk} = [];
-    }
-    elsif (($el eq 'trd' or $el eq 'trdgrp') 
-	   and $lng = get_attr('lng',@attrs)) {
-	if ($xp->in_element('snc') or $xp->in_element('dif')) {
-	    add($sencoj{$sncmrk}, $lng);
-	} elsif ($xp->in_element('drv')) {
-	    foreach $s (@drvsnc) {
-		add($sencoj{$s}, $lng);
-	    }
-	}
-    }
+#    if ($el eq 'drv') {
+#	$drvmrk = get_attr('mrk',@attrs);
+#	warn "Mankas mrk en drv ($file)\n" unless ($drvmrk); 
+#	@drvsnc = ();
+#	$snccnt = 0;
+#    }
+#    elsif ($el eq 'snc')
+#    {
+#	$snccnt++; 
+#	$sncmrk = "$drvmrk.$snccnt";
+#	push @drvsnc, ($sncmrk);
+#	$sencoj{$sncmrk} = [];
+#    }
+#    elsif (($el eq 'trd' or $el eq 'trdgrp') 
+#	   and $lng = get_attr('lng',@attrs)) {
+#	if ($xp->in_element('snc') or $xp->in_element('dif')) {
+#	    add($sencoj{$sncmrk}, $lng);
+#	} elsif ($xp->in_element('drv')) {
+#	    foreach $s (@drvsnc) {
+#		add($sencoj{$s}, $lng);
+#	    }
+#	}
+#    }
 }
 
 sub end_handler {

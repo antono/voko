@@ -18,6 +18,18 @@ use integer;
 
 $debug = 0;
 
+$tmp_file = '/tmp/'.$$.'voko.inx';
+$refdir = '../art/';
+
+$prefix = "mx_";
+
+
+$mankantaj_tradukoj = 12000; # se mankas nur tiom da tradukoj
+                           # ili listighas por pli facila aldono
+$maks_mankantaj = 333;     # nur tiom da mankantaj aperu en la listo
+                           # por ne tro longigi ghin
+
+
 while (@ARGV) {
     if ($ARGV[0] eq '-v') {
 	$verbose = 1;
@@ -30,12 +42,20 @@ while (@ARGV) {
     };
 };
 
-die "Ne ekzistas dosierujo \"$dos\""
-  unless -d $dos;
+
 
 # legu la agordo-dosieron
 unless ($agord_dosiero) { $agord_dosiero = "cfg/vortaro.cfg" };
-#%config = read_cfg($agord_dosiero);
+%config = read_cfg($agord_dosiero);
+%lingvonomoj=read_xml_cfg($config{"lingvoj"},'lingvo','kodo');
+
+$inxdir = $config{"vortaro_pado"}."/inx";
+
+$dos = $config{"vortaro_pado"}."/xml"
+  unless $dos;
+
+die "Ne ekzistas dosierujo \"$dos\""
+  unless -d $dos;
 
 $lngcnt=0;
 $uzo = '';
@@ -60,6 +80,7 @@ for $file (sort readdir(DIR)) {
 	    warn "$letter...\n";
 	};
 	#warn "$dos/$file\n" if ($verbose);
+	$radiko = '';
 	eval { $parser->parsefile("$dos/$file") }; warn $@ if ($@);
 
 	if ($debug) {
@@ -84,24 +105,15 @@ closedir DIR;
 # sencoj enhavas por chiu lingvo bitaron el kiu oni
 # vidas, kiuj sencoj estas tradukitaj
 
-
-# debugging
-print "sumo=".scalar(keys %sencoj)."\n";
-#print "lingvoj: ".join(',',keys %lingvoj)."\n";
+# skribu statistikajn informojn
+$trdfile = $config{'statistiko_tradukoj'};
+open OUT, ">$trdfile" or die "Ne povas skribi al \"$trdfile\": $!\n";
+print OUT "sumo=".scalar(keys %sencoj)."\n";
 foreach $l (sort keys %lingvoj) {
-    print "$l=".$lingvoj{$l}->[0]."\n";
+    print OUT  "$l=".$lingvoj{$l}->[0]."\n";
 }
+close OUT;
 
-# if ($debug) {
-#foreach $k (sort keys %sencoj) {
-#    print "$k: ".join(',',@{$sencoj{$k}})."\n";
-#}
-#}
-
-$mankantaj_tradukoj = 500; # se mankas nur tiom da tradukoj
-                           # ili listighas por pli facila aldono
-$maks_mankantaj = 3; # nur tiom da mankantaj aperu en la listo
-                      # por ne tro longigu ghin
 
 #exit if ($debug);
 
@@ -110,24 +122,66 @@ my @mankantaj;
 foreach $lng (keys %lingvoj) {
     my $d = scalar(keys %sencoj) - $lingvoj{$lng}->[0]; 
     if (($d <= $mankantaj_tradukoj) and ($d > 0)) {
+
+	push @mankantaj_lng,($lng);
+
+	my $target_file = "$inxdir/$prefix$lng.html";
+	open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
+	select OUT;
+	index_header("netradukitaj vortoj por \"$lng\"");
+	index_buttons();
+	
 #	add(\@mankantaj,$l);
-	print "[$lng]\n";
+	my $mankas = scalar(keys %sencoj) - $lingvoj{$lng}->[0];
 
+	if ($mankas > $maks_mankantaj) {
+	    print "<h1>$maks_mankantaj el $mankas netradukitaj sencoj";
+	} else {
+	    print "<h1>La $mankas netradukitaj sencoj";
+	}
+	print " de la lingvo ".$lingvonomoj{$lng}."</h1>\n";
+	
 	my $cnt=0;
-	my $field = $lingvoj{$lng}->[1]/32;
+	my $field = $lingvoj{$lng}->[1]/32+1;
 	my $power = $lingvoj{$lng}->[1]%32;
-
+	
 #	print $field, " ", $power, "\n";
 
 	while (($mrk,$trdj) = each %sencoj) {
 	    unless ($trdj->[$field] and 
 		    ($trdj->[$field] & (1 << $power))) {
-		print ++$cnt,": $mrk\n";
+		print ++$cnt,": <a href=\"",referenco($mrk),
+		    "\" target=\"precipa\">".
+		    "$trdj->[0]</a><br>\n";
 		last if ($cnt>=$maks_mankantaj);
 	    }
 	}
+	
+	# malek
+	index_footer();
+	close OUT;
+	select STDOUT;
+	diff_mv($tmp_file,$target_file,$verbose);
     }
 }
+
+# liston de la lingvoj de mankanataj trd-oj...
+my $target_file = "$inxdir/mankantaj.html";
+open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
+select OUT;
+index_header("netradukitaj vortoj");
+index_buttons();
+
+print "<h1>listoj de mankantaj tradukoj</h1>\n";
+foreach $lng (@mankantaj_lng) {
+    print "<a href=\"$prefix$lng.html\">".$lingvonomoj{$lng}."</a><br>\n";
+}
+
+# malek
+index_footer();
+close OUT;
+select STDOUT;
+diff_mv($tmp_file,$target_file,$verbose);
 
 
 
@@ -147,14 +201,15 @@ sub start_handler {
 	    warn "Mankas mrk en drv ($file)\n" unless ($drvmrk); 
 	    @drvsnc = ();
 	    $snccnt = 0;
+	    $drvkap = '';
 	}
     }
     elsif ($el eq 'snc') {
 	if (not $ignoru_snc and not $ignoru_drv) {
-	    $snccnt++; $sncsum++;
+	    $snccnt++; #$sncsum++;
 	    $sncmrk = get_attr('mrk',@attrs) || "$drvmrk.$snccnt";
 	    push @drvsnc, ($sncmrk);
-	    $sencoj{$sncmrk} = [];
+	    $sencoj{$sncmrk} = ["$drvkap $snccnt"];
 	} else {
 	    # tamen altigi snccnt tie chi, por ke la 
 	    # sencoj estu adreseblaj
@@ -178,6 +233,18 @@ sub start_handler {
 		   print "ignoras tradukon ".get_attr('lng',@attrs)."\n" if ($debug); 
 	       }
 	   }
+    elsif ($el eq 'tld' and $xp->in_element('kap')) {
+	my $lit = get_attr('lit',@attrs);
+	my $rad = $radiko;
+	if ($lit) {
+            use bytes;
+	    my $len = length($lit); # necesa, char en UTF-8 supersignaj literoj
+	                            # estas du-bitokaj
+	    $rad =~ s/^.{$len}/$lit/;
+            no bytes;
+	}         
+	$drvkap .= $rad;
+    }
 }
 
 sub end_handler {
@@ -207,13 +274,16 @@ sub char_handler {
     my ($xp, $text) = @_;
 
     # transprenu la tekston ene de uzo
-    if  (length($text) and 
-         (
-          $xp->in_element('uzo')
-         ))
-    {
-        $text = $xp->xml_escape($text);
-        $uzo .= $text;
+    if  (length($text)) {
+
+	if ($xp->in_element('uzo')) {
+	    $text = $xp->xml_escape($text);
+	    $uzo .= $text;
+	} elsif ($xp->in_element('kap')) {
+	    $drvkap .= $text;
+	} elsif ($xp->in_element('rad')) {
+	    $radiko .= $text;
+	}
     }
 } 
 
@@ -258,7 +328,7 @@ sub add {
     }
 
     # kalkulu la adreson el entjero kaj bito el la lingvonumero
-    my $field = $lingvoj{$lng}->[1]/32;
+    my $field = $lingvoj{$lng}->[1]/32+1;
     my $power = $lingvoj{$lng}->[1]%32;
     $list->[$field] = 0 unless ($list->[$field]);
 
@@ -272,7 +342,22 @@ sub add {
 }
 
 
+# kunmetas html-referencon el Revo-XML-marko
+sub referenco {
+    my $ref=$_[0];
+    my $rez;
 
+    if ($ref =~ /^([^\.]*)\.(.*)$/) {
+        my $r1=$1; my $r2="$1.$2";
+	$r2 =~ s/\.[1-9]$//; # referencu al derivajho,
+	                     # char sencoj ne chiam havas markon
+        $rez="$refdir".lc($r1).".html#".$r2;
+    } else {
+        $rez="$refdir".lc($ref).".html";
+    };
+
+    return $rez;
+};
 
 
 

@@ -81,6 +81,10 @@ $command="tezauro.pl $verbose $agord_dosiero";
 print "$command\nTIME:",`date`,"\n" if ($verbose);
 open LOG, "$command|"; while (<LOG>) { print }; close LOG;
 
+$command="tradukoj.pl $verbose -c $agord_dosiero";
+print "$command\nTIME:",`date`,"\n" if ($verbose);
+open LOG, "$command|"; while (<LOG>) { print }; close LOG;
+
 $command="indeks.pl $verbose $agord_dosiero";
 print "$command\nTIME:",`date`,"\n" if ($verbose);
 open LOG, "$command|"; while (<LOG>) { print }; close LOG;
