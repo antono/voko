@@ -1,67 +1,44 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -w
 
 # kreas el dosiero indekso.sgml
 # unuopajn indeksojn en HTML-formato
 # por la diversaj fakoj, lingvoj ktp.
 
-# voku: indeks.pl -dceldosierujo -r../art/ fontdosierujo/indekso.sgml 
-# au:   indeks.pl -dceldosierujo -r../art/vortaro.html\# fontdosiero/indekso.sgml
+# voku ekz: 
+#   cd revo
+#   indeks.pl -dinx -r../art/ sgm/indekso.xml 
+
+##########################################################
 
 BEGIN {
-# en kiu dosierujo mi estas?
+  # en kiu dosierujo mi estas?
   $pado = $0;
   $pado =~ s|\\|/|g; # sub Windows anstatauigu \ per /
   $pado =~ s/indeks.pl$//;
-# print $pado;
   # shargu la funkcio-bibliotekon
-  require $pado."nls_sort.pm";
+#  require $pado."nls_sort.pm";
+#  import nls_sort qw(cmp_nls);
+
+  push @INC, ($pado); #print join(':',@INC);
+  require nls_sort;
+  nls_sort->import();
 }         
 
+################### agordejo ##############################
 
-# konstantoj
+#$debug = 1;
 
-$html = '.html'; # dosierfinajho
-$tmp_file = "/tmp/$$voko.inx";
+$tmp_file = '/tmp/'.$$.'voko.inx';
 
 $tagoj   = 14;       # shanghindekso indikas shanghitajn en la lastaj n tagoj
 $xml_dir = 'xml';    # relative al vortara radidosierujo
 $art_dir = '../art'; # relative al inx
 $nmax    = 200;      # maksimume tiom da shanghitajn artikolojn indiku
 $cvs_log = '/usr/bin/cvs log';
+$neliteroj = '0-9\/\s,;\(\)\.\-!:';
 
-$|=1;
-
-# analizu la argumentojn
-
-while (@ARGV) {
-    if ($ARGV[0] eq '-v') {
-	$verbose = 1;
-	shift @ARGV;
-    } elsif ($ARGV[0] =~ /^\-d/) {
-	$dir = shift @ARGV;
-	$dir =~ s/^\-d//;
-    } elsif ($ARGV[0] =~ /^\-r/) {
-	$refdir = shift @ARGV;
-	$refdir =~ s/^\-r//;
-    } else {
-	$inxfn=shift @ARGV;
-    }
-}
-
-$dir ='.' unless $dir;
-$refdir = '../art/' unless $refdir;
-
-# kelkaj konstantoj
-$pluraj = ($refdir !~ /#$/);
-$inxref = "<i><a href=\"indeksoj$html\">".
-	   "indeksoj</a></i>";
-$inxstl = "<link titel=\"indekso-stilo\" type=\"text/css\" ".
-	   "rel=stylesheet href=\"../stl/indeksoj.css\">\n";
-$cntdecl = "<meta http-equiv=\"Content-Type\" content=\"text/html; ".
-	   "charset=UTF-8\">";
-
-
-%faknomoj=('2MAN'=>'komunuza senco',
+%faknomoj=(
+	'2MAN'=>'komunuza senco',
 	'AGR'=>'agrikulturo',
 	'ANA'=>'anatomio, histologio',
 	'ARKE'=>'arkeologio',
@@ -151,7 +128,7 @@ $cntdecl = "<meta http-equiv=\"Content-Type\" content=\"text/html; ".
 	    'be'=>'belorusa',
 	    'bg'=>'bulgara',
 	    'bh'=>'bihara',
-	    'bi'=>'bislamo',
+	    'bi'=>'bislama',
 	    'bn'=>'bengala',
 	    'bo'=>'tibeta',
 	    'br'=>'bretona',
@@ -161,10 +138,10 @@ $cntdecl = "<meta http-equiv=\"Content-Type\" content=\"text/html; ".
 	    'cy'=>'kimra',
 	    'da'=>'dana',
 	    'de'=>'germana',
-	    'dz'=>'dzonko',
+	    'dz'=>'dzonka',
 	    'el'=>'greka',
 	    'en'=>'angla',
-	    'eo'=>'esperanto',
+	    'eo'=>'esperanta',
 	    'es'=>'hispana',
 	    'et'=>'estona',
 	    'eu'=>'eŭska',
@@ -185,9 +162,9 @@ $cntdecl = "<meta http-equiv=\"Content-Type\" content=\"text/html; ".
 	    'hr'=>'kroata',
 	    'hu'=>'hungara',
 	    'hy'=>'armena',
-	    'ia'=>'interlingvao',
+	    'ia'=>'interlingvaa',
 	    'id'=>'indonezia',
-	    'ie'=>'okcidentalo',
+	    'ie'=>'okcidentala',
 	    'ik'=>'eskima',
 	    'is'=>'islanda',
 	    'it'=>'itala',
@@ -235,7 +212,7 @@ $cntdecl = "<meta http-equiv=\"Content-Type\" content=\"text/html; ".
 	    'ro'=>'rumana',
 	    'ru'=>'rusa',
 	    'rw'=>'ruanda',
-	    'sa'=>'sanskrito',
+	    'sa'=>'sanskrita',
 	    'sd'=>'sinda',
 	    'sg'=>'sangoa',
 	    'sh'=>'serbo-kroata',
@@ -270,7 +247,7 @@ $cntdecl = "<meta http-equiv=\"Content-Type\" content=\"text/html; ".
 	    'ur'=>'urduo',
 	    'uz'=>'uzbeka',
 	    'vi'=>'vjetnama',
-	    'vo'=>'volapuko',
+	    'vo'=>'volapuka',
 	    'wo'=>'volofa',
 	    'xh'=>'ksosa',
 	    'yi'=>'jida',
@@ -280,154 +257,560 @@ $cntdecl = "<meta http-equiv=\"Content-Type\" content=\"text/html; ".
 	    'zu'=>'zulua'
 );    
 
-@alfabeto = ('a','b','c',"\346",'d','e','f','g',"\370",'h',"\266",'i','j',
-	      "\274",'k','l','m','n','o','p','r','s',"\376",'t','u',"\375",
-	     'v','z');
-@kapvortoj;
+################## precipa programparto ###################
+
+$|=1;
+
+# analizu la argumentojn
+
+while (@ARGV) {
+    if ($ARGV[0] eq '-v') {
+	$verbose = 1;
+	shift @ARGV;
+    } elsif ($ARGV[0] =~ /^\-d/) {
+	$dir = shift @ARGV;
+	$dir =~ s/^\-d//;
+    } elsif ($ARGV[0] =~ /^\-r/) {
+	$refdir = shift @ARGV;
+	$refdir =~ s/^\-r//;
+    } else {
+	$inxfn=shift @ARGV;
+    }
+}
+
+$dir ='.' unless $dir;
+$refdir = '../art/' unless $refdir;
+
+# enhavos post analizo la informojn de la indeks-dosiero
+%kapvortoj = ();        # %kapvortoj{litero}->@[mrk,kap,rad]
+%invvortoj = ();     # sama strukturo
+%fakoj = ();            # %fakoj{fako}->@[mrk,kap,rad]
+%tradukoj = ();         # %tradukoj{lingvo}->%{litero}->@[mrk,kap,trd]
 
 # legu la tutan indeks-dosieron
 
-print "Legi $inxfn...\n" if ($verbose);
-open INX,$inxfn or die "Ne povis malfermi $inxfn\n";
-$inx=join('',<INX>);
+print "Legi kaj analizi $inxfn...\n" if ($verbose);
+$/ = '</art';
+open INX, $inxfn or die "Ne povis malfermi $inxfn\n";
+while (<INX>) {
+    artikolo($_);
+}
 close INX;
 
 # traktu cxiujn unuopajn indekserojn
 
-print "Analizi la indekserojn...\n" if ($verbose);
-$inx =~ s/<art\s+mrk="([^\"]*)"\s*>(.*?)<\/art\s*>/ARTIKOLO($1,$2)/sieg;
+#print "Analizi la indekserojn...\n" if ($verbose);
+#$inx =~ s/<art\s+mrk="([^\"]*)"\s*>(.*?)<\/art\s*>/artikolo($1,$2)/sieg;
 
 # kreu la html-dosierojn
 
 # fakindeksoj
-while (($fak,$refs) = each %fakoj) 
-{
-    FAKINX($fak,$refs);
-}
+foreach $fako (sort keys %fakoj) { FAKINX($fako,$fakoj{$fako}) }
 
 # lingvoindeksoj
-while (($lng,$refs) = each %tradukoj) 
-{
-    LINGVINX($lng,$refs);
+foreach $lng (sort keys %tradukoj) { 
+    @literoj = sort { cmp_nls($a,$b,$lng) } keys %{$tradukoj{$lng}};
+    $unua_litero{$lng} = letter_asci_nls($literoj[0],$lng);
+    foreach $lit (@literoj) {
+	$refs = $tradukoj{$lng}->{$lit};
+	@$refs = sort { cmp_nls($a->[2],$b->[2],$lng) } @$refs;
+	LINGVINX($lng,$lit,\@literoj,$refs);
+    }
 }
 
-if ($pluraj) {
-    # kiuj komencliteroj okazas en @kapvortoj
-    @literoj;
-    for $lit (@alfabeto) {
-	# trovu kapvorton komencigxantan je la litero
-	if (TROVU($lit)) { push @literoj,"$lit"; };
-    };
 
-    # kapvortoj
-    @kapvortoj = sort { LIT($a->[1]) cmp LIT($b->[1]) } @kapvortoj;
-    foreach $lit (@literoj) { KAPVORTINX($lit) };
+# kapvortoj
+@literoj = sort {cmp_nls($a,$b,'eo')} keys %kapvortoj;
+foreach $lit (@literoj) {
+    $refs = $kapvortoj{$lit};
+    @$refs = sort { cmp_nls($a->[2],$b->[2],'eo') } @$refs;
+    KAPVORTINX($lit,\@literoj,$refs);
+}
 
-    # kiuj finliteroj okazas en @kapvortoj
-    @invliteroj;
-    for $lit (@alfabeto) {
-	# trovu kapvorton komencigxantan je la litero
-	if (INVTROVU($lit)) { push @invliteroj,"$lit"; };
-    };
+# inversa indekso
+@literoj = sort { cmp_nls($a,$b,'eo')} keys %invvortoj;
+$unua_litero{'inv'} = letter_asci_nls($literoj[0],'eo');
+foreach $lit (@literoj) {
+    $refs = $invvortoj{$lit};
+    @$refs = sort { cmp_nls($a->[2],$b->[2],'eo') } @$refs;
+    INVVORTINX($lit,\@literoj,$refs);
+}
 
-    # inversa indekso
-    @kapvortoj = sort { INVLIT($a->[1]) cmp INVLIT($b->[1]) } @kapvortoj;
-    foreach $lit (@invliteroj) { INVKAPVORTINX($lit) };
-} else {
-
-    # simplajn kapvortlistojn
-
-    # kapvortoj
-    @kapvortoj = sort { LIT($a->[1]) cmp LIT($b->[1]) } @kapvortoj;
-    SIMPLKAPVORTINX(); 
-
-    # inversa indekso
-    @kapvortoj = sort { &INVLIT($a->[1]) cmp &INVLIT($b->[1]) } @kapvortoj;
-    SIMPLINVKAPVORTINX();
-};
-
-# indekso de la shanghitah artikoloj
+# indekso de la shanghitaj artikoloj
 INXSHANGHITAJ();
 
+# indekso de la indeksoj
 INXLIST();
 
 unlink($tmp_file);
 
-#############################################################
+############## funkcioj por analizi la indeks-dosieron ##############
 
 # analizas la indeks-tekston de artikolo
 
-sub ARTIKOLO {
-    my $mrk = lc(shift @_);
-    my $tekst = shift @_;
+sub artikolo {
+    my $tekst = shift;
+    my ($mrk,$kap,$rad,$first_lit,$last_lit);
+
+    # elprenu la markon
+    $tekst =~ s/^.*?<art\s+mrk="([^\"]*)"\s*>//s;
+    $mrk = $1;
+    unless ($mrk) {
+	# se ne estas vosto de la dosiero, plendu
+	if ($tekst =~ /<\/art$/) {
+	    warn "marko ne trovighis en $tekst\n";
+	}
+	return;
+    }
 
     # trovu la kapvorton
-    $tekst =~ /^\s*<kap\s*>(.*?)<\/kap\s*>/si;
-    my $kap = $1; $kap =~ s/\s+/ /sg;
-    $kap =~ s/\*//g;
-    $kap =~ s/[1-9\/]([aeio])\s*[ZCBYDV]?\s*$/\/$1/s;
+    $tekst =~ /^\s*<kap\s*>(.*?)<\/kap\s*>/s;
+    $kap = $1;
+    unless ($kap) {
+	warn "kapvorto ne trovighis en $tekst\n";
+    }
+    # normigu la kapvorton
+    $kap =~ s/\s+/ /sg;
+    #$kap =~ s/\*//g;
+    #$kap =~ s/[1-9\/]([aeio])\s*[ZCBYDV]?\s*$/\/$1/s;
+    $kap =~ s/\s+$//s;
     $kap =~ s/\/$//;
-    # aldonu al kapvortlisto
-    push @kapvortoj, [$mrk,$kap];
+    $kap =~ s/^\s+//;
+
+    # prenu radikon
+    $rad = $kap;
+    $rad =~ s/\/(?:[aeio]|oj)$//; # forigu finajhon
+    $rad =~ s/[$neliteroj]//g;
+
+    # unua kaj lasta litero
+    $first_lit = letter_nls(first_utf8char($rad),'eo');
+    $last_lit  = letter_nls(last_utf8char($rad),'eo');
+
+    unless ($first_lit) {
+	die "$rad ne komencighas je e-a litero\n";
+    }
+
+    unless ($last_lit) {
+	die "$rad ne finighas je e-a litero\n";
+    }
+
+    # aldonu al kapvortlistoj
+    push @{ $kapvortoj{$first_lit} }, [$mrk,$kap,$rad];
+    push @{ $invvortoj{$last_lit } }, [$mrk,$kap,reverse_utf8($rad)];
 
     # se la teksto entenas derivajho(j)n,
     # analizu nur tiujn, alikaze la tutan tekston
 
     if ($tekst =~/<drv/) {
 	$tekst =~ s/<drv\s*(?:mrk="([^\"]*)")?\s*>(.*?)<\/drv\s*>/
-	    INDEKSERO($mrk,$1,$2)/siegx;
-    } else { INDEKSERO($mrk,$mrk,$tekst) };
+	    indeksero($mrk,$1,$2)/siegx;
+    } else { 
+	indeksero($mrk,$mrk,$tekst);
+    };
 
     return '';
 }
 
 # analizas unuopan indekseron
 
-sub INDEKSERO {
-    my $mrk1 = lc(shift @_);
-    my $mrk2 = lc(shift @_);
-    my $tekst = shift @_;
-
+sub indeksero {
+    my ($mrk1,$mrk2,$tekst) = @_;
+    my ($kap,$rad);
     my $mrk = ($mrk2 or $mrk1);
 
     # trovu la kapvorton
     $tekst =~ s/^\s*<kap\s*>(.*?)<\/kap\s*>//si;
-    my $kap = $1; $kap =~ s/\s+/ /sg;
-    $kap =~ s/\*//g;
-    $kap =~ s/[1-9\/]([aeio])Z?$/\/$1/;
+    $kap = $1; 
+    $kap =~ s/\s+/ /sg;
+    #$kap =~ s/\*//g;
+    #$kap =~ s/[1-9\/]([aeio])Z?$/\/$1/;
+    $kap =~ s/\s+$//;
     $kap =~ s/\/$//;
+    $kap =~ s/^\s+//;
+
+    # prenu radikon
+    $rad = $kap;
+    $rad =~ s/\/(?:[aeio]|oj)$//; # forigu finajhon
+    $rad =~ s/[$neliteroj]//g;
+
     # aldonu al kapvortlisto
 #    push @kapvortoj, [$mrk,$kap];
+
     # analizu la fakojn
-    $tekst =~ s/<uzo\s*>(.*?)<\/uzo\s*>/FAKO($1,$mrk,$kap)/sieg;
+    $tekst =~ s/<uzo\s*>(.*?)<\/uzo\s*>/fako($1,$mrk,$kap,$rad)/sieg;
     # analizu la tradukojn
     $tekst =~ s/<trd\s+lng="([^\"]*)"\s*>(.*?)<\/trd\s*>/
-	TRADUKO($2,$1,$mrk,$kap)/siegx;
+	traduko($2,$1,$mrk,$kap)/siegx;
 
     return '';
 }
 
 # notas unopan fakindikon
 
-sub FAKO {
-    my ($fak,$mrk,$kap)=@_;
+sub fako {
+    my ($fak,$mrk,$kap,$rad)=@_;
 
     $kap =~ s/\///;
-    push @{ $fakoj{$fak} }, [$mrk,$kap];
+    push @{ $fakoj{$fak} }, [$mrk,$kap,$rad];
 
     return '';
 };
 
 # notas unuopan tradukon
 
-sub TRADUKO {
+sub traduko {
     my ($trd,$lng,$mrk,$kap)=@_;
-
+    my $letter;
     $kap =~ s/\///;
-    push @{ $tradukoj{$lng} }, [$mrk,$kap,$trd];
+
+    # sub kiu litero aperu la vorto?
+    $letter = letter_nls(first_utf8char($trd),$lng);
+
+    # enmetu la vorton sub $tradukoj{$lng}->{$letter}
+    push @{$tradukoj{$lng}->{$letter}}, [$mrk,$kap,$trd];
 
     return '';
 };
+
+############### funkcioj por krei la indeks-html-ojn ###########
+
+
+# kreas fakindekson por unuopa fako
+
+sub FAKINX {
+    my ($fako,$refs) = @_;
+    my ($va, $vb, $r);
+    my $last0 = '';
+    my $last1 = '';
+    my $n = 0;
+    my @vortoj;
+    my $target_file = "$dir/fx_".lc($fako).".html";
+
+    # ek
+    print "$target_file..." if ($verbose);
+    open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
+    select OUT;
+    index_header($faknomoj{uc($fako)},'','','');
+    
+    # ordigu la vortliston
+    @vortoj = sort { cmp_nls($a->[2],$b->[2],'eo') } @$refs;
+
+    # skribu la liston kiel html sen duoblajhoj
+    foreach $ref (@vortoj) {
+	if (($last0 ne $ref->[0]) or ($last1 ne $ref->[1])) {
+	    $r = referenco($ref->[0]);
+	    print "<a href=\"$r\" target=\"precipa\">";
+	    print "$ref->[1]</a><br>\n";
+	    $last0 = $ref->[0];
+	    $last1 = $ref->[1];
+	    $n++;
+	};
+    };
+
+    # malek
+    index_footer($n > 20);
+    close OUT;
+    select STDOUT;
+    diff_mv($tmp_file,$target_file);
+}
+
+# kreas lingvoindekson por unuopa lingvo
+
+sub LINGVINX {
+    my ($lng,$lit,$literoj,$refs) = @_;
+    my $r;
+    my $n=0;
+    my $asci = letter_asci_nls($lit,$lng);
+    my $target_file = "$dir/lx_${lng}_$asci.html";
+ 
+    print "$target_file..." if ($verbose);
+    open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
+    select OUT;
+    index_header($lingvoj{$lng},"lx_${lng}_",$lng,$lit,@$literoj);
+
+    foreach $ref (@$refs) {
+	$r=referenco($ref->[0]);    
+	print "$ref->[2] = <a href=\"$r\" ";
+	print "target=\"precipa\">$ref->[1]</a><br>\n";
+	$n++;
+    };
+    
+    index_footer($n > 20 && "lx_${lng}_",$lng,$lit,@$literoj);
+    close OUT;
+    select STDOUT;
+    diff_mv($tmp_file,$target_file);
+}
+
+# kreas la indekson de la kapvortoj
+
+sub KAPVORTINX {
+    my ($lit,$literoj,$refs) = @_;
+    my $l_x = utf8_cx($lit);
+    my ($unua,$r,$a);
+    my $n = 0;
+    my $last0 = '';
+    my $last1 = '';
+
+    my $target_file = "$dir/ix_kap$l_x.html";
+
+    print "$target_file..." if ($verbose);
+    open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
+    select OUT;
+    index_header('kapvortoj ','ix_kap','eo',$lit,@$literoj);
+
+    foreach $ref (@$refs) {
+	if (($last0 ne $ref->[0]) or ($last1 ne $ref->[1])) {
+	    $r="$refdir$ref->[0].html";
+
+	    print "<a href=\"$r\" target=\"precipa\">";
+	    print "$ref->[1]</a><br>\n";
+	
+	    $last0 = $ref->[0];
+	    $last1 = $ref->[1];
+	    $n++;
+	}
+    }
+
+    index_footer($n > 20 && 'ix_kap','eo',$lit,@$literoj);
+    close OUT;
+    select STDOUT;
+    diff_mv($tmp_file,$target_file);
+}
+
+
+# kreas la inversan indekson de la kapvortoj
+
+sub INVVORTINX {
+    my ($lit,$literoj,$refs) = @_;
+    my $l_x = utf8_cx($lit);
+    my $r;
+    my $last0 = '';
+    my $last1 = '';
+    my $n=0;
+    
+    my $target_file = "$dir/ix_inv$l_x.html";
+    
+    print "$target_file..." if ($verbose);
+    open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
+    select OUT;
+    index_header('inversa','ix_inv','eo',$lit,@$literoj);
+
+    foreach $ref (@$refs) {
+	if (($last0 ne $ref->[0]) or ($last1 ne $ref->[1])) {
+	    $r="$refdir$ref->[0].html";
+
+	    print "<a href=\"$r\" target=\"precipa\">";
+	    print "$ref->[1]</a><br>\n";
+
+	    $last0 = $ref->[0];
+	    $last1 = $ref->[1];
+	    $n++;
+	};
+    };
+
+    index_footer($n > 20 && 'ix_inv','eo',$lit,@$literoj);
+    close OUT;
+    select STDOUT;
+    diff_mv($tmp_file,$target_file);
+}
+
+# kreas indekson de la laste shaghitaj artikoloj
+
+sub INXSHANGHITAJ {
+    my $now = time();
+    my $time;
+    my $n = 0;
+    my @files = ();
+
+    my $target_file = "$dir/ix_novaj.html";
+
+    print "$target_file..." if ($verbose);
+    open OUT, ">$tmp_file" or die "Ne povis malfermi $tmp_file: $!\n";
+    select OUT;
+    index_header("laste ŝanĝitaj",'','','');
+
+    # malfermu kaj trakribru xml-dosierujon
+    opendir DIR, $xml_dir or die "Ne povis malfermi $xml_dir: $!\n";
+    for $dos (readdir DIR) {
+
+	$time = (stat("$xml_dir/$dos"))[9];
+	if ( (-f "$xml_dir/$dos") and
+	     ($now - $time < $tagoj * 24 * 60 * 60)) {
+	    # metu tempon kaj informon en liston
+	    push @files, [$time, cvs_log($dos)];
+
+	    if (++$n >= $nmax) { last; }
+	}
+	
+    }
+    closedir DIR;
+
+    # skribu la liston
+    for $entry (sort { $b->[0] <=> $a->[0] } @files) {
+	print $entry->[1];
+    }
+
+    index_footer($n>20);
+    close OUT;
+    select STDOUT;
+    diff_mv($tmp_file,$target_file);
+}
+
+
+# kreas la indekson de la indeksoj
+
+sub INXLIST {
+    my ($lit,$lit1);
+    my $target_file = "$dir/indeksoj.html";
+
+    print "$target_file..." if ($verbose);
+    open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
+    select OUT;
+
+    print 
+	"<html>\n<head>\n<title>indekslisto</title>\n",
+	"<link titel=\"indekso-stilo\" type=\"text/css\" ",
+	"rel=stylesheet href=\"../stl/indeksoj.css\">\n",
+	"<meta http-equiv=\"Content-Type\" ",
+	"content=\"text/html; charset=UTF-8\">\n",
+	"</head>\n<body>\n",
+	"<h2><a href=\"../titolo.html\" target=\"precipa\">",
+	"titolpa\304\235o</a></h2>\n",
+	"<h2><a href=\"../sercxo.html\" target=\"precipa\">",
+	"ser\304\211o</a></h2>\n<dl>\n";
+
+
+    #kapvortoj
+    print "<dt>kapvortindekso\n<dd><b>";
+    for $lit (@literoj) {
+	$lit1 = utf8_cx($lit);
+	print "<a href=\"ix_kap$lit1.html\">$lit</a>\n";
+    };
+    print "</b>\n";
+
+    #lingvoj
+    if (%tradukoj) {
+	print "<dt>lingvoindeksoj\n<dd>";
+	for $lng (sort keys %tradukoj) 
+	{
+	    $lng=lc($lng);
+	    my $ln=substr($lng,0,5);
+	    print "<a href=\"lx_${ln}_$unua_litero{$ln}.html\">";
+	    print "$lingvoj{$lng}</a><br>\n";
+	};
+    };
+
+    #fakoj
+    if (%fakoj) {
+	print "<dt>fakindeksoj\n<dd>";
+	for $fak (sort keys %fakoj) 
+	{
+	    print 
+		"<a href=\"fx_", lc($fak), ".html\">",
+		"<img src=\"../smb/", uc($fak), ".gif\"",
+		"alt=\"", $faknomoj{uc($fak)}, "\" border=0></a>\n";
+	};
+    };
+
+    # aliaj 
+    print "<dt>aliaj indeksoj\n<dd>";
+    print "<a href=\"ix_inv$unua_litero{'inv'}.html\">";
+    print "inversa indekso</a><br>\n";
+    print "<a href=\"ix_novaj.html\">ŝanĝitaj artikoloj</a>\n";
+
+    print "</dl>\n";
+
+    print "</body></html>\n";
+    close OUT;
+
+    select STDOUT;
+    diff_mv($tmp_file,$target_file);
+}
+
+##################### helpfunkcioj por la html-oj ###########
+
+# kunmetas html-referencon el Revo-XML-marko
+sub referenco {
+    my $ref=$_[0];
+    my $rez;
+
+    if ($ref =~ /^([^\.]*)\.(.*)$/) {
+	my $r1=$1; my $r2=$2;
+	$rez="$refdir".lc($r1).".html#".uc($r2);
+    } else {
+	$rez="$refdir".lc($ref).".html";
+    };
+
+    return $rez;
+};
+
+sub utf8_cx {
+    $vort = shift;
+    $vort =~ s/\304\210/Cx/g;
+    $vort =~ s/\304\234/Gx/g;
+    $vort =~ s/\304\244/Hx/g;
+    $vort =~ s/\304\264/Jx/g;
+    $vort =~ s/\305\234/Sx/g;
+    $vort =~ s/\305\254/Ux/g;
+    $vort =~ s/\304\211/cx/g;
+    $vort =~ s/\304\235/gx/g;
+    $vort =~ s/\304\245/hx/g;
+    $vort =~ s/\304\265/jx/g;
+    $vort =~ s/\305\235/sx/g;
+    $vort =~ s/\305\255/ux/g;      
+    return $vort;
+}
+
+# skribas la supran parton de html-ajho
+sub index_header {
+    my ($title_base,$file_base,$lng,$letter,@letters) = @_;
+    my ($l_utf8, $l_x);
+
+    print 
+	"<html>\n<head>\n<title>$title_base $letter</title>\n",
+	"<link titel=\"indekso-stilo\" type=\"text/css\" ",
+	"rel=stylesheet href=\"../stl/indeksoj.css\">\n",
+	"<meta http-equiv=\"Content-Type\" ",
+	"content=\"text/html; charset=UTF-8\">\n",
+	"</head>\n<body>\n",
+	"<i><a href=\"indeksoj.html\">indeksoj</a></i>\n";
+
+    for $l (@letters) {
+	$l_x    = letter_asci_nls($l,$lng);
+
+	if ($l ne $letter) {
+	    print "<a href=\"$file_base$l_x.html\">$l</a>\n"; 
+	} else { 
+	    print "<b>$l</b>\n"; 
+	};
+    };
+    print "<h1>$title_base";
+    print " $letter..." if ($letter);
+    print "</h1>\n";
+}
+
+# skribas la suban parton de html-ajho
+sub index_footer {
+    my ($file_base,$lng,$letter,@letters) = @_;
+    my $l_x;
+
+    if ($file_base) {
+	print "<p><i><a href=\"indeksoj.html\">indeksoj</a></i>\n";
+	for $l (@letters) { 
+
+	    $l_x    = letter_asci_nls($l,$lng);
+
+	    if ($l ne $letter) {
+		print "<a href=\"$file_base$l_x.html\">$l</a>\n"; 
+	    } else { 
+		print "<b>$l</b>\n"; 
+	    };
+	};
+    };
+
+    print "</body>\n</html>\n";
+}
+
 
 # komparas novan dosieron kun ekzistanta,
 # kaj nur che shanghoj au neekzisto alshovas
@@ -445,334 +828,14 @@ sub diff_mv {
     }
 };
 
-# kreas fakindekson por unuopa fako
 
-sub FAKINX {
-    my ($fak,$refs) = @_;
-
-    $fak = uc($fak);
-    my $fk = lc($fak);
-    my $r;
-    my $last0, $last1;
-
-#    open OUT,">$dir/fx_$fk$html" or die "Ne povis krei $dir/fx_$fk$html\n";
-    open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
-
-    select STDOUT;
-    print "$dir/fx_$fk$html..." if ($verbose);
-    select OUT;
-
-    print "<html><head><title>fakindekso por ".$faknomoj{$fak}."</title>\n";
-    print "$inxstl\n$cntdecl</head>\n";
-    print "<body>\n$inxref\n<h1>".$faknomoj{$fak}."</h1>\n";
-
-    foreach $ref (sort { LIT($a->[1]) cmp LIT($b->[1]) } @$refs) {
-	if (($last0 ne $ref->[0]) or ($last1 ne $ref->[1])) {
-	    $r = REFERENCO($ref->[0]);
-	    print "<a href=\"$r\" target=\"precipa\">";
-	    print "$ref->[1]</a><br>\n";
-	    $last0 = $ref->[0];
-	    $last1 = $ref->[1];
-	};
-    };
-
-    print "<p>$inxref</body></html>\n";
-    close OUT;
-
-    select STDOUT;
-    diff_mv($tmp_file,"$dir/fx_$fk$html");
-}
-
-# kreas lingvoindekson por unuopa lingvo
-
-sub LINGVINX {
-    my ($lng,$refs) = @_;
-
-    $lng = lc($lng);
-    my $r;
-    my $ln = substr($lng,0,5);
-    my $lingvo = $lingvoj{$lng};  
- 
-#    open OUT,">$dir/lx_$ln$html" or die "Ne povis krei $dir/lx_$ln$html\n";
-    open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
-
-    select STDOUT;
-    print "$dir/lx_$ln$html..." if ($verbose);
-    select OUT;
-
-    $lingvo =~ s/[oe]$/a/;
-    print "<html><head><title>indekso $lingvo</title>\n";
-    print "$inxstl\n$cntdecl</head>\n<body>\n";    
-    print "$inxref\n<h1>indekso $lingvo</h1>\n";
-
-#    foreach $ref (sort { LIT($a->[2]) cmp LIT($b->[2]) } @$refs) {
-    foreach $ref (sort {nls_sort::cmp_nls($a->[2],$b->[2],$ln)} @$refs) {
-	$r=REFERENCO($ref->[0]);    
-	print "$ref->[2] = <a href=\"$r\" ";
-	print "target=\"precipa\">$ref->[1]</a><br>\n";
-    };
-
-    print "<p>$inxref</body></html>\n";
-    close OUT;
-
-    select STDOUT;
-    diff_mv($tmp_file,"$dir/lx_$ln$html");
-}
-
-# kreas la indekson de la kapvortoj
-
-sub KAPVORTINX {
-    my $lit = $_[0];
-    my $lit1 = enmetu_x($lit);
-    my $vrt;
-    my $r,$a,$n=0;
-
-#    open OUT,">$dir/ix_kap$lit1$html" or 
-#	die "Ne povis krei $dir/ix_kap$lit1$html\n";
-    open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
-
-    select STDOUT;
-    print "$dir/ix_kap$lit1$html..." if ($verbose);
-    select OUT;
-
-    print "<html><head><title>kapvortoindekso sekcio $lit1</title>\n";
-    print "$inxstl\n$cntdecl</head><body>\n";
-    print "$inxref\n";
-    for $a (@literoj) { 
-	if ($a ne $lit) {
-	    print "<a href=\"ix_kap".enmetu_x($a)."$html\">"
-		.Lat3_UTF8($a)."</a>\n"; 
-	} else { print "<b>".Lat3_UTF8($a)."</b> "; };
-    };
-    print "<h1>kapvortoj ".Lat3_UTF8($lit)."...</h1>\n";
-
-    foreach $ref (@kapvortoj) {
-	my $vrt = lc(LIT($ref->[1]));
-	$vrt =~ s/^(.x?).*$/$1/;
-	if (($lit1 eq $vrt) and
-	    (($last0 ne $ref->[0]) or ($last1 ne $ref->[1]))) {
-	    if ($refdir =~ /#$/) { $r="$refdir".uc($ref->[0]); } 
-	    else { $r="$refdir$ref->[0]$html";};
-
-	    print "<a href=\"$r\" target=\"precipa\">";
-	    print "$ref->[1]</a><br>\n";
-
-	    $last0 = $ref->[0];
-	    $last1 = $ref->[1];
-	    $n++;
-	};
-    };
-
-    if ($n > 20) {
-	print "<p>$inxref\n";
-	for $a (@literoj) { 
-	    if ($a ne $lit) {
-		print "<a href=\"ix_kap".enmetu_x($a)."$html\">"
-		    .Lat3_UTF8($a)."</a>\n"; 
-	    } else { print "<b>".Lat3_UTF8($a)."</b> "; };
-	};
-    };
-
-    print "</body></html>\n";
-    close OUT;
-
-    select STDOUT;
-    diff_mv($tmp_file,"$dir/ix_kap$lit1$html");
-}
-
-sub SIMPLKAPVORTINX {
-    my $ref,$r,$n=0,$last0,$last1;
-
-#    open OUT,">$dir/ix_kap$html" or 
-#	die "Ne povis krei $dir/ix_kap$html\n";
-    open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
-
-    select STDOUT;
-    print "$dir/ix_kap$html..." if ($verbose);
-    select OUT;
-
-    print "<html><head><title>kapvortoindekso</title>\n";
-    print "$inxstl\n$cntdecl</head><body>\n";
-    print "$inxref\n";
-    print "<h1>kapvortoj</h1>\n";
-
-    foreach $ref (@kapvortoj) {
-	if (($last0 ne $ref->[0]) or ($last1 ne $ref->[1])) {
-	    if ($refdir =~ /#$/) { $r="$refdir".uc($ref->[0]); } 
-	    else { $r="$refdir$ref->[0]$html";};
-
-	    print "<a href=\"$r\" target=\"precipa\">";
-	    print "$ref->[1]</a><br>\n";
-
-	    $last0 = $ref->[0];
-	    $last1 = $ref->[1];
-	    $n++;
-	};
-    };
-
-    print "<p>$inxref\n";
-    print "</body></html>\n";
-    close OUT;
-
-    select STDOUT;
-    diff_mv($tmp_file,"$dir/ix_kap$html");
-}
-
-# kreas la inversan indekson de la kapvortoj
-
-sub INVKAPVORTINX {
-    my $lit = $_[0];
-    my $lit1 = enmetu_x($lit);
-    my $r,$n=0;
-    my $last0,$last1;
-
-#    open OUT,">$dir/ix_inv$lit1$html" or 
-#	die "Ne povis krei $dir/ix_inv$lit1$html\n";
-    open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
-
-
-    select STDOUT;
-    print "$dir/ix_inv$lit1$html..." if ($verbose);
-    select OUT;
-
-    print "<html><head><title>inversa kapvortoindekso sekcio $lit1</title>\n";
-    print "$inxstl\n$cntdecl</head><body>\n";
-    print "$inxref\n";
-    for $a (@invliteroj) { 
-	if ($a ne $lit) {
-	    print "<a href=\"ix_inv".enmetu_x($a)."$html\">"
-		.Lat3_UTF8($a)."</a>\n"; 
-	} else { print "<b>".Lat3_UTF8($a)."</b> "; };
-    };
-    print "<h1>inversa indekso ...".Lat3_UTF8($lit)."</h1>\n";
-
-    foreach $ref (@kapvortoj) {
-	my $inv = lc(INVLIT($ref->[1]));
-	$inv =~ s/^(.x?).*$/$1/;
-	if (($lit1 eq $inv) 
-	    and (($last0 ne $ref->[0]) or ($last1 ne $ref->[1]))) {
-	    if ($refdir =~ /#$/) { $r="$refdir".uc($ref->[0]); } 
-	    else { $r="$refdir$ref->[0]$html";};
-
-	    print "<a href=\"$r\" target=\"precipa\">";
-	    print "$ref->[1]</a><br>\n";
-
-	    $last0 = $ref->[0];
-	    $last1 = $ref->[1];
-	    $n++;
-	};
-    };
-
-    if ($n > 20) {
-	print "<p>$inxref\n";
-	for $a (@invliteroj) { 
-	    if ($a ne $lit) {
-		print "<a href=\"ix_inv".enmetu_x($a)."$html\">"
-		    .Lat3_UTF8($a)."</a>\n"; 
-	    } else { print "<b>".Lat3_UTF8($a)."</b> "; };
-	};
-    };
-
-    print "</body></html>\n";
-    close OUT;
-
-    select STDOUT;
-    diff_mv($tmp_file,"$dir/ix_inv$lit1$html");
-}
-
-sub SIMPLINVKAPVORTINX {
-    my $ref,$r,$n=0;
-    my $last0,$last1;
- 
-#   open OUT,">$dir/ix_inv$html" or 
-#	die "Ne povis krei $dir/ix_inv$html\n";
-    open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
-
-    select STDOUT;
-    print "$dir/ix_inv$html..." if ($verbose);
-    select OUT;
-
-    print "<html><head><title>inversa kapvortoindekso</title>\n";
-    print "$inxstl\n$cntdecl</head><body>\n";
-    print "$inxref\n";
-    print "<h1>inversa indekso</h1>\n";
-
-    foreach $ref (@kapvortoj) {
-	if (($last0 ne $ref->[0]) or ($last1 ne $ref->[1])) {
-	    if ($refdir =~ /#$/) { $r="$refdir".uc($ref->[0]); } 
-	    else { $r="$refdir$ref->[0]$html";};
-
-	    print "<a href=\"$r\" target=\"precipa\">";
-	    print "$ref->[1]</a><br>\n";
-
-	    $last0 = $ref->[0];
-	    $last1 = $ref->[1];
-	    $n++;
-	};
-    };
-
-
-    print "<p>$inxref\n";
-    print "</body></html>\n";
-    close OUT;
-
-    select STDOUT;
-    diff_mv($tmp_file,"$dir/ix_inv$html");
-}
-
-# kreas indekson de la laste shaghitaj artikoloj
-
-sub INXSHANGHITAJ {
-    my $now = time();
-    my $n = 0;
-
-    print "$dir/ix_novaj$html..." if ($verbose);
-
-    # malfermu kaj komencu indeks-dosieron
-    open INX, ">$tmp_file" or die "Ne povis malfermi $tmp_file: $!\n";
-    print INX <<EOH;
-<html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <link titel="indekso-stilo" type="text/css" 
-    rel=stylesheet href="../stl/indeksoj.css">
-    <title>indekso ne artikoloj ŝanĝitaj en la lastaj $tagoj tagoj</title>
-</head>
-<body>
-<i><a href="indeksoj.html">indeksoj</a></i><p>
-<h1>ŝanĝitaj dum la lastaj $tagoj tagoj</h1>
-
-EOH
-
-    # malfermu kaj trakribru xml-dosierujon
-    opendir DIR, $xml_dir or die "Ne povis malfermi $xml_dir: $!\n";
-    for $dos (readdir DIR) {
-
-	if ( (-f "$xml_dir/$dos") and
-	     ($now - (stat("$xml_dir/$dos"))[9] < $tagoj * 24 * 60 * 60)
-	     ) {
-	    print INX cvs_log($dos);
-	    if (++$n >= $nmax) { last; }
-	}
-	
-    }
-    closedir DIR;
-    
-    if ($n > 20) {
-	print INX "<p><i><a href=\"indeksoj.html\">indeksoj</a></i>\n";
-    }
-    print INX "<body>\n</html>\n";
-    close INX;
-
-    diff_mv($tmp_file,"$dir/ix_novaj$html");
-}
-
+# elprenas informojn el "cvs log"
 sub cvs_log {
     my $dos = shift;
     my ($art,$log,$head,$info,$dato);
     my $result;
 
-    print "nova: $dos\n" if ($debug);
+    #print "nova: $dos\n" if ($verbose);
 
     # skribu vorton kaj referencon al la artikolo
     $art = $dos;
@@ -787,8 +850,13 @@ sub cvs_log {
     $head =~ s/\./\\./g;
 
     if ($head) {
-	$log =~ /-{28}\nrevision $head\n(.*?)-{28}/s;
+	$log =~ /-{28}\nrevision $head\n(.*?)(?:-{28}|={28})/s;
 	$info = $1;
+
+	unless ($info) {
+	    warn "$dos: Ne povis elpreni versioinformon el $log\n";
+	    return;
+	}
 
 	$info =~ s/date: ([0-9\/]+)[^\n]*\n//;
 	$dato = $1;
@@ -805,206 +873,10 @@ sub cvs_log {
     return $result;
 }
 
-# kreas la indekson de la indeksoj
+#################################################################
 
-sub INXLIST {
-    my $lit,$lit1;
-    
-#    open OUT,">$dir/indeksoj$html" or die "Ne povis krei $dir/indeksoj$html\n";
-    open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
 
-    select STDOUT;
-    print "$dir/indeksoj$html..." if ($verbose);
-    select OUT;
 
-    print "<html><head><title>indekslisto</title>\n";
-    print "$inxstl\n$cntdecl</head><body>\n";
-    print "<h2><a href=\"../titolo$html\" target=\"precipa\">";
-    print "titolpa\304\235o</a></h2>\n";
-    print "<h2><a href=\"../sercxo$html\" target=\"precipa\">ser\304\211o</a></h2>\n";
-    print "<dl>\n";
-
-    if ($pluraj) {
-	#kapvortoj
-	print "<dt>kapvortindekso\n<dd><b>";
-	for $lit (@literoj) {
-	    $lit1 = enmetu_x($lit);
-	    print "<a href=\"ix_kap$lit1$html\">".Lat3_UTF8($lit)."</a>\n";
-	};
-	print "</b>\n";
-
-	#inversa indekso
-#	print "<p><a href=\"ix_inva$html\">inversa indekso</a><p>\n";
-
-    } else {
-	#kapvortoj
-	print "<a href=\"ix_kap$html\">kapvortindekso</a><p>\n";
-	#inversa indekso
-	print "<a href=\"ix_inv$html\">inversa indekso</a><p>\n";
-    };
-    
-    print "\n";
-
-    #lingvoj
-    if (%tradukoj) {
-	print "<dt>lingvoindeksoj\n<dd>";
-	for $lng (sort keys %tradukoj) 
-	{
-	    $lng=lc($lng);
-	    my $ln=substr($lng,0,5);
-	    print "<a href=\"lx_$ln$html\">";
-	    print "$lingvoj{$lng}</a><br>\n";
-	};
-    };
-
-    #fakoj
-    if (%fakoj) {
-	print "<dt>fakindeksoj\n<dd>";
-	for $fak (sort keys %fakoj) 
-	{
-	    print "<a href=\"fx_".lc($fak)."$html\">";
-	    print "<img src=\"../smb/".uc($fak).".gif\"";
-	    my $fknm=$faknomoj{uc($fak)};
-	    print "alt=\"$fknm\" border=0></a>\n";
-	};
-    };
-
-    # aliaj 
-    print "<dt>aliaj indeksoj\n<dd>";
-    print "<a href=\"ix_inva$html\">inversa indekso</a><br>\n";
-    print "<a href=\"ix_novaj$html\">ŝanĝitaj artikoloj</a>\n";
-
-    print "</dl>\n";
-
-    print "</body></html>\n";
-    close OUT;
-
-    select STDOUT;
-    diff_mv($tmp_file,"$dir/indeksoj$html");
-}
-
-# funkcio por trovi vorton, komencigxantan je litero $lit
-sub TROVU {
-    my $lit = $_[0];
-    my $lit1 = enmetu_x($lit);
-    my $vrt, $ref;
-
-    foreach $ref (@kapvortoj) {
-	my $vrt = lc(LIT($ref->[1]));
-	$vrt =~ s/^(.x?).*$/$1/;
-	if ($lit1 eq $vrt) { return $ref->[1] };
-    }
-
-    return ''; # neniun trovis
-};
-
-# funkcio por trovi vorton, finigxantan je litero $lit
-sub INVTROVU {
-    my $lit = $_[0];
-    my $lit1 = enmetu_x($lit);
-    my $vrt, $ref;
-
-    foreach $ref (@kapvortoj) {
-	my $vrt = lc(INVLIT($ref->[1]));
-	$vrt =~ s/^(.x?).*$/$1/;
-	if ($lit1 eq $vrt) { return $ref->[1] };
-    }
-
-    return ''; # neniun trovis
-};
-
-# funkcio por esperanta ordigado
-
-sub LIT {
-    my $vort = lc($_[0]);
-
-    # konverti la e-literojn de UTF-8 al cx ... ux
-    $vort =~ s/\304[\210\211]/cx/g;
-    $vort =~ s/\304[\234\235]/gx/g;
-    $vort =~ s/\304[\244\245]/hx/g;
-    $vort =~ s/\304[\264\265]/jx/g;
-    $vort =~ s/\305[\234\235]/sx/g;
-    $vort =~ s/\305[\254\255]/ux/g;
-
-    # forigi finajxon
-    $vort =~ s/[\/1-9](?:[aeio]|oj)$//;
-    # forigi cxiujn ne-literojn
-    $vort =~ s/[^a-z]//g;
-    return $vort;
-}
-
-# funkcio por inversa esperanta ordigado
-# kun speciala atento de finajhoj, se ili
-# estas apartigitaj per / au cifero kiel en PIV
-
-sub INVLIT {
-    my $vort = reverse(lc($_[0]));
-
-    # konverti la e-literojn de UTF-8 al cx ... ux
-    $vort =~ s/[\210\211]\304/cx/g;
-    $vort =~ s/[\234\235]\304/gx/g;
-    $vort =~ s/[\244\245]\304/hx/g;
-    $vort =~ s/[\264\265]\304/jx/g;
-    $vort =~ s/[\234\235]\305/sx/g;
-    $vort =~ s/[\254\255]\305/ux/g;
-
-    # forigi finajxon
-    $vort =~ s/^(?:[aeio]|oj)[\/1-9]//;
-    # forigi cxiujn ne-literojn
-    $vort =~ s/[^a-z]//g;
-
-    return $vort;
-}
-
-sub INVCMP {
-    return INVLIT($a->[1]) cmp INVLIT($b->[1]);
-};
-
-sub REFERENCO {
-    my $ref=$_[0];
-    my $rez;
-
-    if ($refdir =~ /#$/) { 
-	# chiuj artikoloj estas en unu sola
-	# dosiero, tien referencu!
-	$rez="$refdir".uc($ref); 
-    } 
-    else { 
-	# chiuj artikoloj estas en unuopaj
-	# dosieroj, parto de la referenco
-	# povus montri en tian dosieron
-	if ($ref =~ /^([^\.]*)\.(.*)$/) {
-	    my $r1=$1; my $r2=$2;
-	    $rez="$refdir".lc($r1)."$html#".uc($r2);
-	} else {
-	    $rez="$refdir".lc($ref)."$html";
-	};
-    };
-    return $rez;
-};
-
-sub enmetu_x {
-    my $lit = $_[0];
-    $lit =~ s/\346/cx/g;
-    $lit =~ s/\370/gx/g;
-    $lit =~ s/\266/hx/g;
-    $lit =~ s/\274/jx/g;
-    $lit =~ s/\376/sx/g; 
-    $lit =~ s/\375/ux/g;
-
-    return $lit;
-};
-
-sub Lat3_UTF8 {
-    my $vort = $_[0];
-    $vort =~ s/\346/\304\211/g;
-    $vort =~ s/\370/\304\235/g;
-    $vort =~ s/\266/\304\245/g;
-    $vort =~ s/\274/\304\265/g;
-    $vort =~ s/\376/\305\235/g;
-    $vort =~ s/\375/\305\255/g;
-    return $vort;
-}
 
 
 

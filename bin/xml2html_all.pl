@@ -2,6 +2,8 @@
 #
 
 $debug=0;
+$tmp_file = '/tmp/'.$$.'voko.art';
+$|=1;
 
 while ($ARGV[0] =~ /^-/) {
     if ($ARGV[0] eq '-v') {
@@ -30,13 +32,43 @@ for $file (readdir(DIR)) {
 	    or ((stat $outfile)[9] < (stat $infile)[9])
 	    or $all) {
 
-	    warn "$infile -> $outfile\n" if ($verbose);
-	    `xml2html.pl $infile > $outfile`;
+	    print "$infile -> $outfile..." if ($verbose);
+	    `xml2html.pl $infile > $tmp_file`;
+	    if ($all) {
+		# aktualigu nur, se shanghite
+		diff_mv($tmp_file,$outfile);
+	    } else {
+		# aktualigu, pro neekzisto au diverseco de la dosierdatoj
+		print "farite\n" if ($verbose);
+		`mv $tmp_file $outfile`;
+	    }
 	} else {
 	    warn "ignoru: $infile\n" if ($debug);
 	}
     }
 }
+close DIR;
+unlink($tmp_file);
+
+
 
   
+# komparas novan dosieron kun ekzistanta,
+# kaj nur che shanghoj au neekzisto alshovas
+# la novan dosieron
+
+sub diff_mv {
+    my ($newfile,$oldfile) = @_;
+
+    if ((! -e $oldfile) or (`diff -q $newfile $oldfile`)) {
+	print "farite\n" if ($verbose);
+	`mv $newfile $oldfile`;
+    } else {
+	print "(senshanghe)\n" if ($verbose);
+	unlink($newfile);
+    }
+};
+
+
+
 

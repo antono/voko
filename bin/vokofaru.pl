@@ -29,6 +29,8 @@ while (@ARGV) {
     }
 };
 
+$|=1;
+
 unless($vortaro) { $vortaro = "sgm/vortaro.xml" };
 
 # chu splitigi la HTML-tekston en unuopajn
@@ -40,8 +42,10 @@ chdir(cvs);
 
 # transformu la dosierojn al HTML
 print "xml2html_all.pl $verbose $xml_html_cxiujn revo ../art\n" if ($verbose);
-`xml2html_all.pl $verbose $xml_html_cxiujn revo ../art`;
-
+open LOG, "xml2html_all.pl $verbose $xml_html_cxiujn revo ../art |"
+    or die "Ne povis dukti\n";
+while (<LOG>) { print };
+close LOG;
 
 # kreu indeksdosieron
 print "xml2inx.pl $verbose revo > ../sgm/indekso.xml~\n" if ($verbose);

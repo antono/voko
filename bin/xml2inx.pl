@@ -33,9 +33,15 @@ my $parser = new XML::Parser(ParseParamEnt => 1,
 				 Char  => \&char_handler}
 			     );
 opendir DIR,$dos;
-for $file (readdir(DIR)) {
+$letter = '';
+for $file (sort readdir(DIR)) {
     if (-f "$dos/$file") {
-	warn "$dos/$file\n" if ($verbose);
+	# montru progreson...
+	if ($verbose and (substr($file,0,1) ne $letter)) {
+	    $letter = substr($file,0,1);
+	    warn "$letter...\n";
+	};
+	#warn "$dos/$file\n" if ($verbose);
 	eval { $parser->parsefile("$dos/$file") }; warn $@ if ($@);
     }
 };
