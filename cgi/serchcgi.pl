@@ -44,8 +44,7 @@ require $pado."sercho.pm";
 # Se en via medio (ENVIRONMENT) ne estas
 # difinita $VOKO, tie æi indiku la absolutan padon
 # al via voko-dosiero
-#$VOKO = $ENV{'VOKO'};
-$VOKO="/home/wolfram/work";
+$VOKO = $ENV{'VOKO'}."/..";
 
 # kiuj vortaroj ekzistas, kaj en kiuj
 # lokoj ili estas? La lokojn nepre donu 
@@ -167,7 +166,7 @@ if ($params{'strukturo'} eq 'art') {
 	for $linio (@rez) { 
 	    my @fields = split(/\|\|/,$linio);
 	    $fields[2] =~ s/^([^\.]*)(.*)$/"$artikoloj\/".lc($1).
-		".html#$2"/e;
+		".html#$1$2"/e;
 	    if ($parametroj{'strukturo'} ne 'kap') { print "$fields[4]: "; };
 	    print "<a href=\"$fields[2]\" target=\"precipa\">$fields[3]</a>";
 	    print "<br>\n";
