@@ -9,7 +9,7 @@
 # art - la teksto de la artikolo
 
 # konfigura¼o
-$CVSsituo = "/home/wolfram/cvsroot/vortaroj/anglesp";
+$CVSsituo = "/home/wolfram/cvsroot/vort";
 $tmp = "/tmp";
 $VOKO = "/home/wolfram/work/voko";
 $DTD = "$VOKO/dtd/vokosgml.dtd";
@@ -34,10 +34,10 @@ $logmsg = $cgi->param('logmsg');
 $kiu = $cgi->param('kiu');
 
 # forigu æiujn ne-literojn el $mrk
-$mrk =~ s/[^A-Za-z0-9]//g;
+$mrk =~ s/[^A-Za-z0-9_]//g;
 
 # forigu æiujn ne-literojn el $logmsg
-$logmsg =~ s/[^a-zA-Z0-9_ "']//g;     
+$logmsg =~ s/[^a-zA-Z0-9\.,;!\?\+\-_ "']//g;     
 #$logmsg =~ s/\\//g;
 $logmsg =~ s/"/'/g;
 #$logmsg =~ s/\$/'\$'/eg;
@@ -75,6 +75,8 @@ if ($ago eq 'kreu') {
 
     # forigu la dosieron kun la artikolo
     #unlink "$vortaro/red/$mrk.sgm";
+    print "forigo ankoraý ne funkcias...<p>\n";
+    print "<a href=\"vokored.pl?kiu=$kiu\">komencopaøo</a></p>\n";
 
 } elsif ($ago eq 'listigu') {
 
@@ -86,8 +88,12 @@ if ($ago eq 'kreu') {
     local $komencu = 0;
 
     print "<h1>artikolo \"$mrk\"</h1>";
+    # versio-informoj
     print "<p align=right><a href=\"vokored.pl?ago=info&mrk=$mrk&kiu=$kiu\">"
-         ."versio-informoj</a></p>";
+         ."versio-informoj</a><br>";
+    # Al centra paøo
+    print "<a href=\"vokored.pl?kiu=$kiu\">komencopaøo</a></p>\n";
+
     #print "<hr>";
 
     # ricevu la SGML-tekston de la artikolo
@@ -155,7 +161,7 @@ if ($ago eq 'kreu') {
     };
 
     # Al centra paøo
-    print "<hr><a href=\"vokored.pl\">komencopaøo</a>\n";
+    print "<hr><a href=\"vokored.pl?kiu=$kiu\">komencopaøo</a>\n";
 
 } elsif ($ago eq "info") {
 
@@ -273,9 +279,13 @@ sub jade {
     close IN;
     unlink "$tmp/$mrk.$$.htm";
 
+    # elprenu la parton inter <body>...</body>
+    $html =~ s/^.*?<body[^>]*>//si;
+    $html =~ s/<\/body\s*>.*$//si;
+
     # anstataýigu la referencojn
-    $html =~ s/(<a\s+href=)"\#([a-z]+)"(\s*>)/
-	"$1\"vokored.pl?ago=redaktu&mrk=".lc($2)."\"$3"/ieg;
+    $html =~ s/(<a\s+href=)"\#([a-z]+)([a-z0-9\.]+)?"(\s*>)/
+	"$1\"vokored.pl?ago=redaktu&kiu=$kiu&mrk=".lc($2)."#$2$3\"$4"/sieg;
 
     return $html;
 }

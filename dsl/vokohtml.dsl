@@ -14,8 +14,6 @@
 ;  jade -t sgml -c dsl/catalog -d dsl/vokohtml.dsl sgm/vortaro.sgm \
 ;  > titolo.htm
 ;
-; aldonendas poste: mankantaj elementoj, 
-; bildoj kaj bildetoj...
 
 ;******************* deklaroj *********************
 
@@ -41,6 +39,12 @@
 
 ;**** parametroj influantaj la aspekton de al dokumento ***
 
+; por unuopa artikolo uzu apartan dosieron vokoart.dsl kun
+; *inx-dosiero* #f
+; *pluraj-dosieroj* #f
+; kaj laýnecese
+; *lng-simboloj*, *ref-simboloj*, *fak-simboloj* #f
+
 ; *modo* difinas la modon lau kiu la SGML-dokumento estas transformata
 ; al HTML
 ;
@@ -57,7 +61,9 @@
 
 ; *simboloj* difinas, æu por signi lingvoj, referencojn k.a. estu uzataj
 ; bildetoj aý nura teksto
-(define *simboloj* #t) ; enmetu simbolojn por lingvoj kaj referenctipoj
+(define *lng-simboloj* #f) ; enmetu simbolojn por lingvoj 
+(define *ref-simboloj* #t) ; enmetu simbolojn por referenctipoj
+(define *fak-simboloj* #t) ; enmetu simbolojn por fakoj
 
 ; *tiparnomo* difinas la uzitan tiparon - øi estu Latin-3-tiparo, 
 ; (momente ne plu uzata)
@@ -122,6 +128,41 @@
     (("PRT") (string-append "c&" "gt; "))
     (("MALPRT") (string-append "e&" "gt; "))
     (else "> ")))
+
+(define (*refsmb-teksto2* tipo)
+  (case tipo
+    (("VID") (make sequence 
+	       (literal "-") 
+	       (make entity-ref name: "gt") 
+	       (literal " ")))
+    (("SIN") (make sequence 
+	       (literal "=") 
+	       (make entity-ref name: "gt") 
+	       (literal " ")))
+    (("DIF") (literal "= "))
+    (("ANT") (make sequence 
+	       (literal "x") 
+	       (make entity-ref name: "gt") 
+	       (literal " ")))
+    (("SUPER") (make sequence 
+		 (literal "/") 
+		 (make entity-ref name: "gt") 
+		 (literal " ")))
+    (("SUB") (make sequence 
+	       (literal "\\") 
+	       (make entity-ref name: "gt") 
+	       (literal " ")))
+    (("PRT") (make sequence 
+	       (literal "c") 
+	       (make entity-ref name: "gt") 
+	       (literal " ")))
+    (("MALPRT") (make sequence 
+		  (literal "e") 
+		  (make entity-ref name: "gt") 
+		  (literal " ")))
+    (else (make sequence 
+	    (make entity-ref name: "gt") 
+	    (literal " ")))))
 
 
 ; Meta/Link-elementoj por HTML-kapo
@@ -210,15 +251,17 @@
 	  (make element gi: "body"
 		(case *modo*
 		  (("KOLORA") (with-mode KOLORA (process-children)))
-		  (else       (with-mode NORMALA (Process-children))))))
+		  (else       (with-mode NORMALA (process-children))))))
   
     ; La indekso estas eltira¼o el vortaro.sgml kaj uzas la saman DTD
-    (make entity system-id: *inx-dosiero*
+    (if *inx-dosiero*
+	(make entity system-id: *inx-dosiero*
 	  (make sequence
 	    (make document-type name: "vortaro" 
 		  public-id: "-//VoKo//DTD vortaro//EO")
 	    (make element gi: "vortaro"
-		  (with-mode INDEKSO (process-children)))))))
+		  (with-mode INDEKSO (process-children)))))
+	(empty-sosofo))))
 
 ; ************************************************************
 ;      transformreguloj lau modo HEAD (por HTML-elemento HEAD)
@@ -246,18 +289,19 @@
 
 (mode NORMALA 
 
-  (element prologo (make sequence))
-  (element titolo (make element gi: "h1"))
+  (element prologo (make sequence (process-children-trim)))
+  (element titolo (make element gi: "h1" (process-children-trim)))
   (element autoro (make element gi: "p" attributes:
-			(list (list "align" "center"))))
-  (element alineo (make element gi: "p"))
+			(list (list "align" "center")) 
+			(process-children-trim)))
+  (element alineo (make element gi: "p" (process-children-trim)))
   (element url (make element gi: "a" attributes:
 		     (list (list "href" (attribute-string "ref")))))
 			
   (element precipa-parto (make sequence))
   (element epilogo (make sequence 
 		     (make empty-element gi: "hr")
-		     (process-children)))
+		     (process-children-trim)))
 
   (element sekcio (if *pluraj-dosieroj* 
 		      (make sequence)
@@ -428,7 +472,7 @@
 
   (element fnt (make element gi: "sup" (process-children-trim)))
 
-  (element uzo (if (and *simboloj* (string=? 
+  (element uzo (if (and *fak-simboloj* (string=? 
 				(attribute-string "tip") "FAK"))
 			(make empty-element gi: "img" attributes: (list
 				(list "src" (string-append "../smb/" 
@@ -453,12 +497,12 @@
   ; REFERENCO - referencas al alia vorto en la vortaro	
 
   (element refgrp (make sequence 
-		    (literal (*refsmb-teksto* (attribute-string "tip")))
+		    (*refsmb-teksto2* (attribute-string "tip"))
 		    (process-children)))
 
 	
   (element ref (make sequence
-		 (literal (*refsmb-teksto* (attribute-string "tip")))
+		 (*refsmb-teksto2* (attribute-string "tip"))
 		 (if (attribute-string "cel")
 		     (if *pluraj-dosieroj*
 			 (make element gi: "a" attributes:
@@ -511,18 +555,19 @@
 
 (mode KOLORA
 
-  (element prologo (make sequence))
-  (element titolo (make element gi: "h1"))
+  (element prologo (make sequence (process-children-trim)))
+  (element titolo (make element gi: "h1" (process-children-trim)))
   (element autoro (make element gi: "p" attributes:
-			(list (list "align" "center"))))
-  (element alineo (make element gi: "p"))
+			(list (list "align" "center")) 
+			(process-children-trim)))
+  (element alineo (make element gi: "p" (process-children-trim)))
   (element url (make element gi: "a" attributes:
 		     (list (list "href" (attribute-string "ref")))))
 			
   (element precipa-parto (make sequence))
   (element epilogo (make sequence 
 		     (make empty-element gi: "hr")
-		     (process-children)))
+		     (process-children-trim)))
 
   (element sekcio (if *pluraj-dosieroj*
 		      (make sequence)
@@ -720,7 +765,7 @@
 
   (element fnt (make element gi: "sup" (process-children-trim)))
 
-  (element uzo (if (and *simboloj* (string=? 
+  (element uzo (if (and *fak-simboloj* (string=? 
 				(attribute-string "tip") "FAK"))
 			(make empty-element gi: "img" attributes: (list
 				(list "src" (string-append "../smb/" 
@@ -730,7 +775,7 @@
 			(make sequence (process-children-trim))))
 
   (element (drv uzo) (make sequence 
-		(if (and *simboloj* (string=? 
+		(if (and *fak-simboloj* (string=? 
 				(attribute-string "tip") "FAK"))
 			(make empty-element gi: "img" attributes: (list
 				(list "src" (string-append "../smb/" 
@@ -751,21 +796,21 @@
 
   (element refgrp 
     (make sequence 
-      (if *simboloj* 
+      (if *ref-simboloj* 
 	  (make empty-element gi: "img" attributes: 
 		(list (list "src" (*refsmb-dosiero* (attribute-string "tip")))
 		      (list "alt" (*refsmb-teksto* (attribute-string "tip")))))
-		(literal (*refsmb-teksto* (attribute-string "tip"))))
+		(*refsmb-teksto2* (attribute-string "tip")))
       (process-children)))
 
 	
   (element ref 
     (make sequence 
-      (if (and *simboloj* (attribute-string "tip"))
+      (if (and *ref-simboloj* (attribute-string "tip"))
 	  (make empty-element gi: "img" attributes: 
 		(list (list "src" (*refsmb-dosiero* (attribute-string "tip")))
 		      (list "alt" (*refsmb-teksto* (attribute-string "tip")))))
-	  (literal (*refsmb-teksto* (attribute-string "tip"))))
+	  (*refsmb-teksto2* (attribute-string "tip")))
       (if (attribute-string "cel") 
 	  (if *pluraj-dosieroj*
 	      (make element gi: "a" attributes:
@@ -796,7 +841,7 @@
 		(make empty-element gi: "br") 
 		(make element gi: "span" attributes:
 			(list (list "class" "trd"))
-		(if *simboloj* 
+		(if *lng-simboloj* 
 			(make empty-element gi: "img" attributes: (list
 				(list "src" (string-append 
 					"../smb/"
