@@ -58,6 +58,7 @@ $refdir = '../art/';
 # enhavos post analizo la informojn de la indeks-dosiero
 %kapvortoj = ();
 %tradukoj = ();         # %tradukoj{lingvo}->%{litero}->@[mrk,kap,trd]
+%radDeDosiero = ();
 
 # legu la fakojn
 %faknomoj = read_xml_cfg($config{"fakoj"},'fako','kodo');
@@ -76,6 +77,21 @@ while (<INX>) {
 }
 close INX;
 $/ = "\n";
+
+%UTF8alX = (
+  chr(264) => "Cx",
+  chr(265) => "cx",
+  chr(284) => "Gx",
+  chr(285) => "gx",
+  chr(292) => "Hx",
+  chr(293) => "hx",
+  chr(308) => "Jx",
+  chr(309) => "jx",
+  chr(348) => "Sx",
+  chr(349) => "sx",
+  chr(364) => "Ux",
+  chr(365) => "ux",
+  );
 
 # traktu cxiujn unuopajn indekserojn
 
@@ -150,6 +166,7 @@ sub artikolo {
 
     $kap =~ s/\///g;
     push @{ $kapvortoj{$first_lit} }, [$mrk,$kap,$rad];
+    $radDeDosiero{$mrk} = $rad;
 
     # se la teksto entenas derivajho(j)n,
     # analizu unue tiujn
@@ -470,10 +487,10 @@ sub javaskriptoDosieroj {
   print "Javaskriptodosieroj...\n";
   if ($indeksoj=~/jx/) {
     # kreu la lingvoindeksojn
-    #$lng = 'nl'; {
+    #$lng = 'af'; {
     foreach $lng (sort keys %tradukoj) { 
       @literoj = sort { cmp_nls($a,$b,$lng) } keys %{$tradukoj{$lng}};
-      $unua_litero{$lng} = letter_asci_nls($literoj[0],$lng);
+      #$unua_litero{$lng} = letter_asci_nls($literoj[0],$lng);
       $n = 0;
       $nombroListoj = 0;
       $listoNomo = 'Eroj';
@@ -512,6 +529,7 @@ sub jx_lng_lit_js {
   foreach $ref (@$refs) {
     if (($last1 ne $ref->[1]) or ($last2 ne $ref->[3])) {
       $r=referenco($ref->[0]);    
+      $kap = $ref->[1];
       $trd = $ref->[3];
       #$trd =~ s/(<\/?)ind>/$1u>/sg;
       $trd =~ s/[\r\n\f]/ /g;
@@ -519,11 +537,11 @@ sub jx_lng_lit_js {
       $trd =~ s/  / /g;
       if ($r =~ /\#([^.]*)\.([^"]*)$/)
       {
-        &NovaEro($trd, $1, $2, $ref->[1]);
+        &NovaEro($trd, $1, $2, $ref->[1], $kap);
       }
       elsif ($r =~ /art\/([^.]*)\.html$/)
       {
-        &NovaEro($trd, $1, '', $ref->[1]);
+        &NovaEro($trd, $1, '', $ref->[1], $kap);
       }
       else
       {
@@ -605,15 +623,16 @@ sub jx_lng_eo_lit_js {
   foreach $ref (@$refs) {
     if (($last0 ne $ref->[0]) or ($last1 ne $ref->[1])) {
       $r=referenco($ref->[0]);
+      $kap = $ref->[1];
       if ($r =~ /\#([^.]*)\.([^"]*)$/)
       {
         if (!exists($eoKunTraduko{$ref->[1]}))
-        { &NovaEro('', $1, $2, $ref->[1]); }
+        { &NovaEro('', $1, $2, $ref->[1], $kap); }
       }
       elsif ($r =~ /art\/([^.]*)\.html$/)
       {
         if (!exists($eoKunTraduko{$ref->[1]}))
-        { &NovaEro('', $1, '', $ref->[1]); }
+        { &NovaEro('', $1, '', $ref->[1], $kap); }
       }
       else
       {
@@ -635,21 +654,143 @@ sub jx_lng_eo_lit_js {
 # $loko: HTML loko de la Esperanta vorto en la dosiero.
 # $esperanto: la Esperanta vorto.
 # Estas notite en %eoKunTraduko ke tiu Esperanta vorto havas tradukon.
+sub Marko()
+{
+  local ($dosiero, $esperanto, $rad) = @_;
+  if ($esperanto =~ /[^ -~]/) {
+  }
+  foreach $signo (keys(%UTF8alX))
+  { $esperanto =~ s/$signo/$UTF8alX{$signo}/g;
+    $rad =~ s/$signo/$UTF8alX{$signo}/g;
+  }
+  $esperanto =~ s/,  */,/g;
+  $esperanto =~ s/ /_/g;
+  $esperanto =~ s/\W*$//g;
+  $esperanto =~ s/^\W*//g;
+  $rad =~ s/\W*$//g;
+  $rad =~ s/^\W*//g;
+  if ($esperanto =~ /^(.*?)($rad)(.*)$/i)
+  {
+    $antau0 = '';
+    $post0 = $esperanto;
+    while ($post0 =~ /^(.*?)($rad)(.*)$/i)
+    {
+      $antau0 .= $1;
+      $mezo = $2;
+      $post0 = $3;
+      if ($mezo ne $rad && lcfirst($mezo) eq lcfirst($rad))
+      {
+        $antau0 .= substr($mezo, 0, 1);
+        if (substr($mezo, 1, 1) eq 'x')
+        { $antau0 .= 'x'; }
+      }
+      $antau0 .= '0';
+    }
+    return $dosiero . "." . $antau0 . $post0;
+  }
+  else
+  { return ''; }
+}
+sub JavascriptMarko()
+{
+  local ($dosiero, $esperanto, $rad, $nunaMarko) = @_;
+  if ($esperanto =~ /[^ -~]/) {
+  }
+  foreach $signo (keys(%UTF8alX))
+  { $esperanto =~ s/$signo/$UTF8alX{$signo}/g;
+    $rad =~ s/$signo/$UTF8alX{$signo}/g;
+  }
+  $esperanto =~ s/,  */,/g;
+  $esperanto =~ s/ /_/g;
+  $esperanto =~ s/\W*$//g;
+  $esperanto =~ s/^\W*//g;
+  $rad =~ s/\W*$//g;
+  $rad =~ s/^\W*//g;
+  $marko = '';
+  if ($esperanto =~ /^$rad.$/i)
+  { ; }
+  else
+  {
+    $longeco = length($rad);
+    if ($longeco < 2) { return $nunaMarko; }
+    if ($longeco > 15) { $marko .= '>'; $longeco -= 15; }
+    $marko .= chr(ord('#') + $longeco - 2);
+    if ($esperanto =~ /^(.+?)($rad)(.*)$/i)
+    {
+      $posEnVorto = length($1);
+      if ($posEnVorto > 13) { $marko .= '>'; $posEnVorto -= 13; }
+      $marko .= chr(ord('#') + $posEnVorto);
+    }
+  }
+  if ($rad =~ /^[a-z]/ && index($esperanto, ucfirst($rad)) != -1)
+  { $marko .= '_'; }
+  if ($rad =~ /^[A-Z]/ && index($esperanto, lcfirst($rad)) != -1)
+  { $marko .= '^'; }
+  if ($dosiero =~ /^(\D*)(\d+)$/)
+  {
+    if (length($1) > 6) { return $nunaMarko; }
+    local $cifero = $2;
+    if ($esperanto =~ /^$1/i)
+    { $marko .= "$cifero"; }
+  }
+  elsif ($dosiero =~ /^(\D\D\D\D\D\D)$/ && $esperanto =~ /^$1/i)
+  { $marko .= ']'; }
+  if ($nunaMarko =~ /^.*?\..*?\.(.*)$/)
+  { $marko .= "~$1"; }
+  return $marko;
+}
 sub NovaEro()
 {
-  local ($traduko, $dosiero, $loko, $esperanto) = @_;
+  local ($traduko, $dosiero, $loko, $esperanto, $kap) = @_;
   $traduko =~ s/<[^>]*>//g;
   $traduko =~ s/"/\\"/g;
   $traduko =~ s/\\$/\\ /g;
   $esperanto =~ s/[\r\n\f] */ /g;
   $eoKunTraduko{$esperanto} = '1';
+  $js_marko = $dosiero;
+  $marko=$esperanto;
+  foreach $signo (keys(%UTF8alX))
+  { $marko =~ s/$signo/$UTF8alX{$signo}/g;
+  }
   if ($traduko ne '')
   {
     print '"'.$traduko.'",';
   }
-  if ($loko ne '') { $loko = '.' . $loko; }
-  #print EL '"'.$esperanto.'","'.$dosiero.$loko."\",";
-  print '"'.$esperanto.'","'.$dosiero.$loko."\",\n";
+  if ($loko eq '')
+  {
+    if ($esperanto =~ /^$dosiero.$/i)
+    { $js_marko = '!'; }
+    elsif ($dosiero =~ /^(\D*)(\d+)$/ && length($1) <= 6)
+    {
+      local $cifero = $2;
+      if ($esperanto =~ /^$1/i)
+      { $js_marko = "!$cifero"; }
+    }
+    elsif ($dosiero =~ /^(\D\D\D\D\D\D)$/ && $esperanto =~ /^$1/i)
+    { $js_marko = '}'; }
+  }
+  else
+  {
+    $js_marko .= '.' . $loko;
+    $rad = $radDeDosiero{$dosiero};
+    $bona_marko = &Marko($dosiero, $esperanto, $rad);
+    $bona_marko_por_kompari = $bona_marko;
+    $bona_marko_por_kompari =~ s/\(/\\(/g;
+    $bona_marko_por_kompari =~ s/\)/\\)/g;
+    if ($js_marko =~ /^$bona_marko_por_kompari(\.[^.]*)?$/)
+    { $js_marko = &JavascriptMarko($dosiero, $esperanto, $rad, $js_marko); }
+    else
+    { # proponu pli bonajn markojn
+      if ($js_marko =~ /\.([^.0]+)$/)
+      { $pliprecizigo = $1;
+        if ($bona_marko !~ /$pliprecizigo/i)
+        { $bona_marko .= '.' . $pliprecizigo; }
+      }
+      if ($verbose && $lng eq 'af')
+      { print STDERR $esperanto.': '.$js_marko." -> ".$bona_marko . "\n"; }
+    }
+  }
+  print '"'.$esperanto.'","'.$js_marko."\",\n";
   $n += 4;
   if ($n > 64000)
   { # Javaskriptlisto ne povas havi pli ol 64000 erojn.
