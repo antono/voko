@@ -8,11 +8,11 @@ require Exporter;
 
 
 
-#read_nls_cfg("/home/revo/voko/bin/nls.cfg");
+#read_nls_cfg("/home/revo/voko/cfg/nls.cfg");
 #dump_nls_info("eo");
 #dump_nls_info("fr");
 #dump_nls_info("ru");
-
+#dump_nls_info("ko");
 
 ##################
 
@@ -196,6 +196,7 @@ sub letter_asci_nls {
     if (defined %$letters) {
 	return ( ${$$letters{first_utf8char($chr)}}[3] || '0' );
     } else {
+	$chr =~ s/[^A-Za-z]/0/; # specialaj signoj ne estu en dosiernomoj
 	return $chr;
     }
 }
@@ -227,6 +228,7 @@ sub read_nls_cfg {
     my ($a,$b,$c);
     my $minusklo;
     my $min = 1;
+    my $ascii;
 
     open CFG, $cfg_file or die "Ne povis malfermi \"$cfg_file\": $!\n";
     while ($line=<CFG>) {
@@ -245,32 +247,62 @@ sub read_nls_cfg {
 	    }
 	    # chu anstatauigo de litergrupo
 	    elsif ($line =~ /^\+([^=]+)=(.*)$/) {
-		${"aliases_$lng"}{traduce_non_ascii($1)}=traduce_non_ascii($2);
+		${"aliases_$lng"}{convert_non_ascii($1)}=convert_non_ascii($2);
 	    }
-	    # chu liter-priskribo
+	    # estas liter-priskribo
             elsif ($line =~ /^([a-z]+):\s*(.*)\s*$/) {
 		$ascii = $1;
-		$a++; ($b,$c) = (0,0);
-		@literoj = split(',',$2);
-		foreach $litgrp (@literoj) {
-		    $b++; $c=0;
-		    $litgrp =~ s/^\s*//;
-		    $litgrp =~ s/\s*$//;
-		    $minusklo = traduce_non_ascii(
-			(split /\s+/, $litgrp)[$min -1]);
-		    # renversu alinomigon
-		    while (($from,$to)=each %{"aliases_$lng"}) {
-			$minusklo = replace($minusklo,$to,$from);
+		$a++;
+		my $priskribo = $2;
+		
+		# chu temas pri intervalo? (aziaj lingvoj)
+		if ($priskribo =~ /\[\s*(.*?)\s*,\s*(.*?)\s*\]/) {
+
+		    # eltrovu la intervallimojn
+		    my ($from,$to) = ($1,$2);
+		    unless ($from =~ /\\u([a-f0-9]{4})/i) {
+			die "Sintakseraro: interlimojn indiku per \uffff\n";
 		    }
-		    foreach $lit (split /\s+/, $litgrp) {
-			$c++;
-			$lit = traduce_non_ascii($lit);
-			${"letters_$lng"}{$lit}=
-			    [100*$a+10*$b,100*$a+10*$b+$c,$minusklo,$ascii];
+		    $from = hex($1);
+		    unless ($to =~ /\\u([a-f0-9]{4})/i) {
+			die "Sintakseraro: interlimojn indiku per \uffff\n";
 		    }
-		}
-	    } 
-	    # erara linio
+		    $to = hex($1);
+
+		    # plenigu la literotabelon
+		    $minusklo = int_utf8($from);
+		    for ($i = $from; $i<=$to; $i++) {
+			${"letters_$lng"}{int_utf8($i)}=
+			    [1000*$a+($i-$from),1000*$a+($i-$from),
+			     $minusklo,$ascii];
+	            }
+		} else {
+		
+		    # temas pri unuopaj literoj
+		    ($b,$c) = (0,0);
+		    @literoj = split(',',$priskribo);
+		    foreach $litgrp (@literoj) {
+			$b++; $c=0;
+			$litgrp =~ s/^\s*//;
+			$litgrp =~ s/\s*$//;
+			
+			$minusklo = convert_non_ascii(
+			   (split /\s+/, $litgrp)[$min -1]);
+			# renversu alinomigon
+			while (($from,$to)=each %{"aliases_$lng"}) {
+			    $minusklo = replace($minusklo,$to,$from);
+			}
+
+			foreach $lit (split /\s+/, $litgrp) {
+			    $c++;
+			    $lit = convert_non_ascii($lit);
+			    ${"letters_$lng"}{$lit}=
+				[100*$a+10*$b,100*$a+10*$b+$c,$minusklo,$ascii];
+		        }
+		    }
+                }
+            }  
+            # erara linio
             else {
 		die "Sintakseraro en linio $.: \"$line\"\n";
 	    }
@@ -279,7 +311,7 @@ sub read_nls_cfg {
     close CFG;
 }
 
-sub traduce_non_ascii {
+sub convert_non_ascii {
     my $text = shift;
 
     $text =~ s/([\200-\377])/to_utf8("\000$1")/ieg;
@@ -318,7 +350,6 @@ sub to_utf8 {
 
 
 # transformas entjeran valoron de unikoda signo al UTF-8
-# (tre simile al to_utf8, ne uzata momente)
 sub int_utf8 { 
     my($c)=@_;
     return $c < 0x80 ? chr($c) : 

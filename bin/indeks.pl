@@ -310,6 +310,8 @@ sub traduko {
 	$ind = $1;
     } else {
 	$ind = $trd;
+	# klarigojn ne konsideru che ordigado
+	$ind =~  s/<klr>(.*?)<\/klr>//sg;
     }
 
     # komencaj spacoj ghenus ordigadon
@@ -760,7 +762,7 @@ sub INX_FAK {
 		my $faknomo=$faknomoj{uc($fak)};
 		unless ($faknomo) {
 		    warn "Faknomo \"$fak\" ne difinita!\n";
-		    $faknomo = '';
+		    $faknomo = 'nekonata';
 		}
 		print 
 		    "<img src=\"../smb/$fak.gif\" alt=\"$fak\" border=0 ",
