@@ -102,7 +102,15 @@ kreita de Wolfram Diestel
 
 <xsl:template match="tit">
   <b><xsl:apply-templates/></b>
-  <xsl:if test="following-sibling::*[1][self::eld]">
+  <xsl:if test="following-sibling::*[1][self::eld|self::isbn]">
+      <xsl:text>, </xsl:text><br/>
+  </xsl:if>
+</xsl:template>
+
+<xsl:template match="isbn">
+  <xsl:text>ISBN: </xsl:text>
+  <xsl:apply-templates/>
+  <xsl:if test="following-sibling::*[1][self::eld|self::ald]">
       <xsl:text>, </xsl:text><br/>
   </xsl:if>
 </xsl:template>

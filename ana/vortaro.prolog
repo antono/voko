@@ -2335,7 +2335,7 @@ r('sur','adv').
 r('trans','adv').
 r('jxus','adj').
 r('for','adj').
-r('hodiauw','adj').
+r('hodiaw','adj').
 r('hieraw','adj').
 r('morgaw','adj').
 

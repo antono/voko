@@ -187,7 +187,7 @@ sub artikolo {
     $statistiko{'art'}++;
     while ($tekst =~ m/<drv\b/g) { $statistiko{'drv'}++ };
     while ($tekst =~ m/<bld\b/g) { $statistiko{'bld'}++ };
-    while ($tekst =~ m/lng="([a-z]{2})"/g) { $statistiko{"lng_$1"}++ };
+    while ($tekst =~ m/lng="([a-z]{2,3})"/g) { $statistiko{"lng_$1"}++ };
     while ($tekst =~ m/<uzo>([A-Z]+)<\/uzo>/g) { $statistiko{"fak_$1"}++ unless ($1 eq 'KOMUNE')};
 
     # elprenu la markon

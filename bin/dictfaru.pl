@@ -202,6 +202,7 @@ sub traduko {
     # forigu eblajn klr-ojn kaj aliajn ghenajn signojn
     $trd =~ s/<klr[^>]>.*?<\/klr>//sg;
     $trd =~ s/\///sg;
+    $trd =~ s/\n/ /sg;
 
     # kio estas la indeksenda vorto?
     if ($trd =~ /<ind>(.*?)<\/ind>/s) {

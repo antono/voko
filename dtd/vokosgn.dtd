@@ -77,10 +77,13 @@
 <!ENTITY lt "&#38;#60;">
 <!ENTITY gt "&#62;">
 <!ENTITY apos "&#39;">
+<!ENTITY minute "&apos;">
 <!ENTITY quot "&#34;">
+<!ENTITY second "&quot;">
 <!ENTITY leftquot "&#x201e;">
 <!ENTITY rightquot "&#x201c;">
 <!ENTITY ring "&#x00b0;">
+<!ENTITY deg "&ring;">
 <!ENTITY quadrat "&#x00b2;">
 <!ENTITY cubic "&#x00b3;">
 <!ENTITY para "&#x00a7;">

@@ -29,7 +29,8 @@
 <!ENTITY ubreve "&#x016d;">
 
 <!ENTITY eacute "&#x00e9;"> 
-
+<!ENTITY iacute "&#x00ed;">
+ 
 ]>
  
 <bibliografio>
@@ -192,7 +193,18 @@
     </eld>
   </vrk>  
 
-  <vrk mll="Isxtar">
+  <vrk mll="IntKui">
+    <aut>Maria Becker-Meisberger</aut>
+    <tit>Internacie kuiri</tit>
+    <isbn>90-71205-70-3</isbn>
+    <eld>
+      <nom>Flandra Esperanto-Ligo</nom>
+      <lok>Antwerpen</lok>
+      <dat>2000</dat>
+    </eld>
+  </vrk>
+
+  <vrk mll="I&scirc;tar">
     <url>http://home.att.net/~karlpov/proisxtr.htm</url>
     <aut>H. A. Luyken</aut>
     <tit>Pro I&scirc;tar</tit>
@@ -217,8 +229,18 @@
     <aut>Sergio Pokrovskij</aut>
     <tit>Komputila Leksikono</tit>
   </vrk>
- 
-   <vrk mll="Lanti">
+
+  <vrk mll="Kosmo">
+    <aut>David Galad&iacute;-Enr&iacute;quez kaj Amri Wandel</aut>
+    <tit>La kosmo kaj ni - Galaksioj, planedoj kaj vivo en la universo</tit> 
+    <eld>
+      <nom>Flandra Esperanto-Ligo</nom>
+      <lok>Antverpeno</lok>
+      <dat>2001</dat>
+    </eld>
+  </vrk>
+
+  <vrk mll="Lanti">
     <aut>E. Lanti</aut>
     <tit>Vortoj de k-do Lanti</tit>
     <eld>
@@ -240,11 +262,13 @@
     <url>ftp://ftp.esperanto.org/publika/tekstoj/</url>
     <trd>L. L. Zamenhof</trd>
     <tit>Malnova Testamento</tit>
+    <ald>Fori&gcirc;os - uzu MT anstata&ubreve;e!</ald>
   </vrk>
 
   <vrk mll="X">
     <url>ftp://ftp.esperanto.org/publika/tekstoj/html</url>
     <tit>Nova Testamento</tit>
+    <ald>Fori&gcirc;os - uzu NT anstata&ubreve;e!</ald>   
   </vrk>
 
   <vrk mll="ManPol">
@@ -286,6 +310,14 @@
   <vrk mll="NT">
     <url>ftp://ftp.esperanto.org/publika/tekstoj/html</url>
     <tit>Nova Testamento, Londona Biblio</tit>
+  </vrk>
+
+  <vrk mll="OndEsp">
+    <tit>La Ondo de Esperanto</tit>
+    <eld>
+      <nom>Sezonoj</nom>
+      <lok>Ruslando</lok>
+    </eld>
   </vrk>
 
   <vrk mll="Paroloj">
