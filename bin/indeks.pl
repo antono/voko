@@ -889,40 +889,32 @@ sub INX_PLENA {
 
     #kapvortoj
     if ($config{"inx_eo"}=~/kapvortoj/) {
-	print "<h1>kapvortoj</h1>\n<b>";
+	print "KAPVORTOJ:\n";
 	for $lit (@literoj) {
 	    $lit1 = utf8_cx($lit);
 	    print "<a href=\"kap_$lit1.html\">$lit</a>\n";
 	};
-	print "</b>\n";
+	print "<p>\n";
     }
 
-    #tezauroradikoj
-    if ($config{"inx_eo"}=~/tezauro/) {
-	print "<h1>tezaŭro</h1>\n";
-	open TEZ, $config{"tezauro_radikoj"};
-	while (<TEZ>) {
-	    my ($file,$kap) = split(';');
-	    print "<a href=\"$file\">$kap</a><br>\n";
-	}
-    }
 
     #lingvoj
-    print "<h1>nacilingvoj</h1>\n";
+    print "LINGVOJ:\n";
     for $lng (sort keys %tradukoj) 
     {
 	print "<a href=\"lx_${lng}_$unua_litero{$lng}.html\">";
 	if (-f "$vortaro_pado/smb/$lng.jpg") {
-	    print "<img src=\"../smb/$lng.jpg\" alt=\"[$lng]\">&nbsp;";
+	    print "<img src=\"../smb/$lng.jpg\" alt=\"$lng\"> ";
 	} else {
-	    print "<img src=\"../smb/xx.jpg\" alt = \"[$lng]\">&nbsp;";
+	    print "<img src=\"../smb/xx.jpg\" alt = \"$lng\"> ";
 	}
 	print "</a>\n";
     };
+    print "<p>\n";
     
     #fakoj
     if ($config{"inx_fak"}=~/alfabetaj/ && %fakoj) {
-	print "<h1>fakoj alfabete</h1>\n";
+	print "FAKOJ (alfabete):\n";
 	
 	    for $fak (sort keys %fakoj) 
 	    {
@@ -935,9 +927,10 @@ sub INX_PLENA {
 		"<img src=\"../smb/$fak.gif\" alt=\"$fak\" border=0></a>\n";
 	    }
     }
+    print "<p>\n";
 	
     if ($config{"inx_fak"}=~/tezauro/) {
-	print "<h1>fakoj strukture</h1>\n";
+	print "FAKOJ (strukture):\n";
 	
 	for $fak (@strukt_fakoj) 
 	{
@@ -950,11 +943,12 @@ sub INX_PLENA {
 	    "<img src=\"../smb/$fak.gif\" alt=\"$fak\" border=0></a>\n";
 	}
     }
+    print "<p>\n";
 
     # gravaj paghoj
     my @paghoj = split(';',$config{"inx_ktp_paghoj"});
     if (@paghoj) {
-	print "<h1>gravaj paĝoj</h1>\n";
+	print "GRAVAJ PAĜOJ:\n";
 
 	while (@paghoj) {
 	    my $href=shift @paghoj;
@@ -962,28 +956,29 @@ sub INX_PLENA {
 	    print 
 		"<a href=\"$href\" target=\"",
 		($href=~/^http:/)? "_new" : "precipa",
-		"\">$title</a><br>\n";
+		"\">$title</a>\n";
 	}
     }
+    print "<p>\n";
 
     # diversaj indeksoj 
     my $inx = $config{"inx_ktp"};
     if ($inx=~/(inversa|shanghitaj|bildoj|statistiko)/) {
-	print "<h1>diversaj indeksoj</h1>\n";
+	print "DIVERSAJ INDEKSOJ:\n";
 	if ($inx=~/bildoj/) {
 	    print "<a href=\"bildoj.html\">";
-	    print "bildoj</a><br>\n";
+	    print "bildoj</a>\n";
 	};
 	if ($inx=~/inversa/) {
 	    print "<a href=\"inv_$unua_litero{'inv'}.html\">";
-	    print "inversa indekso</a><br>\n";
+	    print "inversa indekso</a>\n";
 	};
 	if ($inx=~/shanghitaj/) {
 	    print "<a href=\"novaj.html\">ŝanĝitaj ",
-	    "artikoloj</a><br>\n";
+	    "artikoloj</a>\n";
 	}
 	if ($inx=~/statistiko/) {
-	    print "<a href=\"statistiko.html\">statistiko</a><br>\n";
+	    print "<a href=\"statistiko.html\">statistiko</a>\n";
 	}
     }
 
@@ -997,14 +992,15 @@ sub INX_PLENA {
 	    print 
 		"<a href=\"$href\" target=\"",
 		($href=~/^http:/)? "_new" : "precipa",
-		"\">$title</a><br>\n";
+		"\">$title</a>\n";
 	}
     }
+    print "<p>\n";
     
     # redakto
     @paghoj = split(';',$config{"inx_ktp_redakto"});
     if (@paghoj) {
-	print "<h1>redaktado</h1>\n";
+	print "REDAKTADO:\n";
 
 	while (@paghoj) {
 	    my $href=shift @paghoj;
@@ -1012,9 +1008,22 @@ sub INX_PLENA {
 	    print 
 		"<a href=\"$href\" target=\"",
 		($href=~/^http:/)? "_new" : "precipa",
-		"\">$title</a><br>\n";
+		"\">$title</a>\n";
 	}
     }
+    print "<p>\n";
+
+
+    #tezauroradikoj
+    if ($config{"inx_eo"}=~/tezauro/) {
+	print "TEZAŬRO:\n";
+	open TEZ, $config{"tezauro_radikoj"};
+	while (<TEZ>) {
+	    my ($file,$kap) = split(';');
+	    print "<a href=\"$file\">$kap</a>\n";
+	}
+    }
+    print "<p>\n";
 
     index_footer();
     close OUT;
@@ -1064,21 +1073,31 @@ sub linkbuttons {
     my $bgcolor = 'bgcolor="#AACCAA"';
 
     print 
-	"<table border=0 cellspacing=1 width=100%>\n",
-	"  <tr bgcolor=silver align=center>\n",
+	"<script src=\"../smb/butonoj.js\"></script>\n",
+
         (($self eq 'eo')? 
-	"  <td $bgcolor><b>Esperanto</b></td>\n" :
-	"  <td><b><a href=\"_eo.html\">Esperanto</a></b></td>\n"),
+	 "<img src=\"../smb/nav_eo0.png\" alt=\"[Esperanto]\" border=0>\n":
+	 "<a href=\"_eo.html\" onMouseOver=\"highlight(0)\" ".
+	 "onMouseOut=\"normalize(0)\">".
+	 "<img src=\"../smb/nav_eo1.png\" alt=\"[Esperanto]\" border=0></a>\n"),
+
 	(($self eq 'lng')?
-	"  <td $bgcolor><b>Lingvoj</b></td>" :
-        "  <td><b><a href=\"_lng.html\">Lingvoj</a></b></td>"),
+	 "<img src=\"../smb/nav_lng0.png\" alt=\"[Lingvoj]\" border=0>\n":
+	 "<a href=\"_lng.html\" onMouseOver=\"highlight(1)\" ".
+	 "onMouseOut=\"normalize(1)\">".
+	 "<img src=\"../smb/nav_lng1.png\" alt=\"[Lingvoj]\" border=0></a>\n"),
+
         (($self eq 'fak')?
-	"  <td $bgcolor><b>Fakoj</b></td>" :
-        "  <td><b><a href=\"_fak.html\">Fakoj</a></b></td>"),
+	 "<img src=\"../smb/nav_fak0.png\" alt=\"[Fakoj]\" border=0>\n":
+	 "<a href=\"_fak.html\" onMouseOver=\"highlight(2)\" ".
+	 "onMouseOut=\"normalize(2)\">".
+	 "<img src=\"../smb/nav_fak1.png\" alt=\"[Fakoj]\" border=0></a>\n"),
+
         (($self eq 'ktp')?
-	"  <td $bgcolor><b>ktp.</b></td>" :
-        "  <td><b><a href=\"_ktp.html\">ktp.</a></b></td>"),
-        "  </tr>\n</table>\n";
+	 "<img src=\"../smb/nav_ktp0.png\" alt=\"[ktp.]\" border=0>\n":
+	 "<a href=\"_ktp.html\" onMouseOver=\"highlight(3)\" ".
+	 "onMouseOut=\"normalize(3)\">".
+	 "<img src=\"../smb/nav_ktp1.png\" alt=\"[ktp.]\" border=0></a>\n");
 }
 
 # skribas la supran parton de html-ajho

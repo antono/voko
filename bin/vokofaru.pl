@@ -97,8 +97,8 @@ open LOG, "$command|"; while (<LOG>) { print }; close LOG;
 if ($indekso ne $inxtmp_dos) {
     $tempdif = (stat "$inxtmp_dos")[9] - (stat "$indekso")[9];
     if ($tempdif > 7*24*60*60)  {  # 7 tagoj
-	print "pli ol 7 tagoj pasis: mv $inxtmp $indekso\n";
-	`mv $inxtmp $indekso`;
+	print "pli ol 7 tagoj pasis: mv $inxtmp_dos $indekso\n";
+	`mv $inxtmp_dos $indekso`;
     }
 }
 
