@@ -9,11 +9,11 @@ require Exporter;
 
 
 
-#read_nls_cfg("/home/revo/voko/cfg/nls.cfg");
-#dump_nls_info("eo");
-#dump_nls_info("fr");
-#dump_nls_info("ru");
-#dump_nls_info("ko");
+read_nls_cfg("/home/revo/voko/cfg/nls.cfg");
+dump_nls_info("eo");
+dump_nls_info("fr");
+dump_nls_info("ru");
+dump_nls_info("ko");
 
 # $interpunkcio = '[\s,;\.:\(\)\-\'\/\?!\"]';
 $interpunkcio = '[\s,;\.:\(\)\-\'\/\"]';
@@ -243,9 +243,28 @@ sub read_nls_cfg {
     my $ascii;
 
     open CFG, $cfg_file or die "Ne povis malfermi \"$cfg_file\": $!\n";
-    while ($line=<CFG>) {
-	if ($line !~ /^#|^\s*$/) { 
-                   # ignoru komantariojn kaj malplenajn liniojn
+    my @cfg = <CFG>;
+    close CFG;
+
+    my $cfg_path = $cfg_file;
+    $cfg_path =~ s/\/[a-z\.]+$//;
+
+    my $i = 0;
+    while ($i < $#cfg) {
+	my $line = $cfg[$i]; $i++;
+
+	# inkludenda dosiero?
+	if ($line =~ /^#include\s+([^\s]+)/) {
+	    my $incl = $1;
+	    unless (open CFG, "$cfg_path/$incl") {
+		warn "Ne povis malfermi inkluddosieron \"$cfg_path/$incl\"\n";
+		next;
+	    }
+	    splice(@cfg,$i,0,<CFG>);
+	    close CFG;
+
+	} elsif ($line !~ /^#|^\s*$/) { 
+            # ignoru komentojn kaj malplenajn liniojn
 	    
 	    # chu nova lingvo-sekcio?
 	    if ($line =~ /^\[([a-z]{2,3})\]\s*$/) {
