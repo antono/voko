@@ -88,7 +88,37 @@ kaj stiloj (em,ctl,sup...)
   <xsl:if test="$aspekto='ilustrite'">
     <br/>
     <center>
-      <img class="bld" src="{@lok}"/>
+      <xsl:choose>
+         <xsl:when test="@tip='svg'">
+           <embed class="bld" src="{@lok}" type="image/svg+xml"
+                  pluginspace="http://www.adobe.com/svg/viewer/install/">
+             <xsl:if test="@alt">
+               <xsl:attribute name="height"> 
+                 <xsl:value-of select="@alt"/>
+               </xsl:attribute>
+             </xsl:if>
+             <xsl:if test="@lrg">
+               <xsl:attribute name="width">
+                 <xsl:value-of select="@lrg"/>
+               </xsl:attribute> 
+             </xsl:if> 
+           </embed>
+         </xsl:when>
+         <xsl:otherwise>
+           <img class="bld" src="{@lok}">
+             <xsl:if test="@alt">
+               <xsl:attribute name="height">
+                 <xsl:value-of select="@alt"/>
+               </xsl:attribute>
+             </xsl:if>
+             <xsl:if test="@lrg">
+               <xsl:attribute name="width"> 
+                 <xsl:value-of select="@lrg"/>
+               </xsl:attribute>
+             </xsl:if> 
+           </img>
+         </xsl:otherwise>
+      </xsl:choose>
       <br/>
       <i>
         <xsl:apply-templates select="text()|tld|ind|klr|fnt"/>

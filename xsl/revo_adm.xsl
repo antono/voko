@@ -63,19 +63,24 @@ reguloj por prezentado de la administraj notoj
 <xsl:template name="redakto">
   <span class="redakto">
 
-    <xsl:if test="$aspekto='ilustrite'">
-      <xsl:variable name="xml"
-        select="substring-before(substring-after(@mrk,'$Id: '),',v')"/>
+    <xsl:choose>
+      <xsl:when test="$aspekto='ilustrite'">
+        <xsl:variable name="xml"
+          select="substring-before(substring-after(@mrk,'$Id: '),',v')"/>
 
-	[^<a class="redakto" 
-	     href="../index.html" target="_top">Revo</a>] 
-        [<a class="redakto" 
-            href="{$xmldir}/{$xml}"><xsl:value-of select="$xml"/></a>]
-        [<a class="redakto" 
-            href="{$redcgi}{substring-before($xml,'.xml')}">redakti...</a>]
-    </xsl:if>
-
-    versio: <xsl:value-of 
+	  [^<a class="redakto" 
+	       href="../index.html" target="_top">Revo</a>] 
+          [<a class="redakto" 
+              href="{$xmldir}/{$xml}"><xsl:value-of select="$xml"/></a>]
+          [<a class="redakto" 
+              href="{$redcgi}{substring-before($xml,'.xml')}">redakti...</a>]
+      </xsl:when>
+      <xsl:otherwise>
+        [<a href="../index.html">Revo</a>] 
+      </xsl:otherwise>
+    </xsl:choose>
+  
+    artikolversio: <xsl:value-of 
       select="substring-before(substring-after(@mrk,',v'),'revo')"/>
   </span>
   <br />

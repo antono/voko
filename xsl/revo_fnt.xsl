@@ -78,10 +78,19 @@ reguloj por la prezentado de la fontindikoj
 
   <!-- prenu la informojn pri la bibliografiero el tiu dosiero -->
   <xsl:variable name="mll" select="."/>
-  <a class="fnt" href="{$bibliogrhtml}#{$mll}" target="indekso">
-    <xsl:apply-templates mode="bibliogr"
-      select="document($bibliografio)//vrk[@mll=$mll]"/>
-  </a>
+
+  <xsl:choose>
+    <xsl:when test="$aspekto='ilustrite'">
+      <a class="fnt" href="{$bibliogrhtml}#{$mll}" target="indekso">
+        <xsl:apply-templates mode="bibliogr"
+        select="document($bibliografio)//vrk[@mll=$mll]"/>
+      </a>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:apply-templates mode="bibliogr"
+        select="document($bibliografio)//vrk[@mll=$mll]"/>
+    </xsl:otherwise>
+  </xsl:choose>
 
   <!-- interpunkcio -->
   <xsl:if test="following-sibling::lok">

@@ -588,6 +588,31 @@
 <!ENTITY Udblac "&#x0170;">
 <!ENTITY udblac "&#x0171;">
 
+<!-- latvaj -->
+
+<!ENTITY amacron "&#257;"> 
+<!ENTITY emacron "&#275;">
+<!ENTITY gcommaaccent "&#291;"> 
+<!ENTITY imacron "&#299;"> 
+<!ENTITY kcommaaccent "&#311;"> 
+<!ENTITY lcommaaccent "&#316;">
+<!ENTITY ncommaaccent "&#326;"> 
+<!ENTITY omacron "&#333;"> 
+<!ENTITY rcommaaccent "&#343;"> 
+<!ENTITY umacron "&#363;"> 
+
+<!ENTITY Amacron "&#256;">
+<!ENTITY Emacron "&#274;">
+<!ENTITY Gcommaaccent "&#290;">
+<!ENTITY Imacron "&#298;">
+<!ENTITY Kcommaaccent "&#310;">
+<!ENTITY Lcommaaccent "&#315;">
+<!ENTITY Ncommaaccent "&#325;">
+<!ENTITY Omacron "&#332;">
+<!ENTITY Rcommaaccent "&#342;">
+<!ENTITY Umacron "&#362;">
+
+
 <!-- kimraj -->
 
 <!ENTITY Ycirc  "&#x0176;">

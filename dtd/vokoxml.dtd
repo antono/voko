@@ -278,8 +278,12 @@ aŭtomate por minimumigi erarojn.
 >
 
 <!-- [tezrad] Tezaŭraradiko. La kapvorto aperas en la enir-listo
-de la tezaŭo. -->
+de la tezaŭro. Se vi uzas la atributon fak, ĝi aperas en la 
+struktura enirlisto de la fako -->
 <!ELEMENT tezrad EMPTY>
+<!ATTLIST tezrad
+        fak CDATA #IMPLIED
+>
 
 <!-- [trdgrp] Tradukgrupo kunigas diversajn tradukojn de
 sama lingvo.
@@ -312,11 +316,17 @@ kiu rilatas internaj tradukoj ktp.
 <!-- [bld] Bildo povas ilustri iun vorton aŭ sencon. Per la
 atributo <dfn>lok</dfn> ĝi
 referencas al ekstera dosiero, kiu entenas la bildon.
+Per <dfn>alt</dfn> kaj <dfn>lrg</dfn> vi povas doni fiksan formaton.
+Per <dfn>tip</dfn> vi donas tipon de la bildo, t.e. <dfn>img</dfn>
+por JPEG, GIF, PNG-bildo, <dfn>svg</dfn> por SVG-vektorgrafiko.
 -->
 <!ELEMENT bld (#PCDATA|tld|klr|fnt|ind|trd|trdgrp)*>
 <!ATTLIST bld
 	lok CDATA #REQUIRED
 	mrk ID #IMPLIED
+	tip (img|svg) "img"
+	alt CDATA #IMPLIED 
+	lrg CDATA #IMPLIED
 >
 
 <!-- [adm] Administraj informoj estu por redaktado. Ili povus
