@@ -11,7 +11,7 @@ require Exporter;
 #read_nls_cfg("/home/revo/voko/bin/nls.cfg");
 #dump_nls_info("eo");
 #dump_nls_info("fr");
-
+#dump_nls_info("ru");
 
 
 ##################
@@ -28,26 +28,24 @@ require Exporter;
 
 sub pop_utf8char {
     my $str_ref = \$_[0];
-    my $chr; 
+    my $chr;
+    my $rez;
     
-    $$str_ref = reverse($$str_ref);
-    $chr = chop $$str_ref;
+    #$$str_ref = reverse($$str_ref);
+    $chr = ord(substr($$str_ref,0,1));
     
-    if (ord($chr) < 0x80) {
-	# nothing
-    } elsif (ord($chr) < 0xD0) {
-	$chr .= chop $$str_ref;
-    } elsif (ord($chr) < 0xF0) {
-	$chr .= chop $$str_ref;
-	$chr .= chop $$str_ref;
+    if ($chr < 0x80) {
+	$rez = substr($$str_ref,0,1);
+    } elsif ($chr < 0xE0) {
+	$rez = substr($$str_ref,0,2);
+    } elsif ($chr < 0xF0) {
+	$rez = substr($$str_ref,0,3);
     } else {
-	$chr .= chop $$str_ref;
-	$chr .= chop $$str_ref;
-	$chr .= chop $$str_ref;
+	$rez = substr($$str_ref,0,4);
     };
     
-    $$str_ref = reverse($$str_ref);
-    return $chr;  
+    $$str_ref = substr($$str_ref,length($rez));
+    return $rez;  
 }
 
 # redonas UTF-8-signon de la komenco de signaro 
