@@ -112,6 +112,9 @@ pluevoluigita de Wolfram Diestel
     <xsl:with-param name="lng">be</xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="flago">
+    <xsl:with-param name="lng">br</xsl:with-param>
+  </xsl:call-template>
+  <xsl:call-template name="flago">
     <xsl:with-param name="lng">bg</xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="flago">
@@ -127,6 +130,9 @@ pluevoluigita de Wolfram Diestel
     <xsl:with-param name="lng">fr</xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="flago">
+    <xsl:with-param name="lng">gd</xsl:with-param>
+  </xsl:call-template>
+  <xsl:call-template name="flago">
     <xsl:with-param name="lng">de</xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="flago">
@@ -139,6 +145,9 @@ pluevoluigita de Wolfram Diestel
     <xsl:with-param name="lng">hu</xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="flago">
+    <xsl:with-param name="lng">is</xsl:with-param>
+  </xsl:call-template>
+  <xsl:call-template name="flago">
     <xsl:with-param name="lng">it</xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="flago">
@@ -146,6 +155,12 @@ pluevoluigita de Wolfram Diestel
   </xsl:call-template>
   <xsl:call-template name="flago">
     <xsl:with-param name="lng">la</xsl:with-param>
+  </xsl:call-template>
+  <xsl:call-template name="flago">
+    <xsl:with-param name="lng">lv</xsl:with-param>
+  </xsl:call-template>
+  <xsl:call-template name="flago">
+    <xsl:with-param name="lng">lt</xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="flago">
     <xsl:with-param name="lng">grc</xsl:with-param>
@@ -157,6 +172,9 @@ pluevoluigita de Wolfram Diestel
     <xsl:with-param name="lng">nl</xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="flago">
+    <xsl:with-param name="lng">no</xsl:with-param>
+  </xsl:call-template>
+  <xsl:call-template name="flago">
     <xsl:with-param name="lng">pl</xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="flago">
@@ -164,6 +182,12 @@ pluevoluigita de Wolfram Diestel
   </xsl:call-template>
   <xsl:call-template name="flago">
     <xsl:with-param name="lng">ru</xsl:with-param>
+  </xsl:call-template>
+  <xsl:call-template name="flago">
+    <xsl:with-param name="lng">sk</xsl:with-param>
+  </xsl:call-template>
+  <xsl:call-template name="flago">
+    <xsl:with-param name="lng">sl</xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="flago">
     <xsl:with-param name="lng">sv</xsl:with-param>
@@ -600,6 +624,10 @@ pluevoluigita de Wolfram Diestel
     <xsl:with-param name="lingvo">beloruse</xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="lingvo">
+    <xsl:with-param name="lng">br</xsl:with-param>
+    <xsl:with-param name="lingvo">bretone</xsl:with-param>
+  </xsl:call-template>
+  <xsl:call-template name="lingvo">
     <xsl:with-param name="lng">bg</xsl:with-param>
     <xsl:with-param name="lingvo">bulgare</xsl:with-param>
   </xsl:call-template>
@@ -620,6 +648,10 @@ pluevoluigita de Wolfram Diestel
     <xsl:with-param name="lingvo">france</xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="lingvo">
+    <xsl:with-param name="lng">gd</xsl:with-param>
+    <xsl:with-param name="lingvo">gaele</xsl:with-param>
+  </xsl:call-template>
+  <xsl:call-template name="lingvo">
     <xsl:with-param name="lng">de</xsl:with-param>
     <xsl:with-param name="lingvo">germane</xsl:with-param>
   </xsl:call-template>
@@ -636,6 +668,10 @@ pluevoluigita de Wolfram Diestel
     <xsl:with-param name="lingvo">hungare</xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="lingvo">
+    <xsl:with-param name="lng">is</xsl:with-param>
+    <xsl:with-param name="lingvo">islande</xsl:with-param>
+  </xsl:call-template>
+  <xsl:call-template name="lingvo">
     <xsl:with-param name="lng">it</xsl:with-param>
     <xsl:with-param name="lingvo">itale</xsl:with-param>
   </xsl:call-template>
@@ -646,6 +682,14 @@ pluevoluigita de Wolfram Diestel
   <xsl:call-template name="lingvo">
     <xsl:with-param name="lng">la</xsl:with-param>
     <xsl:with-param name="lingvo">latine</xsl:with-param>
+  </xsl:call-template>
+  <xsl:call-template name="lingvo">
+    <xsl:with-param name="lng">lv</xsl:with-param>
+    <xsl:with-param name="lingvo">latve</xsl:with-param>
+  </xsl:call-template>
+  <xsl:call-template name="lingvo">
+    <xsl:with-param name="lng">lt</xsl:with-param>
+    <xsl:with-param name="lingvo">litove</xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="lingvo">
     <xsl:with-param name="lng">grc</xsl:with-param>
@@ -660,6 +704,10 @@ pluevoluigita de Wolfram Diestel
     <xsl:with-param name="lingvo">nederlande</xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="lingvo">
+    <xsl:with-param name="lng">no</xsl:with-param>
+    <xsl:with-param name="lingvo">norvege</xsl:with-param>
+  </xsl:call-template>
+  <xsl:call-template name="lingvo">
     <xsl:with-param name="lng">pl</xsl:with-param>
     <xsl:with-param name="lingvo">pole</xsl:with-param>
   </xsl:call-template>
@@ -670,6 +718,14 @@ pluevoluigita de Wolfram Diestel
   <xsl:call-template name="lingvo">
     <xsl:with-param name="lng">ru</xsl:with-param>
     <xsl:with-param name="lingvo">ruse</xsl:with-param>
+  </xsl:call-template>
+  <xsl:call-template name="lingvo">
+    <xsl:with-param name="lng">sk</xsl:with-param>
+    <xsl:with-param name="lingvo">slovake</xsl:with-param>
+  </xsl:call-template>
+  <xsl:call-template name="lingvo">
+    <xsl:with-param name="lng">sl</xsl:with-param>
+    <xsl:with-param name="lingvo">slovene</xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="lingvo">
     <xsl:with-param name="lng">sv</xsl:with-param>
@@ -952,6 +1008,7 @@ pluevoluigita de Wolfram Diestel
 </xsl:template>
 
 </xsl:stylesheet>
+
 
 
 
