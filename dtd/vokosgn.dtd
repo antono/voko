@@ -78,16 +78,27 @@
 <!ENTITY gt "&#62;">
 <!ENTITY apos "&#39;">
 <!ENTITY quot "&#34;">
+<!ENTITY leftquot "&#x201e;">
+<!ENTITY rightquot "&#x201c;">
 <!ENTITY ring "&#x00b0;">
 <!ENTITY quadrat "&#x00b2;">
 <!ENTITY cubic "&#x00b3;">
 <!ENTITY para "&#x00a7;">
+<!ENTITY dash "&#x2015;">
 
 <!ENTITY Euml "&#x00cb;">
 <!ENTITY euml "&#x00eb;">
 <!ENTITY iuml "&#x00ef;">
+
+<!-- portugalaj, hispanaj -->
+
 <!ENTITY Ntilde "&#x00d1;">
 <!ENTITY ntilde "&#x00f1;">   
+
+<!ENTITY Atilde "&#x00c3;">
+<!ENTITY atilde "&#x00e3;">
+<!ENTITY Otilde "&#x00d5;">
+<!ENTITY otilde "&#x00f5;">
 
 <!-- grekaj -->
 

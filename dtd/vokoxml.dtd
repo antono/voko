@@ -317,6 +317,9 @@ minuskligo.
 <!-- [aut] Aŭtoro de citita frazo aŭ verko -->
 <!ELEMENT aut (#PCDATA)>
 
+<!-- [frm] Matematika au kemia formulo -->
+<!ELEMENT frm (#PCDATA|sup|sub)*>
+
 <!-- [em] Emfazo. Normale grase skribata vortoj.-->
 <!ELEMENT em (#PCDATA|tld)*>
 
@@ -327,7 +330,7 @@ minuskligo.
 <!ELEMENT sub (#PCDATA)>
 
 <!-- [ctl] citilita teksto, ekz. memindika uzo de vorto -->
-<!ELEMENT ctl (#PCDATA|tld)*>
+<!ELEMENT ctl (#PCDATA|tld|em)*>
 
 <!-- [url] Referenco al iu ekstera dosiero. En la HTML-versio de vortaro
 tio fariĝas &lt;a href=...&gt; Anstataŭ la TTT-ejo prefere uzu
