@@ -53,7 +53,8 @@ kreita de Wolfram Diestel
   </ul>
 </xsl:template>
 
-<xsl:template match="h1|p|ol|ul|li|dl|dt|dd|a">
+<xsl:template match="h1|h3|p|ol|ul|li|dl|dt|dd|a|
+	      table|tr|th|td|blockquote|br|hr">
   <xsl:copy-of select="."/>
 </xsl:template>
 

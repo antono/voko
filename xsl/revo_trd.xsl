@@ -121,10 +121,10 @@ montru tie, cxar ili estas esenca parto de la tiuj -->
 -->
 
   <xsl:apply-templates mode="tradukoj"
-    select="//trdgpr[@lng=$lng and not(parent::ekz|parent::bld)]|
+    select="//trdgrp[@lng=$lng and not(parent::ekz|parent::bld)]|
             //trd[@lng=$lng and not(parent::ekz|parent::bld)]"/>
   <xsl:apply-templates mode="tradukoj"
-    select="//trdgpr[@lng=$lng and (parent::ekz|parent::bld)]|
+    select="//trdgrp[@lng=$lng and (parent::ekz|parent::bld)]|
             //trd[@lng=$lng and (parent::ekz|parent::bld)]"/>
 </xsl:template>  
 
