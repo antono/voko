@@ -1,8 +1,8 @@
-BODY {background: E0FFE0; font-size: medium}
-H1 {font-size: large; color: darkgreen}
-H2 {font-size: medium; color: darkgreen}
+BODY {background: #E0FFE0; font-size: medium}
+H1 {font-size: large; color: #008000}
+H2 {font-size: medium; color: #008000}
 A {text-decoration: none}
 A:link {color: blue}
 A:visited {color: blue}
-.dato {color: 666666; font-size: small}
+.dato {color: #666666; font-size: small}
  

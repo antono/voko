@@ -1,38 +1,43 @@
 /* HTML-elementoj */
-BODY {background: E8FFE8; font-size: medium}
-H1 {color: darkgreen; font-size: x-large}
-H2 {color: darkgreen; font-size: large}
+BODY {background: #E8FFE8; font-size: medium}
+H1 {color: #008000; font-size: x-large}
+H2 {color: #008000; font-size: large}
 /*A {text-decoration: none}*/
 A:link {color: blue}
 A:visited {color: blue}
 SUP {font-size: smaller}
 
 /* ekzemploj */
-.ekz {color: darkgreen}
+.ekz {color: #008000}
 .rimekz {font-style: italic}
-A.ekz:link {text-decoration: underline; color: darkgreen}
-A.ekz:visited {text-decoration: underline; color: darkgreen}
+A.ekz:link {text-decoration: underline; color: #008000}
+A.ekz:visited {text-decoration: underline; color: #008000}
 A.ekz:active {text-decoration: underline; color: green}
 
 /* difinoj */
-.drvdif {color: darkred}
-.sncgrpdif {color: darkred}
-.dif {color: darkred}
-A.dif:link {text-decoration: underline; color: darkred}
-A.dif:visited {text-decoration: underline; color: darkred}
+.drvdif {color: #800000}
+.sncgrpdif {color: #800000}
+.dif {color: #800000}
+A.dif:link {text-decoration: underline; color: #800000}
+A.dif:visited {text-decoration: underline; color: #800000}
 A.dif:active {text-decoration: underline; color: red}
 
 /* rimarkoj */
-.rim {color: darkblue}
-A.rim:link {text-decoration: underline; color: darkblue}
-A.rim:visited {text-decoration: underline; color: darkblue}
+.rim {color: #000080}
+A.rim:link {text-decoration: underline; color: #000080}
+A.rim:visited {text-decoration: underline; color: #000080}
 A.rim:active {text-decoration: underline; color: blue}
 
 /* referencoj */
-.ref {color: brown}
+.ref {color: #808000}
 A.ref:link {text-decoration: underline; color: #775533}
 A.ref:visited {text-decoration: underline; color: #775533}
 A.ref:active {text-decoration: underline; color: yellow}
+
+/* bildoj */
+A.bld:link {text-decoration: underline; color: black}
+A.bld:visited {text-decoration: underline; color: black}
+A.bld:active {text-decoration: underline; color: gray}
 
 /* klarigo */
 .klr {font-style: normal}
@@ -44,16 +49,16 @@ A.klr:active {text-decoration: underline; color: #775533}
 .trd {color: #104040}
 .rimtrd {font-style: italic}
 .diftrd {font-style: italic}
-.trdeo {color: darkgreen; font-weight: bold}
+.trdeo {color: #008000; font-weight: bold}
 .trdnac {color: #104040}
-A.trdeo:link {text-decoration: underline; font-weight: bold; color: darkgreen}
-A.trdeo:visited {text-decoration: underline; font-weight: bold; color: darkgreen}
+A.trdeo:link {text-decoration: underline; font-weight: bold; color: #008000}
+A.trdeo:visited {text-decoration: underline; font-weight: bold; color: #008000}
 A.trdeo:active {text-decoration: underline; font-weight: bold; color: green}
 
 /* fontindikoj en la teksto */
 .fnt {font-style: normal}
-A.fnt:link {text-decoration: underline; color: darkgreen}
-A.fnt:visited {text-decoration: underline; color: darkgreen}
+A.fnt:link {text-decoration: underline; color: #008000}
+A.fnt:visited {text-decoration: underline; color: #008000}
 A.fnt:active {text-decoration: underline; color: green}
 
 /* fontindikaj piednotoj */
@@ -67,4 +72,8 @@ A.fnt:active {text-decoration: underline; color: green}
 A.redakto:link {text-decoration: underline; color: black}
 A.redakto:visited {text-decoration: underline; color: black}
 A.redakto:active {text-decoration: underline; color: gray}
+
+.flago {  border-color: #CCCCCC; border-width: 1px;  border-style: outset}
+IMG.bld {  border-color: #cccccc; border-width: 2px; border-style: outset} 
+
 

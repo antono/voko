@@ -121,6 +121,9 @@ pluevoluigita de Wolfram Diestel
     <xsl:with-param name="lng">cs</xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="flago">
+    <xsl:with-param name="lng">cy</xsl:with-param>
+  </xsl:call-template>
+  <xsl:call-template name="flago">
     <xsl:with-param name="lng">da</xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="flago">
@@ -210,7 +213,7 @@ pluevoluigita de Wolfram Diestel
     <xsl:text> </xsl:text>
     <a href="#lng_{$lng}">
     <img src="{$smbdir}/{$lng}.png" alt="{$lng}" 
-      border="0" hspace="3" width="21" height="15"/>
+      border="0" hspace="3" width="21" height="15" class="flago"/>
     </a>
   </xsl:if>
 </xsl:template>
@@ -365,6 +368,9 @@ pluevoluigita de Wolfram Diestel
 </xsl:template>
 
 <xsl:template match="rim" name="rim">
+  <xsl:if test="@mrk">
+    <a name="{@mrk}"/>
+  </xsl:if>
   <span class="rim">
     <b>
     <xsl:text>Rim.</xsl:text>
@@ -517,7 +523,7 @@ pluevoluigita de Wolfram Diestel
 <xsl:template match="bld">
   <br/>
   <center>
-  <img src="{@lok}"/>
+  <img class="bld" src="{@lok}"/>
   <br/>
   <i>
   <xsl:apply-templates select="text()|tld|ind|klr|fnt"/>
@@ -632,7 +638,7 @@ pluevoluigita de Wolfram Diestel
   <xsl:if test="//trd[@lng=$lng and not(ancestor::bld)]|//trdgrp[@lng=$lng]">
     <a name="lng_{$lng}"></a>
     <h3>
-      <img src="{$smbdir}/{$lng}.png" width="21" height="15" alt="[{$lng}]"/>
+      <img src="{$smbdir}/{$lng}.png" width="21" height="15" alt="[{$lng}]" class="flago"/>
       <xsl:text> </xsl:text>
       <xsl:value-of select="$lingvo"/>
     </h3>
@@ -665,6 +671,10 @@ pluevoluigita de Wolfram Diestel
   <xsl:call-template name="lingvo">
     <xsl:with-param name="lng">cs</xsl:with-param>
     <xsl:with-param name="lingvo">&#x0109;e&#x0125;e</xsl:with-param>
+  </xsl:call-template>
+  <xsl:call-template name="lingvo">
+    <xsl:with-param name="lng">cy</xsl:with-param>
+    <xsl:with-param name="lingvo">kimre</xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="lingvo">
     <xsl:with-param name="lng">da</xsl:with-param>
