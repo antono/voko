@@ -80,11 +80,11 @@ artikolo estas avantaĝe difini tiun ĉi unuon.-->
 <!-- [%tekst-stiloj] La unuo <dfn>tekst-stiloj</dfn> 
 listigas ĉiujn strukturilojn, kiuj donas stilon al tekstoparto,
 ekz. emfazita, citilita, altigita aŭ malaltigita teksto.
-Aliaj du elementoj klarigo kaj tildo same povas esti
+Aliaj elementoj klarigo kaj tildo kaj sencreferenco same povas esti
 multloke, do ankaŭ ili estas listigitaj tie ĉi. -->
 
 <!-- tekst-stiloj -->
-<!ENTITY % tekst-stiloj "tld|klr|em|sup|sub|ctl">
+<!ENTITY % tekst-stiloj "tld|sncref|klr|em|sup|sub|ctl">
 
 <!-- [art] Unuopa artikolo de la vortaro. Ĝi povas okazi en
 <dfn>vortaro</dfn> (se ne ekzistas precipa-parto),
@@ -95,7 +95,7 @@ derivaĵojn aŭ plurajn sencojn de la kapvorto aŭ subartikolojn. -->
 
 <!ELEMENT art (kap,(subart|drv|snc|%priskribaj-elementoj;)*)>
 <!ATTLIST art
-	mrk CDATA #IMPLIED
+	mrk CDATA #REQUIRED
 >
 
 <!-- [subart] Subartikolo. Ĝi povas okazi en <dfn>artikolo</dfn>,
@@ -111,7 +111,7 @@ pluraj subdividoj <dfn>subdrv</dfn>.-->
 
 <!ELEMENT drv (kap,(subdrv|snc|%priskribaj-elementoj;)*)>
 <!ATTLIST drv
-	mrk CDATA #IMPLIED
+	mrk ID #IMPLIED
 >
 
 <!-- [subdrv] Subderivaĵo. Ĝi grupigas plurajn proksimajn sencojn, se la
@@ -122,12 +122,17 @@ estas nombrataj per A), B), ... -->
 <!ELEMENT subdrv (snc|%priskribaj-elementoj;)*>
 
 <!-- [snc] Senco de unuopa vorto en artikolo. Komparu la latinajn ciferojn en
-la artikoloj de PIV.-->
+la artikoloj de PIV. Per mrk oni povas referenci sencon de alie. Per ref oni
+referencas al alia senco samartikola (uzata en malmultaj longaj artikoloj, ekz.
+"al". Per num la senco ricevas numeron. Atentu, ke future simbolaj nomoj por
+la sencoj estos perferataj kaj do numerado okazas automate ignorante la atributon
+num. -->
 
 <!ELEMENT snc (subsnc|%priskribaj-elementoj;)*>
 <!ATTLIST snc
-	mrk CDATA #IMPLIED
+	mrk ID #IMPLIED
         num CDATA #IMPLIED
+	ref CDATA #IMPLIED
 >
 
 <!-- [subsnc] Subsenco ene de senco. Ĝi redonas subtilaĵojn ene de unu senco.
@@ -135,7 +140,18 @@ Ili estas nombrataj per a), b), ... -->
 
 <!ELEMENT subsnc (%priskribaj-elementoj;)*>
 <!ATTLIST subsnc
-	mrk CDATA #IMPLIED
+	mrk ID #IMPLIED
+>
+
+<!-- [sncref] Referenco al alia senco. Tiu elemento estas anstatauigata
+ per la numero de la referencita senco. Tio funkcias nur, se la
+ referencita senco estas en la sama dosiero. Tamen ne hezitu uzi ĝin
+ ankaŭ trans artikolojn, ĉar iama papera eldono profitos de ĝi.
+-->
+
+<!ELEMENT sncref EMPTY>
+<!ATTLIST sncref
+       ref CDATA #IMPLIED
 >
 
 <!-- ************************************************
@@ -165,7 +181,7 @@ ili mem, sen la streketoj antaŭe aŭ malantaŭe.-->
 <!-- [fnt] Fonto enhavas informojn pri autoro, verko, trovloko
 au aliajn informojn.-->
 
-<!ELEMENT fnt (#PCDATA|aut|vrk|lok)*>
+<!ELEMENT fnt (#PCDATA|aut|vrk|lok|url)*>
 
 <!-- [gra] kiel grammatikaj informoj momente estas permesataj
 nur indiko de la vortspeco.-->
@@ -201,7 +217,7 @@ mem. La lingvon indikas la atributo <dfn>lng</dfn>.
 klarigoj kaj fonto.
 -->
 
-<!ELEMENT ekz (#PCDATA|fnt|ref|refgrp|%tekst-stiloj;)*>
+<!ELEMENT ekz (#PCDATA|fnt|uzo|ref|refgrp|%tekst-stiloj;)*>
 
 <!-- [rim] Rimarko povas enhavi iujn indikojn pri la vorto aŭ
 senco, krome referencojn, ekzemplojn, emfazitajn partojn.
@@ -276,7 +292,7 @@ enhavi informojn pri kreodato, ŝanĝdato, aŭtoro, eraroj kaj
 plibonigproponoj pri artikolo. Ĝia strukturo ankoraŭ estas
 diskutatebla.
 -->
-<!ELEMENT adm (#PCDATA)>
+<!ELEMENT adm (#PCDATA|aut)*>
 
 <!-- [tld] Tildo rilatas al la radiko, donita en la kapvorto
 ĝi ne bezonas enhavon. La atributo <dfn>lit</dfn> indikas alian
@@ -311,7 +327,7 @@ minuskligo.
 <!ELEMENT sub (#PCDATA)>
 
 <!-- [ctl] citilita teksto, ekz. memindika uzo de vorto -->
-<!ELEMENT ctl (#PCDATA)>
+<!ELEMENT ctl (#PCDATA|tld)*>
 
 <!-- [url] Referenco al iu ekstera dosiero. En la HTML-versio de vortaro
 tio fariĝas &lt;a href=...&gt; Anstataŭ la TTT-ejo prefere uzu
@@ -330,6 +346,13 @@ ofte malvalidiĝus. -->
 <!ENTITY % signoj SYSTEM "../dtd/vokosgn.dtd">
 %signoj;
 
+<!-- ************************************************
+                   MALLONGIGOJ
+*****************************************************
+-->
+
+<!ENTITY % mallongigoj SYSTEM "../dtd/vokomll.dtd">
+%mallongigoj;
 
 <!-- *************************************************
                    URLoj
