@@ -79,7 +79,7 @@ artikolo de aliaj lokoj. La marko principe egalas al la dosiernomo.
 
 Se la artikoloj estas administrataj per la ar¶ivosistemo
 CVS, la marko estas aýtomate donita de tiu sistemo en loko
-markita per $Id$ kaj tiukaze enhavas krome indikojn pri
+markita per &#36;Id&#36; kaj tiukaze enhavas krome indikojn pri
 versio kaj þanøtempo de la artikolo. Tiujn informojn uzas
 ankaý la retpoþta redaktoservo por certigi, ke ne du
 redaktantoj redaktas samtempe la saman artikolon.
@@ -87,7 +87,7 @@ Ampleksaj artikoloj cetere povas esti dividitaj en
 subartikoloj. 
 
 [[
-<art mrk="$Id$">
+<art mrk="&#36;Id: vort.xml,v 1.6 2000/03/31 20:09:48 revo Exp &#36;">
   <kap><rad>vort</rad>/o</kap>
   <subart>
     ...
@@ -396,4 +396,20 @@ Noto: Ene de difinoj la tipoj de referencoj ne estas indikitaj
 per signo, æar tio øenas la fluan legadon. Tamen vi indiku la
 tipon, æar øi povas esti uzata de programoj, kiuj analizas la
 rilatojn inter vortoj.
+
+%uzo%<h2>uzindikoj</h2>
+
+Uzo indikas en kiu medio vorto estas uzata. Tio povas
+rilati al fako, regiono, tempo ktp.:
+
+[[
+<!-- arkaisma vorto el fako biologio -->
+<drv mrk="krkspl.0o">
+  <kap><tld/>o</kap>
+  <uzo tip="fak">BIO</uzo>
+  <uzo>(ark.)</uzo>
+  ...
+</drv>
+]]
+
 
