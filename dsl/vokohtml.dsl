@@ -334,8 +334,15 @@
 		      (make element gi: "head"
 			    (*meta-encoding*)
 			    (*link-style-sheet*)
-			    (make element gi: "title" (process-matching-children 'KAP)))
-		      (make element gi: "body"))))
+			    (make element gi: "title" 
+				  (process-matching-children 'KAP)))
+		      (make element gi: "body"
+			    ; numerigu la subartikoloj se ekistas 
+			    (if (> (*children-count* '(SUBART)) 0)
+				(make element gi: "ol" attributes: 
+				      (list (list "type" "I")))
+				(process-children)
+				)))))
 
         ; nur unu dosiero - normale traktu la artikolon
 	(make sequence
@@ -350,6 +357,11 @@
   ; KAPVORTO 
 
   (element (art kap) (make element gi: "h2"))
+
+  ; SUBART
+
+  (element (subart) (make element gi: "li"))
+  ;(element (subart dif) (make element gi: "b"))
 
   ; DERIVAJHO - ghi disigas artikolon en plurajn partojn
   ; unue skribu markon kiel referenccelo poste komencu
@@ -371,9 +383,9 @@
                  ; la kapvorto estu ekster la senclisto
 		 (with-mode KAP (process-matching-children 'KAP))
 		 ; numerigu la sencojn nur se estas pli ol unu
-		 (if (> (*children-count* '(SNCGRP)) 0)
+		 (if (> (*children-count* '(SUBDRV)) 0)
 		     (make element gi: "ol" attributes: 
-			   (list (list "type" "I")))
+			   (list (list "type" "A")))
 		     (if (= (*children-count* '(SNC)) 0) ; provo
 			 (process-children)          ; provo
 			 (if (> (*children-count* '(SNC)) 1)
@@ -387,18 +399,10 @@
   ; SENCGRUPO - se vorto havas tre multajn sencojn, tiuj 
   ; estas grupigitaj
 
-  (element sncgrp (make element gi: "li"
-			(if (> (*children-count* '(SUBSNCGRP)) 1)
-			    (make element gi: "ol" attributes: 
-				  (list (list "type" "A")))
-			    (if (> (*children-count* '(SNC)) 1)
-				(make element gi: "ol")
-				(make element gi: "ul")))))
-
-  (element subsncgrp (make element gi: "li"
-			   (if (> (*children-count* '(SNC)) 1)
-			       (make element gi: "ol")
-			       (make element gi: "ul"))))
+  (element subdrv (make element gi: "li"
+			(if (> (*children-count* '(SNC)) 1)
+			    (make element gi: "ol")
+			    (make element gi: "ul"))))
 
   ; SENCO - chiu vorto povas havi plurajn sencojn
   ; unue skribu markon kiel referenccelo, poste la enavon
@@ -434,7 +438,7 @@
 			(make empty-element gi: "br")
 			(empty-sosofo))))
 
-  (element (sncgrp dif) (make sequence
+  (element (subdrv dif) (make sequence
 		(make sequence)
 		(make empty-element gi: "p")))
 
@@ -604,8 +608,15 @@
 		      (make element gi: "head"
 			    (*meta-encoding*)
 			    (*link-style-sheet*)
-			    (make element gi: "title"  (process-matching-children 'KAP)))
-		      (make element gi: "body"))))
+			    (make element gi: "title"  
+				  (process-matching-children 'KAP)))
+		      (make element gi: "body"
+			    ; numerigu la subartikoloj se ekistas 
+			    (if (> (*children-count* '(SUBART)) 0)
+				(make element gi: "ol" attributes: 
+				      (list (list "type" "I")))
+				(process-children)
+			    )))))
 
         ; nur unu dosiero - normale traktu la artikolon
 	(make sequence
@@ -620,6 +631,24 @@
   ; KAPVORTO 
 
   (element (art kap) (make element gi: "h2"))
+  ;(element (art dif) (make element gi:"p" (make element gi: "b")))
+
+  ; SUBART
+
+  (element (subart) 
+    (make element gi: "li"
+	  ; numerigu la sencojn nur se estas pli ol unu
+	  (if (> (*children-count* '(SUBDRV)) 0)
+	      (make element gi: "ol" attributes: 
+		    (list (list "type" "A")))
+	      (if (= (*children-count* '(SNC)) 0) 
+		  (process-children)          
+		  (if (> (*children-count* '(SNC)) 1)
+		      (make element gi: "ol")
+		      (make element gi: "ul"))))))
+ 
+  
+  ;(element (subart dif) (make element gi: "p" (make element gi: "b")))
 
   ; DERIVAJHO - ghi disigas artikolon en plurajn partojn
   ; unue skribu markon kiel referenccelo poste komencu
@@ -641,9 +670,9 @@
                  ; la kapvorto estu ekster la senclisto
 		 (with-mode KAP (process-matching-children 'KAP))
 		 ; numerigu la sencojn nur se estas pli ol unu
-		 (if (> (*children-count* '(SNCGRP)) 0)
+		 (if (> (*children-count* '(SUBDRV)) 0)
 		     (make element gi: "ol" attributes: 
-			   (list (list "type" "I")))
+			   (list (list "type" "A")))
 		     (if (= (*children-count* '(SNC)) 0) ; provo
 			 (process-children)          ; provo
 				(if (> (*children-count* '(SNC)) 1)
@@ -657,23 +686,10 @@
   ; SENCGRUPO - se vorto havas tre multajn sencojn, tiuj 
   ; estas grupigitaj
 
-  (element sncgrp (make element gi: "li"
-		(if (> (*children-count* '(SUBSNCGRP)) 1)
-			(make element gi: "ol" attributes: (list
-				(list "type" "A")))
-;			(make element gi: "ol"))))
-
+  (element subdrv (make element gi: "li"
 			(if (> (*children-count* '(SNC)) 1)
 				(make element gi: "ol")
-				(make element gi: "ul")))))
-
-  (element subsncgrp (make element gi: "li"
-		(make element gi: "ol")))
-		
-;		(if (> (*children-count* '(SNC)) 1)
-;			(make element gi: "ol")
-;			(make element gi: "ul"))))
-
+				(make element gi: "ul"))))
 
   ; SENCO - chiu vorto povas havi plurajn sencojn
   ; unue skribu markon kiel referenccelo, poste la enavon
@@ -716,15 +732,10 @@
 			(make empty-element gi: "br")
 			(empty-sosofo))))
 
-  (element (sncgrp dif) (make sequence
+  (element (subdrv dif) (make sequence
 		(make element gi: "span" attributes:
 			(list (list "class" "sncgrpdif")))
 		(make empty-element gi: "p")))
-
-  (element (subsncgrp dif) (make sequence
-		(make element gi: "span" attributes:
-			(list (list "class" "sncgrpdif")))
-		(make empty-element gi: "br")))
 
   (element (drv dif) (make sequence
 		(make element gi: "span" attributes:
@@ -775,7 +786,7 @@
 					(data (current-node)) ".gif"))
 				(list "alt" (data (current-node)))
 				(list "align" "absmiddle")))
-			(make sequence (process-children-trim))))
+			(make sequence (process-children-trim) (literal " "))))
 
   (element (drv uzo) (make sequence 
 		(if (and *fak-simboloj* (string=? 
@@ -784,7 +795,7 @@
 				(list "src" (string-append "../smb/" 
 					(data (current-node)) ".gif"))
 				(list "alt" (data (current-node)))))
-			(make sequence (process-children-trim)))
+			(make sequence (process-children-trim) (literal " ")))
 
 		; post la lasta uzindikoj de derivajho komencu novan linion
 		; antau la unua senco
