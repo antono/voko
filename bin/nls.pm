@@ -161,6 +161,10 @@ sub letter_nls {
     my ($chr,$lng) = @_;
     my $letters = \%{"letters_$lng"};
     my $aliases = \%{"aliases_$lng"};
+
+    unless (defined %$letters) {
+	$letters = \%{"letters_la"};
+    }
     
     if (defined %$aliases) {
 	while (($from,$to)=each %$aliases) {
@@ -180,6 +184,8 @@ sub replace {
     my $lfrom = length($from);
     my $lto = length($to);
 
+    return $str unless($from);
+
     $pos = index($str,$from);
     while ($pos>=0) {
 	$str = substr($str,0,$pos).$to.substr($str,$pos+$lfrom);
@@ -197,6 +203,10 @@ sub letter_asci_nls {
     my $letters = \%{"letters_$lng"};
     my $aliases = \%{"aliases_$lng"};
     
+    unless (defined %$letters) {
+	$letters = \%{"letters_la"};
+    }
+
     if (defined %$aliases) {
 	while (($from,$to)=each %$aliases) {
 	    $chr = replace($chr,$from,$to); 
@@ -404,7 +414,26 @@ sub hex_utf8 {
 sub defined_nls {
   my $lng = shift;
   my $letters = \%{"letters_$lng"};
-  return %$letters;
+  my $aliases = \%{"aliases_$lng"};
+
+  return unless (%$letters);
+
+  my (%letr, @desc);
+
+  while (($lit,$d)=each(%$letters)) {
+      my @desc = @$d;
+      if (defined %$aliases) {
+	  while (($from,$to)=each %$aliases) {
+	      if ($to) { 
+		  $lit = replace($lit,$to,$from); 
+		  $desc[2] = replace($desc[2],$to,$from)
+		  }
+	  }
+      }
+      $letr{$lit}=\@desc;
+  }
+
+  return %letr;
 }
 
 

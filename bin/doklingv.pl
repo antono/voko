@@ -39,6 +39,35 @@ $dok_dir = "/dok/lng"; # pli malsupre antaumetighas vortaro_pado
 $stilo = "../../stl/artikolo.css"; #relative al dok_dir
 $bgcol = "bgcolor=\"#EEEECC\""; # fonkoloro de tabeloj
 
+%sufiksoj = (
+	     "acute" => "dekstra korno",
+	     "breve" => "ronda hoketo",
+	     "caron" => "pinta hoketo",
+	     "cedil" => "cedilo",
+	     "circ" => "ĉapelo",
+	     "comma" => "subkomo",
+	     "dblac" => "longa tremao",
+	     "dot" => "superpunkto",
+	     "grave" => "maldekstra korno",
+	     "macron" => "superstreko",
+	     "nodot" => "sen punkto",
+	     "ogonek" => "subhoko",
+	     "ring" => "ringo",
+	     "slash" => "trastreko",
+	     "stroke" => "trastreko",
+	     "tilde" => "tildo",
+	     "uml" => "tremao");
+
+%prefiksoj = ("c" => "cirila");
+
+%liternomoj = (
+	       "c_malmol" => "cirila minuskla malmolsigno",
+	       "c_Malmol" => "cirila majuskla malmolsigno",
+	       "c_mol" => "cirila minuskla molsigno",
+	       "c_Mol" => "cirila majuskla molsigno"
+	       
+	       );
+
 ################## precipa programparto ###################
 
 $|=1; # ne bufru eligon
@@ -63,11 +92,10 @@ $lingvoj=$config{"lingvoj"};
 $cfg_dir = "$vortaro_pado/cfg";
 $dtd_dir = "$vortaro_pado/dtd";
 $smb_dir = "$vortaro_pado/smb";
-$out_dir = "/home/revo/tmp/$dok_dir"; 
+$out_dir = "$vortaro_pado/$dok_dir"; 
 
 # legu la informojn
 %lingvoj=read_cfg("$lingvoj");
-%regpri =read_cfg("$cfg_dir/regpri.cfg");
 %unuoj=read_entities("$dtd_dir/vokosgn.dtd");
 read_nls_cfg("$nls_cfg");
 
@@ -152,8 +180,8 @@ foreach $lng (@nls_lingvoj) {
 	$unuo = "&amp;#x$kodo;" if ($kodo and !$unuo);
 	
 	my $nomo;
-	if ($ali) { #supozu litergrupon
-	    $nomo="litergrupo $l";
+	if (first_utf8char($lit) ne $lit) { #supozu litergrupon
+	    $nomo="litergrupo $lit";
 	} elsif ($lit =~ /^[a-z]$/) {
 	    $nomo="minuskla $lit";
 	} elsif ($lit =~ /^[A-Z]$/){
@@ -169,13 +197,16 @@ foreach $lng (@nls_lingvoj) {
 	} else {
 	    $rowcnt = '';
 	}
+
+	my $grupo = $desc->[2];
+	unless ($desc->[2] eq $desc->[3]) {
+	    $grupo .= " ($desc->[3])";
+	}
 	
 	if ($rowcnt =~ /"1"$/) {
-	    print "<TR $bgcol><TD $bgcol ALIGN=\"LEFT\">".
-		$desc->[2]." (".$desc->[3].")</TD>";
+	    print "<TR $bgcol><TD $bgcol ALIGN=\"LEFT\">$grupo</TD>";
 	} elsif ($rowcnt) {
-	    print "<TR $bgcol><TD $bgcol $rowcnt ALIGN=\"LEFT\">".
-		$desc->[2]." (".$desc->[3].")</TD>";
+	    print "<TR $bgcol><TD $bgcol $rowcnt ALIGN=\"LEFT\">$grupo</TD>";
 	} else {
 	    print "<TR $bgcol>";
 	}
@@ -286,28 +317,39 @@ sub kodo {
 #liveras priskriban nomon de litero
 sub priskribo {
     my ($lit)=@_;
-    my $kodo='';
     my $pri='';
 
-    $kodo=kodo($lit);
-    if ($kodo and $unuoj{$kodo}) {
+    my $kodo=kodo($lit);
+    my $unuo=$unuoj{$kodo};
 
-	if ($debug) { warn ">>> $kodo ".join(', ',@{$unuoj{$kodo}})."\n"; };
+    if ($kodo and $unuo) {
 
-        $pri=$unuoj{$kodo}[1]; #neregula priskribo
-        # prenu regulan priskribon
+	# eksplicita priskribo?
+        $pri=$unuo->[1] || $liternomoj{$unuo->[0]}; 
+
+        # nomo kunmetita el litero plus kromsigno?
         if (! $pri) {
-	    my $l=substr($unuoj{$kodo}[0],0,1);
- 	    my $kromsigno = substr($unuoj{$kodo}[0],1,length($unuoj{$kodo}[0])-1);
-	    if (defined $regpri{$kromsigno}) {
-  	        $pri = ( ($l =~ /^[a-z]$/)?"min":"maj")."uskla $l $regpri{$kromsigno}";
+	    
+	    # lau model Ccirc?
+	    my $l=substr($unuo->[0],0,1);
+ 	    my $kromsigno = substr($unuo->[0],1,length($unuo->[0])-1);
+	    if (defined $sufiksoj{$kromsigno}) {
+  	        $pri = ( ($l =~ /^[a-z]$/)?"min":"maj")
+		    ."uskla $l $sufiksoj{$kromsigno}";
 	    } else {
-	        $pri ='ne konata';
+
+		# lau model c_ja
+		($pref,$l) = split('_',$unuo->[0]);
+		
+		if (defined $prefiksoj{$pref}) {
+		    $pri = $prefiksoj{$pref}.( ($l =~ /^[a-z]$/)?" min":" maj" )
+			."uskla $l";
+		}
 	    }
-	}
-    } else {
-        $pri ='ne konata';
+	} 
     }
+
+    $pri = 'ne konata' unless ($pri);
 
     return $pri;
 }
