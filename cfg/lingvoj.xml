@@ -47,6 +47,7 @@
   <lingvo kodo="gd" flago="../smb/gd.png">gaela</lingvo>
   <lingvo kodo="gl">galega</lingvo>
   <lingvo kodo="gn">gvarania</lingvo>
+  <lingvo kodo="grc" flago="../smb/grc.png">malnovgreka</lingvo>
   <lingvo kodo="gu">guĝarata</lingvo>
   <lingvo kodo="ha">haŭsa</lingvo>
   <lingvo kodo="he" flago="../smb/he.png">hebrea</lingvo>
@@ -73,6 +74,7 @@
   <lingvo kodo="ku">kurda</lingvo>
   <lingvo kodo="ky">kirgiza</lingvo>
   <lingvo kodo="la" flago="../smb/la.png">latina/scienca</lingvo>
+  <lingvo kodo="lat" flago="../smb/lat.png">malnovlatina</lingvo>
   <lingvo kodo="ln">lingala</lingvo>
   <lingvo kodo="lo">laŭa</lingvo>
   <lingvo kodo="lt" flago="../smb/lt.png">litova</lingvo>
