@@ -9,13 +9,17 @@
 # art - la teksto de la artikolo
 
 # konfigura¼o
-$CVSsituo = "/home/wolfram/cvsroot/vortaroj/pevet";
+$CVSsituo = "/home/wolfram/cvsroot/vortaroj/anglesp";
 $tmp = "/tmp";
 $VOKO = "/home/wolfram/work/voko";
 $DTD = "$VOKO/dtd/vokosgml.dtd";
 $DSL = "$VOKO/dsl/vokoart.dsl";
 $jade = "/usr/bin/jade -t sgml -d $DSL ";
 $checkout = "/usr/bin/co -q -p ";
+$lock = "/usr/bin/rcs -l ";
+$checkinfirst = "/usr/bin/ci -r -i -t-";
+$checkin = "/usr/bin/ci -r -j -m";
+$rlog = "/usr/bin/rlog";
 
 # komenco de la programo
 
@@ -26,49 +30,65 @@ $cgi = new CGI;
 
 $mrk = $cgi->param('mrk');
 $ago = lc($cgi->param('ago'));
+$logmsg = $cgi->param('logmsg');
+$kiu = $cgi->param('kiu');
 
+# forigu æiujn ne-literojn el $mrk
+$mrk =~ s/[^A-Za-z0-9]//g;
+
+# forigu æiujn ne-literojn el $logmsg
+$logmsg =~ s/[^a-zA-Z0-9_ "']//g;     
+#$logmsg =~ s/\\//g;
+$logmsg =~ s/"/'/g;
+#$logmsg =~ s/\$/'\$'/eg;
+
+# forigu chiujn ne-literojn el $kiu
+$kiu =~ s/[^a-zA-Z\-_ ]//g;
+$kiu =~ s/[ \-]/_/g;
 
 # kapo de la HTML-dosiero
 print "Content-Type: text/html\n\n";
-print "<html><head><title>artikolo: $mrk</title></head>\n";
+print "<html><head><meta http-equiv=\"Content-Type\"";
+print "content=\"text/html; charset=iso-8859-3\">";
+print "<title>artikolo: $mrk</title></head>\n";
 print "<body>\n";
 
-if ($ago eq 'kreu') {
+# testu la parametrojn
+if ($ago) {
+  # æu $mrk estas valida?
+  if (not $mrk) {
+    FINU("La marko de la artikolo ne estas indikita.\n");
+  };
 
-    # æu $mrk estas valida?
-    if (not $mrk) {
-	FINU("La marko de la artikolo ne estas indikita.\n");
-    };
+  # æu $kiu estas valida?
+  if ((not $kiu) or (length($kiu)<3)) {
+    FINU("Vi ne indikis taýgan nomon vian.\n");
+  };
+}
+
+if ($ago eq 'kreu') {
 
     form("<!doctype vortaro system>\n\n<vortaro>\n<art mrk=\"$mrk\">\n".
 	 "<kap>$mrk</kap>\n...\n</art>\n</vortaro>\n");
 
 } elsif ($ago eq 'forigu') {
 
-    # æu $mrk estas valida?
-    if (not $mrk) {
-	FINU("La marko de la artikolo ne estas indikita.\n");
-    };
-
     # forigu la dosieron kun la artikolo
     #unlink "$vortaro/red/$mrk.sgm";
 
 } elsif ($ago eq 'listigu') {
-
-    # æu $mrk estas valida?
-    if (not $mrk) {
-	FINU("Vi ne donis komencliterojn.\n");
-    };    
 
     # listigu æiujn artikolojn, kies nomo komenciøas je $mrk
     listigu();
 
 } elsif ($ago eq 'redaktu') {
 
-    # æu $mrk estas valida?
-    if (not $mrk) {
-	FINU("La marko de la artikolo ne estas indikita.\n");
-    };
+    local $komencu = 0;
+
+    print "<h1>artikolo \"$mrk\"</h1>";
+    print "<p align=right><a href=\"vokored.pl?ago=info&mrk=$mrk&kiu=$kiu\">"
+         ."versio-informoj</a></p>";
+    #print "<hr>";
 
     # ricevu la SGML-tekston de la artikolo
     $art = malHTMLigu($cgi->param('art'));
@@ -77,58 +97,85 @@ if ($ago eq 'kreu') {
 	$art = checkout();
     };
 
-    local @jade_eraroj;
-    $html = jade($art);
-
-    if (@jade_eraroj) {
-	print "<h2>\"Jade\" redonis erarojn</h2>\n<pre>\n";
-
-	# analizu ilin iomete
-	local $err = 0;
-	for $eraro (@jade_eraroj) {
-#	    print $eraro;
-	$eraro =~ /^[^:]*jade:[^:]*:(\d+:\d+):(.*)$/;
-	$che = $1;
-	$msg = $2;
-	print "æe $che - $msg\n";
-	$err = $err or ($msg !~ /reference to non\-existent ID/);
-	};
-	print "</pre>\n";
-    };
-
-    if (not $err) {
-	if (@jade_eraroj) {
-	    print "Temas pri referenceraroj, kiuj rezultiøas el ";
-	    print "la unuopa trakto de la artikoloj. Vi povas ";
-	    print "ignori ilin.\n";
-	};
-
-	unless ($komencu) {
-	    # skribu la HTML-tekston al art/
-	    checkin($art);
-
-	    print "La þanøoj estas sekurigitaj.<p>";
-	};
+    unless ($art) {
+	print "Nova artikolo.<p>\n";
+	form("<!doctype vortaro system>\n\n<vortaro>\n<art mrk=\"$mrk\">\n".
+	     "<kap>$mrk</kap>\n...\n</art>\n</vortaro>\n");
 
     } else {
-	print "Bonvolu korekti la suprajn erarojn kaj reprovu. ";
-	print "La þanøoj ne estas sekurigitaj pro la eraroj.";
+	local @jade_eraroj;
+	$html = jade($art);
+ 
+	my $err = 0;
+	if (@jade_eraroj) {
+	    print "<h2>\"Jade\" redonis erarojn</h2>\n<pre>\n";
+
+	    # analizu ilin iomete
+	    for $eraro (@jade_eraroj) {
+#	    print $eraro;
+		$eraro =~ /^[^:]*jade:[^:]*:(\d+:\d+):(.*)$/;
+		$che = $1;
+		$msg = $2;
+		print "æe $che - $msg\n";
+		$err = ($err or ($msg !~ /reference to non\-existent ID/));
+	    };
+	    print "</pre>\n";
+	};
+
+	if (not $err) {
+	    if (@jade_eraroj) {
+		print "Temas pri referenceraroj, kiuj rezultiøas el ";
+		print "la unuopa trakto de la artikoloj. Vi povas ";
+		print "ignori ilin.\n";
+	    };
+	    
+	    unless ($komencu) {
+		# skribu la HTML-tekston al art/
+		@output = checkin($art);
+		if (@output) {
+		    print "<h2>Sekurigmesaøoj</h2>\n";
+		    print join("\n<br>",@output);
+		    
+		    if ($output[$#output] =~ /^\s*done\s*$/) {
+			print "<p>La þanøoj estas sekurigitaj.<p>";
+		    };
+		};
+	    };
+
+	} else {
+	    print "Bonvolu korekti la suprajn erarojn kaj reprovu. ";
+	    print "La þanøoj ne estas sekurigitaj pro la eraroj.";
+	};
+
+	# Montru la tekston de la artikolo
+	print "$html<hr>\n";
+	
+	# Donu eblecon reredakti la artikolon
+	form($art);
     };
 
-    # Montru la tekston de la artikolo
-    print "$html<hr>\n";
+    # Al centra paøo
+    print "<hr><a href=\"vokored.pl\">komencopaøo</a>\n";
 
-    # Donu eblecon reredakti la artikolon
-    form($art);
+} elsif ($ago eq "info") {
+
+  # montru versio-informojn
+  print "<pre>\n";
+  print `$rlog $CVSsituo/$mrk.sgm,v`;
+  print "</pre>\n";  
 
 } else {
 
-    # Se ne estas indikita ago montru la startpaøon.
+# Se ne estas indikita ago montru la startpaøon.
 
 print <<EOF
 <h1>Vortaroredaktilo por Voko-vortaroj</h1>
 <form action="vokored.pl" method=post>
-artikolo: <input type=edit name=mrk> (= marko; dosiernomo sen fina¼o)
+via nomo: <input type=edit name=kiu value=$kiu> 
+ (ekz. "L_L_Zamenhof")
+<p>
+artikolo: <input type=edit name=mrk value=$mrk> 
+ (= marko; dosiernomo sen fina¼o)
 <p>
 <input type=submit name=ago value=redaktu>
 <input type=submit name=ago value=kreu>
@@ -149,7 +196,7 @@ sub checkout {
     #print "$checkout $dosiero";
     if (not open IN,"$checkout $dosiero|") {
 	print "komando $checkout $dosiero\n";
-	print "por artikolo $mrk ne sukcesis.\n";
+	print "por artikolo $mrk ne sukcesis. $!\n";
 	print "</body></html>";
 	exit;
     };
@@ -159,6 +206,45 @@ sub checkout {
 }
 
 sub checkin {
+    my $text = $_[0];
+
+    # skribu la tekston en provizoran dosieron
+    # æar ci atendas, ke la dosiernomo estas la sama kiel
+    # la jam ekzistanta dosiero (sen ,v) ni devas
+    # krei subdosieron, alikaze okazus problemoj
+    # se du homoj samtempe aktualigas la saman artikolon
+
+    `mkdir $tmp/$$`;
+    open OUT,">$tmp/$$/$mrk.sgm" or 
+	FINU("Ne povis krei $tmp/$$/$mrk.sgm");
+    print OUT $text;
+    close OUT;
+
+    # æu øi jam ekzistas?
+    if (-s "$CVSsituo/$mrk.sgm,v") {
+
+	#print "$checkin\"$logmsg\" $tmp/$mrk.sgm $CVSsituo/$mrk.sgm,v<p>";
+	# metu en la CVS-deponejon
+	`$lock $CVSsituo/$mrk.sgm,v 2> $tmp/ci-err.$$`;
+	`$checkin\"$logmsg\" -w$kiu $tmp/$$/$mrk.sgm $CVSsituo/$mrk.sgm,v 2>> $tmp/ci-err.$$`;
+
+    } else {
+	
+	`$checkinfirst\"$logmsg\" -w$kiu $tmp/$$/$mrk.sgm $CVSsituo/$mrk.sgm,v 2>> $tmp/ci-err.$$`;
+
+    };
+
+    unlink "$tmp/$$/$mrk.sgm";
+    `rmdir $tmp/$$`;
+    
+    open ERR,"$tmp/ci-err.$$";
+    @err = <ERR>;
+    close ERR;
+    unlink ("$tmp/ci-err.$$");
+    
+#    print @err;
+
+    return @err;
 }
 
 sub jade {
@@ -187,6 +273,10 @@ sub jade {
     close IN;
     unlink "$tmp/$mrk.$$.htm";
 
+    # anstataýigu la referencojn
+    $html =~ s/(<a\s+href=)"\#([a-z]+)"(\s*>)/
+	"$1\"vokored.pl?ago=redaktu&mrk=".lc($2)."\"$3"/ieg;
+
     return $html;
 }
 
@@ -196,8 +286,10 @@ sub form {
 print <<EOF
 <form action="vokored.pl" method=post>
 <input type=hidden name=mrk value=$mrk>
+<input type=hidden name=kiu value=$kiu>
 <textarea name=art rows= 20 cols=80>$text</textarea>
 <p>
+<input type=edit size=40 name=logmsg value="$logmsg">
 <input type=submit name=ago value=redaktu>
 </form>
 EOF
@@ -215,7 +307,8 @@ sub listigu {
 
     for $dos (@dosieroj) {
 	$dos =~ s/.*\/([^\/]+)\.sgm,v$/$1/;
-	print "<a href=\"vokored.pl?ago=redaktu&mrk=$dos\">$dos</a><br>\n";
+	print "<a href=\"vokored.pl?ago=redaktu&mrk=$dos&kiu=$kiu\">"
+              ."$dos</a><br>\n";
     };
 }
 
