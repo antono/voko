@@ -9,7 +9,7 @@ require Exporter;
 #%EXPORT_TAGS = tag => [...];  # define names for sets of symbols
                                                                               
 
-$debug = 1;
+$debug = 0;
 
 
 ################ tests ###############
@@ -151,7 +151,7 @@ sub int_utf8 {
 
 # transformas deksesuman prezenton de unikoda signo al UTF-8
 sub hex_utf8 {
-    utf8(hex($_[0]));
+    int_utf8(hex($_[0]));
 }
 
 # transformas UTF-8-signon al deksesuma prezento
@@ -175,7 +175,8 @@ sub utf8_hex{
 		unpack("c",$3)<<6&0x0FC0|
 		unpack("c",$4)&0x003F);
     } else {
-	$chr;
+	sprintf($format,
+		unpack("c",$chr));
     }
 }
 
@@ -184,9 +185,15 @@ sub cmp_nls {
     my ($w1,$w2,$lng) = @_;
     my $cmp;
     my $fnc = \&{"letterval_$lng"};
+    my $prep = \&{"sortprep_$lng"};
     
     unless (defined &$fnc) { 
 	$fnc = \&letterval_en;
+    }
+
+    if (defined &$prep) {
+	$w1 = &$prep($w1);
+	$w2 = &$prep($w2);
     }
     
     # komparu krude (sen atento de uskleco kaj similaj diferencoj)
@@ -547,6 +554,8 @@ sub letter_asci_eo {
     to_utf8("\000ò") => 'o', 
     to_utf8("\000Ô") => 'o', 
     to_utf8("\000ô") => 'o', 
+    to_utf8("\001\122") => 'o',
+    to_utf8("\001\123") => 'o',    
 
     to_utf8("\000Ú") => 'u', 
     to_utf8("\000ú") => 'u', 
@@ -555,6 +564,22 @@ sub letter_asci_eo {
     to_utf8("\000Û") => 'u', 
     to_utf8("\000û") => 'u' 
     );
+
+$OElig = to_utf8("\001\122");
+$oelig = to_utf8("\001\123");
+
+sub sortprep_fr {
+    my $w = shift;
+
+    print "$w -> " if ($debug);
+
+    $w =~ s/$OElig/Oe/g;
+    $w =~ s/$oelig/oe/g;
+
+    print "-> $w\n" if ($debug);
+
+    return $w;
+}
 
 sub letterval_fr {
     my ($chr,$level) = @_;
@@ -737,8 +762,8 @@ sub letter_asci_ru {
     to_utf8("\000Â") => 'a',
     to_utf8("\000â") => 'a',
 
-    to_utf8("\000Ç") => 'ç',
-    to_utf8("\000ç") => 'ç',
+    to_utf8("\000Ç") => to_utf8("\000ç"),
+    to_utf8("\000ç") => to_utf8("\000ç"),
     to_utf8("\001\036") => to_utf8("\001\037"),
     to_utf8("\001\037") => to_utf8("\001\037"),
 
@@ -749,15 +774,15 @@ sub letter_asci_ru {
     to_utf8("\000Î") => 'i',
     to_utf8("\000î") => 'i',
 
-    to_utf8("\000Ö") => 'ö',
-    to_utf8("\000ö") => 'ö',
+    to_utf8("\000Ö") => to_utf8("\000ö"),
+    to_utf8("\000ö") => to_utf8("\000ö"),
     to_utf8("\001\136") => to_utf8("\001\137"),
     to_utf8("\001\137") => to_utf8("\001\137"),
 
     to_utf8("\000Û") => 'u',
     to_utf8("\000û") => 'u',
-    to_utf8("\000Ü") => 'ü',
-    to_utf8("\000ü") => 'ü',
+    to_utf8("\000Ü") => to_utf8("\000ü"),
+    to_utf8("\000ü") => to_utf8("\000ü"),
     );
 
 sub letterval_tr {
@@ -810,16 +835,299 @@ sub letter_asci_tr {
 
     $chr = letter_tr($chr);
     
-    if ($chr eq 'ç')                    { return 'cx'; }
+    if ($chr eq to_utf8("\000ç"))       { return 'cx'; }
     elsif ($chr eq to_utf8("\001\037")) { return 'gx'; }
     elsif ($chr eq to_utf8("\001\061")) { return 'ix'; }
-    elsif ($chr eq 'ö')                 { return 'ox'; }
+    elsif ($chr eq to_utf8("\000ö"))    { return 'ox'; }
     elsif ($chr eq to_utf8("\001\137")) { return 'sx'; }  
-    elsif ($chr eq 'ü')                 { return 'ux'; }
+    elsif ($chr eq to_utf8("\000ü"))    { return 'ux'; }
     else                                { return $chr; }
 }
 
+
+########################## pola ###########################
+
+my %values_pl_1 = (
+    to_utf8("\000Ä") => 10*ord('a'),    # Ä egalas a
+    to_utf8("\000ä") => 10*ord('a'),    # ä egalas a
+    to_utf8("\000Ö") => 10*ord('o'),    # Ö egalas o
+    to_utf8("\000ö") => 10*ord('o'),    # ö egalas o
+    to_utf8("\000Ü") => 10*ord('u'),    # Ü egalas u
+    to_utf8("\000ü") => 10*ord('u'),    # ü egalas u
+    to_utf8("\000ß") => 10*ord('s')+1   # ß post s
+    );
+
+my %values_pl_2 = (
+    to_utf8("\000Ä") => 10*ord('a')+3,    # Ä post ä
+    to_utf8("\000ä") => 10*ord('a')+2,    # ä post A
+    to_utf8("\000Ö") => 10*ord('o')+3,    # Ö post ö
+    to_utf8("\000ö") => 10*ord('o')+2,    # ö post O
+    to_utf8("\000Ü") => 10*ord('u')+3,    # Ü post ü
+    to_utf8("\000ü") => 10*ord('u')+2,    # ü post U
+    to_utf8("\000ß") => 10*ord('s')+2     # ß post S
+    );
+
+my %values_pl_3 = (
+    to_utf8("\000Ä") => 'a', 
+    to_utf8("\000ä") => 'a',
+    to_utf8("\000Ö") => 'o',
+    to_utf8("\000ö") => 'o',
+    to_utf8("\000Ü") => 'u',
+    to_utf8("\000ü") => 'u' 
+    );
+
+sub letterval_pl {
+    my ($chr,$level) = @_;
+    my ($offset,$values);
+    
+    if ($level == 1) {
+	$values = \%values_pl_1; # kruda
+	$offset = 0;
+    } else {
+	$values = \%values_pl_2; # subtila
+	$offset = 1;
+    };
+    
+    if (! $chr) {
+	return 0;
+    } elsif (ord($chr) >= ord('a') and ord($chr) <= ord('z')) {
+	return 10 * ord($chr);
+    } elsif (ord($chr) >= ord('A') and ord($chr) <= ord('Z')) {
+	return 10 * ord(lc($chr)) + $offset;
+    } elsif ( exists $$values{$chr} ) {
+	return $$values{$chr};
+    } else {
+	return 9999;
+    }
+}
+
+
+sub letter_pl {
+    my $letter = shift;
+    my $chr;
+
+    if (ord($letter) >= ord('a') and ord($letter) <= ord('z')) {
+	return $letter;
+    } elsif (ord($letter) >= ord('A') and ord($letter) <= ord('Z')) {
+	return lc($letter);
+    } elsif ( exists $values_pl_3{$letter} ) {
+	return $values_pl_3{$letter};
+    } else {
+	return '0';
+    }
+}
+
+########################## hungara ###########################
+
+my %values_hu_1 = (
+    to_utf8("\000Ä") => 10*ord('a'),    # Ä egalas a
+    to_utf8("\000ä") => 10*ord('a'),    # ä egalas a
+    to_utf8("\000Ö") => 10*ord('o'),    # Ö egalas o
+    to_utf8("\000ö") => 10*ord('o'),    # ö egalas o
+    to_utf8("\000Ü") => 10*ord('u'),    # Ü egalas u
+    to_utf8("\000ü") => 10*ord('u'),    # ü egalas u
+    to_utf8("\000ß") => 10*ord('s')+1   # ß post s
+    );
+
+my %values_hu_2 = (
+    to_utf8("\000Ä") => 10*ord('a')+3,    # Ä post ä
+    to_utf8("\000ä") => 10*ord('a')+2,    # ä post A
+    to_utf8("\000Ö") => 10*ord('o')+3,    # Ö post ö
+    to_utf8("\000ö") => 10*ord('o')+2,    # ö post O
+    to_utf8("\000Ü") => 10*ord('u')+3,    # Ü post ü
+    to_utf8("\000ü") => 10*ord('u')+2,    # ü post U
+    to_utf8("\000ß") => 10*ord('s')+2     # ß post S
+    );
+
+my %values_hu_3 = (
+    to_utf8("\000Ä") => 'a', 
+    to_utf8("\000ä") => 'a',
+    to_utf8("\000Ö") => 'o',
+    to_utf8("\000ö") => 'o',
+    to_utf8("\000Ü") => 'u',
+    to_utf8("\000ü") => 'u' 
+    );
+
+sub letterval_hu {
+    my ($chr,$level) = @_;
+    my ($offset,$values);
+    
+    if ($level == 1) {
+	$values = \%values_hu_1; # kruda
+	$offset = 0;
+    } else {
+	$values = \%values_hu_2; # subtila
+	$offset = 1;
+    };
+    
+    if (! $chr) {
+	return 0;
+    } elsif (ord($chr) >= ord('a') and ord($chr) <= ord('z')) {
+	return 10 * ord($chr);
+    } elsif (ord($chr) >= ord('A') and ord($chr) <= ord('Z')) {
+	return 10 * ord(lc($chr)) + $offset;
+    } elsif ( exists $$values{$chr} ) {
+	return $$values{$chr};
+    } else {
+	return 9999;
+    }
+}
+
+
+sub letter_hu {
+    my $letter = shift;
+    my $chr;
+
+    if (ord($letter) >= ord('a') and ord($letter) <= ord('z')) {
+	return $letter;
+    } elsif (ord($letter) >= ord('A') and ord($letter) <= ord('Z')) {
+	return lc($letter);
+    } elsif ( exists $values_hu_3{$letter} ) {
+	return $values_hu_3{$letter};
+    } else {
+	return '0';
+    }
+}
+
+########################## chehha ###########################
+
+my %values_cs_1 = (
+    to_utf8("\000Á") => 10*ord('a'),
+    to_utf8("\000á") => 10*ord('a'), 
+    to_utf8("\001\032") => 10*ord('e'),
+    to_utf8("\001\033") => 10*ord('e'),
+    to_utf8("\000Í") => 10*ord('i'),
+    to_utf8("\000í") => 10*ord('i'),
+    to_utf8("\000Ú") => 10*ord('u'),
+    to_utf8("\000ú") => 10*ord('u'),
+    to_utf8("\000Ý") => 10*ord('y'),
+    to_utf8("\000ý") => 10*ord('y'),
+    to_utf8("\001\014") => 10*ord('c')+2,
+    to_utf8("\001\015") => 10*ord('c')+2,
+    to_utf8("\001\140") => 10*ord('s')+2,
+    to_utf8("\001\141") => 10*ord('s')+2,
+    to_utf8("\001\130") => 10*ord('r')+2,
+    to_utf8("\001\131") => 10*ord('r')+2,
+    to_utf8("\001\175") => 10*ord('z')+2,
+    to_utf8("\001\176") => 10*ord('z')+2,
+    to_utf8("\001\116") => 10*ord('d'),
+    to_utf8("\001\117") => 10*ord('d'),
+    to_utf8("\001\107") => 10*ord('n'),
+    to_utf8("\001\110") => 10*ord('n'),
+    to_utf8("\001\144") => 10*ord('t'),
+    to_utf8("\001\145") => 10*ord('t')
+    );
+
+my %values_cs_2 = (
+    to_utf8("\000Á") => 10*ord('a')+2,
+    to_utf8("\000á") => 10*ord('a')+3, 
+    to_utf8("\001\032") => 10*ord('e')+2,
+    to_utf8("\001\033") => 10*ord('e')+3,
+    to_utf8("\000Í") => 10*ord('i')+2,
+    to_utf8("\000í") => 10*ord('i')+3,
+    to_utf8("\000Ú") => 10*ord('u')+2,
+    to_utf8("\000ú") => 10*ord('u')+2,
+    to_utf8("\000Ý") => 10*ord('y')+2,
+    to_utf8("\000ý") => 10*ord('y')+3,
+    to_utf8("\001\014") => 10*ord('c')+2,
+    to_utf8("\001\015") => 10*ord('c')+3,
+    to_utf8("\001\140") => 10*ord('s')+2,
+    to_utf8("\001\141") => 10*ord('s')+3,
+    to_utf8("\001\130") => 10*ord('r')+2,
+    to_utf8("\001\131") => 10*ord('r')+3,
+    to_utf8("\001\175") => 10*ord('z')+2,
+    to_utf8("\001\176") => 10*ord('z')+3,
+    to_utf8("\001\116") => 10*ord('d')+2,
+    to_utf8("\001\117") => 10*ord('d')+3,
+    to_utf8("\001\107") => 10*ord('n')+2,
+    to_utf8("\001\110") => 10*ord('n')+3,
+    to_utf8("\001\144") => 10*ord('t')+2,
+    to_utf8("\001\145") => 10*ord('t')+3
+    );
+
+my %values_cs_3 = (
+    to_utf8("\000Á") => 'a',
+    to_utf8("\000á") => 'a', 
+    to_utf8("\001\032") => 'e',
+    to_utf8("\001\033") => 'e',
+    to_utf8("\000Í") => 'i',
+    to_utf8("\000í") => 'i',
+    to_utf8("\000Ú") => 'u',
+    to_utf8("\000ú") => 'u',
+    to_utf8("\000Ý") => 'y',
+    to_utf8("\000ý") => 'y',
+    to_utf8("\001\014") => to_utf8("\001\015"),
+    to_utf8("\001\015") => to_utf8("\001\015"),
+    to_utf8("\001\140") => to_utf8("\001\141"),
+    to_utf8("\001\141") => to_utf8("\001\141"),
+    to_utf8("\001\130") => to_utf8("\001\131"),
+    to_utf8("\001\131") => to_utf8("\001\131"),
+    to_utf8("\001\175") => to_utf8("\001\176"),
+    to_utf8("\001\176") => to_utf8("\001\176"),
+    to_utf8("\001\116") => 'd',
+    to_utf8("\001\117") => 'd',
+    to_utf8("\001\107") => 'n',
+    to_utf8("\001\110") => 'n',
+    to_utf8("\001\144") => 't',
+    to_utf8("\001\145") => 't',
+    );
+
+sub letterval_cs {
+    my ($chr,$level) = @_;
+    my ($offset,$values);
+    
+    if ($level == 1) {
+	$values = \%values_cs_1; # kruda
+	$offset = 0;
+    } else {
+	$values = \%values_cs_2; # subtila
+	$offset = 1;
+    };
+    
+    if (! $chr) {
+	return 0;
+    } elsif (ord($chr) >= ord('a') and ord($chr) <= ord('z')) {
+	return 10 * ord($chr);
+    } elsif (ord($chr) >= ord('A') and ord($chr) <= ord('Z')) {
+	return 10 * ord(lc($chr)) + $offset;
+    } elsif ( exists $$values{$chr} ) {
+	return $$values{$chr};
+    } else {
+	return 9999;
+    }
+}
+
+
+sub letter_cs {
+    my $letter = shift;
+    my $chr;
+
+    if (ord($letter) >= ord('a') and ord($letter) <= ord('z')) {
+	return $letter;
+    } elsif (ord($letter) >= ord('A') and ord($letter) <= ord('Z')) {
+	return lc($letter);
+    } elsif ( exists $values_cs_3{$letter} ) {
+	return $values_cs_3{$letter};
+    } else {
+	return '0';
+    }
+}
+
+sub letter_asci_cs {
+    my $chr = shift;
+
+    $chr = letter_cs($chr);
+    
+    if ($chr eq to_utf8("\001\015"))    { return 'cx'; }
+    elsif ($chr eq to_utf8("\001\141")) { return 'sx'; }
+    elsif ($chr eq to_utf8("\001\131")) { return 'rx'; }
+    elsif ($chr eq to_utf8("\001\176")) { return 'zx'; }
+    else                                { return $chr; }
+}
+
+
 ###########################################################
+
 
 1;
 
