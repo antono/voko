@@ -785,6 +785,7 @@ sub print_begin {
 <HTML>
 <HEAD>
 <TITLE>$DTDNAME</TITLE>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-3">
 <link titel="artikolo-stilo" type="text/css" rel=stylesheet 
 href="../stl/artikolo.css">
 </HEAD>
