@@ -53,11 +53,9 @@ $rilato_dos=$config{"rilato_dosiero"} ||
 
 $indekso = $config{"indeks_dosiero"} || "$vortaro_pado/sgm/indekso.xml";
 
-$inxtmp_dos = $config{"inxtmp_dosiero"} || $indekso;
-
 # iru al dtd, por ke la dtd estu je ../dtd/vokoxml.dtd
-print "cd $vortaro_pado/dtd\n" if ($verbose);
-chdir("$vortaro_pado/dtd");
+#print "cd $vortaro_pado/dtd\n" if ($verbose);
+#chdir("$vortaro_pado/dtd");
 
 # transformu la dosierojn al HTML
 $xml_pado="$vortaro_pado/xml";
@@ -65,13 +63,13 @@ $art_pado="$vortaro_pado/art";
 
 # kreu indeksdosieron
 
-$command = "xml2inx.pl $verbose $xml_pado > $inxtmp_dos";
+$command = "xml2inx.pl $verbose -c $agord_dosiero $xml_pado";
 print "$command\n" if ($verbose);
 `$command`;
 
 # cd ..
-print "cd $vortaro_pado\n" if ($verbose);
-chdir("$vortaro_pado");
+#print "cd $vortaro_pado\n" if ($verbose);
+#chdir("$vortaro_pado");
 
 # kreu HTML-indeksojn
 $command="rilatoj.pl $verbose $xml_pado > $rilato_dos";

@@ -810,6 +810,8 @@ sub INXSTATISTIKO {
     my $target_file = "$dir/statistiko.html";
     my (@trdj, @fakj);
 
+    %stattrd = read_cfg($config{"statistiko_tradukoj"});
+
     # ek
     #print "$target_file..." if ($verbose);
     open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
@@ -824,12 +826,13 @@ sub INXSTATISTIKO {
     print "<h2>kapvortoj</h2>\n";
     print "artikoloj: ".$statistiko{'art'}."<br>\n";
     print "derivaĵoj: ".$statistiko{'drv'}."<br>\n";
+    print "sencoj: ".$stattrd{'sumo'}."<br>\n";
     print "bildoj: ".$statistiko{'bld'}."<br>\n";
     $n=3;
 
     print "<h2>tradukoj</h2>\n";
     foreach $s (grep(/^lng_/,keys %statistiko)) {
-	push @trdj, [substr($s,4),$statistiko{$s}];
+	push @trdj, [substr($s,4),$statistiko{$s},$stattrd{substr($s,4)}];
     }
     foreach $s (sort {$b->[1] <=> $a->[1]} @trdj) {
 	$lng = $s->[0];
@@ -839,11 +842,13 @@ sub INXSTATISTIKO {
 		print "<img src=\"../smb/xx.png\" alt = \"\">&nbsp;";
 	    }
 	print "$lingvoj{$lng}j: ".$s->[1];
-        my $pcnt = 100*$s->[1]/$statistiko{'drv'};
+        my $pcnt = 100*$s->[2]/$stattrd{'sumo'};
 	printf(" (~ %.02f%%)",$pcnt>100?100:$pcnt);
 	print "<br>\n";
 	$n++;
     };
+    print "(la procentoj rezultas el nombro de tradukitaj sencoj je",
+          " la tuta nombro de sencoj)\n"; 
 
     print "<h2>fakoj</h2>\n";
     foreach $s (grep(/^fak_/,keys %statistiko)) {

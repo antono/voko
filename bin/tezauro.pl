@@ -56,7 +56,8 @@ $dos=$config{"rilato_dosiero"};
 	'super' => '&#x2197;', #'&#x2282;',
 	'prt' => '&#x2199;', #'&#x220b;',
 	'malprt' => '&#x2197;', #'&#2208;',
-	'dif' => '=');
+	'dif' => '=',
+	'ekz' => '-');
 
 %img = ('vid' => 'vid.gif',
 	'sin' => 'sin.gif',
@@ -65,7 +66,8 @@ $dos=$config{"rilato_dosiero"};
 	'super' => 'super.gif',
 	'prt' => 'sub.gif',
 	'malprt' => 'super.gif',
-	'dif' => 'dif.gif');
+	'dif' => 'dif.gif',
+	'ekz' => 'ekz.gif');
 
 die "Ne ekzistas dosierujo \"$dos\""
   unless -f $dos;
@@ -190,13 +192,14 @@ sub start_handler {
     elsif ($el eq 'tez')
     {
 	$tez = create_node(get_attr('mrk',@attrs));
+	$tez->{'nodspc'} = (get_attr('nodspc',@attrs) || 'kap');
 	$kap = '';
 	my ($tip,$cel);
 	# "tez" povas referenci mem al supernocio
 	if ($cel = get_attr('cel',@attrs)) {
 	    $tip = get_attr('tip',@attrs);
 	    # se mankas tipindiko, uzu "vid"
-	    $tip = 'vid' unless ($tip =~ /^dif|sin|ant|sub|super|prt|malprt$/);
+	    $tip = 'vid' unless ($tip =~ /^dif|sin|ant|sub|super|prt|malprt|ekz|lst$/);
 	    push @{$tez->{$tip}}, ($cel);
 	}
     }
@@ -204,7 +207,7 @@ sub start_handler {
     {
 	my $tip = get_attr('tip',@attrs);
 	# se mankas tipindiko, uzu "vid"
-	$tip = 'vid' unless ($tip =~ /^dif|sin|ant|sub|super|prt|malprt$/);
+	$tip = 'vid' unless ($tip =~ /^dif|sin|ant|sub|super|prt|malprt|ekz|lst$/);
 	unless ($xp->current_element() =~ /^art|drv|snc|subsnc$/) {
 	    warn "KOREKTU: <ref> ene de <".$xp->current_element().
 		"> ne estas traktata ($art->{'mrk'})!\n";
@@ -280,6 +283,7 @@ sub get_attr {
 sub create_node {
     my %node;
     $node{'mrk'} = shift;
+    $node{'nodspc'} = 'kap'; # apriore
     return \%node;
 }
 
@@ -323,6 +327,8 @@ sub make_net {
 	make_refs($node,'super','sub');
 	make_refs($node,'prt','malprt');
 	make_refs($node,'malprt','prt');
+	make_refs($node,'ekz','lst');
+	make_refs($node,'lst','ekz');
     }
     print "\n" if ($show_progress);
 }
@@ -582,54 +588,63 @@ sub html_tree {
 	print "<h1><a href=\"".word_ref($node)."\" target=\"precipa\">";
 	print $node->{'kap'};
 	print "</a></h1>\n";
+
+	if ($node->{'nodspc'} eq 'kap') {
 	
-        # la supernocioj
-	if (@{$node->{'super'}}) {
-	    print "<i class=griza>speco de</i><br>\n";
-	    ero($node->{'super'},'super');
-	}
+	    # la supernocioj
+	    if (@{$node->{'super'}}) {
+		print "<i class=griza>speco de</i><br>\n";
+		ero($node->{'super'},'super');
+	    }
 
-        # la tutoj
-	if (@{$node->{'malprt'}}) {
-	    print "<i class=griza>parto de</i><br>\n";
-	    ero($node->{'malprt'},'malprt');
-	}
+	    # la tutoj
+	    if (@{$node->{'malprt'}}) {
+		print "<i class=griza>parto de</i><br>\n";
+		ero($node->{'malprt'},'malprt');
+	    }
 
-        # la difino
-	if (@{$node->{'dif'}}) {
-	    print "<i class=griza>difinito</i><br>\n";
-	    ero($node->{'dif'},'dif');
-	} 
+	    # la difino
+	    if (@{$node->{'dif'}}) {
+		print "<i class=griza>difinito</i><br>\n";
+		ero($node->{'dif'},'dif');
+	    } 
 
 
-	# la sinonimoj
-	if (@{$node->{'sin'}}) {
-	    print "<i class=griza>sinonimoj</i><br>\n";
-	    ero($node->{'sin'},'sin');
-	} 
+	    # la sinonimoj
+	    if (@{$node->{'sin'}}) {
+		print "<i class=griza>sinonimoj</i><br>\n";
+		ero($node->{'sin'},'sin');
+	    } 
 
-	# la antonimoj
-	if (@{$node->{'ant'}}) {
-	    print "<i class=griza>antonimoj</i><br>\n";
-	    ero($node->{'ant'},'ant');
-	}
+	    # la antonimoj
+	    if (@{$node->{'ant'}}) {
+		print "<i class=griza>antonimoj</i><br>\n";
+		ero($node->{'ant'},'ant');
+	    }
 
-	# la subnocioj
-	if (@{$node->{'sub'}}) {
-	    print "<i class=griza>specoj</i><br>\n";
-	    ero($node->{'sub'},'sub');
-	}
+	    # la subnocioj
+	    if (@{$node->{'sub'}}) {
+		print "<i class=griza>specoj</i><br>\n";
+		ero($node->{'sub'},'sub');
+	    }
 
-        # la partoj
-	if (@{$node->{'prt'}}) {
-	    print "<i class=griza>partoj</i><br>\n";
-	    ero($node->{'prt'},'prt');
-	}
-
-	# vidu ankau
-	if (@{$node->{'vid'}}) {
-	    print "<i class=griza>vidu</i><br>\n";
-	    ero($node->{'vid'},'vid');
+	    # la partoj
+	    if (@{$node->{'prt'}}) {
+		print "<i class=griza>partoj</i><br>\n";
+		ero($node->{'prt'},'prt');
+	    }
+	    
+	    # vidu ankau
+	    if (@{$node->{'vid'}}) {
+		print "<i class=griza>vidu</i><br>\n";
+		ero($node->{'vid'},'vid');
+	    }
+	} else {
+	    # la listeroj
+	    if (@{$node->{'ekz'}}) {
+		#print "<i class=griza>speco de</i><br>\n";
+		ero($node->{'ekz'},'ekz');
+	    }
 	}
         
 	index_footer();

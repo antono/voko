@@ -6,15 +6,24 @@
 ################# komenco de la programo ################
 
 use XML::Parser;
+use lib "$ENV{'VOKO'}/bin";
+use vokolib;
 
 while (@ARGV) {
     if ($ARGV[0] eq '-v') {
 	$verbose = 1;
 	shift @ARGV;
+    } elsif ($ARGV[0] eq '-c') {
+	shift @ARGV;
+	$agord_dosiero = shift @ARGV;
     } else {
 	$dos = shift @ARGV;
     };
 };
+
+# legu la agordo-dosieron
+unless ($agord_dosiero) { $agord_dosiero = "cfg/vortaro.cfg" };
+%config = read_cfg($agord_dosiero);
 
 die "Ne ekzistas dosierujo \"$dos\""
   unless -d $dos;
@@ -23,6 +32,10 @@ $radiko='';
 $fako=0;
 $lingvo='';
 $fermu_ekz=0;
+
+$outfile = $config{'inxtmp_dosiero'};
+open OUT, ">$outfile" or die "Ne povas skribi al \"$outfile\": $!\n";
+select OUT;
 
 # indeks-komencon skribu
 print '<?xml version="1.0" encoding="UTF-8"?>';
@@ -54,6 +67,24 @@ closedir DIR;
 
 # indeks-finon skribu
 print "\n</vortaro>\n";
+
+select STDOUT;
+close OUT;
+
+# nombru la tradukitajn sencojn por chiu lingvo
+foreach $trdj (values %sencoj) {
+    foreach $l (@$trdj) {
+	$lingvoj{$l}++;
+    }
+}
+
+$trdfile = $config{'statistiko_tradukoj'};
+open OUT, ">$trdfile" or die "Ne povas skribi al \"$trdfile\": $!\n";
+print OUT "sumo=".scalar(keys %sencoj)."\n";
+while (($l,$n)=each(%lingvoj)) {
+    print OUT "$l=$n\n";
+}
+close OUT;
 
 #################### fino de la programo ####################
 
@@ -92,7 +123,6 @@ sub char_handler {
 sub start_handler {
     my ($xp,$el,@attrs) = @_;
     my $attr;
-
 
     # normale transprenendaj elementoj
     if (
@@ -201,6 +231,31 @@ sub start_handler {
 
     # venas nova radiko, forigu la antauan
     $radiko = '' if ($el eq 'rad');
+
+    # kalkulado de la tradukitaj sencoj
+    if ($el eq 'drv') {
+	$drvmrk = get_attr('mrk',@attrs);
+	warn "Mankas mrk en drv ($file)\n" unless ($drvmrk); 
+	@drvsnc = ();
+	$snccnt = 0;
+    }
+    elsif ($el eq 'snc')
+    {
+	$snccnt++; 
+	$sncmrk = "$drvmrk.$snccnt";
+	push @drvsnc, ($sncmrk);
+	$sencoj{$sncmrk} = [];
+    }
+    elsif (($el eq 'trd' or $el eq 'trdgrp') 
+	   and $lng = get_attr('lng',@attrs)) {
+	if ($xp->in_element('snc') or $xp->in_element('dif')) {
+	    add($sencoj{$sncmrk}, $lng);
+	} elsif ($xp->in_element('drv')) {
+	    foreach $s (@drvsnc) {
+		add($sencoj{$s}, $lng);
+	    }
+	}
+    }
 }
 
 sub end_handler {
@@ -279,6 +334,11 @@ sub get_attr {
     return ''; # atributo ne trovita;
 };           
 
+sub add {
+    my ($list,$what)=@_;
+
+    push @$list, ($what) unless (map {$_ eq $what? 1:()} @$list);
+}
 
 
 
