@@ -10,7 +10,7 @@ $|=1;
 $xsl = $ENV{"VOKO"}.'/xsl/revohtml.xsl';
 $xslt = $ENV{"VOKO"}.'/bin/xslt.sh';
 
-$max_malnovaj=10;     # ne konvertu tro multajn malnovajn
+$max_malnovaj=50;     # ne konvertu tro multajn malnovajn
 $malnova=60*60*24*30*3; # malnova signifas - tri monatoj
 
 while (@ARGV) {
@@ -65,10 +65,11 @@ for $file (sort readdir(DIR)) {
 	$outfile = "$todir/$file";
 	$outfile =~  s/\.xml$/\.html/i;
 	
-	if (not (-e $outfile)                           # ne ekzistas html-dosiero 
+	if (not (-e $outfile)                           # ne ekzistas html-dosiero
+            or not (-s $outfile)                        # malplena html-dosiero 
 	    or ((stat $outfile)[9] < (stat $infile)[9]) # aý estas pli malnova
 	    or $all                                     # aý konvertu æiujn
-	    or ($malnovaj and (time() - (stat $infile)[9] > $malnova)
+	    or ($malnovaj and (time() - (stat $outfile)[9] > $malnova)
 		and ($n++ < $max_malnovaj))) {          
 
 	    # transformu per XSL

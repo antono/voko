@@ -8,7 +8,8 @@ require Exporter;
 # skribas la supran parton de html-ajho
 sub index_header {
     my $title = shift;
-    print 
+    print
+        "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">\n",
 	"<html>\n<head>\n<meta http-equiv=\"Content-Type\" ",
 	"content=\"text/html; charset=UTF-8\">\n",
 	"<title>$title</title>\n",
@@ -29,7 +30,7 @@ sub index_buttons {
     my $bgcolor = 'bgcolor="#AACCAA"';
 
     print 
-	"<script src=\"../smb/butonoj.js\"></script>\n",
+	"<script type=\"text/javascript\" src=\"../smb/butonoj.js\"></script>\n",
 
         (($self eq 'eo')? 
 	 "<img src=\"../smb/nav_eo0.png\" alt=\"[Esperanto]\" border=0>\n":

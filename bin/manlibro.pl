@@ -49,7 +49,7 @@ s/\[\[(.*?)\]\]/formatu_ekz($1)/seg;
 print <<EOH;
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link titel="artikolo-stilo" type="text/css" rel=stylesheet href="../stl/artikolo.css">
+<link title="artikolo-stilo" type="text/css" rel=stylesheet href="../stl/artikolo.css">
 
 <title>$title</title>
 </head>

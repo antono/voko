@@ -889,7 +889,7 @@ sub INX_EO {
 
     #kapvortoj
     if ($config{"inx_eo"}=~/kapvortoj/) {
-	print "<h1>kapvortindekso</h1>\n<font size=+1><b>";
+	print "<h1>kapvortindekso</h1>\n<font size="+1"><b>";
 	for $lit (@literoj) {
 	    $lit1 = letter_asci_nls($lit,'eo');
 	    print "<a href=\"kap_$lit1.html\">$lit</a>\n";

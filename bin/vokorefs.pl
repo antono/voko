@@ -29,6 +29,7 @@ print "\n<vortaro>\n";
 
 my $parser = new XML::Parser(ParseParamEnt => 1,
 			     ErrorContext => 2,
+                             NoLWP => 1,
 			     Handlers => {
 				 Start => \&start_handler,
 				 End   => \&end_handler,
@@ -95,18 +96,20 @@ sub start_handler {
 	print "<$el$attr>";
     }
     elsif ( $el eq 'tld' and 
-	    ($xp->in_element('kap') or
-	     $xp->in_element('ref'))
-	    ) 
+	    ($xp->in_element('kap') #or
+	     #$xp->in_element('ref'))
+	    )) 
     {
 	#$attr = attr_str(@attrs);
 	#print "<tld$attr/>";
 	my $lit = get_attr('lit',@attrs);
 	my $rad = $radiko;
 	if ($lit) {
+	    use bytes;
 	    my $len = length($lit); # necesa, æar en UTF-8 supersignaj literoj
 	                            # estas du-bitokaj
 	    $rad =~ s/^.{$len}/$lit/;
+            no bytes;
 	}           
 	print $rad;
     }

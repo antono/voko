@@ -9,21 +9,21 @@ $maxlen = 80; # maksimuma longeco de linio
 
 #### esploru la argumentojn
 
-while (@ARGV) {
-    if ($ARGV[0] eq '-v') {
-	$verbose = 1;
-	shift @ARGV;
-    } else {
-	$dos = shift @ARGV;
-    };
-};
+#while (@ARGV) {
+#    if ($ARGV[0] eq '-v') {
+#	$verbose = 1;
+#	shift @ARGV;
+#    }; # else {
+#	$dos = shift @ARGV;
+#    };
+#};
 
 #### legu la dosieron
-die "Ne ekzistas dosiero \"$dos\""
-  unless -f $dos;
-open DOS,$dos or die "Ne povis malfermi \"$dos\"\n";
-$buffer = join('',<DOS>);
-close DOS;
+#die "Ne ekzistas dosiero \"$dos\""
+#  unless -f $dos;
+#open DOS,$dos or die "Ne povis malfermi \"$dos\"\n";
+$buffer = join('',<>);
+#close DOS;
 
 #### chiuj traktendajn strukturilojn metu sur propran linion
 

@@ -31,6 +31,7 @@ print "\n<vortaro>\n";
 
 my $parser = new XML::Parser(ParseParamEnt => 1,
 			     ErrorContext => 2,
+                             NoLWP => 1,
 			     Handlers => {
 				 Start => \&start_handler,
 				 End   => \&end_handler,
