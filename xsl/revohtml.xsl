@@ -4,6 +4,7 @@
                 extension-element-prefixes="xt">
 
 <!-- xsl:output method="html" version="3.2"/ -->
+<xsl:strip-space elements="trdgrp"/>
 
 <!--
 
@@ -371,10 +372,10 @@ modifita de Wolfram Diestel
   <xsl:variable name="n">
     <xsl:number level="any" count="fnt[aut|vrk|lok]"/>
   </xsl:variable>
-  <sup class="fnt">
+  <span class="fnt">
     <a name="ekz_{$n}"></a>
-    (<a href="#fnt_{$n}"><xsl:value-of select="$n"/></a>)
-  </sup>
+    [<a href="#fnt_{$n}"><xsl:value-of select="$n"/></a>]
+  </span>
 </xsl:template>
 
 <xsl:template match="klr">
@@ -432,9 +433,9 @@ modifita de Wolfram Diestel
 </xsl:template>
 
 <xsl:template match="ctl">
-  <xsl:text>"</xsl:text>
+  <xsl:text>&#x201e;</xsl:text>
   <xsl:apply-templates/>
-  <xsl:text>"</xsl:text>
+  <xsl:text>&#x201c;</xsl:text>
 </xsl:template>
 
 <xsl:template match="trdgrp|trd">
@@ -536,7 +537,8 @@ modifita de Wolfram Diestel
   </span>
   <xsl:text> </xsl:text>
   <span class="trdnac">
-  <xsl:apply-templates mode="tradukoj"/>
+	<!-- xsl:value-of select="normalize-space(.)"/ -->
+    <xsl:apply-templates mode="tradukoj"/>
   </span>
   <xsl:choose>
     <xsl:when test="not(position()=last())">
@@ -561,10 +563,15 @@ modifita de Wolfram Diestel
 <xsl:template match="snc" mode="tradukoj">
   <xsl:apply-templates select="ancestor::node()[self::drv or
     self::art][1]/kap" mode="tradukoj"/>
-  <xsl:if test="@num">
     <xsl:text> </xsl:text>
-    <xsl:value-of select="@num"/>
-  </xsl:if>
+    <xsl:choose>
+      <xsl:when test="@ref">
+        <xsl:apply-templates mode="number-of-ref-snc" select="id(@ref)"/>
+      </xsl:when>
+      <xsl:when test="count(ancestor::node()[self::drv or self::subart][1]//snc)>1">
+        <xsl:number from="drv|subart" level="any" count="snc" format="1"/>
+      </xsl:when>
+    </xsl:choose>
 </xsl:template>
 
 <xsl:template match="subsnc" mode="tradukoj">
@@ -607,8 +614,7 @@ modifita de Wolfram Diestel
   </xsl:variable>
   <span class="fontoj">
   <a name="fnt_{$n}"></a>
-  <sup><a href="#ekz_{$n}">
-    <xsl:value-of select="$n"/></a>) </sup>
+  <a href="#ekz_{$n}"><xsl:value-of select="$n"/></a>.
   <xsl:apply-templates mode="fontoj" select="aut|vrk|lok"/>
   </span>
   <br />

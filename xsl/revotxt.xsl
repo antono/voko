@@ -6,7 +6,7 @@
 <!-- XSL-difino produktanta simplan HTMLon, kiun per "lynx -dump"
     oni povas plutransformi al simpla teksto -->
 
-<xsl:strip-space elements="kap trd"/>
+<xsl:strip-space elements="kap trd trdgrp"/>
 
 <!-- kruda artikolstrukturo -->
 
@@ -194,10 +194,7 @@
 </xsl:template>
 
 <xsl:template match="fnt[aut|vrk|lok]">
-  <xsl:variable name="n">
-    <xsl:number level="any" count="fnt[aut|vrk|lok]"/>
-  </xsl:variable>
-  <sup>(<xsl:value-of select="$n"/>)</sup>
+  [<xsl:number level="any" count="fnt[aut|vrk|lok]"/>]
 </xsl:template>
 
 <xsl:template match="klr">
@@ -230,6 +227,8 @@
 <xsl:template match="dif/trd">
   <xsl:apply-templates/>
 </xsl:template>
+
+<xsl:template match="bld"/>
 
 <!-- teksto -->
 
@@ -360,10 +359,8 @@
 <!-- fontoj -->
 
 <xsl:template match="fnt" mode="fontoj">
-  <xsl:variable name="n">
-    <xsl:number level="any" count="fnt[aut|vrk|lok]"/>
-  </xsl:variable>
-  <sup><xsl:value-of select="$n"/>) </sup>
+  <xsl:number level="any" count="fnt[aut|vrk|lok]"/>.
+
   <xsl:variable name="fnt" select="normalize-space(.)"/>
   <xsl:choose>
     <xsl:when test="starts-with($fnt,'(')">
