@@ -13,6 +13,7 @@
 ##########################################################
 
 use lib "$ENV{'VOKO'}/bin";
+use vokolib;
 use nls; read_nls_cfg("$ENV{'VOKO'}/cfg/nls.cfg");
 
 ################### agordejo ##############################
@@ -152,7 +153,7 @@ $smb_dir = "$vortaro_pado/smb";
 $out_dir = "$vortaro_pado/$dok_dir"; 
 
 # legu la informojn
-%lingvoj=read_cfg("$lingvoj");
+%lingvoj=read_xml_cfg("$lingvoj",'lingvo','kodo');
 %unuoj=read_entities("$dtd_dir/vokosgn.dtd");
 #read_nls_cfg("$nls_cfg");
 
@@ -288,23 +289,6 @@ unlink($tmp_file);
 
 
 ############### funkcioj ###########
-
-sub read_cfg {
-    $cfgfile = shift;
-    my %hash = ();
-
-    open CFG, $cfgfile 
-	|| die "Ne povis malfermi dosieron \"$cfgfile\": $!\n";
-
-    while ($line = <CFG>) {
-	if ($line !~ /^\#|^\s*$/) {
-	    $line =~ /^([^=]+)=(.*)$/;
-	    $hash{$1} = $2;
-	}
-    }
-    close CFG;
-    return %hash;
-}
 
 # legas vokosgn.dtd kaj elprenas la
 # kodoj kaj liternomojn (unuojn)

@@ -14,6 +14,8 @@
 
 ###########################
 
+use lib "$ENV{'VOKO'}/bin";
+use vokolib;
 
 use XML::Parser;
 
@@ -40,8 +42,8 @@ die "Ne ekzistas dosierujo \"$dos\""
 # legu la agordo-dosieron, fakojn kaj stilojn
 unless ($agord_dosiero) { $agord_dosiero = "cfg/vortaro.cfg" };
 %config = read_cfg($agord_dosiero);
-%fakoj = read_cfg($config{"fakoj"});
-%stiloj = read_cfg($config{"stiloj"});
+%fakoj = read_xml_cfg($config{"fakoj"},'fako','kodo');
+%stiloj = read_xml_cfg($config{"stiloj"},'stilo','kodo');
 
 # HTML-kapo
 if (html) {
@@ -278,22 +280,7 @@ sub linkbuttons {
 	"<br>";
 }
 
-sub read_cfg {
-    $cfgfile = shift;
-    my %hash = ();
 
-    open CFG, $cfgfile 
-	or die "Ne povis malfermi dosieron \"$cfgfile\": $!\n";
-
-    while ($line = <CFG>) {
-	if ($line !~ /^#|^\s*$/) {
-	    $line =~ /^([^=]+)=(.*)$/;
-	    $hash{$1} = $2;
-	}
-    }
-    close CFG;
-    return %hash;
-}
 
 
 

@@ -36,7 +36,7 @@ while (@ARGV) {
 unless ($cfg_file) { $cfg_file = "cfg/vortaro.cfg" };
 
 %config = read_cfg($cfg_file);
-%fakoj = read_cfg($config{'fakoj'});
+%fakoj = read_xml_cfg($config{'fakoj'},'fako','kodo');
 delete $fakoj{'KOMUNE'}; # ne estas vera fako
 
 $revo_baz=$config{"vortaro_pado"};

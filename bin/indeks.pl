@@ -70,10 +70,10 @@ $refdir = '../art/';
 @mallongigoj = ();      # @mallongigoj->@[mrk,kap,mll]
 
 # legu la fakojn
-%faknomoj = read_cfg($config{"fakoj"});
+%faknomoj = read_xml_cfg($config{"fakoj"},'fako','kodo');
 
 # legu la lingvojn
-%lingvoj=read_cfg($config{"lingvoj"});
+%lingvoj=read_xml_cfg($config{"lingvoj"},'lingvo','kodo');
 
 # legu la tutan indeks-dosieron
 print "Legi kaj analizi $inxfn...\n" if ($verbose);

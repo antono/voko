@@ -3,7 +3,8 @@ package vokolib;
 require Exporter;
 @ISA = qw(Exporter);
 
-@EXPORT = qw(index_header index_footer index_buttons read_cfg diff_mv);
+@EXPORT = qw(index_header index_footer index_buttons 
+	     read_cfg read_xml_cfg diff_mv);
 
 # skribas la supran parton de html-ajho
 sub index_header {
@@ -73,13 +74,77 @@ sub read_cfg {
 	    $line =~ s/^#!//; chomp $line;
 	    $hash{'_#!_'} = $line;
 	} elsif ($line !~ /^#|^\s*$/) {
-	    $line =~ /^([^=]+)=(.*)$/;
+	    $line =~ /^([^=]+)=(.*?)\s*$/;
 	    $hash{$1} = $2;
 	}
     }
     close CFG;
     return %hash;
 }
+
+
+sub read_xml_cfg {
+    local ($cfgfile,$proc_el,$proc_attr) = @_;
+    local ($key,$val) = ('','');
+    local %cfg = ();
+
+    die "Dosiero \"$cfgfile\" ne trovighis.\n" unless (-f $cfgfile); 
+    die "Mankas argumento \$proc_el au \$proc_attr\n" 
+        unless ($proc_el and $proc_attr);
+
+    use XML::Parser;
+
+    my $parser = new XML::Parser(ParseParamEnt => 1,
+                                 ErrorContext => 2,
+                                 NoLWP => 1,
+                                 Handlers => {
+                                     Start => \&start_handler,
+                                     End   => \&end_handler,
+                                     Char  => \&char_handler}
+                                 );
+    
+    eval { $parser->parsefile("$cfgfile") }; warn "$cfgfile: $@" if ($@);
+
+    return %cfg;
+    
+    sub char_handler {
+        my ($xp, $text) = @_;
+
+        if ($xp->in_element($proc_el)) {
+            $text = $xp->xml_escape($text);
+            $val .= $text;
+        }
+    }
+
+    sub start_handler {
+        my ($xp,$el,@attrs) = @_;
+        my $attr;
+
+        if ($el eq $proc_el) {
+            $key = get_attr($proc_attr,@attrs);
+            $val = '';
+        }
+    }
+
+    sub end_handler {
+        my ($xp,$el) = @_;
+
+        if ($el eq $proc_el) {
+            $cfg{$key} = $val;
+        }
+    }
+
+    sub get_attr {
+        my($attr_name,@attr_list)=@_;
+
+        while (@attr_list) {
+            if (shift @attr_list eq $attr_name) { 
+                return shift @attr_list 
+                };
+        };
+        return ''; # atributo ne trovita;
+    }
+};           
 
 
 # komparas novan dosieron kun ekzistanta,
