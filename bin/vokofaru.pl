@@ -23,8 +23,7 @@ while (@ARGV) {
     } elsif ($ARGV[0] eq '-v') {
 	$verbose = shift @ARGV;
     } elsif ($ARGV[0] eq '-a') {
-	$xml_html = 1;
-	shift @ARGV;
+	$xml_html_cxiujn = shift @ARGV;
     } else {
 	$vortaro = shift @ARGV; # momente ne plu uzata parametro
     }
@@ -40,24 +39,31 @@ print "cd cvs\n" if ($verbose);
 chdir(cvs);
 
 # transformu la dosierojn al HTML
-if ($xml_html) {
-    print "xml2html_all.pl $verbose revo ../art\n" if ($verbose);
-    `xml2html_all.pl $verbose revo ../art`;
-}
+print "xml2html_all.pl $verbose $xml_html_cxiujn revo ../art\n" if ($verbose);
+`xml2html_all.pl $verbose $xml_html_cxiujn revo ../art`;
+
 
 # kreu indeksdosieron
-print "xml2inx.pl $verbose revo > ../sgm/indekso.xml\n" if ($verbose);
-`xml2inx.pl $verbose revo > ../sgm/indekso.xml`;
+print "xml2inx.pl $verbose revo > ../sgm/indekso.xml~\n" if ($verbose);
+`xml2inx.pl $verbose revo > ../sgm/indekso.xml~`;
 
 # cd ..
 print "cd ..\n" if ($verbose);
 chdir('..');
 
 # kreu HTML-indeksojn
-print "indeks.pl $verbose -dinx -r../art/ sgm/indekso.xml\n" if ($verbose);
-open LOG, "indeks.pl $verbose -dinx -r../art/ sgm/indekso.xml|";
+print "indeks.pl $verbose -dinx -r../art/ sgm/indekso.xml~\n" if ($verbose);
+open LOG, "indeks.pl $verbose -dinx -r../art/ sgm/indekso.xml~|";
 while (<LOG>) { print };
 close LOG;
+
+# se pasis manpleno da tagoj, shovu la indeks-dosieron, por
+# ke ghi atingu la TTT-servilon (sed ja ne tro ofte)
+$tempdif = (stat 'sgm/indekso.xml~')[9] - (stat 'sgm/indekso.xml')[9];
+if ($tmpdif > 7*24*60*60)  {  # 7 tagoj
+    print "pli ol 7 tagoj pasis: mv sgm/indekso.xml~ sgm/indekso.xml\n";
+    `mv sgm/indekso.xml~ sgm/indekso.xml`;
+}
 
 ######## fino ###########
 
@@ -67,7 +73,7 @@ vokofaru.pl (c) VOKO, 1997-1998 - libera softvaro
   
 uzo:
    cd /pado/al/mia/vortaro/
-   vokofaru.pl [-a] [-v] [-h]
+   vokofaru.pl ([-a] [-v] | [-h])
 
    Tio faras el la artikoloj en la subdosierujo xml 
    la indeksojn en HTML-formo en la subdosierujo inx
@@ -76,7 +82,7 @@ uzo:
 
    Por la konvertado estas necesa Perl kun la modulo XML::Parser 
    
-   -a kreu la HTML-artikolojn
+   -a kreu æiujn HTML-artikolojn, ne nur de þanøitaj artikoloj
    -h montru tiun æi helpon
    -v skribu mesaøojn pri la progreso sur la ekranon
 
