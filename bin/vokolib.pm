@@ -6,6 +6,8 @@ require Exporter;
 @EXPORT = qw(index_header index_footer index_buttons 
 	     read_cfg read_xml_cfg diff_mv);
 
+$debug=0;
+
 # skribas la supran parton de html-ajho
 sub index_header {
     my $title = shift;
@@ -156,7 +158,13 @@ sub diff_mv {
 
     if ((! -e $oldfile) or (`diff -q $newfile $oldfile`)) {
 	print "$oldfile\n" if ($verbose);
-	`mv $newfile $oldfile`;
+        if ($debug) {
+	        print "#" x 60, "\n";
+		print `diff $oldfile $newfile`;
+		print "\n","#" x 60, "\n";
+	} else {
+		`mv $newfile $oldfile`;
+	}
 	return 1;
     } else {
 	#print "(senshanghe)\n" if ($verbose);

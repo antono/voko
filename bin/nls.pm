@@ -1,13 +1,18 @@
 package nls;
 
+use v5.6.1;
+
 require Exporter;
 @ISA = qw(Exporter);
 
-@EXPORT = qw(read_nls_cfg pop_utf8char first_utf8char last_utf8char 
-	     defined_nls cmp_nls reverse_utf8 letter_nls letter_asci_nls
-             convert_non_ascii replace to_utf8 utf8_hex nls_lingvoj); 
+@EXPORT = qw(read_nls_cfg defined_nls cmp_nls reverse_utf8 
+	     letter_nls letter_asci_nls dump_nls_info
+             convert_non_ascii replace nls_lingvoj); 
 
 
+$debug=0;
+#no warnings;
+#no bytes;
 
 #read_nls_cfg("/home/revo/voko/cfg/nls.cfg");
 #dump_nls_info("de");
@@ -18,104 +23,17 @@ require Exporter;
 #dump_nls_info("ko");
 
 # $interpunkcio = '[\s,;\.:\(\)\-\'\/\?!\"]';
-$interpunkcio = '[\s,;\.:\(\)\-\'\/\"]';
-
-##################
-
-# bytes | bits | representation
-#     1 |    7 | 0vvvvvvv
-#     2 |   11 | 110vvvvv 10vvvvvv
-#     3 |   16 | 1110vvvv 10vvvvvv 10vvvvvv
-#     4 |   21 | 11110vvv 10vvvvvv 10vvvvvv 10vvvvvv
-
-
-# elprenas UTF-8-signon de la komenco de signaro
-# kaj mallongigas ghin je unu litero
-
-sub pop_utf8char {
-    my $str_ref = \$_[0];
-    my $chr;
-    my $rez;
-    
-    #$$str_ref = reverse($$str_ref);
-    $chr = ord(substr($$str_ref,0,1));
-    
-    if ($chr < 0x80) {
-	$rez = substr($$str_ref,0,1);
-    } elsif ($chr < 0xE0) {
-	$rez = substr($$str_ref,0,2);
-    } elsif ($chr < 0xF0) {
-	$rez = substr($$str_ref,0,3);
-    } else {
-	$rez = substr($$str_ref,0,4);
-    };
-    
-    $$str_ref = substr($$str_ref,length($rez));
-    return $rez;  
-}
-
-# redonas UTF-8-signon de la komenco de signaro 
-#  (sed ne shanghas la signaron)
-sub first_utf8char {
-    my $str = $_[0];
-    return pop_utf8char($str);
-}
-
-# redonas UTF-8-signon de la fino de signaro 
-#  (sed ne shanghas la signaron)
-sub last_utf8char {
-    my $str = $_[0];
-    my $chr; 
-    
-    while ($str) {
-	$chr = pop_utf8char($str);
-    }
-    
-    return $chr;
-}
-
-sub reverse_utf8 {
-    my $str = shift;
-    my $result = '';
-
-    while ($str) {
-	$result = pop_utf8char($str) . $result;
-    }
-
-    return $result;
-}
-
-
-# transformas UTF-8-signon al deksesuma prezento
-sub utf8_hex{
-    my $chr = shift;
-    my $format='0x%04X';
-    
-    if ($chr =~ /([\xC0-\xDF])([\x80-\xBF])/) {
-	sprintf($format,
-		unpack("c",$1)<<6&0x07C0|
-		unpack("c",$2)&0x003F);
-    } elsif ($chr =~ /([\xE0-\xEF])([\x80-\xBF])([\x80-\xBF])/) {
-	sprintf($format,
-		unpack("c",$1)<<12&0xF000|
-		unpack("c",$2)<<6&0x0FC0|
-		unpack("c",$3)&0x003F);
-    } elsif ($chr =~ /([\xF0-\xF7])([\x80-\xBF])([\x80-\xBF])([\x80-\xBF])/) {
-	sprintf($format,
-		unpack("c",$1)<<18&0x1C0000|
-		unpack("c",$2)<<12&0x3F000|
-		unpack("c",$3)<<6&0x0FC0|
-		unpack("c",$4)&0x003F);
-    } else {
-	sprintf($format,
-		unpack("c",$chr));
-    }
-}
+$interpunkcio = '[\s,;\.:\(\)\-\'\/\"]'; #"
 
 # komparu du signovicojn per nacilingva ordig-funkcio
 sub cmp_nls {
+
     my ($vorto1,$vorto2,$lng) = @_;
     my $cmp;
+
+    # perforte diru al Perl, ke temas pri UTF-8
+    $vorto1 = pack("U*",unpack("U*",$vorto1));
+    $vorto2 = pack("U*",unpack("U*",$vorto2));
 
     my $letters = \%{"letters_$lng"};
     my $aliases = \%{"aliases_$lng"};
@@ -127,6 +45,9 @@ sub cmp_nls {
     # ignoru interpunkcion
     $vorto1 =~ s/$interpunkcio//g;
     $vorto2 =~ s/$interpunkcio//g;
+#demandsigno au 0 restu ene!
+#    $vorto1 =~ s/\PL//g;
+#    $vorto2 =~ s/\PL//g;
 
     if (defined %$aliases) {
 	while (($from,$to)=each %$aliases) {
@@ -134,24 +55,31 @@ sub cmp_nls {
 	    $vorto2 = replace($vorto2,$from,$to);
 	}
     }
+
+
     
-    # komparu krude (sen atento de uskleco kaj similaj diferencoj)
-    my ($x,$y) = ($vorto1,$vorto2);
-    do {
-	$cmp = ( $x? (${$$letters{pop_utf8char($x)}}[0] || 99999) : 0 ) 
-	    <=> ( $y? (${$$letters{pop_utf8char($y)}}[0] || 99999) : 0 );
-        } while ($cmp == 0 and ($x or $y));
-    
-    # se la vortoj egalas, komparu pli subtile
-    if ($cmp == 0) {
-	# komparu krude (sen atento de uskleco kaj similaj diferencoj)
-        my ($x,$y) = ($vorto1,$vorto2);
-        do {
-	    $cmp = ( $x? (${$$letters{pop_utf8char($x)}}[1] || 99999) : 0 ) 
-	        <=> ( $y? (${$$letters{pop_utf8char($y)}}[1] || 99999) : 0 );
-            } while ($cmp == 0 and ($x or $y));
+    my $i;
+    for ($i = 0; $i < length($vorto1) and $i < length($vorto2); $i++) {
+	$cmp = (${$$letters{substr($vorto1,$i,1)}}[0] || 99999)
+	  <=> (${$$letters{substr($vorto2,$i,1)}}[0] || 99999);
+        last if ($cmp != 0);
+    }
+
+    # se la vortoj egalas his nun, la pli longa venu poste
+    $cmp = (length($vorto1) <=> length($vorto2)) unless ($cmp); 
+   
+    # se la vortoj plu egalas, komparu pli subtile
+    unless ($cmp) {
+      for ($i = 0; $i < length($vorto1); $i++) {
+	$cmp = (${$$letters{substr($vorto1,$i,1)}}[1] || 99999)
+	  <=> (${$$letters{substr($vorto2,$i,1)}}[1] || 99999);
+        last if ($cmp != 0);
+      }
     }
     
+    print "$vorto1 (".length($vorto1).") <=> $vorto2 (".length($vorto2)."): $cmp\n" 
+	if ($debug);    
+
     return $cmp;
 }
 
@@ -162,6 +90,11 @@ sub letter_nls {
     my $letters = \%{"letters_$lng"};
     my $aliases = \%{"aliases_$lng"};
 
+    # diru al Perl, ke temas pri UTF-8
+#    print "letter_nls: $chr (".length($chr).") - " if ($debug);
+#    $chr = pack("U*",unpack("U*",$chr));
+#    print "letter_nls: $chr (".length($chr).")\n" if ($debug);
+ 
     unless (defined %$letters) {
 	$letters = \%{"letters_la"};
     }
@@ -173,7 +106,10 @@ sub letter_nls {
     }
    
     if (defined %$letters) {
-	return ( ${$$letters{first_utf8char($chr)}}[2] || '?' );
+#	return ( ${$$letters{substr($chr,0,1)}}[2] || '?' );
+#	print "letter_nls 1a: ".unpack("U",$chr).".".
+#	    pack("U",unpack("U",$chr))."\n" if ($debug);
+	return ( ${$$letters{pack("U",unpack("U",$chr))}}[2] || '?' );
     } else {
 	return lc(substr($chr,0,1));
     }
@@ -181,6 +117,12 @@ sub letter_nls {
 
 sub replace {
     my ($str,$from,$to) = @_;
+
+    # perforte diru al Perl, ke temas pri UTF-8
+    $str = pack("U*",unpack("U*",$str));
+    $from = pack("U*",unpack("U*",$from));
+    $to = pack("U*",unpack("U*",$to));
+
     my $lfrom = length($from);
     my $lto = length($to);
 
@@ -188,7 +130,16 @@ sub replace {
 
     $pos = index($str,$from);
     while ($pos>=0) {
+
+	if ($debug) {
+	   # if ($pos+$lfrom > length($str)) {
+		printf("replace: \"$str\" (%i)  \"$from\" (%i) \"$to\" (%i)\n",
+			length($str),length($from),length($to));
+	   # }
+	}
+	no warnings;
 	$str = substr($str,0,$pos).$to.substr($str,$pos+$lfrom);
+	use warnings;
 	$pos = index($str,$from,$pos+$lto);
     }
 
@@ -214,7 +165,7 @@ sub letter_asci_nls {
     }
        
     if (defined %$letters) {
-	return ( ${$$letters{first_utf8char($chr)}}[3] || '0' );
+	return ( ${$$letters{pack("U",unpack("U",$chr))}}[3] || '0' );
     } else {
 	$chr =~ s/[^A-Za-z]/0/; # specialaj signoj ne estu en dosiernomoj
 	return $chr;
@@ -226,6 +177,7 @@ sub letter_asci_nls {
 # nur por testado
 
 sub dump_nls_info {
+    use utf8;
     $lng = shift;
 
     print "[$lng]\n";
@@ -233,12 +185,20 @@ sub dump_nls_info {
     foreach $ali (keys %{"aliases_$lng"}) {
         print "$ali=".${"aliases_$lng"}{$ali}."\n";
     }
-#    foreach $lit (keys %{"letters_$lng"}) {
+
+if ($debug) {
+    use utf8;
+    my $l = (keys %{"letters_$lng"})[0]; 
+    print "len($l): ".length($l)."\n";
+}
+
   foreach $lit (sort
       {cmp_nls($a,$b,$lng)}
-      keys %{"letters_$lng"}) {
+#		{cmp_nls(@{${"letters_$lng"}{$a}}[4],
+#		     @{${"letters_$lng"}{$b}}[4],$lng)}
+      map { pack("U",unpack("U",$_)) } keys %{"letters_$lng"}) {
 
-        print "$lit: ".join(',',@{${"letters_$lng"}{$lit}})."\n";
+      print "$lit: ".join(',',@{${"letters_$lng"}{$lit}})."\n";
     }
     print "\n";
 }
@@ -247,6 +207,7 @@ sub dump_nls_info {
 # pri ordigado kaj alfabeto
 
 sub read_nls_cfg {
+
     $cfg_file = shift;
     my $lng='';
     my ($a,$b,$c);
@@ -313,11 +274,11 @@ sub read_nls_cfg {
 		    $to = hex($1);
 
 		    # plenigu la literotabelon
-		    $minusklo = int_utf8($from);
+		    $minusklo = chr($from);
 		    for ($j = $from; $j<=$to; $j++) {
-			${"letters_$lng"}{int_utf8($j)}=
+			${"letters_$lng"}{chr($j)}=
 			    [1000*$a+($j-$from),1000*$a+($j-$from),
-			     $minusklo,$ascii];
+			     $minusklo,$ascii,chr($j)];
 	            }
 		} else {
 		
@@ -331,6 +292,7 @@ sub read_nls_cfg {
 			$litgrp =~ s/^\s*//;
 			$litgrp =~ s/\s*$//;
 			
+#			print "minusklo: " if ($debug);
 			$minusklo = convert_non_ascii(
 			   (split /\s+/, $litgrp)[$min -1]) unless($minusklo);
 			# renversu alinomigon
@@ -342,9 +304,14 @@ sub read_nls_cfg {
 
 			foreach $lit (split /\s+/, $litgrp) {
 			    $c++;
+#			    print "litero: " if ($debug);
 			    $lit = convert_non_ascii($lit);
+#			    print "length: ".length($lit)."\n" if ($debug);
+
+			    # hier wird scheinbar von Unicode nach Bytes umgew.?
 			    ${"letters_$lng"}{$lit}=
-				[100*$a+10*$b,100*$a+10*$b+$c,$minusklo,$ascii];
+				[100*$a+10*$b,100*$a+10*$b+$c,$minusklo,$ascii,$lit];
+#			print "len1: ".length((keys %{"letters_$lng"})[0])."\n" if ($debug);
 		        }
 		    }
                 }
@@ -361,52 +328,11 @@ sub read_nls_cfg {
 sub convert_non_ascii {
     my $text = shift;
 
-    $text =~ s/([\200-\377])/to_utf8("\000$1")/ieg;
-    $text =~ s/\\u([a-f0-9]{4})/hex_utf8($1)/ieg;
-   
+    $text =~ s/([\200-\377])/pack("U",unpack("C",$1))/ieg;
+    $text =~ s/\\u([a-f0-9]{4})/pack("U",hex($1))/ieg;
+
+#    print "[$text]\n" if ($debug);
     return $text;
-}
-
-# tranformas unuopan unikodan signon al UTF8
-sub to_utf8 {
-    my $uchr = $_[0];
-    my $uval = ord($uchr)*256+ord(substr($uchr,1,1)); 
-    my $chrs = '';
-    
-    if ($uval < 0x80) {
-	$chrs .= ($uchr);
-    }
-    elsif ($uval < 0x800) {
-	$chrs .= chr(0xC0 | $uval >> 6);
-	$chrs .= chr(0x80 | $uval & 0x3F);
-    }
-    elsif ($uval < 0x10000) {
-	$chrs .= chr(0xE0 | $uval >> 12);
-	$chrs .= chr(0x80 | $uval >> 6 & 0x3F);
-	$chrs .= chr(0x80 | $uval & 0x3F);
-    }
-    elsif ($uval < 0x200000) {
-	$chrs .= chr(0xF0 | $uval >> 18);
-	$chrs .= chr(0x80 | $uval >> 12 & 0x3F);
-	$chrs .= chr(0x80 | $uval >> 6 & 0x3F);
-	$chrs .= chr(0x80 | $uval & 0x3F);
-    }
-
-    return $chrs;
-}
-
-
-# transformas entjeran valoron de unikoda signo al UTF-8
-sub int_utf8 { 
-    my($c)=@_;
-    return $c < 0x80 ? chr($c) : 
-        $c < 0x800 ? chr($c >>6&0x3F|0xC0) . chr($c & 0x3F | 0x80) :
-            chr($c >>12&0x0F|0xE0).chr($c >>6&0x3F|0x80).chr($c &0x3F|0x80);
-} 
-
-# transformas deksesuman prezenton de unikoda signo al UTF-8
-sub hex_utf8 {
-    int_utf8(hex($_[0]));
 }
 
 # kontrolas cxu lingvo $lng estas difinita
@@ -435,5 +361,16 @@ sub defined_nls {
 
   return %letr;
 }
+
+
+
+
+
+
+
+
+
+
+
 
 

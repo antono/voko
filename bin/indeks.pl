@@ -215,10 +215,12 @@ sub artikolo {
     # forigu ankau / el la kapvorto por esti komparebla kun
     # derivajhoj
  #   $kap =~ s/\///g;
+    # perforte dir al Perl, ke temas pri UTF-8
+    $rad = pack("U*",unpack("U*",$rad));
 
     # unua kaj lasta litero
     $first_lit = letter_nls($rad,'eo');
-    $last_lit  = letter_nls(last_utf8char($rad),'eo');
+    $last_lit  = letter_nls(substr($rad,length($rad)-1),'eo');
 
     print "1a: $first_lit; l-a: $last_lit\n" if ($debug);
 
@@ -231,7 +233,12 @@ sub artikolo {
     }
 
     # aldonu al kapvortlistoj
-    push @{ $invvortoj{$last_lit } }, [$mrk,$kap,reverse_utf8($rad)];
+    my $reversed_rad = reverse($rad); # sekurigu en variablo, char aliokaze Perl 5.6. forgesas
+                                      # pri la inversigo
+    push @{ $invvortoj{$last_lit } }, [$mrk,$kap,$reversed_rad];
+
+    print "rad: $rad reversed ".reverse($rad)."\n" if ($debug);
+
     $kap =~ s/\///g;
     push @{ $kapvortoj{$first_lit} }, [$mrk,$kap,$rad];
 
@@ -428,7 +435,7 @@ sub traduko {
     # sub kiu litero aperu la vorto?
     $letter = letter_nls($ind,$lng);
 
-    print "trd: $trd ($letter)\n" if ($debug);
+    print "trd $lng: $ind (".length($trd)."-".length($ind)."-$letter)\n" if ($debug);
 
     # enmetu la vorton sub $tradukoj{$lng}->{$letter}
     push @{$tradukoj{$lng}->{$letter}}, [$mrk,$kap,$ind,$trd];
