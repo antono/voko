@@ -90,7 +90,14 @@
 <!ENTITY euml "&#x00eb;">
 <!ENTITY iuml "&#x00ef;">
 
-<!-- portugalaj, hispanaj -->
+<!ENTITY Aring "&#x00c5;">
+<!ENTITY aring "&#x00e5;">
+<!ENTITY AElig "&#x00c6;">
+<!ENTITY aelig "&#x00e6;">
+<!ENTITY Oslash "&#x00d8;">
+<!ENTITY oslash "&#x00f8;">
+
+<!-- portugalaj, hispanaj, katalunaj -->
 
 <!ENTITY Ntilde "&#x00d1;">
 <!ENTITY ntilde "&#x00f1;">   
@@ -99,6 +106,8 @@
 <!ENTITY atilde "&#x00e3;">
 <!ENTITY Otilde "&#x00d5;">
 <!ENTITY otilde "&#x00f5;">
+
+<!ENTITY middot "&#x00b7;">
 
 <!-- grekaj -->
 
@@ -250,6 +259,8 @@
 <!ENTITY dcaron "&#x010f;">
 <!ENTITY Tcaron "&#x0164;">
 <!ENTITY tcaron "&#x0165;">    
+<!ENTITY Uring  "&#x016e;">
+<!ENTITY uring  "&#x016f;">
 
 <!ENTITY Aogonek "&#x0104;">
 <!ENTITY aogonek "&#x0105;">
@@ -266,10 +277,45 @@
 <!ENTITY Zacute "&#x0179;">
 <!ENTITY zacute "&#x017a;">
 
+<!ENTITY alef   "&#x05d0;">
+<!ENTITY bet    "&#x05d1;">
+<!ENTITY gimel  "&#x05d2;">
+<!ENTITY dalet  "&#x05d3;">
+<!ENTITY he     "&#x05d4;">
+<!ENTITY vav    "&#x05d5;">
+<!ENTITY zayin  "&#x05d6;">
+<!ENTITY het    "&#x05d7;">
+<!ENTITY tet    "&#x05d8;">
+<!ENTITY yod    "&#x05d9;">
+<!ENTITY fkaf   "&#x05da;">
+<!ENTITY kaf    "&#x05db;">
+<!ENTITY lamed  "&#x05dc;">
+<!ENTITY fmem   "&#x05dd;">
+<!ENTITY mem    "&#x05de;">
+<!ENTITY fnun   "&#x05df;">
+<!ENTITY nun    "&#x05e0;">
+<!ENTITY samekh "&#x05e1;">
+<!ENTITY ayin   "&#x05e2;">
+<!ENTITY fpe    "&#x05e3;">
+<!ENTITY pe     "&#x05e4;">
+<!ENTITY ftsadi "&#x05e5;">
+<!ENTITY tsadi  "&#x05e6;">
+<!ENTITY qof    "&#x05e7;">
+<!ENTITY resh   "&#x05e8;">
+<!ENTITY shin   "&#x05e9;">
+<!ENTITY tav    "&#x05ea;">
+
 <!-- hungaraj -->
 
+<!-- evitu, char shajne ne launormaj liternomoj -->
 <!ENTITY Odacute "&#x0150;">
 <!ENTITY odacute "&#x0151;">
 <!ENTITY Udacute "&#x0170;">
 <!ENTITY udacute "&#x0171;">
+
+<!-- uzu tiujn anstataue -->
+<!ENTITY Odblac "&#x0150;">
+<!ENTITY odblac "&#x0151;">
+<!ENTITY Udblac "&#x0170;">
+<!ENTITY udblac "&#x0171;">
 

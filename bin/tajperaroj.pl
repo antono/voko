@@ -3,6 +3,15 @@
 # trovas oftajn erarojn en artikoloj, kiuj
 # ne estas sintakseraroj lau la DTD
 
+
+# aldonindaj testoj:
+#
+# - duoblaj tip en refgrp/ref
+# - duoblaj lng en trdgrp/trd
+# - neekzistanta fako en uzo tip=fak
+# - ne jam subtenita/neekzistanta lingvo en trgrp/trd
+# - neekzistanta stilo en uzo tip=stil
+
 ###########################
 
 
@@ -32,7 +41,9 @@ if (html) {
 	"<title>eraro-raporto</title>\n".
 	"<link title=\"indekso-stilo\" type=\"text/css\" ".
 	"rel=stylesheet href=\"../stl/indeksoj.css\">\n".
-	"</head>\n<body><h1>Eraroraporto</h1>\n<dl>\n";
+	"</head>\n<body>";
+    linkbuttons();
+    print "<h1>Eraroraporto</h1>\n<dl>\n";
 }
 
 my $parser = new XML::Parser(ParseParamEnt => 1,
@@ -208,8 +219,31 @@ sub avertu {
     }
 }
 
+# skribas tabelon kun ligoj al precipaj indekspaghoj
+sub linkbuttons {
+    my $bgcolor = 'bgcolor="#AACCAA"';
 
+    print 
+	"<script src=\"../smb/butonoj.js\"></script>\n",
 
+	 "<a href=\"_eo.html\" onMouseOver=\"highlight(0)\" ".
+	 "onMouseOut=\"normalize(0)\">".
+	 "<img src=\"../smb/nav_eo1.png\" alt=\"[Esperanto]\" border=0></a>\n",
+
+	 "<a href=\"_lng.html\" onMouseOver=\"highlight(1)\" ".
+	 "onMouseOut=\"normalize(1)\">".
+	 "<img src=\"../smb/nav_lng1.png\" alt=\"[Lingvoj]\" border=0></a>\n",
+
+	 "<a href=\"_fak.html\" onMouseOver=\"highlight(2)\" ".
+	 "onMouseOut=\"normalize(2)\">".
+	 "<img src=\"../smb/nav_fak1.png\" alt=\"[Fakoj]\" border=0></a>\n",
+
+	 "<a href=\"_ktp.html\" onMouseOver=\"highlight(3)\" ".
+	 "onMouseOut=\"normalize(3)\">".
+	 "<img src=\"../smb/nav_ktp1.png\" alt=\"[ktp.]\" border=0></a>\n",
+
+	"<br>";
+}
 
 
 
