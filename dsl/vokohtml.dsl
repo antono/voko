@@ -9,7 +9,10 @@
 ; kaj estas uzata por transformi SGML-dosieron konstruitan
 ; lau la vortaro-DTD al HTML-dosiero
 ;
-; uzo: jade -t sgml -c dsl/catalog -d dsl/vokohtml.dsl sgm/vortaro.sgml > art/vortaro.html
+; uzo:
+;  cd $VOKO/mia_vortaro 
+;  jade -t sgml -c dsl/catalog -d dsl/vokohtml.dsl sgm/vortaro.sgm \
+;  > titolo.htm
 ;
 ; aldonendas poste: mankantaj elementoj, 
 ; bildoj kaj bildetoj...
@@ -56,9 +59,19 @@
 ; bildetoj aý nura teksto
 (define *simboloj* #t) ; enmetu simbolojn por lingvoj kaj referenctipoj
 
-; *tiparnomo* difinas la uzitan tiparon - øi estu Latin-3-tiparo, (momente ne plu uzata)
+; *tiparnomo* difinas la uzitan tiparon - øi estu Latin-3-tiparo, 
+; (momente ne plu uzata)
 ; (define *tiparnomo* "Times SudEuro")
 
+; kien skribi la artikolojn kaj la indekson
+(define *art-dosiero* "art/")
+(define *inx-dosiero* "sgm/indekso.sgm")
+
+; kie troviøas simboletoj (rilate al la artikoloj)
+(define *smb-dosiero* "../smb/")
+
+; kie troviøas stildosieroj (rilate al la artikoloj)
+(define *stl-dosiero* "../stl/")
 
 ;******************* helpfunkcioj *****************
 
@@ -84,7 +97,7 @@
 ; redonas la nomon de la grafik-dosiero laý la referenctipo
 
 (define (*refsmb-dosiero* tipo)
-  (string-append "../smb/"
+  (string-append *smb-dosiero*
 		 (case tipo
 		   (("VID") "vidu")	
 		   (("SIN") "sinonimo")
@@ -103,11 +116,11 @@
     (("VID") (string-append "-&" "gt; "))	
     (("SIN") (string-append "=&" "gt; "))
     (("DIF") "= ")
-    (("ANT") "x> ")
-    (("SUPER") "/> ")
-    (("SUB") "\\> ")
-    (("PRT") "c> ")
-    (("MALPRT") "e> ")
+    (("ANT") (string-append "x&" "gt; "))
+    (("SUPER") (string-append "/&" "gt; "))
+    (("SUB") (string-append "\\&" "gt; "))
+    (("PRT") (string-append "c&" "gt; "))
+    (("MALPRT") (string-append "e&" "gt; "))
     (else "> ")))
 
 
@@ -125,7 +138,7 @@
 	(list	(list "titel" "artikolo-stilo")
 		(list "type" "text/css")
 		(list "rel" "stylesheet")
-		(list "href" "../stl/artikolo.css"))))
+		(list "href" (string-append *stl-dosiero* "artikolo.css")))))
 
 ; donas la pozicion de la unua okazo de singo en signaro
 
@@ -138,8 +151,8 @@
 (define (*ref->url* ref)
   (let ((pos (*string-pos* #\. ref)))
     (if pos
-	(string-append (string-downcase (substring ref 0 pos)) ".html#" ref) 
-	(string-append (string-downcase ref) ".html"))))
+	(string-append (string-downcase (substring ref 0 pos)) ".htm#" ref) 
+	(string-append (string-downcase ref) ".htm"))))
   
 ; minuskligi signaron
 
@@ -184,7 +197,7 @@
 ;                           transformreguloj 
 ;*********************************************************************
 
-; VORTARO - kreas vortaro.html kaj indekso.sgml
+; VORTARO - kreas titolo.htm kaj indekso.sgm
 ; transformas la vortaron lau la supre donita modo
 
 (element vortaro 
@@ -200,7 +213,7 @@
 		  (else       (with-mode NORMALA (Process-children))))))
   
     ; La indekso estas eltira¼o el vortaro.sgml kaj uzas la saman DTD
-    (make entity system-id: "indekso.sgml"
+    (make entity system-id: *inx-dosiero*
 	  (make sequence
 	    (make document-type name: "vortaro" 
 		  public-id: "-//VoKo//DTD vortaro//EO")
@@ -260,12 +273,14 @@
 	  ;(make sequence
 	  ;  (make element gi: "a" attributes:
 	  ;	  (list (list "href" (string-append 
-	  ;			      (attribute-string "mrk") ".html")))
+	  ;			      (attribute-string "mrk") ".htm")))
 	  ;	  (literal (*titolo*)))
 	  ;  (make empty-element gi: "br"))
           ; kreu novan dosieron por la artikolo
 	  (make entity system-id: 
-		(string-append (string-downcase (attribute-string "mrk")) ".html")
+		(string-append *art-dosiero* 
+			       (string-downcase (attribute-string "mrk")) 
+			       ".htm")
 		(make element gi: "html"
 		      (make element gi: "head"
 			    (*meta-encoding*)
@@ -520,12 +535,14 @@
 	  ;(make sequence
 	  ;  (make element gi: "a" attributes:
 	  ;	  (list (list "href" (string-append 
-	  ;			      (attribute-string "mrk") ".html")))
+	  ;			      (attribute-string "mrk") ".htm")))
 	  ;	  (literal (*titolo*)))
 	  ;  (make empty-element gi: "br"))
           ; kreu novan dosieron por la artikolo
 	  (make entity system-id: 
-		(string-append (string-downcase (attribute-string "mrk")) ".html")
+		(string-append *art-dosiero*
+			       (string-downcase (attribute-string "mrk")) 
+			       ".htm")
 		(make element gi: "html"
 		      (make element gi: "head"
 			    (*meta-encoding*)

@@ -1,0 +1,31 @@
+Prefere legu la informojn en docu/ se vi volas
+krei proprajn vortarojn aý kunevoluigi en VoKo-
+projekto.
+
+Por rapidemaj:
+
+Vi kreas propran HTML-vortaron laý la sekva skemo:
+
+- Preparu dosieron vortaro.sgm kun la enhavo de
+la vortaro. La strukturo konvenu al dtd/vokosgml.dtd
+
+- Iru al dosierujo, kie instaliøu la vortaro(j):
+
+    cd /pado/al/miaj/vortaroj
+
+- Preparu dosierstrukturon por la nova vortaro:
+  
+    vokoprep.pl mia_vort
+ 
+- Þovu la dosieron vortaro.sgm al mia_vort/sgm/vortaro.sgm:
+
+    mv /malnova/loko/vortaro.sgm mia_vort/sgm/vortaro.sgm
+
+- Kreu la HTML-artikoloj kaj indeks-dosierojn ktp.:
+
+    cd mia_vort
+    vokofaru.pl
+
+- Faru postlaborojn, ekz. kopiu bildojn al mia_vort/bld k.a.
+
+
