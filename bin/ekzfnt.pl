@@ -294,10 +294,14 @@ sub preparu_ekz {
     return $ekz;
 }
 
-
+sub linebreaks {
+    $txt = shift;
+    $txt =~ s/[^\n]//sg;
+    return $txt;
+}
 
 sub preparu_dos {
-    my ($enc,$fin) = shift;
+    my ($enc,$fin) = @_;
 
     @frazoj = ();
     my $linio = 1;
@@ -308,7 +312,7 @@ sub preparu_dos {
 
     # forigu chiujn strukturilojn
     if ($fin =~ /html?|sgml?|xml/) {
-       $txt =~ s/<[^>]{1,200}>//sg;
+	$txt =~ s/<([^>]{1,200})>/linebreaks($1)/seg;
     }
 
     # x-konvencio de literoj por poste povi facile apliki

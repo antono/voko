@@ -400,7 +400,7 @@ sub trdgrp {
 	    print "</dl>\n";
             $subart_finished = 1;
 	}
-    } elsif ($xp_>in_element('art')) {
+    } elsif ($xp->in_element('art')) {
         if (($drv_cnt || $snc_cnt || $subart_cnt) && !($art_finished)) {
             print "</dl>\n";
             $art_finished = 1;
@@ -449,7 +449,7 @@ sub trd  {
             print "</dl>\n";
             $subart_finished = 1;
 	}
-    } elsif ($xp_>in_element('art')) {
+    } elsif ($xp->in_element('art')) {
         if (($drv_cnt || $snc_cnt || $subart_cnt) && !($art_finished)) {
             print "</dl>\n";
             $art_finished = 1;
