@@ -29,7 +29,7 @@ modifita de Wolfram Diestel
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <link title="artikolo-stilo" type="text/css" rel="stylesheet"
   href="{$cssdir}/artikolo.css" />
-  <title><xsl:value-of select="/vortaro/art/rad"/></title>
+  <title><xsl:value-of select="/vortaro/art/kap/rad"/></title>
   </head>
   <body>
     <xsl:apply-templates/>
@@ -649,7 +649,7 @@ modifita de Wolfram Diestel
 </xsl:text>
   </b>
   <pre>
-  <xsl:apply-templates/>
+  <xsl:apply-templates mode="admin"/>
   </pre>
 </xsl:template>
 
@@ -660,10 +660,15 @@ modifita de Wolfram Diestel
 <xsl:template match="snc" mode="admin">
   <xsl:apply-templates select="ancestor::node()[self::drv or
     self::art][1]/kap" mode="admin"/>
-  <xsl:if test="@num">
     <xsl:text> </xsl:text>
-    <xsl:value-of select="@num"/>
-  </xsl:if>
+    <xsl:choose>
+      <xsl:when test="@ref">
+        <xsl:apply-templates mode="number-of-ref-snc" select="id(@ref)"/>:
+      </xsl:when>
+      <xsl:when test="count(ancestor::node()[self::drv or self::subart][1]//snc)>1">
+        <xsl:number from="drv|subart" level="any" count="snc" format="1."/>
+      </xsl:when>
+    </xsl:choose>
 </xsl:template>
 
 <xsl:template match="subsnc" mode="admin">
@@ -698,6 +703,11 @@ modifita de Wolfram Diestel
   <xsl:text>~</xsl:text>
 </xsl:template>
 
+<xsl:template match="aut" mode="admin">
+  <xsl:text>[</xsl:text>
+  <xsl:apply-templates/>
+  <xsl:text>]</xsl:text>
+</xsl:template>
 
 <!-- redakto -->
 
