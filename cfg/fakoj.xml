@@ -46,7 +46,7 @@
   <fako kodo="HOR" vinjeto="../smb/HOR.gif">hortikulturo, arbokulturo, silvikulturo</fako>
   <fako kodo="ISL" vinjeto="../smb/ISL.gif">islamo</fako>
   <fako kodo="JUR" vinjeto="../smb/JUR.gif">juro</fako>
-  <fako kodo="KAL">kalendaro, tempomezurado</fako>
+  <fako kodo="KAL" vinjeto="../smb/KAL.gif">kalendaro, tempomezurado</fako>
   <fako kodo="KAT" vinjeto="../smb/KAT.gif">katolikismo</fako>
   <fako kodo="KEM" vinjeto="../smb/KEM.gif">kemio, biokemio</fako>
   <fako kodo="KIN" vinjeto="../smb/KIN.gif">kinoarto</fako>
