@@ -92,6 +92,9 @@ print "\n";
 
 make_net();
 
+#show("uj.0.estrata");
+#show("prefek.0ujo");
+
 # elkalkuli altecojn kaj ero-nombrojn
 
 cnt_and_depth();
@@ -187,7 +190,7 @@ sub start_handler {
 	    $mrk = $snc->{'mrk'}.".".chr(ord('a')+$cnt_snc_subsnc-1);
 	};
 	$subsnc = create_node($mrk);
-	$subsnc->{'kap'} = $drv->{'kap'}." $cnt_drv_snc".chr(ord('a')+$cnt_snc_subsnc-1);
+	$subsnc->{'kap'} = $snc->{'kap'}.chr(ord('a')+$cnt_snc_subsnc-1);
     }
     elsif ($el eq 'tez')
     {
