@@ -106,7 +106,7 @@ sub utf8_hex{
     }
 }
 
-# komparu du signvicojn per nacilingva ordig-funkcio
+# komparu du signovicojn per nacilingva ordig-funkcio
 sub cmp_nls {
     my ($vorto1,$vorto2,$lng) = @_;
     my $cmp;
@@ -154,7 +154,7 @@ sub letter_nls {
     
     if (defined %$aliases) {
 	while (($from,$to)=each %$aliases) {
-	    $chr = replace($chr,$from,$to);
+	    $chr = replace($chr,$from,$to); 
 	}
     }
    
@@ -189,7 +189,7 @@ sub letter_asci_nls {
     
     if (defined %$aliases) {
 	while (($from,$to)=each %$aliases) {
-	    $chr = replace($chr,$from,$to);
+	    $chr = replace($chr,$from,$to); 
 	}
     }
        
@@ -246,7 +246,7 @@ sub read_nls_cfg {
 		$min = 2;
 	    }
 	    # chu anstatauigo de litergrupo
-	    elsif ($line =~ /^\+([^=]+)=(.*)$/) {
+	    elsif ($line =~ /^\+([^=]+)=([^\s]*)\s*$/) {
 		${"aliases_$lng"}{convert_non_ascii($1)}=convert_non_ascii($2);
 	    }
 	    # estas liter-priskribo
@@ -290,7 +290,9 @@ sub read_nls_cfg {
 			   (split /\s+/, $litgrp)[$min -1]);
 			# renversu alinomigon
 			while (($from,$to)=each %{"aliases_$lng"}) {
-			    $minusklo = replace($minusklo,$to,$from);
+			    if ($to) { 
+				$minusklo = replace($minusklo,$to,$from);
+			    }
 			}
 
 			foreach $lit (split /\s+/, $litgrp) {
