@@ -50,7 +50,7 @@ opendir DIR, "$ARTIK";
 
 while ($dos = readdir DIR) {
 
-    if ((-f "$ARTIK/$dos") and ($dos !~ /_vortaro\.sgml?/)) {
+    if ((-f "$ARTIK/$dos") and ($dos !~ /_vortaro\.xml/)) {
 
 	print "$dos\n";
 

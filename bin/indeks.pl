@@ -10,21 +10,29 @@
 
 # konstantoj
 
-$html = '.htm'; # dosierfinajho
+$html = '.html'; # dosierfinajho
 
 $|=1;
 
 # analizu la argumentojn
 
-if ($ARGV[0] =~ /^\-d/) {
-    $dir = shift @ARGV;
-    $dir =~ s/^\-d//;
-} else { $dir = '.' };
-if ($ARGV[0] =~ /^\-r/) {
-    $refdir = shift @ARGV;
-    $refdir =~ s/^\-r//;
-} else { $refdir = '../art/' };
-$inxfn=shift @ARGV;
+while (@ARGV) {
+    if ($ARGV[0] eq '-v') {
+	$verbose = 1;
+	shift @ARGV;
+    } elsif ($ARGV[0] =~ /^\-d/) {
+	$dir = shift @ARGV;
+	$dir =~ s/^\-d//;
+    } elsif ($ARGV[0] =~ /^\-r/) {
+	$refdir = shift @ARGV;
+	$refdir =~ s/^\-r//;
+    } else {
+	$inxfn=shift @ARGV;
+    }
+}
+
+$dir ='.' unless $dir;
+$refdir = '../art/' unless $refdir;
 
 # kelkaj konstantoj
 $pluraj = ($refdir !~ /#$/);
@@ -33,7 +41,7 @@ $inxref = "<i><a href=\"indeksoj$html\">".
 $inxstl = "<link titel=\"indekso-stilo\" type=\"text/css\" ".
 	   "rel=stylesheet href=\"../stl/indeksoj.css\">\n";
 $cntdecl = "<meta http-equiv=\"Content-Type\" content=\"text/html; ".
-	   "charset=ISO-8859-3\">";
+	   "charset=UTF-8\">";
 
 
 %faknomoj=('2MAN'=>'komunuza senco',
@@ -255,8 +263,6 @@ $cntdecl = "<meta http-equiv=\"Content-Type\" content=\"text/html; ".
 	    'zu'=>'zulua'
 );    
 
-#	   print "$lingvoj{'de'}; $lingvoj{'he'}\n";
-
 @alfabeto = ('a','b','c',"\346",'d','e','f','g',"\370",'h',"\266",'i','j',
 	      "\274",'k','l','m','n','o','p','r','s',"\376",'t','u',"\375",
 	     'v','z');
@@ -264,14 +270,14 @@ $cntdecl = "<meta http-equiv=\"Content-Type\" content=\"text/html; ".
 
 # legu la tutan indeks-dosieron
 
-print "Legi $inxfn...\n";
+print "Legi $inxfn...\n" if ($verbose);
 open INX,$inxfn or die "Ne povis malfermi $inxfn\n";
 $inx=join('',<INX>);
 close INX;
 
 # traktu cxiujn unuopajn indekserojn
 
-print "Analizi la indekserojn...\n";
+print "Analizi la indekserojn...\n" if ($verbose);
 $inx =~ s/<art\s+mrk="([^"]*)"\s*>(.*?)<\/art\s*>/ARTIKOLO($1,$2)/sieg;
 
 # kreu la html-dosierojn
@@ -413,7 +419,7 @@ sub FAKINX {
     open OUT,">$dir/fx_$fk$html" or die "Ne povis krei $dir/fx_$fk$html\n";
 
     select STDOUT;
-    print "Skribi $dir/fx_$fk$html\n";
+    print "Skribi $dir/fx_$fk$html\n" if ($verbose);
     select OUT;
 
     print "<html><head><title>fakindekso por ".$faknomoj{$fak}."</title>\n";
@@ -430,7 +436,7 @@ sub FAKINX {
 	};
     };
 
-    print "$inxref</body></html>\n";
+    print "<p>$inxref</body></html>\n";
     close OUT;
 }
 
@@ -447,7 +453,7 @@ sub LINGVINX {
     open OUT,">$dir/lx_$ln$html" or die "Ne povis krei $dir/lx_$ln$html\n";
 
     select STDOUT;
-    print "Skribi $dir/lx_$ln$html\n";
+    print "Skribi $dir/lx_$ln$html\n" if ($verbose);
     select OUT;
 
     $lingvo =~ s/[oe]$/a/;
@@ -461,7 +467,7 @@ sub LINGVINX {
 	print "target=\"precipa\">$ref->[1]</a><br>\n";
     };
 
-    print "$inxref</body></html>\n";
+    print "<p>$inxref</body></html>\n";
     close OUT;
 }
 
@@ -477,18 +483,19 @@ sub KAPVORTINX {
 	die "Ne povis krei $dir/ix_kap$lit1$html\n";
 
     select STDOUT;
-    print "Skribi $dir/ix_kap$lit1$html\n";
+    print "Skribi $dir/ix_kap$lit1$html\n" if ($verbose);
     select OUT;
 
-    print "<html><head><title>kapvortoindekso sekcio $lit</title>\n";
+    print "<html><head><title>kapvortoindekso sekcio $lit1</title>\n";
     print "$inxstl\n$cntdecl</head><body>\n";
     print "$inxref\n";
     for $a (@literoj) { 
 	if ($a ne $lit) {
-	    print "<a href=\"ix_kap".enmetu_x($a)."$html\">$a</a>\n"; 
-	} else { print "<b>$a</b> "; };
+	    print "<a href=\"ix_kap".enmetu_x($a)."$html\">"
+		.Lat3_UTF8($a)."</a>\n"; 
+	} else { print "<b>".Lat3_UTF8($a)."</b> "; };
     };
-    print "<h1>kapvortoj $lit...</h1>\n";
+    print "<h1>kapvortoj ".Lat3_UTF8($lit)."...</h1>\n";
 
     foreach $ref (@kapvortoj) {
 	my $vrt = lc(LIT($ref->[1]));
@@ -511,8 +518,9 @@ sub KAPVORTINX {
 	print "<p>$inxref\n";
 	for $a (@literoj) { 
 	    if ($a ne $lit) {
-		print "<a href=\"ix_kap".enmetu_x($a)."$html\">$a</a>\n"; 
-	    } else { print "<b>$a</b> "; };
+		print "<a href=\"ix_kap".enmetu_x($a)."$html\">"
+		    .Lat3_UTF8($a)."</a>\n"; 
+	    } else { print "<b>".Lat3_UTF8($a)."</b> "; };
 	};
     };
 
@@ -527,7 +535,7 @@ sub SIMPLKAPVORTINX {
 	die "Ne povis krei $dir/ix_kap$html\n";
 
     select STDOUT;
-    print "Skribi $dir/ix_kap$html\n";
+    print "Skribi $dir/ix_kap$html\n" if ($verbose);
     select OUT;
 
     print "<html><head><title>kapvortoindekso</title>\n";
@@ -565,10 +573,10 @@ sub INVKAPVORTINX {
 	die "Ne povis krei $dir/ix_inv$lit1$html\n";
 
     select STDOUT;
-    print "Skribi $dir/ix_inv$lit1$html\n";
+    print "Skribi $dir/ix_inv$lit1$html\n" if ($verbose);
     select OUT;
 
-    print "<html><head><title>inversa kapvortoindekso sekcio $lit</title>\n";
+    print "<html><head><title>inversa kapvortoindekso sekcio $lit1</title>\n";
     print "$inxstl\n$cntdecl</head><body>\n";
     print "$inxref\n";
     for $a (@invliteroj) { 
@@ -576,7 +584,7 @@ sub INVKAPVORTINX {
 	    print "<a href=\"ix_inv".enmetu_x($a)."$html\">$a</a>\n"; 
 	} else { print "<b>$a</b> "; };
     };
-    print "<h1>inversa indekso ...$lit</h1>\n";
+    print "<h1>inversa indekso ...".Lat3_UTF8($lit)."</h1>\n";
 
     foreach $ref (@kapvortoj) {
 	my $inv = lc(INVLIT($ref->[1]));
@@ -599,8 +607,9 @@ sub INVKAPVORTINX {
 	print "<p>$inxref\n";
 	for $a (@invliteroj) { 
 	    if ($a ne $lit) {
-		print "<a href=\"ix_inv".enmetu_x($a)."$html\">$a</a>\n"; 
-	    } else { print "<b>$a</b> "; };
+		print "<a href=\"ix_inv".enmetu_x($a)."$html\">"
+		    .Lat3_UTF8($a)."</a>\n"; 
+	    } else { print "<b>".Lat3_UTF8($a)."</b> "; };
 	};
     };
 
@@ -612,11 +621,11 @@ sub SIMPLINVKAPVORTINX {
     my $ref,$r,$n=0;
     my $last0,$last1;
  
-   open OUT,">$dir/ix_inv.htm" or 
+   open OUT,">$dir/ix_inv$html" or 
 	die "Ne povis krei $dir/ix_inv$html\n";
 
     select STDOUT;
-    print "Skribi $dir/ix_inv$html\n";
+    print "Skribi $dir/ix_inv$html\n" if ($verbose);
     select OUT;
 
     print "<html><head><title>inversa kapvortoindekso</title>\n";
@@ -652,15 +661,14 @@ sub INXLIST {
     open OUT,">$dir/indeksoj$html" or die "Ne povis krei $dir/indeksoj$html\n";
 
     select STDOUT;
-    print "Skribi $dir/indeksoj$html\n";
+    print "Skribi $dir/indeksoj$html\n" if ($verbose);
     select OUT;
 
     print "<html><head><title>indekslisto</title>\n";
     print "$inxstl\n$cntdecl</head><body>\n";
     print "<h2><a href=\"../titolo$html\" target=\"precipa\">";
-    print "titolpaøo</a></h2>\n";
-    print "<h2><a href=\"../sercxo$html\" target=\"precipa\">seræo</a></h2>\n";
-#    print "<h2>indeksoj</h2>";
+    print "titolpa\304\235o</a></h2>\n";
+    print "<h2><a href=\"../sercxo$html\" target=\"precipa\">ser\304\211o</a></h2>\n";
     print "<dl>\n";
 
     if ($pluraj) {
@@ -668,7 +676,7 @@ sub INXLIST {
 	print "<dt>kapvortindekso\n<dd><b>";
 	for $lit (@literoj) {
 	    $lit1 = enmetu_x($lit);
-	    print "<a href=\"ix_kap$lit1$html\">$lit</a>\n";
+	    print "<a href=\"ix_kap$lit1$html\">".Lat3_UTF8($lit)."</a>\n";
 	};
 	print "</b>\n";
 
@@ -676,7 +684,7 @@ sub INXLIST {
 	print "<dt>inversa indekso\n<dd>";
 	for $lit (@invliteroj) {
 	    $lit1 = enmetu_x($lit);
-	    print "<a href=\"ix_inv$lit1$html\">$lit</a>\n";
+	    print "<a href=\"ix_inv$lit1$html\">".Lat3_UTF8($lit)."</a>\n";
 	};
     } else {
 	#kapvortoj
@@ -694,7 +702,7 @@ sub INXLIST {
 	{
 	    $lng=lc($lng);
 	    my $ln=substr($lng,0,5);
-	    print "<a href=\"lx_$ln.htm\">";
+	    print "<a href=\"lx_$ln$html\">";
 	    print "$lingvoj{$lng}</a><br>\n";
 	};
     };
@@ -704,7 +712,7 @@ sub INXLIST {
 	print "<dt>fakindeksoj\n<dd>";
 	for $fak (sort keys %fakoj) 
 	{
-	    print "<a href=\"fx_".lc($fak).".htm\">";
+	    print "<a href=\"fx_".lc($fak)."$html\">";
 	    print "<img src=\"../smb/".uc($fak).".gif\"";
 	    my $fknm=$faknomoj{uc($fak)};
 	    print "alt=\"$fknm\" border=0></a>\n";
@@ -752,19 +760,28 @@ sub INVTROVU {
 sub LIT {
     my $vort = lc($_[0]);
 
-    # konverti la e-literojn al cx ... ux
-    $vort =~ s/\306/cx/g;
-    $vort =~ s/\330/gx/g;
-    $vort =~ s/\246/hx/g; 
-    $vort =~ s/\254/jx/g;
-    $vort =~ s/\336/sx/g;
-    $vort =~ s/\335/ux/g;
-    $vort =~ s/\346/cx/g;
-    $vort =~ s/\370/gx/g;
-    $vort =~ s/\266/hx/g;
-    $vort =~ s/\274/jx/g;
-    $vort =~ s/\376/sx/g; 
-    $vort =~ s/\375/ux/g;
+    # konverti la e-literojn de Lat-3 al cx ... ux
+#    $vort =~ s/\306/cx/g;
+#    $vort =~ s/\330/gx/g;
+#    $vort =~ s/\246/hx/g; 
+#    $vort =~ s/\254/jx/g;
+#    $vort =~ s/\336/sx/g;
+#    $vort =~ s/\335/ux/g;
+#    $vort =~ s/\346/cx/g;
+#    $vort =~ s/\370/gx/g;
+#    $vort =~ s/\266/hx/g;
+#    $vort =~ s/\274/jx/g;
+#    $vort =~ s/\376/sx/g; 
+#    $vort =~ s/\375/ux/g;
+
+    # konverti la e-literojn de UTF-8 al cx ... ux
+    $vort =~ s/\304[\210\211]/cx/g;
+    $vort =~ s/\304[\234\235]/gx/g;
+    $vort =~ s/\304[\244\245]/hx/g;
+    $vort =~ s/\304[\264\265]/jx/g;
+    $vort =~ s/\305[\234\235]/sx/g;
+    $vort =~ s/\305[\254\255]/ux/g;
+
     # forigi finajxon
     $vort =~ s/[\/1-9](?:[aeio]|oj)$//;
     # forigi cxiujn ne-literojn
@@ -779,19 +796,28 @@ sub LIT {
 sub INVLIT {
     my $vort = reverse(lc($_[0]));
 
-    # konverti la e-literojn al cx ... ux
-    $vort =~ s/\306/cx/g;
-    $vort =~ s/\330/gx/g;
-    $vort =~ s/\246/hx/g; 
-    $vort =~ s/\254/jx/g;
-    $vort =~ s/\336/sx/g;
-    $vort =~ s/\335/ux/g;
-    $vort =~ s/\346/cx/g;
-    $vort =~ s/\370/gx/g;
-    $vort =~ s/\266/hx/g;
-    $vort =~ s/\274/jx/g;
-    $vort =~ s/\376/sx/g; 
-    $vort =~ s/\375/ux/g;
+    # konverti la e-literojn de Lat-3 al cx ... ux
+#    $vort =~ s/\306/cx/g;
+#    $vort =~ s/\330/gx/g;
+#    $vort =~ s/\246/hx/g; 
+#    $vort =~ s/\254/jx/g;
+#    $vort =~ s/\336/sx/g;
+#    $vort =~ s/\335/ux/g;
+#    $vort =~ s/\346/cx/g;
+#    $vort =~ s/\370/gx/g;
+#    $vort =~ s/\266/hx/g;
+#    $vort =~ s/\274/jx/g;
+#    $vort =~ s/\376/sx/g; 
+#    $vort =~ s/\375/ux/g;
+
+    # konverti la e-literojn de UTF-8 al cx ... ux
+    $vort =~ s/\304[\210\211]/cx/g;
+    $vort =~ s/\304[\234\235]/gx/g;
+    $vort =~ s/\304[\244\245]/hx/g;
+    $vort =~ s/\304[\264\265]/jx/g;
+    $vort =~ s/\305[\234\235]/sx/g;
+    $vort =~ s/\305[\254\255]/ux/g;
+
     # forigi finajxon
     $vort =~ s/^(?:[aeio]|oj)[\/1-9]//;
     # forigi cxiujn ne-literojn
@@ -819,9 +845,9 @@ sub REFERENCO {
 	# povus montri en tian dosieron
 	if ($ref =~ /^([^\.]*)\.(.*)$/) {
 	    my $r1=$1; my $r2=$2;
-	    $rez="$refdir".lc($r1).".htm#".uc($r2);
+	    $rez="$refdir".lc($r1)."$html#".uc($r2);
 	} else {
-	    $rez="$refdir".lc($ref).".htm";
+	    $rez="$refdir".lc($ref)."$html";
 	};
     };
     return $rez;
@@ -838,6 +864,21 @@ sub enmetu_x {
 
     return $lit;
 };
+
+sub Lat3_UTF8 {
+    my $vort = $_[0];
+    $vort =~ s/\346/\304\211/g;
+    $vort =~ s/\370/\304\235/g;
+    $vort =~ s/\266/\304\245/g;
+    $vort =~ s/\274/\304\265/g;
+    $vort =~ s/\376/\305\235/g;
+    $vort =~ s/\375/\305\255/g;
+    return $vort;
+}
+
+
+
+
 
 
 

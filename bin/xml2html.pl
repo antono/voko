@@ -1,95 +1,430 @@
-#!/usr/bin/perl
-############################################################
-# Konvertas la dokumenton grimpado.xml al HTML-versio kun
-# indeksoj
-############################################################
+#!/usr/bin/perl -w
+#
 
-# shargu la helpfunkciojn
+################## parametroj ########################
 
-push (@INC,'pwd');
-use  xmlpack;
+$lng_simboloj = 1; # enmetu simbolojn por lingvoj
+$ref_simboloj = 1; # enmetu simbolojn por referenctipoj
+$fak_simboloj = 1; # enmetu simbolojn por fakoj
+$redakto_cgi  = '/cgi-bin/redakti.pl'; # ligo al redakto-programo
 
-# la konvertenda dokumento kaj la celpado
+# kie troviøas simboletoj (rilate al la artikoloj)
+$smb_dosierujo = "../smb";
+%refsmb_bildo = ("vid"    => "vidu.gif",
+		 "sin"    => "sinonimo.gif",
+		 "dif"    => "difino.gif",
+		 "ant"    => "antonimo.gif",
+		 "super"  => "supernoc.gif",
+		 "sub"    => "subnocio.gif",
+		 "prt"    => "parto.gif",
+		 "malprt" => "malparto.gif");
 
-$dokumento = '../vortaro/grimpad.xml';
-$celpado = '../html/';
-$celdosiero = 'grimpado.html';
+%refsmb_teksto = ("vid"    => "-&gt;",
+		  "sin"    => "=&gt;",
+		  "dif"    => "=",
+		  "ant"    => "x&gt;",
+		  "super"  => "^",
+		  "sub"    => "v",
+		  "prt"    => "c&gt;",
+		  "malprt" => "e&gt;");
 
-# indikoj por la HTML-dokumento
+# kie troviøas stildosiero (rilate al la artikoloj)
+$stl_dosiero = "../stl/artikolo.css";         
 
-$titolo = "Terminareto pri Grimpado kaj Montmigrado";
-$kopirajto = '<address>Wolfram Diestel '
-	.'&lt;diestel@rzaix340.rz.uni-leipzig.de&gt;</address>';
-$stiloj1 = "<style type=\"text/css\">"
-	."H1 {color:#008080;font-family:sans-serif}"
-	."H2 {color:#007000;text-indent:-5;font-family:sans-serif}</style>\n";
-$stiloj2 = "<style type=\"text/css\">"
-	."H1 {color:#008080;font-family:sans-serif}"
-	."H2 {color:#007000;font-family:sans-serif}</style>\n";
+@romanaj_nombroj = ('0','I','II','III','IV','V','VI','VII','VIII','IX','X');
 
-# parametroj por la konverto-objekto
+################# komenco de la programo ################
 
-%parametroj = (
-   'dosiernomo' => $dokumento,
-   'simbolpado' => '../simboloj/',
-   'bildopado'  => '../bildoj/');
+use XML::Parser;
 
-################### komenco de la programeto #####################
+my $file = shift;
+if ($file) {
+    die "Can't find file \"$file\""
+	unless -f $file;
 
-# malfermu la celdokumenton
-
-open (VORTARO,">$celpado$celdosiero"); select VORTARO;
-print "<html><head><title>$titolo</title>$stiloj1</head>\n";
-print "<body><h1>$titolo</h1>\n\n";
-
-# malfermu la XML-vortaron
-
-$artikolaro = nova xmlpack(%parametroj);
-$artikolaro -> malfermu;
-
-# prilaboru ghin
-
-while ($artikolaro -> legu_artikolon) {
-  print ($artikolaro -> transformu_artikolon_al_HTML);
-  print "<hr>\n\n";
-  %kapvortoj  = (%kapvortoj,$artikolaro->kion_indeksi('<kapvorto[^>]*>(.*?)</kapvorto>'));
-  %esperanta = (%esperanta,$artikolaro -> kion_indeksi('<kapo[^>]*>(.*?)</kapo>'));
-  %angla     = (%angla,$artikolaro -> kion_indeksi('<traduko[^>]*lingvo=.angla.[^>]*>(.*?)</traduko>'));
-  %franca    = (%franca,$artikolaro -> kion_indeksi('<traduko[^>]*lingvo=.franca.[^>]*>(.*?)</traduko>'));
-  %germana   = (%germana,$artikolaro -> kion_indeksi('<traduko[^>]*lingvo=.germana.[^>]*>(.*?)</traduko>'));
-  %hispana   = (%hispana,$artikolaro -> kion_indeksi('<traduko[^>]*lingvo=.hispana.[^>]*>(.*?)</traduko>'));
+    $title = $file; $title =~ s/\.xml//i;
+} else {
+    $title = 'artikolo';
 }
 
-# fermu la vortaron
+my $parser = new XML::Parser(Style => 'Subs', 
+			     ParseParamEnt => 1,
+			     ErrorContext => 2, 
+			     Handlers => {
+				 Char  => \&char_handler}
+			     );
 
-print "$kopirajto</body></html>";
-select STDIN; close VORTARO;
+$snc_cnt=0;
+$subdrv_cnt=0;
+$subsnc_cnt=0;
+$subart_cnt=0;
+$head_level=2;
+$radiko='';
+$marko='';
 
-# kreu la indeksojn
+if ($file) {
+    $parser->parsefile($file);
+} else {
+    $parser->parse(*STDIN);
+}
 
-kreu_indekson('kapvortoj.html','Indekso de la Kapvortoj',%kapvortoj);
-kreu_indekson('esperanta.html','Esperanta Indekso',%esperanta);
-kreu_indekson('angla.html','Angla Indekso',%angla);
-kreu_indekson('franca.html','Franca Indekso',%franca);
-kreu_indekson('germana.html','Germana Indekso',%germana);
-kreu_indekson('hispana.html','Hispana Indekso',%hispana);
+#print_html($tree);
 
-sub kreu_indekson {
-  my ($dosiero,$indekso,%vortoj) = @_;
+#################### fino de la programo ####################
 
-  open (INDEKSO,">$celpado$dosiero"); select INDEKSO;
-  print "<html></head><title>$titolo - $indekso</title>$stiloj2</head>\n";
-  print "<body><h1>$titolo</h1><h2>$indekso</h2>\n\n";
 
-  # skribu chiujn vortojn ordigite
+################## traktantoj de analiz-eventoj ################
+ 
 
-  foreach $vorto (sort(keys %vortoj)) {
-    $marko = $vortoj{$vorto};
+sub get_attr($@) {
+    my($attr_name,@attr_list)=@_;
+    
+    while (@attr_list) {
+	if (shift @attr_list eq $attr_name) { return shift @attr_list };
+    };
+    return ''; # atributo ne trovita;
+};
 
-    print "<a href=\"$celdosiero#$marko\">";
-    print "$vorto</a><br>\n";
+sub char_handler
+{
+    my ($xp, $text) = @_;
+
+    if (length($text)) {
+
+      $text = $xp->xml_escape($text)
+        unless $in_cdata;
+
+      print $text;
+    }
+}  # End char_handler      
+
+
+sub handle_ent
+{
+    my $xp=shift, $name=shift, $value=shift;
+
+    print "Entity: $name=$value\n";
+
+}
+
+################## vortaro (kadro) ##################
+
+sub vortaro {
+#    my $title = $file; $title =~ s/\.xml//i;
+
+    print "<html>\n<head>\n";
+    print "<meta http-equiv=\"Content-Type\""
+	." content=\"text/html; charset=UTF-8\">\n";
+    print "<link titel=\"artikolo-stilo\" type=\"text/css\""
+	." rel=stylesheet href=\"$stl_dosiero\">\n";
+    print "<title>$title</title>\n</head>\n";
+    print "<body>\n";
+};
+sub vortaro_ {
+#    my $title = $file; $title =~ s/\.xml//i;
+
+    if ($redakto_cgi) {
+	print "<hr><a href=\"$redakto_cgi?art=$marko\">redakti...</a>\n";
+    }
+
+    print "</body>\n</html>\n";
+};
+
+##########  kruda strukturo de artikolo #############
+
+sub art {
+    shift; shift; # ignoru xp kaj el
+    $marko = get_attr('mrk',@_);
+
+    $snc_cnt=0;
+    $subdrv_cnt=0;
+    $subart_cnt=0;
+    $head_level=2;
+};
+sub art_ {
+    if ($subart_cnt) { print "</dl>\n" };
+};
+
+sub kap {
+    print "<h$head_level>";
+};
+sub kap_ {
+    print "</h$head_level>\n";
+}
+
+sub rad {
+    my $xp = shift;
+
+    # instalu funkcion, kiu kaptas la radikon
+    $radiko = '';
+    $xp->setHandlers(Char    => \&get_radix);
+};
+sub rad_ {
+    my $xp = shift;
+    $xp->setHandlers(Char => \&char_handler);
+#    $xp->setHandlers(Char => undef);
+};
+sub get_radix{
+   my ($xp, $text) = @_;
+
+   if (length($text)) {
+
+      $text = $xp->xml_escape($text)
+        unless $in_cdata;
+
+      print $text;
   };
 
-  print "<hr>$kopirajto</body></html>\n";
-  select STDOUT; close INDEKSO;
+  $radiko .= $text; 
 }
+
+sub tld {
+    shift; shift; # ignoru xp kaj el
+    my $lit = get_attr('lit',@_);
+    my $rad = $radiko;
+    
+    if ($lit) {
+	my $len = length($lit); # necesa, æar en UTF-8 supersignaj literoj
+	                        # estas du-bitokaj
+	$rad =~ s/^.{$len}/$lit/;
+    }
+    print $rad;
+}
+
+sub subart {
+    $subart_cnt++;
+    $snc_cnt=0;
+
+    if ($subart_cnt == 1) { print "<dl compact>\n"; };
+    print "<dt>$romanaj_nombroj[$subart_cnt].\n<dd>";
+}
+sub subart_ {
+ if ($snc_cnt) {
+	print "</dl>\n";
+    };
+}
+
+sub drv {
+    shift; shift; # ignoru xp kaj el
+    $mrk = get_attr('mrk',@_);
+
+    $subdrv_cnt=0;
+    $snc_cnt=0;
+
+    $head_level++;
+
+    if ($mrk) {
+	print "<a name=\"$mrk\"></a>\n";
+    }
+};
+sub drv_ {
+    $head_level--;
+    if ($subdrv_cnt || $snc_cnt) {
+	print "</dl>\n";
+    };
+}
+
+sub subdrv {
+    $subdrv_cnt++;
+    
+    $snc_cnt=0;
+
+    if ($subdrv_cnt==1) { print "<dl compact>\n" };
+    print "<dt>".chr(ord('A')+$subdrv_cnt-1).".\n<dd>";
+};
+sub subdrv_ {
+    if ($snc_cnt) {
+	print "</dl>\n";
+    };
+};
+
+sub snc {
+    shift; shift; # ignoru la argumentojn xp kaj el
+    my $mrk = get_attr('mrk',@_);
+    $num = get_attr('num',@_); 
+    $num .='.' if ($num);
+
+    $snc_cnt++;
+    $subsnc_cnt=0;
+
+    if ($mrk) {
+	print "<a name=\"$mrk\"></a>\n";
+    };
+
+    if ($snc_cnt==1) { print"<dl compact>\n" };
+    print "<dt>$num\n<dd>";
+};
+sub snc_ {
+    if ($subsnc_cnt) {
+	print "</dl>\n";
+    };
+};
+
+sub subsnc {
+    $subsnc_cnt++;
+
+    if ($subsnc_cnt==1) { print "<dl compact>\n" };
+    print "<dt>".chr(ord('a')+$subsnc_cnt-1).".\n<dd>";
+}
+
+
+############### priskribaj elementoj #################
+
+sub refgrp {
+    shift; shift; # ignoru la argumentojn xp kaj el
+    my $tip = get_attr('tip',@_);
+    
+    if ($tip) { 
+	my $smb = "$smb_dosierujo/$refsmb_bildo{$tip}";
+	my $txt = $refsmb_teksto{$tip};
+
+	if ($ref_simboloj) {
+	    print "<img src=\"$smb\" alt=\"$txt\">";
+	} else {
+	    print "$txt ";
+	};
+    };
+}
+
+sub ref {
+    shift; shift; # ignoru la argumentojn xp kaj el
+    my $cel = get_attr('cel',@_);
+    my $tip = get_attr('tip',@_);
+ 
+    if ($tip) { 
+	my $smb = "$smb_dosierujo/$refsmb_bildo{$tip}";
+	my $txt = $refsmb_teksto{$tip};
+
+	if ($ref_simboloj) {
+	    print "<img src=\"$smb\" alt=\"$txt\">";
+	} else {
+	    print "$txt ";
+	};
+    };
+
+    # transformu cel al URL
+    if ($cel =~ /\./) {
+	$cel =~ s/([a-zA-Z0-9]+)\./$1.html#$1./;
+    } else {
+	$cel .= '.html';
+    };
+    print "<a href=\"$cel\">";
+};
+sub ref_ {
+    print "</a>\n";
+};
+  
+
+sub ekz  { 
+    my $xp = shift;
+    my $class;
+
+    if ($xp->in_element('rim')) {
+	$class = 'rimekz';
+    } else {
+	$class = 'ekz';
+    };
+    print "<cite class=$class>" 
+};
+sub ekz_ { print "</cite>\n" };
+
+sub dif  { print "<span class=dif>" };
+sub dif_ { print "</span>\n" };
+
+sub fnt  { print "<sup>" };
+sub fnt_ { print "</sup>" };
+
+sub gra  { print "(" };
+sub gra_ { print ")<br>\n" };
+
+sub rim  { 
+    shift; shift; # ignoru la argumentojn xp kaj el
+    my $num = get_attr('num',@_);
+    $num = ' '.$num if ($num);
+
+    print "<span class=rim>RIM.$num: " 
+};
+sub rim_ { print "</span>\n"};
+
+sub klr  { print "<span class=klr>" };
+sub klr_ { print "</span>\n" };
+
+
+sub trd  { 
+    my $xp = shift;
+    shift; # ignoru el
+    my $lng = get_attr('lng',@_);
+    my $class;
+
+    if ($xp->in_element('rim')) {
+	$class = 'rimtrd';
+    } elsif ($xp->in_element('dif')) {
+	$class = 'diftrd';
+    } elsif ($xp->in_element('klr')) {
+	$class = 'klrtrd';
+    } else {
+	$class = 'trd';
+    };
+
+    if ($class eq 'trd') {
+	print "<br><span class=$class>";
+	if ($lng_simboloj) {
+	    print "<img src=\"$smb_dosierujo/$lng.jpg\" alt=\"$lng:\"> ";
+	} else {
+	    print "<i>$lng:</i> ";
+	};
+    } else {
+	print "<span class=$class>";
+    };
+};
+sub trd_ { print "</span>" };
+
+sub bld { 
+    shift; shift; # ingoru xp kaj el
+    my $lok = get_attr('lok',@_);
+
+    print "<br><img src=\"$lok\">" 
+};
+
+sub uzo {
+    my $xp = shift; 
+    shift; # ignoru el
+    $tip = get_attr('tip',@_);
+
+    if (($tip eq 'fak') and ($fak_simboloj)) {
+	$xp->setHandlers(Char => \&fak_smb);
+    };
+};
+sub uzo_ {
+    my $xp = shift; 
+    $xp->setHandlers(Char => \&char_handler);
+
+#    if ($xp->in_element('drv')) {
+#	print "\n<br>\n"; # eble nur por fakoj faru?
+#    }
+}
+sub fak_smb{
+    my ($xp, $fak) = @_;
+
+    if (length($fak)) {
+	print "<img src=\"$smb_dosierujo/$fak.gif\" alt=\"$fak\" "
+	    ."align=absmiddle>\n";
+    };
+};
+  
+
+
+################### tekst-stiloj #################
+
+sub em  { print "<strong>" };
+sub em_ { print "</strong>" };
+
+sub sup  { print "<sup>" };   
+sub sup_ { print "</sup>" };
+
+sub sub  { print "<sub>" };
+sub sub_ { print "</sub>" };
+
+
+
+

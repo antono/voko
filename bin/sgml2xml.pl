@@ -21,13 +21,14 @@ open IN,$dos;
 if ($dtd) {
     $teksto = join('',<IN>);
     $teksto =~ s/(<!ELEMENT\s+[^\s]+\s+)[\-o]\s+[\-o]\s+/$1/gs;
+    print "<?xml version=\"1.0\"?>\n";
     print $teksto;
 } else {
-    print "<?xml version=\"1.0\" ?>\n";
+    print "<?xml version=\"1.0\"?>\n";
 
     # provizore anstataýigu PUBLIC-DTD -> SYSTEM-DTD
     <IN>;
-    print "<!DOCTYPE vortaro SYSTEM \"vokoxml.dtd\" >\n";
+    print "<!DOCTYPE vortaro SYSTEM \"../dtd/vokoxml.dtd\">\n";
 
     while (<IN>) {
 	s/(<tld[^>]*)>/$1\/>/ig;
@@ -36,6 +37,16 @@ if ($dtd) {
 };
 
 close IN;
+
+
+
+
+
+
+
+
+
+
 
 
 

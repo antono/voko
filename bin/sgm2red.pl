@@ -8,7 +8,7 @@
 
 # konstantoj
 
-# l' argumentojn analizu
+# la argumentojn analizu
 
 $VOKO=$ENV{'VOKO'};
 $ARTIK="$VOKO/red";
@@ -63,3 +63,14 @@ while (<IN>) {
 };
 
 close IN;
+
+
+
+
+
+
+
+
+
+
+
