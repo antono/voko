@@ -14,6 +14,9 @@ require Exporter;
 #dump_nls_info("ru");
 #dump_nls_info("ko");
 
+# $interpunkcio = '[\s,;\.:\(\)\-\'\/\?!\"]';
+$interpunkcio = '[\s,;\.:\(\)\-\'\/\"]';
+
 ##################
 
 # bytes | bits | representation
@@ -117,6 +120,10 @@ sub cmp_nls {
     unless (defined %$letters) { 
 	$letters = \%letters_la;
     }
+
+    # ignoru interpunkcion
+    $vorto1 =~ s/$interpunkcio//g;
+    $vorto2 =~ s/$interpunkcio//g;
 
     if (defined %$aliases) {
 	while (($from,$to)=each %$aliases) {

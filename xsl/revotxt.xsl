@@ -296,6 +296,10 @@
 
 <xsl:template match="art" mode="tradukoj">
   <xsl:call-template name="lingvo">
+    <xsl:with-param name="lng">en</xsl:with-param>
+    <xsl:with-param name="lingvo">angle</xsl:with-param>
+  </xsl:call-template>
+  <xsl:call-template name="lingvo">
     <xsl:with-param name="lng">be</xsl:with-param>
     <xsl:with-param name="lingvo">beloruse</xsl:with-param>
   </xsl:call-template>
@@ -316,8 +320,12 @@
     <xsl:with-param name="lingvo">germane</xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="lingvo">
-    <xsl:with-param name="lng">en</xsl:with-param>
-    <xsl:with-param name="lingvo">angle</xsl:with-param>
+    <xsl:with-param name="lng">el</xsl:with-param>
+    <xsl:with-param name="lingvo">greke</xsl:with-param>
+  </xsl:call-template>
+  <xsl:call-template name="lingvo">
+    <xsl:with-param name="lng">grc</xsl:with-param>
+    <xsl:with-param name="lingvo">greke (klasike)</xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="lingvo">
     <xsl:with-param name="lng">es</xsl:with-param>

@@ -133,6 +133,9 @@ modifita de Wolfram Diestel
     <xsl:with-param name="lng">el</xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="flago">
+    <xsl:with-param name="lng">grc</xsl:with-param>
+  </xsl:call-template>
+  <xsl:call-template name="flago">
     <xsl:with-param name="lng">es</xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="flago">
@@ -603,6 +606,10 @@ modifita de Wolfram Diestel
   <xsl:call-template name="lingvo">
     <xsl:with-param name="lng">el</xsl:with-param>
     <xsl:with-param name="lingvo">greke</xsl:with-param>
+  </xsl:call-template>
+  <xsl:call-template name="lingvo">
+    <xsl:with-param name="lng">grc</xsl:with-param>
+    <xsl:with-param name="lingvo">greke (klasike)</xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="lingvo">
     <xsl:with-param name="lng">es</xsl:with-param>
