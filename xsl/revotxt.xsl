@@ -119,7 +119,7 @@
 </xsl:template>
 
 <xsl:template match="sncref">
-  <i><xsl:apply-templates mode="number-of-ref-snc" select="id(@ref)"/></i>
+  /<xsl:apply-templates mode="number-of-ref-snc" select="id(@ref)"/>/
 </xsl:template>
 
 <xsl:template match="snc">
@@ -458,9 +458,9 @@
         <xsl:text> </xsl:text>
         <xsl:number from="drv|subart" level="any" count="snc" format="1"/>
       </xsl:when>
-      <xsl:otherwise>
+<!--      <xsl:otherwise>
        <xsl:text> </xsl:text>
-      </xsl:otherwise>
+      </xsl:otherwise> -->
     </xsl:choose>
 </xsl:template>
 

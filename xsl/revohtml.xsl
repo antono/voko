@@ -265,11 +265,6 @@ pluevoluigita de Wolfram Diestel
 <xsl:template match="subsnc" mode="number-of-ref-snc">
   <xsl:number from="drv|subart" level="multiple" count="snc|subsnc"
     format="1.a"/>
-
-<!-- ne funkcias - xt eterene laboradas 
- <xsl:number from="drv|subart" level="any" count="snc"/>
-  <xsl:text></xsl:text>
- <xsl:number from="snc" level="single" format="a"/> -->
 </xsl:template>
 
 <xsl:template match="sncref">
@@ -828,9 +823,9 @@ pluevoluigita de Wolfram Diestel
         <xsl:text> </xsl:text>
         <xsl:number from="drv|subart" level="any" count="snc" format="1"/>
       </xsl:when>
-      <xsl:otherwise>
+<!--      <xsl:otherwise>
         <xsl:text> </xsl:text>
-      </xsl:otherwise>
+      </xsl:otherwise> -->
     </xsl:choose>
 </xsl:template>
 
