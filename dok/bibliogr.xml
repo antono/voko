@@ -2,12 +2,13 @@
 
 <!DOCTYPE bibliografio [
 
-<!ELEMENT vrk (url?,aut?,trd?,tit?,ald?,eld?)>
+<!ELEMENT vrk (url?,aut?,trd?,tit?,isbn?,ald?,eld?)>
 <!ATTLIST vrk mll ID #REQUIRED> 
 <!ELEMENT url (#PCDATA)>
 <!ELEMENT aut (#PCDATA)>
 <!ELEMENT trd (#PCDATA)>
 <!ELEMENT tit (#PCDATA)>
+<!ELEMENT isbn (#PCDATA)>
 <!ELEMENT ald (#PCDATA)>
 <!ELEMENT eld (nom?,lok?,jar?)>
 <!ELEMENT nom (#PCDATA)>
@@ -27,9 +28,21 @@
 <!ENTITY Ubreve "&#x016c;">
 <!ENTITY ubreve "&#x016d;">
 
+<!ENTITY eacute "&#x00e9;"> 
+
 ]>
  
 <bibliografio>
+
+
+  <vrk mll="Bird">
+    <aut>Mészáros Béla</aut>
+    <tit>Oklingva nomaro de eŭropaj birdoj</tit>
+    <eld>
+      <lok>Debrecen</lok>
+      <dat>1980</dat>
+    </eld>
+  </vrk>
 
   <vrk mll="BonaLingvo">
     <aut>Claude Piron</aut>
@@ -41,89 +54,12 @@
     </eld>
   </vrk>
 
-  <vrk mll="F">
-    <url>ftp://ftp.esperanto.org/publika/tekstoj/</url>
-    <aut>L. L. Zamenhof</aut>
-    <tit>Fundamento de Esperanto</tit>
+  <vrk mll="EdE">
+    <tit>Enciklopedio de Esperanto</tit>
+    <isbn>963-571-051-8</isbn>
     <eld>
-      <lok>Varsovio</lok>
-      <dat>1905</dat>
-    </eld>
-  </vrk>
-
-  <vrk mll="Gerda">
-    <url>http://www.worldnet.fr/~mjb/revo/gerda1.txt</url>
-    <aut>Claude Piron</aut>
-    <tit>Gerda malaperis</tit>
-    <eld>
-      <nom>Fonto</nom>
-    </eld>
-  </vrk>
-
-  <vrk mll="M">
-    <url>ftp://ftp.esperanto.org/publika/tekstoj/</url>
-    <trd>L. L. Zamenhof</trd>
-    <tit>Malnova Testamento</tit>
-  </vrk>
-
-  <vrk mll="X">
-    <url>ftp://ftp.esperanto.org/publika/tekstoj/html</url>
-    <trd>L. L. Zamenhof</trd>
-    <tit>Nova Testamento</tit>
-  </vrk>
-
- <vrk mll="MT">
-    <url>ftp://ftp.esperanto.org/publika/tekstoj/</url>
-    <trd>L. L. Zamenhof</trd>
-    <tit>Malnova Testamento</tit>
-  </vrk>
- 
-  <vrk mll="NT">
-    <url>ftp://ftp.esperanto.org/publika/tekstoj/html</url>
-    <trd>L. L. Zamenhof(?)</trd>
-    <tit>Nova Testamento, Londona Biblio</tit>
-  </vrk>
-
-  <vrk mll="PIV1">
-    <tit>Plena Ilustrita Vortaro</tit>
-    <eld>
-      <nom>SAT</nom>
-      <lok>Parizo</lok>
-      <dat>1970</dat>
-    </eld>
-  </vrk>
-
-  <vrk mll="KompLeks">
-    <url>http://purl.oclc.org/NET/voko/URL/KompLeks/</url>
-    <aut>Sergio Pokrovskij</aut>
-    <tit>Komputila Leksikono</tit>
-  </vrk>
- 
-  <vrk mll="Lasu">
-    <url>http://www.worldnet.fr/~mjb/revo/lasu1.txt</url>
-    <aut>Claude Piron</aut>
-    <tit>Lasu min paroli plu!</tit>
-    <eld>
-      <nom>Fonto</nom>
-    </eld>
-  </vrk>
- 
-  <vrk mll="Bird">
-    <aut>Mészáros Béla</aut>
-    <tit>Oklingva nomaro de eŭropaj birdoj</tit>
-    <eld>
-      <lok>Debrecen</lok>
-      <dat>1980</dat>
-    </eld>
-  </vrk>
-
-  <vrk mll="PV">
-    <aut>E. Grosjean-Maupin</aut>
-    <tit>Plena Vortaro de Esperanto</tit>
-    <eld>
-      <nom>SAT</nom>
-      <lok>Parizo</lok>
-      <dat>1934</dat>
+      <lok>Budapest</lok>
+      <dat>1979</dat>
     </eld>
   </vrk>
 
@@ -132,47 +68,15 @@
     <aut>L. L. Zamenhof</aut>
     <tit>Esenco kaj Estonteco</tit>
   </vrk>
-  
-  <vrk mll="Far1">
-    <url>http://www.uni-leipzig.de/esperanto/texte/bibl/faraono/vol1/</url>
-    <aut>B. Prus</aut>
-    <trd>K. Bein</trd>
-    <tit>La Faraono, vol. 1</tit>
-    <eld>
-      <nom>Esp. Centra Librejo</nom>
-      <lok>Parizo</lok>
-      <dat>1927</dat>
-    </eld>
-  </vrk>
 
-  <vrk mll="Far2">
-    <url>http://www.uni-leipzig.de/esperanto/texte/bibl/faraono/vol2/</url>
-    <aut>B. Prus</aut>
-    <trd>K. Bein</trd>
-    <tit>La Faraono, vol. 2</tit>
-    <eld>
-      <nom>Esp. Centra Librejo</nom>
-      <lok>Parizo</lok>
-      <dat>1926</dat>
-    </eld>
-  </vrk>
-
-  <vrk mll="Far3">
-    <url>http://www.uni-leipzig.de/esperanto/texte/bibl/faraono/vol3/</url>
-    <aut>B. Prus</aut>
-    <trd>K. Bein</trd>
-    <tit>La Faraono, vol. 3</tit>
-    <eld>
-      <nom>Esp. Centra Librejo</nom>
-      <lok>Parizo</lok>
-      <dat>1927</dat>
-    </eld>
-  </vrk>
-
-  <vrk mll="PrV">
+  <vrk mll="F">
     <url>ftp://ftp.esperanto.org/publika/tekstoj/</url>
     <aut>L. L. Zamenhof</aut>
-    <tit>Proverbaro</tit>
+    <tit>Fundamento de Esperanto</tit>
+    <eld>
+      <lok>Varsovio</lok>
+      <dat>1905</dat>
+    </eld>
   </vrk>
 
   <vrk mll="Fab1">
@@ -221,8 +125,53 @@
       <dat>1963</dat>
     </eld>
   </vrk>
+  
+  <vrk mll="Far1">
+    <url>http://www.uni-leipzig.de/esperanto/texte/bibl/faraono/vol1/</url>
+    <aut>B. Prus</aut>
+    <trd>K. Bein</trd>
+    <tit>La Faraono, vol. 1</tit>
+    <eld>
+      <nom>Esp. Centra Librejo</nom>
+      <lok>Parizo</lok>
+      <dat>1927</dat>
+    </eld>
+  </vrk>
 
-  <vrk mll="HejmVort">
+  <vrk mll="Far2">
+    <url>http://www.uni-leipzig.de/esperanto/texte/bibl/faraono/vol2/</url>
+    <aut>B. Prus</aut>
+    <trd>K. Bein</trd>
+    <tit>La Faraono, vol. 2</tit>
+    <eld>
+      <nom>Esp. Centra Librejo</nom>
+      <lok>Parizo</lok>
+      <dat>1926</dat>
+    </eld>
+  </vrk>
+
+  <vrk mll="Far3">
+    <url>http://www.uni-leipzig.de/esperanto/texte/bibl/faraono/vol3/</url>
+    <aut>B. Prus</aut>
+    <trd>K. Bein</trd>
+    <tit>La Faraono, vol. 3</tit>
+    <eld>
+      <nom>Esp. Centra Librejo</nom>
+      <lok>Parizo</lok>
+      <dat>1927</dat>
+    </eld>
+  </vrk>
+
+  <vrk mll="Gerda">
+    <url>http://www.worldnet.fr/~mjb/revo/gerda1.txt</url>
+    <aut>Claude Piron</aut>
+    <tit>Gerda malaperis</tit>
+    <eld>
+      <nom>Fonto</nom>
+    </eld>
+  </vrk>
+
+ <vrk mll="HejmVort">
     <url>http://www.helsinki.fi/~jslindst/hejmvort.html</url>
     <aut>Jouko Lindstedt k.a.</aut>
     <tit>Hejma Vortaro</tit>
@@ -243,16 +192,6 @@
     </eld>
   </vrk>  
 
-  <vrk mll="Monato">
-    <url>http://www.esperanto.be/monato/</url>
-    <tit>Monato</tit>
-    <ald>internacia magazino</ald>
-    <eld>
-      <nom>Flandra Esperanto-Ligo</nom>
-      <lok>Belgio</lok>
-    </eld>
-  </vrk>
-
   <vrk mll="Isxtar">
     <url>http://home.att.net/~karlpov/proisxtr.htm</url>
     <aut>H. A. Luyken</aut>
@@ -262,6 +201,50 @@
       <lok>Lepsiko</lok>
       <dat>1924</dat>
     </eld>
+  </vrk>
+
+  <vrk mll="ItEsp">
+    <aut>Carlo Minnaja</aut>
+    <tit>Vocabolario Italiano-Esperanto</tit>
+    <eld>
+      <nom>CoEdEs</nom>
+      <dat>1996</dat>
+    </eld>
+  </vrk>
+
+  <vrk mll="KompLeks">
+    <url>http://purl.oclc.org/NET/voko/URL/KompLeks/</url>
+    <aut>Sergio Pokrovskij</aut>
+    <tit>Komputila Leksikono</tit>
+  </vrk>
+ 
+   <vrk mll="Lanti">
+    <aut>E. Lanti</aut>
+    <tit>Vortoj de k-do Lanti</tit>
+    <eld>
+      <nom>Sennacieca Asocio Tutmonda</nom>
+      <dat>1931</dat>
+    </eld>
+  </vrk>
+
+ <vrk mll="Lasu">
+    <url>http://www.worldnet.fr/~mjb/revo/lasu1.txt</url>
+    <aut>Claude Piron</aut>
+    <tit>Lasu min paroli plu!</tit>
+    <eld>
+      <nom>Fonto</nom>
+    </eld>
+  </vrk>
+
+  <vrk mll="M">
+    <url>ftp://ftp.esperanto.org/publika/tekstoj/</url>
+    <trd>L. L. Zamenhof</trd>
+    <tit>Malnova Testamento</tit>
+  </vrk>
+
+  <vrk mll="X">
+    <url>ftp://ftp.esperanto.org/publika/tekstoj/html</url>
+    <tit>Nova Testamento</tit>
   </vrk>
 
   <vrk mll="ManPol">
@@ -274,10 +257,76 @@
     </eld>
   </vrk>
 
+  <vrk mll="MatVort">
+    <url>http://www.worldnet.fr/~mjb/revo/werner.htm</url>
+    <aut>Jan Werner</aut>
+    <tit>Matematika Vortaro, Esperanta-&Ccirc;e&hcirc;a-Germana</tit>
+    <eld>
+      <lok>Brno</lok>
+      <dat>1990</dat>
+    </eld>
+  </vrk>
+
+  <vrk mll="Monato">
+    <url>http://www.esperanto.be/monato/</url>
+    <tit>Monato</tit>
+    <ald>internacia magazino</ald>
+    <eld>
+      <nom>Flandra Esperanto-Ligo</nom>
+      <lok>Belgio</lok>
+    </eld>
+  </vrk>
+
+ <vrk mll="MT">
+    <url>ftp://ftp.esperanto.org/publika/tekstoj/</url>
+    <trd>L. L. Zamenhof</trd>
+    <tit>Malnova Testamento</tit>
+  </vrk>
+ 
+  <vrk mll="NT">
+    <url>ftp://ftp.esperanto.org/publika/tekstoj/html</url>
+    <tit>Nova Testamento, Londona Biblio</tit>
+  </vrk>
+
   <vrk mll="Paroloj">
     <url>http://www.uni-leipzig.de/esperanto/texte/bibl/paroloj/</url>
     <aut>L. L. Zamenhof</aut>
     <tit>Paroloj</tit>
+  </vrk>
+
+  <vrk mll="PIV1">
+    <tit>Plena Ilustrita Vortaro</tit>
+    <eld>
+      <nom>SAT</nom>
+      <lok>Parizo</lok>
+      <dat>1970</dat>
+    </eld>
+  </vrk>
+
+  <vrk mll="PV">
+    <aut>E. Grosjean-Maupin</aut>
+    <tit>Plena Vortaro de Esperanto</tit>
+    <eld>
+      <nom>SAT</nom>
+      <lok>Parizo</lok>
+      <dat>1934</dat>
+    </eld>
+  </vrk>
+
+  <vrk mll="PrV">
+    <url>ftp://ftp.esperanto.org/publika/tekstoj/</url>
+    <aut>L. L. Zamenhof</aut>
+    <tit>Proverbaro</tit>
+  </vrk>
+
+  <vrk mll="Revadoj">
+    <aut>Jean-Jacques Rousseau</aut>
+    <trd>Andr&eacute; Gilles</trd>
+    <tit>La revadoj de soleca promenanto</tit>
+    <ald>Franca Esperantisto, kaj. 414 (09/1990) kaj 420 (04/1991)</ald>
+    <eld>
+      <nom>Unuigxo Franca por Esperanto, cxe Flandra Esperanto-Ligo</nom>
+    </eld>
   </vrk>
 
   <vrk mll="SPIV">
@@ -289,12 +338,14 @@
     </eld>
   </vrk>
 
-  <vrk mll="MatVort">
-    <url>http://www.worldnet.fr/~mjb/revo/werner.htm</url>
-    <aut>Jan Werner</aut>
-    <tit>Matematika Vortaro, Esperanta-&Ccirc;e&hcirc;a-Germana</tit>
+  <vrk mll="UrdHadda">
+    <aut>Deck Dorval</aut>
+    <tit>Urd Hadda murdita!</tit>
+    <isbn>90-71205-37-1</isbn>
+    <ald>Serio Stafeto, n-ro 13</ald>
     <eld>
-      <lok>Brno</lok>
+      <nom>Flandra Esperanto-Ligo</nom>
+      <lok>Antwerpen</lok>
       <dat>1990</dat>
     </eld>
   </vrk>
