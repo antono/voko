@@ -259,11 +259,13 @@
 		     (make empty-element gi: "hr")
 		     (process-children)))
 
-  (element sekcio (make sequence
-		    (make empty-element gi: "hr") 
-		    (make element gi: "h1" 
-			  (literal (attribute-string "litero")))
-		    (process-children)))	
+  (element sekcio (if *pluraj-dosieroj* 
+		      (make sequence)
+		      (make sequence
+			(make empty-element gi: "hr") 
+			(make element gi: "h1" 
+			      (literal (attribute-string "litero")))
+			(process-children))))	
 
   (element adm (make element gi: "p"))
 
@@ -522,11 +524,13 @@
 		     (make empty-element gi: "hr")
 		     (process-children)))
 
-  (element sekcio	(make sequence
-		(make empty-element gi: "hr")  
-		(make element gi: "h1" 
-		(literal (attribute-string "litero")))
-		(process-children)))	
+  (element sekcio (if *pluraj-dosieroj*
+		      (make sequence)
+		      (make sequence
+			(make empty-element gi: "hr")  
+			(make element gi: "h1" 
+			      (literal (attribute-string "litero")))
+			(process-children))))	
 
 
   (element adm (make element gi: "p"))
