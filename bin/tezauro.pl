@@ -25,8 +25,9 @@ $debug = 0;
 $show_progress = 0;
 $| = 1;
 
-$tez_lim = 10;
+$tez_lim = 10; # gravaj nodoj havu alemenau tiom da c*h (= eroj*alteco)
 @romiaj = ('0','I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII');
+$maks_novaj_dosieroj = 1000;
 
 # analizi la argumentojn
 
@@ -104,9 +105,14 @@ cnt_and_depth();
 
 # faru la fakindeksojn kaj noddosierojn
 
+$file_cnt = 0;
 create_tz();
 create_fx();
 
+# kiom da dosieroj renovighis
+print "$file_cnt novaj au shanghitaj dosieroj\n";
+print "Pliaj ne estas renovigataj pro limigo je $maks_novaj_dosieroj.\n" 
+    if ($file_cnt == $maks_novaj_dosieroj);
 
 if ($debug) {
     print "\n";
@@ -119,7 +125,7 @@ sub char_handler {
     my ($xp, $text) = @_;
 
     if  ($text = $xp->xml_escape($text)) {
-	$kap .= $text if ($xp->in_element('kap'));
+	$kap .= $text if ($xp->in_element('kap') or $xp->in_element('tez'));
 	$uzo .= $text if ($xp->in_element('uzo'));
     }
 } 
@@ -170,10 +176,12 @@ sub start_handler {
 	    warn "KOREKTU PROGRAMON: Senco nek ene de drv nek ene de subart".
 		" ($art->{'kap'})!\n";
 	}
-	if ($mrk) {
+	if ($mrk =~ /^[a-z]/i) {
 	    $snc = create_node($mrk);
 	    $snc->{'kap'} = $kap;
 	    $cnt_snc_subsnc = 0; # rekomencu nombradon de "subsnc"
+	} else {
+	    warn "ERARO: mrk ne komencighas je litero en $art->{'mrk'}\n";
 	}
     }
     elsif ($el eq 'subsnc') 
@@ -186,6 +194,19 @@ sub start_handler {
 	};
 	$subsnc = create_node($mrk);
 	$subsnc->{'kap'} = $drv->{'kap'}." $cnt_drv_snc".chr(ord('a')+$cnt_snc_subsnc-1);
+    }
+    elsif ($el eq 'tez')
+    {
+	$tez = create_node(get_attr('mrk',@attrs));
+	$kap = '';
+	my ($tip,$cel);
+	# "tez" povas referenci mem al supernocio
+	if ($cel = get_attr('cel',@attrs)) {
+	    $tip = get_attr('tip',@attrs);
+	    # se mankas tipindiko, uzu "vid"
+	    $tip = 'vid' unless ($tip =~ /^dif|sin|ant|sub|super|prt|malprt$/);
+	    push @{$tez->{$tip}}, ($cel);
+	}
     }
     elsif ($el eq 'ref')
     {
@@ -213,7 +234,8 @@ sub start_handler {
 sub end_handler {
     my ($xp, $el) = @_;
 
-    if ($el eq 'kap') {
+    if ($el eq 'kap') 
+    {
 	$kap =~ s/^\s+//; $kap =~ s/\s+$//; 
 	unless ($xp->current_element() =~ /^art|drv$/) {
 	    warn "KOREKTU: </kap> ene de <".$xp->current_element().
@@ -222,7 +244,8 @@ sub end_handler {
 	}
 	${$xp->current_element()}->{'kap'} = $kap;
     }
-    elsif ($el eq 'uzo') {
+    elsif ($el eq 'uzo') 
+    {
 	unless ($xp->current_element() =~ /^art|drv|snc|subsnc$/) {
 	    warn "KOREKTU: </uzo> ene de <".$xp->current_element().
 		"> ne estas traktata ($art->{'mrk'})!\n";
@@ -235,6 +258,11 @@ sub end_handler {
 	# aldonu nodon al la nodlisto
 	my $node = ${$el};
 	$wordlist{$node->{'mrk'}} = $node;
+    }
+    elsif ($el eq 'tez') 
+    {
+	$tez->{'kap'} = $kap;
+        $wordlist{$tez->{'mrk'}} = $tez;
     }
 
     # se temas pri nur unu snc, metu ties informojn en drv
@@ -370,6 +398,7 @@ sub make_refs {
 # tiea distanco
 
 sub cnt_and_depth {
+    my ($mrk,$node);
 
     while (($mrk,$node) = each %wordlist) {
        
@@ -501,6 +530,7 @@ sub in_list {
 sub html_tree {
     my $list = shift;
     local @subs = ();
+    my $node;
     my $cnt;
 
     sub ero {
@@ -614,7 +644,9 @@ sub html_tree {
 	
 	close OUT;
 	select STDOUT;
-	diff_mv($tmp_file,$target_file,$verbose);
+	if ($file_cnt < $maks_novaj_dosieroj) {
+	    $file_cnt += diff_mv($tmp_file,$target_file,$verbose);
+	}
 
 	# tezauro-dosieroj por la subnocioj
 	html_tree(\@subs);
@@ -632,27 +664,30 @@ sub ekzistas_referencoj {
 }
 
 sub word_ref {
-    my $entry = shift;
+    my $node = shift;
     my $ref;
 
-    $entry->{'mrk'} =~ /^([^.]+)(\..*)?$/;
-    $ref = "$ref_pref/$1.html"; $ref .= "#$1$2" if ($2);
-
+    if ($node->{'mrk'} =~ /^([^.]+)(\..*)?$/) {
+	$ref = "$ref_pref/$1.html"; $ref .= "#$1$2" if ($2);
+    } else {
+	warn "Mankas atributo mrk: ".$node->{'mrk'}.", ".$node->{'kap'}."\n";
+	$ref = "$ref_pref/eraro.html";
+    }
     return $ref;
 }
 
 sub tez_file {
-    my $entry = shift;
+    my $node = shift;
     
-    my $mrk = $entry->{'mrk'};
+    my $mrk = $node->{'mrk'};
     $mrk =~ tr/./_/;
     return "$tz_prefix".$mrk.".html";
 }
 
 sub tez_link {
-    my $entry = shift;
+    my $node = shift;
     
-    my $mrk = $entry->{'mrk'};
+    my $mrk = $node->{'mrk'};
     $mrk =~ tr/./_/;
     return "tz_$mrk.html";
 }
@@ -682,17 +717,18 @@ sub create_fx {
 	    "<a href=\"../inx/fx_".lc($fako).".html\">alfabete</a> ",
 	    "<b>strukture</b>\n<h1>$fakoj{$fako} strukture...</h1>\n";
 
-	foreach $entry ( sort {$a->{'mrk'} cmp $b->{'mrk'}} @root ) {
+	my $node;
+	foreach $node ( sort {$a->{'mrk'} cmp $b->{'mrk'}} @root ) {
 	    print 
-		"<a href=\"".tez_link($entry)."\">",
+		"<a href=\"".tez_link($node)."\">",
 		"<img src=\"../smb/vid.gif\"   alt=\"".$smb{'vid'}."\" border=0></a>\n";
 	    
-	    if ($entry->{'h'}*$entry->{'c'}>$tez_lim) { print "<b>"; }
+	    if ($node->{'h'}*$node->{'c'}>$tez_lim) { print "<b>"; }
 	    print
-	        "<a href=\"".word_ref($entry)."\" target=\"precipa\">",
-	        $entry->{'kap'}."</a>";
-		#" (".($entry->{'h'}*$entry->{'c'}).")";
-	    if ($entry->{'h'}*$entry->{'c'}>$tez_lim) { print "</b>"; }
+	        "<a href=\"".word_ref($node)."\" target=\"precipa\">",
+	        $node->{'kap'}."</a>";
+		#" (".($node->{'h'}*$node->{'c'}).")";
+	    if ($node->{'h'}*$node->{'c'}>$tez_lim) { print "</b>"; }
 	    print "<br>\n";
 	}
 
@@ -777,20 +813,20 @@ sub match {
 sub show {
     my $what=shift;
     
-    my $entry = $wordlist{$what};
+    my $node = $wordlist{$what};
     
-    unless ($entry) {
+    unless ($node) {
 	print "ne difinita\n";
 	return;
     }
 
-    foreach $key (keys %$entry) {
-	if (ref($entry->{$key}) eq "SCALAR") {
-	    print "$key: ", $entry->{$key}, "\n";
-	} elsif (ref($entry->{$key}) eq "ARRAY") {
-	    print "$key: ", join(' ',@{$entry->{$key}}), "\n";
+    foreach $key (keys %$node) {
+	if (ref($node->{$key}) eq "SCALAR") {
+	    print "$key: ", $node->{$key}, "\n";
+	} elsif (ref($node->{$key}) eq "ARRAY") {
+	    print "$key: ", join(' ',@{$node->{$key}}), "\n";
 	} else {
-	    print "$key: ", $entry->{$key}, "\n";
+	    print "$key: ", $node->{$key}, "\n";
 	}
     }
 }

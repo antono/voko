@@ -92,8 +92,10 @@ sub diff_mv {
     if ((! -e $oldfile) or (`diff -q $newfile $oldfile`)) {
 	print "$oldfile\n" if ($verbose);
 	`mv $newfile $oldfile`;
+	return 1;
     } else {
 	#print "(senshanghe)\n" if ($verbose);
 	unlink($newfile);
+	return 0;
     }
 };

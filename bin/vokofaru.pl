@@ -74,11 +74,11 @@ print "cd $vortaro_pado\n" if ($verbose);
 chdir("$vortaro_pado");
 
 # kreu HTML-indeksojn
-$command="vokorefs.pl $verbose $xml_pado > $rilato_dos";
+$command="rilatoj.pl $verbose $xml_pado > $rilato_dos";
 print "$command\n" if ($verbose);
 open LOG, "$command|"; while (<LOG>) { print }; close LOG;
 
-$command="vokorefs2.pl $verbose $agord_dosiero";
+$command="tezauro.pl $verbose $agord_dosiero";
 print "$command\n" if ($verbose);
 open LOG, "$command|"; while (<LOG>) { print }; close LOG;
 
@@ -89,13 +89,6 @@ open LOG, "$command|"; while (<LOG>) { print }; close LOG;
 $command="tajperaroj.pl $verbose -H $xml_pado -c $agord_dosiero > $vortaro_pado/inx/eraroj.html";
 print "$command\n" if ($verbose);
 open LOG, "$command|"; while (<LOG>) { print }; close LOG;
-
-#foreach $file ("bibliogr","fakoj","lingvoj","stiloj","mallongigoj") {
-#    $command="cfg2html.pl $vortaro_pado/cfg/$file.cfg >".
-#	"$vortaro_pado/dok/$file.html";
-#    print "$command\n" if ($verbose);
-#    `$command`;
-#}
 
 $command = "xml2html_all.pl $verbose -m -c $agord_dosiero";
 print "$command\n" if ($verbose);

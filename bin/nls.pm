@@ -181,7 +181,7 @@ sub replace {
     $pos = index($str,$from);
     while ($pos>=0) {
 	$str = substr($str,0,$pos).$to.substr($str,$pos+$lfrom);
-	$pos = index($str,$pos+$lto);
+	$pos = index($str,$from,$pos+$lto);
     }
 
     return $str;
