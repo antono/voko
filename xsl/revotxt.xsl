@@ -391,6 +391,10 @@
     <xsl:with-param name="lingvo">norvege</xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="lingvo">
+    <xsl:with-param name="lng">os</xsl:with-param>
+    <xsl:with-param name="lingvo">osete</xsl:with-param>
+  </xsl:call-template>
+  <xsl:call-template name="lingvo">
     <xsl:with-param name="lng">pl</xsl:with-param>
     <xsl:with-param name="lingvo">pole</xsl:with-param>
   </xsl:call-template>
@@ -453,6 +457,14 @@
         <xsl:number from="drv|subart" level="any" count="snc" format="1"/>
       </xsl:when>
     </xsl:choose>
+</xsl:template>
+
+<xsl:template match="subsnc" mode="tradukoj">
+  <xsl:apply-templates select="ancestor::snc" mode="tradukoj"/>
+  <xsl:if test="@num">
+    <xsl:value-of select="@num"/>
+  </xsl:if>
+  <xsl:number format="a"/>
 </xsl:template>
 
 <xsl:template match="subart" mode="tradukoj">

@@ -3,7 +3,8 @@
 		version="1.0"
                 extension-element-prefixes="xt">
 
-<!-- xsl:output method="html" version="3.2"/ -->
+<xsl:output method="html" version="4.0" encoding="utf-8"/>
+
 <xsl:strip-space elements="trdgrp"/>
 
 <!--
@@ -27,7 +28,6 @@ pluevoluigita de Wolfram Diestel
 <xsl:template match="/">
   <html>
   <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <link title="artikolo-stilo" type="text/css" rel="stylesheet"
   href="{$cssdir}/artikolo.css" />
   <title><xsl:value-of select="/vortaro/art/kap/rad"/></title>
@@ -93,7 +93,7 @@ pluevoluigita de Wolfram Diestel
   <xsl:choose>
     <xsl:when test="snc">
       <xsl:apply-templates select="kap"/>
-      <dl compact="">
+      <dl>
       <xsl:apply-templates select="*[not(self::kap)]"/>
       </dl>
     </xsl:when>
@@ -178,6 +178,9 @@ pluevoluigita de Wolfram Diestel
     <xsl:with-param name="lng">no</xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="flago">
+    <xsl:with-param name="lng">os</xsl:with-param>
+  </xsl:call-template>
+  <xsl:call-template name="flago">
     <xsl:with-param name="lng">pl</xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="flago">
@@ -217,7 +220,7 @@ pluevoluigita de Wolfram Diestel
 <xsl:template match="drv">
   <a name="{@mrk}"></a>
   <xsl:apply-templates select="kap|gra|uzo|fnt|dif"/>
-  <dl compact="">
+  <dl>
   <xsl:apply-templates select="subdrv|snc"/>
   </dl>
   <xsl:apply-templates
@@ -234,7 +237,7 @@ pluevoluigita de Wolfram Diestel
   </dt>
   <dd>
     <xsl:apply-templates select="dif|gra|uzo|fnt"/>
-    <dl compact="">
+    <dl>
     <xsl:apply-templates select="snc"/>
     </dl>
     <xsl:apply-templates
@@ -294,7 +297,7 @@ pluevoluigita de Wolfram Diestel
   <dd>
     <xsl:apply-templates select="gra|uzo|fnt|dif"/>
     <xsl:if test="subsnc">
-      <dl compact="">
+      <dl>
         <xsl:apply-templates select="subsnc"/>
       </dl>
     </xsl:if>
@@ -724,6 +727,10 @@ pluevoluigita de Wolfram Diestel
     <xsl:with-param name="lingvo">norvege</xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="lingvo">
+    <xsl:with-param name="lng">os</xsl:with-param>
+    <xsl:with-param name="lingvo">osete</xsl:with-param>
+  </xsl:call-template>
+  <xsl:call-template name="lingvo">
     <xsl:with-param name="lng">pl</xsl:with-param>
     <xsl:with-param name="lingvo">pole</xsl:with-param>
   </xsl:call-template>
@@ -805,13 +812,10 @@ pluevoluigita de Wolfram Diestel
 </xsl:template>
 
 <xsl:template match="subsnc" mode="tradukoj">
-  <xsl:apply-templates select="ancestor::node()[self::drv or
-    self::art][1]/kap" mode="tradukoj"/>
+  <xsl:apply-templates select="ancestor::snc" mode="tradukoj"/>
   <xsl:if test="@num">
-    <xsl:text> </xsl:text>
     <xsl:value-of select="@num"/>
   </xsl:if>
-  <xsl:text> </xsl:text>
   <xsl:number format="a"/>
 </xsl:template>
 
