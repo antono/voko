@@ -17,7 +17,7 @@ reguloj por la prezentado de la artikolostrukturo
           href="{$cssdir}/artikolo.css" />
   </xsl:if>
   <title>
-    <xsl:value-of select="//art/kap[1]" mode="titolo"/>
+    <xsl:apply-templates select="//art/kap[1]" mode="titolo"/>
   </title>
   </head>
   <body>

@@ -78,7 +78,7 @@ montru tie, cxar ili estas esenca parto de la tiuj -->
   <xsl:for-each select="(//trdgrp[@lng]|//trd[@lng])
     [count(.|key('lingvoj',@lng)[1])=1]">
 
-    <xsl:sort lng="eo" select="$lingvoj/lingvo[@kodo=current()/@lng]"/>
+    <xsl:sort lang="eo" select="$lingvoj/lingvo[@kodo=current()/@lng]"/>
        
     <xsl:call-template name="lingvo">
       <xsl:with-param name="lng">
