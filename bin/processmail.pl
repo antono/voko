@@ -323,7 +323,7 @@ sub processmail {
 		   $content{'priskribo'},
 		   $content{'teksto'});
     } else {
-	error($editor, "nekonata komando $cmd");
+	error("nekonata komando $cmd");
 	return;
     }
 
@@ -534,7 +534,7 @@ sub cmd_redakt {
     close LOG;
 
     # se finighas "done" - chio en ordo, 
-    # se finighas "aborting" - fiask'
+    # se finighas "aborting" - fiasko
     # se neniu eligajho, la dosiero ne estas shanghita
     
     open ERR,"$tmp/ci.err";

@@ -60,7 +60,7 @@ close LOG;
 # se pasis manpleno da tagoj, shovu la indeks-dosieron, por
 # ke ghi atingu la TTT-servilon (sed ja ne tro ofte)
 $tempdif = (stat 'sgm/indekso.xml~')[9] - (stat 'sgm/indekso.xml')[9];
-if ($tmpdif > 7*24*60*60)  {  # 7 tagoj
+if ($tempdif > 7*24*60*60)  {  # 7 tagoj
     print "pli ol 7 tagoj pasis: mv sgm/indekso.xml~ sgm/indekso.xml\n";
     `mv sgm/indekso.xml~ sgm/indekso.xml`;
 }

@@ -13,6 +13,12 @@
 $html = '.html'; # dosierfinajho
 $tmp_file = "/tmp/$$voko.inx";
 
+$tagoj   = 14;       # shanghindekso indikas shanghitajn en la lastaj n tagoj
+$xml_dir = 'xml';    # relative al vortara radidosierujo
+$art_dir = '../art'; # relative al inx
+$nmax    = 200;      # maksimume tiom da shanghitajn artikolojn indiku
+$cvs_log = '/usr/bin/cvs log';
+
 $|=1;
 
 # analizu la argumentojn
@@ -51,7 +57,7 @@ $cntdecl = "<meta http-equiv=\"Content-Type\" content=\"text/html; ".
 	'ARKE'=>'arkeologio',
 	'ARKI'=>'arkitekturo',
 	'AST'=>'astronomio',
-	'AUT'=>'a˝tomobiloj',
+	'AUT'=>'a≈≠tomobiloj',
 	'AVI'=>'aviado',
 	'BAK'=>'bakteriologio, virusologio',
 	'BELA'=>'belartoj',
@@ -92,7 +98,7 @@ $cntdecl = "<meta http-equiv=\"Content-Type\" content=\"text/html; ".
 	'KUI'=>'kuirarto',
 	'LIN'=>'lingvistiko, filologio',
 	'MAR'=>'maraferoj',
-	'MAS'=>'ma˛inoj, mekaniko',
+	'MAS'=>'ma≈ùinoj, mekaniko',
 	'MAT'=>'matematiko',
 	'MAH'=>'materialismo historia',
 	'MED'=>'medicino',
@@ -112,7 +118,7 @@ $cntdecl = "<meta http-equiv=\"Content-Type\" content=\"text/html; ".
 	'SCI'=>'sciencoj',
 	'SPO'=>'sporto, ludoj',
 	'STA'=>'statistiko',
-	'SHI'=>'˛ipkonstruado, navigado',
+	'SHI'=>'≈ùipkonstruado, navigado',
 	'TEA'=>'teatro',
 	'TEK'=>'teknikoj',
 	'TEKS'=>'teksindustrio, vestoj',
@@ -124,14 +130,14 @@ $cntdecl = "<meta http-equiv=\"Content-Type\" content=\"text/html; ".
 
 %lingvoj = (
 	    'aa'=>'afara',
-	    'ab'=>'ab∂aza',
+	    'ab'=>'abƒ•aza',
 	    'af'=>'afrikansa',
 	    'am'=>'amhara',
 	    'ar'=>'araba',
 	    'as'=>'asama',
 	    'ay'=>'ajmara',
-	    'az'=>'azerbaj¯ana',
-	    'ba'=>'ba˛kira',
+	    'az'=>'azerbajƒùana',
+	    'ba'=>'ba≈ùkira',
 	    'be'=>'belorusa',
 	    'bg'=>'bulgara',
 	    'bh'=>'bihara',
@@ -141,7 +147,7 @@ $cntdecl = "<meta http-equiv=\"Content-Type\" content=\"text/html; ".
 	    'br'=>'bretona',
 	    'ca'=>'kataluna',
 	    'co'=>'korsika',
-	    'cs'=>'Êe∂a',
+	    'cs'=>'ƒâeƒ•a',
 	    'cy'=>'kimra',
 	    'da'=>'dana',
 	    'de'=>'germana',
@@ -151,10 +157,10 @@ $cntdecl = "<meta http-equiv=\"Content-Type\" content=\"text/html; ".
 	    'eo'=>'esperanto',
 	    'es'=>'hispana',
 	    'et'=>'estona',
-	    'eu'=>'e˝ska',
+	    'eu'=>'e≈≠ska',
 	    'fa'=>'persa',
 	    'fi'=>'finna',
-	    'fj'=>'fi¯ia',
+	    'fj'=>'fiƒùia',
 	    'fo'=>'feroa',
 	    'fr'=>'franca',
 	    'fy'=>'frisa',
@@ -162,8 +168,8 @@ $cntdecl = "<meta http-equiv=\"Content-Type\" content=\"text/html; ".
 	    'gd'=>'gaela',
 	    'gl'=>'galega',
 	    'gn'=>'gvarania',
-	    'gu'=>'gu¯arata',
-	    'ha'=>'ha˝sa',
+	    'gu'=>'guƒùarata',
+	    'ha'=>'ha≈≠sa',
 	    'he'=>'hebrea',
 	    'hi'=>'hinda',
 	    'hr'=>'kroata',
@@ -179,17 +185,17 @@ $cntdecl = "<meta http-equiv=\"Content-Type\" content=\"text/html; ".
 	    'ja'=>'japana',
 	    'jw'=>'java',
 	    'ka'=>'kartvela',
-	    'kk'=>'kaza∂a',
+	    'kk'=>'kazaƒ•a',
 	    'kl'=>'gronlanda',
 	    'km'=>'kmera',
 	    'kn'=>'kanara',
 	    'ko'=>'korea',
-	    'ks'=>'ka˛mira',
+	    'ks'=>'ka≈ùmira',
 	    'ku'=>'kurda',
 	    'ky'=>'kirgiza',
 	    'la'=>'latina',
 	    'ln'=>'lingala',
-	    'lo'=>'la˝a',
+	    'lo'=>'la≈≠a',
 	    'lt'=>'litova',
 	    'lv'=>'latva',
 	    'mg'=>'malagasa',
@@ -209,12 +215,12 @@ $cntdecl = "<meta http-equiv=\"Content-Type\" content=\"text/html; ".
 	    'oc'=>'okcitana',
 	    'om'=>'oroma',
 	    'or'=>'orijo',
-	    'pa'=>'pan¯aba',
+	    'pa'=>'panƒùaba',
 	    'pl'=>'pola',
-	    'ps'=>'pa˛tua',
+	    'ps'=>'pa≈ùtua',
 	    'pt'=>'portugala',
-	    'qu'=>'keÊua',
-	    'rm'=>'romanÊa',
+	    'qu'=>'keƒâua',
+	    'rm'=>'romanƒâa',
 	    'rn'=>'burunda',
 	    'ro'=>'rumana',
 	    'ru'=>'rusa',
@@ -227,7 +233,7 @@ $cntdecl = "<meta http-equiv=\"Content-Type\" content=\"text/html; ".
 	    'sk'=>'slovaka',
 	    'sl'=>'slovena',
 	    'sm'=>'samoa',
-	    'sn'=>'˛ona',
+	    'sn'=>'≈ùona',
 	    'so'=>'somala',
 	    'sq'=>'albana',
 	    'sr'=>'serba',
@@ -238,7 +244,7 @@ $cntdecl = "<meta http-equiv=\"Content-Type\" content=\"text/html; ".
 	    'sw'=>'svahila',
 	    'ta'=>'tamila',
 	    'te'=>'telugua',
-	    'tg'=>'ta¯ika',
+	    'tg'=>'taƒùika',
 	    'th'=>'taja',
 	    'ti'=>'tigraja',
 	    'tk'=>'turkmena',
@@ -259,8 +265,8 @@ $cntdecl = "<meta http-equiv=\"Content-Type\" content=\"text/html; ".
 	    'xh'=>'ksosa',
 	    'yi'=>'jida',
 	    'yo'=>'joruba',
-	    'za'=>'¯uanga',
-	    'zh'=>'Êina',
+	    'za'=>'ƒùuanga',
+	    'zh'=>'ƒâina',
 	    'zu'=>'zulua'
 );    
 
@@ -330,6 +336,8 @@ if ($pluraj) {
     SIMPLINVKAPVORTINX();
 };
 
+# indekso de la shanghitah artikoloj
+INXSHANGHITAJ();
 
 INXLIST();
 
@@ -423,6 +431,7 @@ sub diff_mv {
 	`mv $newfile $oldfile`;
     } else {
 	print "(senshanghe)\n" if ($verbose);
+	unlink($newfile);
     }
 };
 
@@ -700,6 +709,91 @@ sub SIMPLINVKAPVORTINX {
     diff_mv($tmp_file,"$dir/ix_inv$html");
 }
 
+# kreas indekson de la laste shaghitaj artikoloj
+
+sub INXSHANGHITAJ {
+    my $now = time();
+    my $n = 0;
+
+    print "$dir/ix_novaj$html..." if ($verbose);
+
+    # malfermu kaj komencu indeks-dosieron
+    open INX, ">$tmp_file" or die "Ne povis malfermi $tmp_file: $!\n";
+    print INX <<EOH;
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link titel="indekso-stilo" type="text/css" 
+    rel=stylesheet href="../stl/indeksoj.css">
+    <title>indekso ne artikoloj ≈ùanƒùitaj en la lastaj $tagoj tagoj</title>
+</head>
+<body>
+<i><a href="indeksoj.html">indeksoj</a></i><p>
+<h1>≈ùanƒùitaj dum la lastaj $tagoj tagoj</h1>
+
+EOH
+
+    # malfermu kaj trakribru xml-dosierujon
+    opendir DIR, $xml_dir or die "Ne povis malfermi $xml_dir: $!\n";
+    for $dos (readdir DIR) {
+
+	if ( (-f "$xml_dir/$dos") and
+	     ($now - (stat("$xml_dir/$dos"))[9] < $tagoj * 24 * 60 * 60)
+	     ) {
+	    print INX cvs_log($dos);
+	    if (++$n >= $nmax) { last; }
+	}
+	
+    }
+    closedir DIR;
+    
+    if ($n > 20) {
+	print INX "<p><i><a href=\"indeksoj.html\">indeksoj</a></i>\n";
+    }
+    print INX "<body>\n</html>\n";
+    close INX;
+
+    diff_mv($tmp_file,"$dir/ix_novaj$html");
+}
+
+sub cvs_log {
+    my $dos = shift;
+    my ($art,$log,$head,$info,$dato);
+    my $result;
+
+    print "nova: $dos\n" if ($debug);
+
+    # skribu vorton kaj referencon al la artikolo
+    $art = $dos;
+    $art =~ s/\.xml$//; 
+    $result = "<a href=\"$art_dir/$art.html\" target=precipa>$art</a>";
+
+    # eltiru informojn pri aktuala versio el "cvs log"
+    $log = `$cvs_log $xml_dir/$dos`;
+
+    $log =~ /head: ([0-9\.]+)/s;
+    $head = $1;
+    $head =~ s/\./\\./g;
+
+    if ($head) {
+	$log =~ /-{28}\nrevision $head\n(.*?)-{28}/s;
+	$info = $1;
+
+	$info =~ s/date: ([0-9\/]+)[^\n]*\n//;
+	$dato = $1;
+
+	# forigu la retadreson
+	$info =~ s/\s*<[^>]+\@[^>]+>\s*//s;
+	
+	# skribu la informojn
+	$info =~ s/\s*$//s;
+	$head =~ s/\\//g;
+	$result .= " (versio: $head $dato; $info)<p>\n";
+    }
+
+    return $result;
+}
+
 # kreas la indekson de la indeksoj
 
 sub INXLIST {
@@ -729,11 +823,8 @@ sub INXLIST {
 	print "</b>\n";
 
 	#inversa indekso
-	print "<dt>inversa indekso\n<dd>";
-	for $lit (@invliteroj) {
-	    $lit1 = enmetu_x($lit);
-	    print "<a href=\"ix_inv$lit1$html\">".Lat3_UTF8($lit)."</a>\n";
-	};
+#	print "<p><a href=\"ix_inva$html\">inversa indekso</a><p>\n";
+
     } else {
 	#kapvortoj
 	print "<a href=\"ix_kap$html\">kapvortindekso</a><p>\n";
@@ -767,7 +858,12 @@ sub INXLIST {
 	};
     };
 
-    print "</dd>\n";
+    # aliaj 
+    print "<dt>aliaj indeksoj\n<dd>";
+    print "<a href=\"ix_inva$html\">inversa indekso</a><br>\n";
+    print "<a href=\"ix_novaj$html\">≈ùanƒùitaj artikoloj</a>\n";
+
+    print "</dl>\n";
 
     print "</body></html>\n";
     close OUT;
@@ -811,20 +907,6 @@ sub INVTROVU {
 sub LIT {
     my $vort = lc($_[0]);
 
-    # konverti la e-literojn de Lat-3 al cx ... ux
-#    $vort =~ s/\306/cx/g;
-#    $vort =~ s/\330/gx/g;
-#    $vort =~ s/\246/hx/g; 
-#    $vort =~ s/\254/jx/g;
-#    $vort =~ s/\336/sx/g;
-#    $vort =~ s/\335/ux/g;
-#    $vort =~ s/\346/cx/g;
-#    $vort =~ s/\370/gx/g;
-#    $vort =~ s/\266/hx/g;
-#    $vort =~ s/\274/jx/g;
-#    $vort =~ s/\376/sx/g; 
-#    $vort =~ s/\375/ux/g;
-
     # konverti la e-literojn de UTF-8 al cx ... ux
     $vort =~ s/\304[\210\211]/cx/g;
     $vort =~ s/\304[\234\235]/gx/g;
@@ -846,20 +928,6 @@ sub LIT {
 
 sub INVLIT {
     my $vort = reverse(lc($_[0]));
-
-    # konverti la e-literojn de Lat-3 al cx ... ux
-#    $vort =~ s/\306/cx/g;
-#    $vort =~ s/\330/gx/g;
-#    $vort =~ s/\246/hx/g; 
-#    $vort =~ s/\254/jx/g;
-#    $vort =~ s/\336/sx/g;
-#    $vort =~ s/\335/ux/g;
-#    $vort =~ s/\346/cx/g;
-#    $vort =~ s/\370/gx/g;
-#    $vort =~ s/\266/hx/g;
-#    $vort =~ s/\274/jx/g;
-#    $vort =~ s/\376/sx/g; 
-#    $vort =~ s/\375/ux/g;
 
     # konverti la e-literojn de UTF-8 al cx ... ux
     $vort =~ s/[\210\211]\304/cx/g;

@@ -1,5 +1,6 @@
 #!/usr/bin/perl -w
 #
+# uzo: xml2html.pl mia_artikolo.xml > mia_artikolo.html
 
 ################## parametroj ########################
 
@@ -62,6 +63,7 @@ $subart_cnt=0;
 $head_level=2;
 $radiko='';
 $marko='';
+$cvs_id='';
 
 if ($file) {
     $parser->parsefile($file);
@@ -122,11 +124,16 @@ sub vortaro {
     print "<body>\n";
 };
 sub vortaro_ {
-#    my $title = $file; $title =~ s/\.xml//i;
+    my $versio;
 
     if ($redakto_cgi) {
-	print "<hr>[<a href=\"$xml_dosierujo/$marko.xml\">$marko.xml</a>]\n";
+	print "<hr>\n[<a href=\"$xml_dosierujo/$marko.xml\">$marko.xml</a>]\n";
 	print "[<a href=\"$redakto_cgi?art=$marko\">redakti...</a>]\n";
+	
+	if ($cvs_id =~ m|,v ([0-9/:\. ]+) |) {
+	    $versio = $1;
+	    print "versio: $versio\n<br>";
+	}
     }
 
     print "</body>\n</html>\n";
@@ -136,8 +143,9 @@ sub vortaro_ {
 
 sub art {
     shift; shift; # ignoru xp kaj el
-    $marko = get_attr('mrk',@_);
-    $marko =~ s/^\044Id:\s+([^,\.]+)\.xml,v.*\044$/$1/; 
+    $cvs_id = get_attr('mrk',@_);
+    $cvs_id =~ /^\044Id:\s+([^,\.]+)\.xml,v.*\044$/;
+    $marko = $1;
 
     $snc_cnt=0;
     $subdrv_cnt=0;
