@@ -863,7 +863,13 @@ sub INX_LNG {
 		print "<img src=\"../smb/xx.png\" alt = \"[$lng]\">&nbsp;";
 	    }
 	    print "<a href=\"lx_${lng}_$unua_litero{$lng}.html\">";
-	    print "$lingvoj{$lng}</a><br>\n";
+
+	    if ($statistiko{"lng_$lng"} >= 1000) {
+		print "<b>$lingvoj{$lng}</b>";
+	    } else {
+		print "$lingvoj{$lng}";
+	    }
+	    print "</a><br>\n";
 	}
     };
 
@@ -876,7 +882,12 @@ sub INX_LNG {
 	    print "<img src=\"../smb/xx.png\" alt = \"[$lng]\">&nbsp;";
 	}
 	print "<a href=\"lx_${lng}_$unua_litero{$lng}.html\">";
-	print "$lingvoj{$lng}</a><br>\n";
+	if ($statistiko{"lng_$lng"} >= 1000) {
+	    print "<b>$lingvoj{$lng}</b>";
+	} else {
+	    print "$lingvoj{$lng}";
+	}
+	print "</a><br>\n";
     }
 
     index_footer();
