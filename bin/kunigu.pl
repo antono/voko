@@ -30,7 +30,7 @@ while ($ARGV[0] and $ARGV[0] =~ /^\-[av]/) {
 if (@ARGV) {
     $vortaro=shift @ARGV;
 } else {
-    $vortaro="$ARTIK/vortaro.xml";
+    $vortaro="sgm/vortaro.xml";
 };
 
 open OUT,">$vortaro" or die "Ne povis malfermi $vortaro: $!\n";

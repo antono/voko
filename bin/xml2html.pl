@@ -342,7 +342,10 @@ sub ekz_ { print "</cite>" };
 sub dif  { print "<span class=dif>" };
 sub dif_ { print "</span>" };
 
-sub fnt  { print "<sup>" };
+sub ofc  { print "<sup class=ofc>" };
+sub ofc_ { print "</sup>" };
+
+sub fnt  { print "<sup class=fnt>" };
 sub fnt_ { print "</sup>" };
 
 sub gra  { print "(" };
