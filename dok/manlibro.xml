@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <manlibro>
-<h1>Manlibreto pri la Voko-DTD</h1>
+<h1>Teĥnika manlibro (pri la Voko-DTD)</h1>
 
 <h2 id="vortaro">vortaro</h2>
 
@@ -91,7 +91,7 @@ Se la artikoloj estas administrataj per la arĥivosistemo
 CVS, la marko estas aŭtomate donita de tiu sistemo en loko
 markita per &#36;Id&#36; kaj tiukaze enhavas krome indikojn pri
 versio kaj ŝanĝtempo de la artikolo. Tiujn informojn uzas
-ankaŭ,a retpoŝta redaktoservo por certigi, ke ne du
+ankaŭ la retpoŝta redaktoservo por certigi, ke ne du
 redaktantoj redaktas samtempe la saman artikolon.
 Ampleksaj artikoloj cetere povas esti dividitaj en
 subartikoloj. 
@@ -148,12 +148,12 @@ la radiko kaj nur aldonas prefiksojn, finaĵojn ktp.
 <p>
 Derivaĵoj entenas la priskribon pri iu vorto derivita
 el la kapvorto de la artikolo. Ili konsistas el propra
-kapvorto kaj ĝia priskribo, kiu normale estas dividita
+kapvorto kaj ĝia priskribo, kiu ofte estas dividita
 en plurajn sencojn. Se temas pri nur unu senco, la divido
 principe ne estas necesa. Sed por faciligi la taskon de
 la konvertiloj mi rekomendas eĉ ĉe nur unu senco krampi
-ĝin per &lt;snc&gt;...&lt;/snc&gt;. Por ke derivaĵoj povas
-esti rekte referencitaj el aliaj artikoloj ili ricevas 
+ĝin per &lt;snc&gt;...&lt;/snc&gt;. Por ke derivaĵoj 
+estu rekte referenceblaj el aliaj artikoloj ili ricevas 
 same kiel la artikolo markon, kiu konsistas el la 
 dosiernomo, punkto kaj la kapvorto de la derivaĵo, en kiu
 la tildo estas anstataŭigita per nulo.
@@ -242,7 +242,7 @@ en la prezento fariĝas "Rim: La senco dormi <i>2</i>
 estas uzata nur..."
 </p><p>
 Se malsupre en artikolo vi volas doni ekzemplojn rilate
-al senco pli frue okazita, vi povas fari tion per:
+al senco pli frue aperanta, vi povas fari tion per:
 </p>
 
 <code>
@@ -268,9 +268,9 @@ krom la citita aŭ ekzempla teksto klarigojn kaj
 <code>
 <ekz>
   lasi <tld/>i la manojn
-  <fnt>(<aut>Zamenhof</aut>: <vrk>Proverbaro</vrk>)</fnt>
+  <fnt><aut>Zamenhof</aut>: <vrk>Proverbaro</vrk></fnt>
   <klr>
-    (f. perdi la kura&amp;gcirc;on)
+    (perdi la kura&amp;gcirc;on)
   </klr>;
 </ekz>
 </code>
@@ -286,7 +286,7 @@ referenco al la bibliografio.
 </p>
 
 <code>
-<fnt><bib>M</bib>, <lok>Josuo 6, 20</lok></fnt>
+<fnt><bib>MT</bib>, <lok>Josuo 6, 20</lok></fnt>
 </code>
 
 <p>
@@ -311,7 +311,7 @@ por novaj redaktoj.
 <h2 id="trd">tradukoj</h2>
 
 <p>
-Simplajn tradukoj vi donas ene de strukturo senco, derivaĵo
+Simplajn tradukojn vi donas ene de strukturo senco, derivaĵo
 aŭ simila per indiko de la ISO-kodo de la lingvo kaj la
 traduka vorto.
 </p>
@@ -324,7 +324,8 @@ la lingvokodo, aliokaze ĉe multaj lingvoj oni iam perdas
 la superrigardon.
 </p><p>
 Ofte la tradukoj konsistas el pluraj vortoj kaj oni devas
-marki la vorton, sub kiu la traduko aperu en la lingvoindekso.
+marki la vorton, sub kiu la traduko aperu en la indekso de la koncerna
+lingvo.
 </p>
 <code>
 <trd lng="de">sich <ind>am&amp;uuml;sieren</ind></trd>
@@ -345,6 +346,13 @@ en la artikolo mem, oni donas tiel.
 </p>
 <code>
 <trd>geben <klr tip="ind">(es gibt)</klr></trd>
+</code>
+<p>
+Se ili aperu kaj en la lingvoindekso kaj en la
+artikolo mem, oni povas skribi:
+</p>
+<code>
+<klr tip="amb">...</klr>
 </code>
 <p>
 Vi ankaŭ povas traduki ekzemplon aŭ parton de ekzemplo, 
