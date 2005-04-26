@@ -176,7 +176,7 @@
   </vrk>
 
   <vrk mll="&Ccirc;uk&ccirc;oj">
-     <url>http://www.ikso.net/~bertilo-tekstaro</url>
+     <url>http://bertilo.com/tekstaro/</url>
      <aut><a>Vasilij</a> <n>Ero&scirc;enko</n></aut>
      <tit>El vivo de &ccirc;uk&ccirc;oj</tit>
      <eld>
@@ -501,7 +501,7 @@
   </vrk>
 
   <vrk mll="FK">
-     <url>http://www.ikso.net/~bertilo-tekstaro</url>
+     <url>http://bertilo.com/tekstaro/</url>
      <aut><a>Ludoviko Lazaro</a> <n>Zamenhof</n></aut>
      <tit>Fundamenta Krestomatio de la lingvo Esperanto</tit>
      <eld>
@@ -602,6 +602,30 @@
     </eld>
   </vrk>
 
+  <vrk mll="InfanTorent2">
+     <url>http://bertilow.com/tekstaro</url>
+     <aut><a>Stellan</a> <n>Engholm</n></aut>
+     <tit>Infanoj en Torento, dua libro en la 
+       Torento-trilogio</tit>
+     <eld>
+       <nom>Eldona Societo Esperanto</nom>
+       <lok>Stockholm</lok>
+       <dat>1939</dat>
+       <nro>1a eldono</nro>
+     </eld>
+     <eld>
+       <nom>Dansk Esperanto-Forlag</nom>
+       <dat>1972</dat>
+       <nro>2a eldono</nro>
+     </eld>
+     <eld>
+       <nom>Inko</nom>
+       <lok>Tyres&ouml;</lok>
+       <dat>2001</dat>
+       <nro>3a eldono</nro>
+     </eld>
+  </vrk>
+
   <vrk mll="IntArkeol">
     <aut><a>Marinko</a> <n>Givoje</n></aut>
     <tit>Interesa arkeologio</tit>
@@ -685,7 +709,7 @@
   </vrk>
 
   <vrk mll="Kiso">
-     <url>http://www.ikso.net/~bertilo-tekstaro</url>
+     <url>http://bertilo.com/tekstaro/</url>
      <aut><a>Hjalmar</a> <n>S&ouml;derberg</n></aut>
      <trd><a>Sten</a> <n>Johansson</n></trd>
      <tit>La Kiso kaj dek tri aliaj noveloj</tit>
@@ -995,6 +1019,18 @@
     </eld>
   </vrk>
 
+  <vrk mll="Mortul&Scirc;ip">
+     <url>http://bertilow.com/tekstaro</url>
+     <aut><a>B.</a> <n>Traven</n></aut>
+     <trd><a>Hans Georg</a> <n>Kaiser</n></trd>
+     <tit>Mortula &Scirc;ipo, Rakonto de usona maristo</tit>
+     <eld>
+       <nom>Inko</nom>
+       <lok>Tyres&ouml;</lok>
+       <dat>2001</dat>
+     </eld>
+  </vrk>
+
   <vrk mll="MT">
     <url>http://www.uni-leipzig.de/esperanto/texte/bibl/biblio/</url>
     <trd><a>L. L.</a> <n>Zamenhof</n></trd>
@@ -1116,6 +1152,18 @@
     </eld>
   </vrk>
 
+  <vrk mll="Plumamikoj">
+     <url>http://bertilow.com/tekstaro</url>
+     <aut><a>Marjorie</a> <n>Boulton</n></aut>
+     <tit>Ne nur leteroj de plum-amikoj</tit>
+     <eld>
+       <nom>Eldona Societo Esperanto</nom>
+       <lok>Malm&ouml;</lok>
+       <dat>1984</dat>
+       <nro>1a eldono</nro>
+     </eld>
+  </vrk>
+
   <vrk mll="PMEG">
     <url>http://purl.oclc.org/net/pmeg/</url>
     <aut><a>Bertilo</a> <n>Wennergren</n></aut>
@@ -1205,11 +1253,45 @@
   </vrk>
 
   <vrk mll="SatirRak">
-     <url>http://www.ikso.net/~bertilo-tekstaro</url>
+     <url>http://bertilo.com/tekstaro/</url>
      <aut><a>S&aacute;ndor</a> <n>Szathm&aacute;ri</n></aut>
      <tit>Satiraj rakontoj</tit>
      <eld>
        <dat>1957-1972</dat>
+     </eld>
+  </vrk>
+
+  <vrk mll="ScTerm">
+    <url>&url_mjb;/ScTerm.tif</url>
+    <aut><a>Maurice</a> <n>Rollet de l'Isle</n></aut>
+    <tit>Scienca Fundamenta Esperanta Terminaro</tit>
+    <eld>
+      <nom>Centra Presejo Esperantista</nom>
+      <lok>Parizo</lok>
+      <dat>1931</dat>
+    </eld>
+  </vrk>
+
+  <vrk mll="SkandalJozef">
+     <url>http://bertilow.com/tekstaro</url>
+     <aut><a>Valdemar</a> <n>Vina&rcaron;</n></aut>
+     <tit>La skandalo pro Jozefo</tit>
+     <eld>
+       <nom>&Ccirc;EA</nom>
+       <lok>Prago</lok>
+       <dat>1981</dat>
+       <nro>1a eldono</nro>
+     </eld>
+     <eld>
+       <nom>Kava-Pech</nom>
+       <lok>Dobrichovice</lok>
+       <dat>2002</dat>
+       <nro>2a eldono</nro>
+     </eld>
+     <eld>
+       <nom>Inko</nom>
+       <lok>Tyres&ouml;</lok>
+       <dat>2002</dat>
      </eld>
   </vrk>
 
@@ -1307,6 +1389,17 @@
     </eld>
   </vrk>
 
+  <vrk mll="Vetero">
+    <aut><a>Denis</a> <n>Riley</n></aut>
+    <aut><a>Lewis</a> <n>Spolton</n></aut>
+    <tit>Vetero kaj klimato de la mondo</tit>
+    <eld>  
+       <nom>Universala Esperanto-Asocio</nom>
+       <lok>Rotterdam</lok>
+       <dat>1987</dat>
+    </eld>
+  </vrk>
+
   <vrk mll="Viki">
      <url>http://eo.wikipedia.com/</url>
      <tit>Vikipedio</tit>
@@ -1332,6 +1425,23 @@
       <dat>2002</dat>
       <isbn>92-9017-078-6</isbn>
     </eld>
+  </vrk>
+
+  <vrk mll="Voja&gcirc;Imp">
+     <url>http://bertilow.com/tekstaro/</url>
+     <aut><a>Valdemar</a> <n>Langlet</n></aut>
+     <tit>Voja&gcirc;impresoj</tit>
+     <eld>
+       <nom>Lingvo Internacia</nom>
+       <dat>1895</dat>
+       <nro>1a eldono</nro>
+     </eld>
+     <eld>
+       <nom>Inko</nom>
+       <lok>Tyres&ouml;</lok>
+       <dat>2003</dat>
+       <nro>2a eldono</nro>
+     </eld>
   </vrk>
 
   <vrk mll="WAPS">
