@@ -949,10 +949,12 @@ sub INX_LNG {
 #	    } else {
 #		print "<img src=\"../smb/xx.png\" alt = \"[$lng]\" class=\"flago\">&nbsp;";
 #	    }
-            if ($indeksoj=~/jx/)
-            { print "<a href=\"lx_${lng}.html\">"; }
-            else
-            { print "<a href=\"lx_${lng}_$unua_litero{$lng}.html\">"; }
+#            if ($indeksoj=~/jx/)
+#            { print "<a href=\"lx_${lng}.html\">"; }
+#            else
+#            { 
+	    print "<a href=\"lx_${lng}_$unua_litero{$lng}.html\">"; 
+#}
 
 	    if ($statistiko{"lng_$lng"} >= 1000) {
 		print "<b>$lingvoj{$lng}</b>";

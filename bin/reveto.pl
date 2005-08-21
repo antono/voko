@@ -35,7 +35,7 @@ $neliteroj = '0-9\/\s,;\(\)\.\-!:';
 #$xslbin = "/home/revo/voko/bin/xslt.sh";
 $xsl = "$VOKO/xsl/revotxt.xsl";
 
-%lingvoj = ('de'=>'germana','fr'=>'franca');
+%lingvoj = ('de'=>'germana','fr'=>'franca','nl'=>'nederlanda');
 
 ################## precipa programparto ###################
 

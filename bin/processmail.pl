@@ -232,7 +232,7 @@ sub process_ent {
                 or ($entity->head->get('content-type')
 		 =~  /POSTDATA\.ATT/s)
 		or ($entity->head->get('subject')
-		 =~ /Form\s+posted\s+from\s+Opera/s))
+		 =~ /form\s+post/si))
                 and ($parttxt =~ /^\s*komando=redakto&/)
                 or ($entity->mime_type
                     =~ m|application/x-www-form-urlencoded|)) { 

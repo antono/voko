@@ -412,6 +412,8 @@ sub make_refs {
 sub cnt_and_depth {
     my ($mrk,$node);
 
+    print "XXXXXxx cnt_and_depth XXXXXXX\n" if ($debug);
+
     while (($mrk,$node) = each %wordlist) {
        
 	# se c kaj h ne jam difinita metu 0
@@ -429,7 +431,13 @@ sub cnt_and_depth {
 	while (@prnts1) {
 
 	    my @prnts2 = ();
+
+	    print "------------------\n" if ($debug);
+
 	    for $n (@prnts1) {
+
+		print "$mrk - ".$n->{'mrk'}."\n" if ($debug);
+
 		# ekskludu cirklojn
 		if ($n == $node) {
 		    warn "FIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII"
@@ -442,6 +450,21 @@ sub cnt_and_depth {
                 # se ne jam en la listo, traktu ankau ties patrojn
 		#if (not exist $all_parents{$n}) {
 		push @prnts2,(@{$n->{'super'}},@{$n->{'malprt'}});
+
+		if ($debug) {
+		    print "malidoj de $mrk: ";
+		    map {print $_->{'mrk'}." "} @prnts2;
+		    print "\n";
+		}
+		
+		if (grep {$_==$n} (@{$n->{'super'}},@{$n->{'malprt'}})) {
+		    warn "FIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII"
+			."! Estas cirklo che la patroj de "
+			    .$n->{'mrk'}."\"\n";
+		    #die; # provizore mortu, char en unu okazo la programo
+		    # ne finighas
+		}    
+
 		#}
 		# memoru la distancon inter $node kaj $n
 		# (se $n plurfoje aperas kiel antauulo, la plej granda

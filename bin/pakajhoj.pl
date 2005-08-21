@@ -214,9 +214,9 @@ sub print_file_list {
     }
 
     # dict-versio
-    if (grep /^revodict.tgz$/, @files) {
+    if (grep /^revodict.*\.tgz$/, @files) {
 	print "<h2>DICT-versio de Reta Vortaro</h2>\n<dl>\n";
-	if ($f = grepfile ('^revodict\.tgz$')) {
+	if ($f = grepfile ('^revodict.*\.tgz$')) {
             print "<dt>DICT-Revo</dt>\n";
 	    print "<dd><a href=\"$f\">$f</a> (".filesize($f).")<br>\n";
             print "Tio ebligas rapidan uzadon de la vortaro simple tajpante\n";
@@ -254,6 +254,8 @@ sub print_file_list {
 	    print "<li><a href=\"$f\">$f</a> (".filesize($f).")\n";
         }
         print "</ul>\n";
+	print "Vi povas ankaŭ ricevi version en bedic-formato.\n";
+	print "Skribu al la Revo-administranto, se vi bezonas.\n";
     }
  
     # listigu ceterajn
