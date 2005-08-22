@@ -48,7 +48,7 @@ unless ($agord_dosiero) { $agord_dosiero = "cfg/vortaro.cfg" };
 # HTML-kapo
 if ($html) {
     index_header('eraro-raporto');
-    index_buttons();
+    index_buttons('ktp');
     print "<h1>Eraroraporto</h1>\n<dl>\n";
 }
 

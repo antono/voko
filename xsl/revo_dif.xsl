@@ -86,6 +86,8 @@ kaj stiloj (em,ctl,sup...)
   <span class="klr"><xsl:apply-templates/></span>
 </xsl:template>
 
+<xsl:template match="klr[@tip='ind']"/>
+
 
 <xsl:template match="bld">
   <xsl:if test="$aspekto='ilustrite'">
@@ -165,13 +167,13 @@ kaj stiloj (em,ctl,sup...)
       <xsl:text>(komune) </xsl:text>
     </xsl:when>
     <xsl:when test=".='FIG'">
-      <xsl:text>(f) </xsl:text>
+      <xsl:text>(figure) </xsl:text>
     </xsl:when>
     <xsl:when test=".='ARK'">
-      <xsl:text>(ark.) </xsl:text>
+      <xsl:text>(arkaismo) </xsl:text>
     </xsl:when>
     <xsl:when test=".='EVI'">
-      <xsl:text>(Ev.) </xsl:text>
+      <xsl:text>(evitinde) </xsl:text>
     </xsl:when>
     <xsl:when test=".='FRAZ'">
       <xsl:text>(fraza&#x0135;o) </xsl:text>

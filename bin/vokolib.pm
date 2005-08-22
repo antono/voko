@@ -18,12 +18,12 @@ sub index_header {
 	"<title>$title</title>\n",
 	"<link title=\"indekso-stilo\" type=\"text/css\" ",
 	"rel=stylesheet href=\"../stl/indeksoj.css\">\n",
-	"</head>\n<body>\n";
+	"</head>\n<body>\n<table cellspacing=\"0\"><tr>\n";
 }
 
 # skribas la suban parton de html-ajho
 sub index_footer {
-    print "\n</body>\n</html>\n";
+    print "\n</td></tr></table></body>\n</html>\n";
 }
 
 
@@ -32,34 +32,19 @@ sub index_buttons {
     my $self = shift || "";
     my $bgcolor = 'bgcolor="#AACCAA"';
 
-    print 
-	"<script type=\"text/javascript\" src=\"../smb/butonoj.js\"></script>\n",
+    print (($self eq 'eo')? "<td class=\"aktiva\">": "<td class=\"fona\">");
+    print "<a href=\"../inx/_eo.html\">Esperanto</a></td>";
 
-        (($self eq 'eo')? 
-	 "<img src=\"../smb/nav_eo0.png\" alt=\"[Esperanto]\" border=0 class=\"btn_active\">\n":
-	 "<a href=\"../inx/_eo.html\" onMouseOver=\"highlight(0)\" ".
-	 "onMouseOut=\"normal(0)\">".
-	 "<img src=\"../smb/nav_eo1.png\" alt=\"[Esperanto]\" border=0 class=\"btn\"></a>\n"),
+    print (($self eq 'lng')? "<td class=\"aktiva\">": "<td class=\"fona\">");
+    print "<a href=\"../inx/_lng.html\">Lingvoj</a></td>";
 
-	(($self eq 'lng')?
-	 "<img src=\"../smb/nav_lng0.png\" alt=\"[Lingvoj]\" border=0 class=\"btn_active\">\n":
-	 "<a href=\"../inx/_lng.html\" onMouseOver=\"highlight(1)\" ".
-	 "onMouseOut=\"normal(1)\">".
-	 "<img src=\"../smb/nav_lng1.png\" alt=\"[Lingvoj]\" border=0 class=\"btn\"></a>\n"),
+    print (($self eq 'fak')? "<td class=\"aktiva\">": "<td class=\"fona\">");
+    print "<a href=\"../inx/_fak.html\">Fakoj</a></td>";
 
-        (($self eq 'fak')?
-	 "<img src=\"../smb/nav_fak0.png\" alt=\"[Fakoj]\" border=0 class=\"btn_active\">\n":
-	 "<a href=\"../inx/_fak.html\" onMouseOver=\"highlight(2)\" ".
-	 "onMouseOut=\"normal(2)\">".
-	 "<img src=\"../smb/nav_fak1.png\" alt=\"[Fakoj]\" border=0 class=\"btn\"></a>\n"),
+    print (($self eq 'ktp')? "<td class=\"aktiva\">": "<td class=\"fona\">");
+    print "<a href=\"../inx/_ktp.html\">ktp.</a></td>";
 
-        (($self eq 'ktp')?
-	 "<img src=\"../smb/nav_ktp0.png\" alt=\"[ktp.]\" border=0 class=\"btn_active\">\n":
-	 "<a href=\"../inx/_ktp.html\" onMouseOver=\"highlight(3)\" ".
-	 "onMouseOut=\"normal(3)\">".
-	 "<img src=\"../smb/nav_ktp1.png\" alt=\"[ktp.]\" border=0 class=\"btn\"></a>\n"),
-
-	"<br>";
+    print "</tr>\n<tr><td colspan=\"4\" class=\"enhavo\">";
 }
 
 sub read_cfg {

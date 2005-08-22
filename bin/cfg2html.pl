@@ -21,7 +21,7 @@ if ($entries{'_#!_'}) {
 
 # eligu HTML-dosieron de la bibliografio
 index_header($stir{'titolo'});
-index_buttons() if ($stir{'butonoj'} eq 'jes');
+index_buttons('ktp') if ($stir{'butonoj'} eq 'jes');
 print "<h1>$stir{'titolo'}</h1>\n";
 
 if ($stir{'listo'} eq 'dl') {

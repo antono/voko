@@ -241,9 +241,17 @@ reguloj por la prezentado de la artikolostrukturo
   <xsl:apply-templates select="tez" mode="ref"/>
 
   <dt>
-    <xsl:number format="a)"/>
-    <xsl:choose>
 
+    <xsl:choose>
+       <xsl:when test="@ref">
+          <xsl:apply-templates mode="number-of-ref-snc" select="id(@ref)"/>:
+       </xsl:when>
+       <xsl:otherwise>
+         <xsl:number format="a)"/>
+       </xsl:otherwise>
+    </xsl:choose>
+
+    <xsl:choose>
       <xsl:when test="@mrk">			       
         <xsl:comment>[[ref="<xsl:value-of select="@mrk"/>"]]</xsl:comment>
       </xsl:when>

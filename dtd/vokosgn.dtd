@@ -634,56 +634,73 @@
 <!ENTITY Yuml   "&#x0178;">
 <!ENTITY yuml   "&#x00ff;">
 
+
 <!-- arabaj -->
+<!ENTITY alif       "&#x0627;"> 
+<!ENTITY ba         "&#x0628;"> 
+<!ENTITY ta         "&#x062A;"> 
+<!ENTITY tha        "&#x062B;"> 
+<!ENTITY jim        "&#x062C;"> 
+<!ENTITY Ha         "&#x062D;"> 
+<!ENTITY hha        "&#x062E;"> 
+<!ENTITY dal        "&#x062F;"> 
+<!ENTITY dhal       "&#x0630;"> 
+<!ENTITY ra         "&#x0631;"> 
+<!ENTITY zin        "&#x0632;"> 
+<!ENTITY sin        "&#x0633;"> 
+<!ENTITY shin1      "&#x0634;"> 
+<!ENTITY Sad        "&#x0635;"> 
+<!ENTITY Dad        "&#x0636;"> 
+<!ENTITY Ta         "&#x0637;"> 
+<!ENTITY Za         "&#x0638;"> 
+<!ENTITY ayn        "&#x0639;"> 
+<!ENTITY ghayn      "&#x063A;"> 
+<!ENTITY fa         "&#x0641;"> 
+<!ENTITY qaf        "&#x0642;"> 
+<!ENTITY kaf1       "&#x0643;"> 
+<!ENTITY lam        "&#x0644;"> 
+<!ENTITY mim        "&#x0645;"> 
+<!ENTITY nun1       "&#x0646;"> 
+<!ENTITY ha         "&#x0647;"> 
+<!ENTITY waw        "&#x0648;"> 
+<!ENTITY ya         "&#x064A;"> 
 
-<!ENTITY &alif;     "&#x627;"> <!-- AØ§ -->
-<!ENTITY &ba;       "&#x628;"> <!-- AØ¨ -->
-<!ENTITY &ta;       "&#x62A;"> <!-- AØª -->
-<!ENTITY &tha;      "&#x62B;"> <!-- AØ« -->
-<!ENTITY &jim;      "&#x62C;"> <!-- AØ¬ -->
-<!ENTITY &Ha;       "&#x62D;"> <!-- AØ­ -->
-<!ENTITY &hha;      "&#x62E;"> <!-- AØ¬ -->
-<!ENTITY &dal;      "&#x62F;"> <!-- AØ¯ -->
-<!ENTITY &dhal;     "&#x630;"> <!-- AØ° -->
-<!ENTITY &ra;       "&#x631;"> <!-- AØ± -->
-<!ENTITY &zin;      "&#x632;"> <!-- AØ² -->
-<!ENTITY &sin;      "&#x633;"> <!-- AØ³ -->
-<!ENTITY &shin1;    "&#x634;"> <!-- AØ´ -->
-<!ENTITY &Sad;      "&#x635;"> <!-- AØµ -->
-<!ENTITY &Dad;      "&#x636;"> <!-- AØ¶ -->
-<!ENTITY &Ta;       "&#x637;"> <!-- AØ· -->
-<!ENTITY &Za;       "&#x638;"> <!-- AØ¸ -->
-<!ENTITY &ayn;      "&#x639;"> <!-- AØ¹ -->
-<!ENTITY &ghayn;    "&#x63A;"> <!-- AØº -->
-<!ENTITY &fa;       "&#x641;"> <!-- AÙ201 -->
-<!ENTITY &qaf;      "&#x642;"> <!-- AÙ202 -->
-<!ENTITY &kaf1;     "&#x643;"> <!-- AÙ203 -->
-<!ENTITY &lam;      "&#x644;"> <!-- AÙ204 -->
-<!ENTITY &mim;      "&#x645;"> <!-- AÙ205 -->
-<!ENTITY &nun1;     "&#x646;"> <!-- AÙ206 -->
-<!ENTITY &ha;       "&#x647;"> <!-- AÙ207 -->
-<!ENTITY &waw;      "&#x648;"> <!-- AÙ210 -->
-<!ENTITY &ya;       "&#x64A;"> <!-- AÙ212 -->
+<!ENTITY fatha      "&#x064E;"> 
+<!ENTITY kasra      "&#x0650;"> 
+<!ENTITY damma      "&#x064F;"> 
+<!ENTITY fatha_alif "&#x064E;&#x0627;"> 
+<!ENTITY kasra_ya   "&#x0650;&#x064A;"> 
+<!ENTITY damma_waw  "&#x064F;&#x0648;"> 
+<!ENTITY fathatan   "&#x064B;"> 
+<!ENTITY kasratan   "&#x064D;"> 
+<!ENTITY dammatan   "&#x064C;"> 
+<!ENTITY sukun      "&#x0652;"> 
+<!ENTITY shadda     "&#x0651;"> 
 
-<!ENTITY &fatha;    "&#x64E;"> <!-- AÙ -->
-<!ENTITY &kasra;    "&#x650;"> <!-- AÙ220 -->
-<!ENTITY &damma;    "&#x64F;"> <!-- AÙ -->
-<!ENTITY &fatha_alif; "&#x64E;&#x627;"> <!-- AÙ330A§ -->
-<!ENTITY &kasra_ya; "&#x650;&#x64A;"> <!-- AÙ220AÙ212 -->
-<!ENTITY &damma_waw; "&#x64F;&#x648;"> <!-- AÙ331210 -->
-<!ENTITY &fathatan; "&#x64B;"> <!-- AÙ213 -->
-<!ENTITY &kasratan; "&#x64D;"> <!-- AÙ215 -->
-<!ENTITY &dammatan; "&#x64C;"> <!-- AÙ214 -->
-<!ENTITY &sukun;    "&#x652;"> <!-- AÙ222 -->
-<!ENTITY &shadda;   "&#x651;"> <!-- AÙ221 -->
+<!ENTITY alif_maqsura "&#x0649;"> 
+<!ENTITY ta_marbuta "&#x0629;"> 
+<!ENTITY alif_hamza_sure "&#x0623;"> 
+<!ENTITY alif_hamza_sube "&#x0625;"> 
+<!ENTITY alif_madda "&#x0622;"> 
+<!ENTITY alif_wasla "&#x0671;"> 
+<!ENTITY ya_hamza   "&#x0626;"> 
+<!ENTITY waw_hamza  "&#x0624;"> 
+<!ENTITY hamza      "&#x0621;"> 
 
-<!ENTITY &alif_maqsura; "&#x649;"> <!-- AÙ211 -->
-<!ENTITY &ta_marbuta; "&#x629;"> <!-- AØ© -->
-<!ENTITY &alif_hamza_sure; "&#x623;"> <!-- AØ£ -->
-<!ENTITY &alif_hamza_sube; "&#x625;"> <!-- AØ? -->
-<!ENTITY &alif_madda; "&#x622;"> <!-- AØ¢ -->
-<!ENTITY &alif_wasla; "&#x671;"> <!-- AÙ± -->
-<!ENTITY &ya_hamza; "&#x626;"> <!-- AØ¦ -->
-<!ENTITY &waw_hamza; "&#x624;"> <!-- AØ¤ -->
-<!ENTITY &hamza;    "&#x621;"> <!-- AØ¡ -->
+<!ENTITY ar_komo    "&#x060C;"> 
+<!ENTITY ar_dekumakomo "&#x066B;"> 
+<!ENTITY ar_punktokomo "&#x061B;"> 
+<!ENTITY ar_demandopunkto "&#x061F;"> 
+<!ENTITY ar_0       "&#x0660;"> 
+<!ENTITY ar_1       "&#x0661;"> 
+<!ENTITY ar_2       "&#x0662;"> 
+<!ENTITY ar_3       "&#x0663;"> 
+<!ENTITY ar_4       "&#x0664;"> 
+<!ENTITY ar_5       "&#x0665;"> 
+<!ENTITY ar_6       "&#x0666;"> 
+<!ENTITY ar_7       "&#x0667;"> 
+<!ENTITY ar_8       "&#x0668;"> 
+<!ENTITY ar_9       "&#x0669;"> 
+
+
 

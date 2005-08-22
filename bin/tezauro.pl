@@ -626,7 +626,7 @@ sub html_tree {
 		select OUT;
 	
 		index_header("tezaŭro: ".$node->{'kap'});
-		index_buttons();
+		index_buttons('eo');
 		
 		print "<p>\n";
 		if ($node->{'uzo'}) {
@@ -781,7 +781,7 @@ sub create_fx {
 	select OUT;
 
 	index_header($fako);
-	index_buttons();
+	index_buttons('fak');
 	print
 	    "<a href=\"../inx/fx_".lc($fako).".html\">alfabete</a> ",
 	    "<b>strukture</b>\n<h1>$fakoj{$fako} strukture...</h1>\n";

@@ -132,7 +132,7 @@ foreach $lng (keys %lingvoj) {
 	open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
 	select OUT;
 	index_header("netradukitaj vortoj por \"$lng\"");
-	index_buttons();
+	index_buttons('ktp');
 	
 #	add(\@mankantaj,$l);
 	my $mankas = scalar(keys %sencoj) - $lingvoj{$lng}->[0];
@@ -173,7 +173,7 @@ my $target_file = "$inxdir/mankantaj.html";
 open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
 select OUT;
 index_header("netradukitaj vortoj");
-index_buttons();
+index_buttons('ktp');
 
 print "<h1>listoj de mankantaj tradukoj</h1>\n";
 foreach $lng (@mankantaj_lng) {

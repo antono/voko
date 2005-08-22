@@ -19,11 +19,11 @@ kreita de Wolfram Diestel
   <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <link title="artikolo-stilo" type="text/css" rel="stylesheet"
-    href="{$cssdir}/indeksoj.css" />
+    href="{$cssdir}/artikolo.css" />
   <title><xsl:value-of select="h1"/></title>
   <style type="text/css">
   <xsl:comment>
-        .code { background-color : #eeeecc; padding: 0.1cm }
+        .code { background-color : #eeeebb; padding: 0.1cm }
         .element { color : blue }
         .attribute { color: #007700 }
         .attribute-value { color: #004400 }

@@ -119,11 +119,13 @@ if ($indeksoj=~/lng/) {
     foreach $lng (sort keys %tradukoj) { 
 	@literoj = sort { cmp_nls($a,$b,$lng) } keys %{$tradukoj{$lng}};
 	$unua_litero{$lng} = letter_asci_nls($literoj[0],$lng);
+if ($lng eq 'de' || $lng eq 'ru' || $lng eq 'hu' || $lng eq 'fr') { #####
 	foreach $lit (@literoj) {
 	    $refs = $tradukoj{$lng}->{$lit};
 	    @$refs = sort { cmp_nls($a->[2],$b->[2],$lng) } @$refs;
 	    LINGVINX($lng,$lit,\@literoj,$refs);
 	}
+} #####
     }
 }
 
@@ -471,7 +473,7 @@ sub FAKINX {
     }
 
     index_header("fakindekso: $faknomo");
-    index_buttons();
+    index_buttons('fak');
     if ($strukt_fakoj{$fako}) {
 	$strukt_file = $strukt_fakoj{$fako};
 	$strukt_file =~ s/\.html$//;
@@ -522,7 +524,7 @@ sub LINGVINX {
     open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
     select OUT;
     index_header("lingvoindekso: $lingvoj{$lng}");
-    index_buttons();
+    index_buttons('lng');
     if ($indeksoj=~/jx/) { print "<a href=\"lx_${lng}.html\">Ser&#x0109;o</a> "};
     index_letters($lingvoj{$lng},"lx_${lng}_",$lit,$literoj,
 		 [map {letter_asci_nls($_,$lng)} @$literoj]);
@@ -565,7 +567,7 @@ sub KAPVORTINX {
     open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
     select OUT;
     index_header("kapvortindekso");
-    index_buttons();
+    index_buttons('eo');
     index_letters('kapvortoj ','kap_',$lit,$literoj,
 		 [map {letter_asci_nls($_,'eo')} @$literoj]);
 #    print "<h1>kapvortoj $lit...</h1>\n";
@@ -609,7 +611,7 @@ sub INVVORTINX {
     open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
     select OUT;
     index_header("inversa indekso");
-    index_buttons();
+    index_buttons('ktp');
     index_letters('inversa','inv_',$lit,$literoj,
 		[map {letter_asci_nls($_,'eo')} @$literoj] );
 #    print "<h1>inversa $lit...</h1>\n";
@@ -678,7 +680,7 @@ sub INXSHANGHITAJ {
     open OUT, ">$tmp_file" or die "Ne povis malfermi $tmp_file: $!\n";
     select OUT;
     index_header("Revo - novaj artikoloj");
-    index_buttons();
+    index_buttons('ktp');
     print "<h1>novaj artikoloj</h1>\n";
 
     # skribu la liston
@@ -702,7 +704,7 @@ sub INXSHANGHITAJ {
     open OUT, ">$tmp_file" or die "Ne povis malfermi $tmp_file: $!\n";
     select OUT;
     index_header("laste ŝanĝitaj");
-    index_buttons();
+    index_buttons('ktp');
     print "<h1>laste ŝanĝitaj</h1>\n";
 
     # skribu la liston de redaktintoj
@@ -746,7 +748,7 @@ sub INXBILDOJ {
     open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
     select OUT;
     index_header('bildoj');
-    index_buttons();
+    index_buttons('ktp');
     print "<h1>bildoj</h1>\n<dl>\n";
     
     # ordigu la vortliston
@@ -788,7 +790,7 @@ sub INXMALLONGIGOJ {
     open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
     select OUT;
     index_header('mallongigoj');
-    index_buttons();
+    index_buttons('ktp');
     print "<h1>mallongigoj</h1>\n<dl>\n";
     
     # ordigu la vortliston
@@ -828,7 +830,7 @@ sub INXSTATISTIKO {
     open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
     select OUT;
     index_header('statistiko');
-    index_buttons();
+    index_buttons('ktp');
     print "<h1>statistiko</h1>\n";
     
     # ordigu la vortliston
@@ -939,6 +941,27 @@ sub INX_LNG {
 
     #lingvoj
     print "<h1>nacilingvaj indeksoj</h1>\n";
+
+    if (exists $tradukoj{'la'}) {
+	print "<p>\n";
+	$lng = 'la';
+#	if (-f "$vortaro_pado/smb/$lng.png") {
+#	    print "<img src=\"../smb/$lng.png\" alt=\"[$lng]\" class=\"flago\">&nbsp;";
+#	} else {
+#	    print "<img src=\"../smb/xx.png\" alt = \"[$lng]\" class=\"flago\">&nbsp;";
+#	}
+        if ($indeksoj=~/jx/)
+        { print "<a href=\"lx_${lng}.html\">"; }
+        else
+        { print "<a href=\"lx_${lng}_$unua_litero{$lng}.html\">"; }
+	if ($statistiko{"lng_$lng"} >= 1000) {
+	    print "<b>$lingvoj{$lng}</b>";
+	} else {
+	    print "$lingvoj{$lng}";
+	}
+	print "</a><br>\n";
+    }
+
     for $lng ( sort 
 	       { cmp_nls($lingvoj{$a},$lingvoj{$b},'eo') } 
 	       keys %tradukoj)
@@ -965,25 +988,7 @@ sub INX_LNG {
 	}
     };
 
-    if (exists $tradukoj{'la'}) {
-	print "<p>\n";
-	$lng = 'la';
-#	if (-f "$vortaro_pado/smb/$lng.png") {
-#	    print "<img src=\"../smb/$lng.png\" alt=\"[$lng]\" class=\"flago\">&nbsp;";
-#	} else {
-#	    print "<img src=\"../smb/xx.png\" alt = \"[$lng]\" class=\"flago\">&nbsp;";
-#	}
-        if ($indeksoj=~/jx/)
-        { print "<a href=\"lx_${lng}.html\">"; }
-        else
-        { print "<a href=\"lx_${lng}_$unua_litero{$lng}.html\">"; }
-	if ($statistiko{"lng_$lng"} >= 1000) {
-	    print "<b>$lingvoj{$lng}</b>";
-	} else {
-	    print "$lingvoj{$lng}";
-	}
-	print "</a><br>\n";
-    }
+ 
 
     index_footer();
     close OUT;
@@ -1350,7 +1355,7 @@ sub index_letters {
 	if ($l ne $letter) {
 	    print "<a href=\"$file_base$file.html\">$l</a>\n"; 
 	} else { 
-	    print "<b>$l</b>\n"; 
+	    print "<b class=\"elektita\">$l</b>\n"; 
 	};
     };
     print "<h1>$title_base";
@@ -1614,7 +1619,7 @@ sub NovaEro()
 sub lx_unua_parto {
   my ($lng,$literoj) = @_;
   index_header("lingvoindekso: $lingvoj{$lng}");
-  index_buttons();
+  index_buttons('lng');
   if ($indeksoj=~/jx/) { print "<b>Ser&#x0109;o</b> "};
   index_letters($lingvoj{$lng},"lx_${lng}_",'',$literoj,
     [map {letter_asci_nls($_,$lng)} @$literoj]);
