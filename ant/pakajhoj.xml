@@ -1,0 +1,225 @@
+<project name="Revo-pakajhoj" default="regule" basedir=".">
+    <description>
+       Reta Vortaro, reguloj por fari pakajhojn.
+    </description>
+
+<!-- todo: 
+
+  - la eltrovado, chu refarighu novaj arhivoj post 28 (kompleto) au 4
+    (parto) tagoj estas iom komplika, char ne trovighis ebleco meti
+    dosierotempon en variablon (property) kaj ankau ne ekzistas
+    funkcio por kompari datojn.
+    
+    Anstatau la nunaj komplikajhoj kun diversaj helpdosieroj
+    oni povus uzi <script> au Javo-klason, kiu decidos pri novaj
+    arkivoj au kiu aldonas la mankantajn funkciojn pri dato de dosiero
+    kaj datokomparo.
+
+  - eble movu padojn k.s. al aparta "property"-dosiero 
+-->
+
+
+   <property name="revo" location="${basedir}"/>
+   <property name="tgz" location="${revo}/../tgz"/>
+   <property name="voko" location="/home/revo/voko"/>
+   <property name="ant" location="${voko}/ant"/>
+
+
+   <target name="init">
+     <tstamp><format property="nun.dato" pattern="yyyy-MM-dd"/></tstamp>
+     <tstamp><format property="nun.tempo" pattern="hh:mm:ss:SS"/></tstamp>
+     <!-- post 4 tagoj faru novan parton -->
+     <tstamp><format property="lasta_parta.testo"
+          pattern="yyyy-MM-dd" offset="-4" unit="day"/></tstamp>
+     <!-- post 28 tagoj faru novan kompleton -->
+     <tstamp><format property="lasta_kompleta.testo"
+          pattern="yyyy-MM-dd" offset="-28" unit="day"/></tstamp>
+     <mkdir dir="${tgz}"/>
+   
+     <property file="${tgz}/.paktempoj"/>
+
+   </target>
+
+   <target name="testo" depends="init" 
+       description="kontrolas kiom da tagoj pasis post lasta pako kaj
+       laubezone faras novan pakon">
+
+       <!-- kreu dosieron per kiu poste komparighas la ekzistantaj
+       zip-dosieroj -->
+       <touch file="${tgz}/.kompleto" datetime="${lasta_kompleta.testo}" 
+ 	      pattern="yyyy-MM-dd"/>
+       <touch file="${tgz}/.parto" datetime="${lasta_parta.testo}" 
+              pattern="yyyy-MM-dd"/>
+
+       <!-- komparu nun -->
+       <condition property="FARU-kompleton">
+          <uptodate targetfile="${tgz}/.kompleto">
+           <srcfiles dir= "${tgz}" includes="revoxml_*"/>
+         </uptodate>
+       </condition>
+
+       <condition property="FARU-parton">
+          <and>
+            <uptodate targetfile="${tgz}/.parto">
+               <srcfiles dir= "${tgz}" includes="revoxml_*,revonov_*"/>
+            </uptodate>
+            <isfalse value="${FARU-kompleton}"/>
+          </and>
+       </condition>
+
+       <echo>lasta kompleto je: ${lasta_kompleta.dato}</echo>
+       <echo>faru novan kompleton: ${FARU-kompleton}</echo>
+       <echo>lasta parto/kompleto je: ${lasta_parta.dato}</echo>
+       <echo>faru novan parton: ${FARU-parton}</echo>
+   </target>
+
+   <target name="regule" depends="init,testo,kompleto,parto" 
+       description="kontrolas, chu bezonighas novaj arhhivoj kaj kreas
+       laubezone">
+<!--     <antcall target="kompleto"/>
+     <antcall target="parto"/> -->
+     <echo>preta</echo>
+   </target>
+
+   <target name="voko" depends="init" description="Voko-Ilo-pakajho">
+     <zip destfile="${tgz}/voko_${nun.dato}.zip">
+       <zipfileset dir="${voko}" excludes="CVS/*" prefix="voko"/>
+     </zip>  
+   </target>
+
+   <target name="xml" depends="init" description="Revo-XML-pakajho">
+     <zip destfile="${tgz}/revoxml_${nun.dato}.zip">
+       <zipfileset dir="${revo}/xml" excludes="CVS/*" prefix="revo/xml"/>
+       <zipfileset dir="${revo}/dtd" excludes="CVS/*" prefix="revo/dtd"/>
+       <zipfileset dir="${revo}/xsl" excludes="CVS/*" prefix="revo/xsl"/>
+       <zipfileset dir="${revo}/stl" excludes="CVS/*" prefix="revo/stl"/>
+       <zipfileset dir="${revo}/cfg" excludes="CVS/*" prefix="revo/cfg"/>
+       <zipfileset dir="${revo}/smb" excludes="CVS/*" prefix="revo/smb"/>
+     </zip>  
+   </target>
+
+  <target name="bld" depends="init" description="Revo-bildo-pakajho">
+     <zip destfile="${tgz}/revobld_${nun.dato}.zip">
+       <zipfileset dir="${revo}/bld" excludes="CVS/*" prefix="revo/bld"/>
+     </zip>  
+   </target>
+
+  <target name="html" depends="init" description="Revo-HTML-pakajho">
+     <zip destfile="${tgz}/revohtml_${nun.dato}.zip">
+       <zipfileset dir="${revo}/art" excludes="CVS/*" prefix="revo/art"/>
+       <zipfileset dir="${revo}/dok" excludes="CVS/*" prefix="revo/dok"/>
+       <zipfileset dir="${revo}/tez" excludes="CVS/*" prefix="revo/tez"/>
+       <zipfileset dir="${revo}" includes="index.html sercxo.html titolo.html revo.ico " 
+       prefix="revo"/>
+     </zip>  
+   </target>
+
+   <target name="shanghoj">
+    <zip destfile="${tgz}/revonov_${lasta_parta.dato}_${nun.dato}.zip">
+       <fileset dir="${revo}" includes="**/*">
+         <date datetime="${lasta_parta.dato} ${lasta_parta.tempo}" 
+	 pattern="yyyy-MM-dd hh:mm:ss:SS"
+	 when="after"/>
+      </fileset>
+    </zip>  
+   </target>
+
+   <target name="forigu" depends="init" 
+       description="forigas malnovajn pakajhojn antau kompleta pako">
+
+     <delete>
+        <fileset dir="${tgz}" includes="voko_*,revoxml_*,revobld_*,revohtml_*,revonov_*"/>
+     </delete>
+   </target>
+
+   <target name="kompleto"
+       depends="init,testo" 
+       if="FARU-kompleton"
+       description="faras pakajhojn de chiuj dosieroj">
+
+     <antcall target="forigu"/>
+     <antcall target="voko"/>
+     <antcall target="xml"/>
+     <antcall target="bld"/>
+     <antcall target="html"/> 
+     <property name="lasta_kompleta.dato" value="${nun.dato}"/>
+     <property name="lasta_kompleta.tempo" value="${nun.tempo}"/>
+     <property name="lasta_parta.dato" value="${nun.dato}"/>
+     <property name="lasta_parta.tempo" value="${nun.tempo}"/>
+    
+     <antcall target="konservu-tempojn"/>
+
+   </target>
+  
+
+   <target name="parto" depends="init,testo" if="FARU-parton"
+     description="faras pakajhon kun la lastaj shanghoj">
+ 
+     <antcall target="shanghoj"/>
+     <property name="lasta_parta.dato" value="${nun.dato}"/>
+     <property name="lasta_parta.tempo" value="${nun.tempo}"/>
+     <antcall target="konservu-tempojn"/>
+
+   </target>
+
+   <target name="konservu-tempojn">
+    <propertyfile
+       file="${tgz}/.paktempoj"
+         comment="Tempoj, kiam farighis lastaj pakajhoj">
+
+      <entry  key="lasta_parta.dato" type="date"
+         value="lasta_parta.dato" pattern="yyyy-MM-dd"/>
+      <entry  key="lasta_parta.tempo" type="date"
+         value="lasta_parta.tempo" pattern="hh:mm:ss:SS"/>
+
+      <entry  key="lasta_kompleta.dato" type="date"
+         value="lasta_kompleta.dato" pattern="yyyy-MM-dd"/>
+      <entry  key="lasta_kompleta.tempo" type="date"
+         value="lasta_kompleta.tempo" pattern="hh:mm:ss:SS"/>
+
+     </propertyfile>
+  </target>
+
+  <target name="dosier-listo" depends="init"
+    description="faras liston de zip-dosieroj kiel XML-dosiero">
+     <java classname="dirtool.listFiles" output="${tgz}/dosieroj.xml" 
+     logError="true">
+         <arg value="${tgz}"/>
+         <arg value="^.*\.zip$"/>
+         <classpath>
+           <pathelement location="./respiro.jar"/>
+           <pathelement path="${java.class.path}"/>
+         </classpath>
+       </java>
+   </target> 
+
+   <target name="index" depends="init,dosier-listo"
+       description="rekreas index.html el index.xml kaj dosieroj.xml">
+
+     <xslt in="${voko}/dok/tgz_index.xml" out="${tgz}/index.html"
+        style="${voko}/xsl/index.xsl"/>
+   </target>
+
+   <target name="scp-jar">
+     <!-- uzata nur por evoluigado, movu la taskon iam al aparta dosiero -->
+     <exec executable="scp">
+        <arg
+ value="wolfram@miro:/home/wolfram/workspace/respiro/respiro.jar"/>
+        <arg value="${basedir}/"/>
+     </exec>
+ 
+   </target>
+
+</project>
+   
+
+
+
+
+
+
+
+
+
+
+

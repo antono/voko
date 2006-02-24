@@ -1,0 +1,133 @@
+<project name="Revo" default="test" basedir=".">
+    <description>
+       Reta Vortaro, reguloj por (re)krei gxin. 
+    </description>
+
+<!-- alstrebu dosierujo-strukturon tian:
+
+fonto en:
+ 
+  xml/art
+  xml/dok
+  xml/xsl
+
+rezulto en:
+
+  html/art
+  html/inx
+  html/dok
+
+-->
+
+
+  <!-- set global properties for this build -->
+  <property name="voko" location="/home/revo/voko"/>
+  <property name="revo" location="${basedir}"/>
+  <property name="dok" location="${revo}/dok"/>
+  <property name="art" location="${revo}/art"/>
+  <property name="xml" location="${revo}/xml"/>
+  <property name="voko_bin" location="${voko}/bin"/>
+  <property name="voko_cfg" location="${voko}/cfg"/>
+  <property name="voko_dok" location="${voko}/dok"/>
+  <property name="xsl" location="${voko}/xsl"/>
+
+  <target name="init">
+    <!-- Create the time stamp -->
+    <tstamp/>
+    <!-- Create the build directory structure used by compile -->
+    <mkdir dir="${dok}" />
+  </target>
+
+  <target name="bib" depends="init"
+        description="bibliografio" >
+
+    <xslt in="${voko_cfg}/bibliogr.xml" out="${dok}/bibliogr.html"
+      style="${xsl}/bibhtml.xsl"/>
+
+    <xslt in="${voko_cfg}/bibliogr.xml" out="${dok}/biblaut.html"
+      style="${xsl}/bibauthtml.xsl"/>
+
+    <xslt in="${voko_cfg}/bibliogr.xml" out="${dok}/bibltit.html"
+      style="${xsl}/bibtithtml.xsl"/>
+  </target>
+
+  <target name="dok" depends="init"
+       description="diversaj dokumentoj">
+
+    <copy todir="${revo}/cfg">
+      <fileset dir="${voko_cfg}" casesensitive="yes">
+        <include name="*.xml"/>
+      </fileset>
+    </copy>
+
+    <copy todir="${revo}/dok">
+      <fileset dir="${voko_dok}" casesensitive="yes">
+        <include name="*.xml"/>
+      </fileset>
+    </copy>
+
+    <xslt in="${voko_dok}/manlibro.xml" out="${dok}/manlibro.html"
+       style="${xsl}/manlibro.xsl"/>
+
+    <xslt in="${voko_dok}/lingva_manlibro.xml" out="${dok}/lingva_manlibro.html"
+       style="${xsl}/manlibro.xsl"/>
+
+<!--
+    <exec dir="${revo}/dok" executable="perl">
+       <arg file="${voko_bin}/dtd2html.pl"/>
+       <arg file="${revo}/dtd/vokoxml.dtd"/>
+    </exec>
+
+    <exec dir="${revo}" executable="perl">
+      <arg file="${voko_bin}/doklingv.pl"/>
+    </exec>
+-->
+
+    <xslt in="${voko_cfg}/fakoj.xml" out="${dok}/fakoj.html"
+       style="${xsl}/dok_fakoj.xsl"/>
+
+    <xslt in="${voko_cfg}/lingvoj.xml" out="${dok}/lingvoj.html"
+       style="${xsl}/dok_lingvoj.xsl"/>
+
+    <xslt in="${voko_cfg}/stiloj.xml" out="${dok}/stiloj.html"
+       style="${xsl}/dok_stiloj.xsl"/>
+
+    <xslt in="${voko_cfg}/mallongigoj.xml" out="${dok}/mallongigoj.html"
+       style="${xsl}/dok_mallongigoj.xsl"/>
+
+  </target>
+
+
+ <target name="dtd" depends="init"
+       description="dokumenttip-difinoj">
+
+    <copy todir="${revo}/dtd">
+      <fileset dir="${voko}/dtd" casesensitive="yes">
+        <include name="*.dtd"/>
+      </fileset>
+    </copy>
+
+  </target>
+
+  <target name="art" depends="init" if="dosiero"
+       description="kreas artikolon el xml-dosiero (donu -Ddosiero=iuradik en komandlinio)">
+  
+    <xslt in="${xml}/${dosiero}.xml" out="${art}/${dosiero}.html"
+       style="${xsl}/revohtml.xsl"/>  
+<!--
+    <exec dir="${revo}" executable="perl">
+       <arg file="${voko_bin}/htmlposte.pl"/>
+       <arg file="${art}/${dosiero}.html"/>
+    </exec>
+-->
+  </target>
+
+</project>
+
+
+
+
+
+
+
+
