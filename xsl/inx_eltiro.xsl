@@ -20,28 +20,47 @@
 
 <xsl:template match="art">
   <art mrk="{substring-after(substring-before(@mrk,'.xml'),'Id: ')}">
-  <xsl:apply-templates select="kap|drv|snc"/>
+  <xsl:apply-templates select="kap|drv|snc|trdgrp|trd"/>
   </art>
 </xsl:template>
 
 <xsl:template match="drv">
   <xsl:copy>
-  <xsl:apply-templates select="@mrk|kap|snc"/>
+  <xsl:apply-templates select="@mrk|kap|snc|trdgrp|trd"/>
   </xsl:copy>
 </xsl:template>
 
 <xsl:template match="snc">
   <xsl:copy>
-  <xsl:apply-templates select="@mrk|kap"/>
+  <xsl:apply-templates select="@mrk|kap|trdgrp|trd"/>
   </xsl:copy>
 </xsl:template>
 
-<xsl:template match="kap|rad|tld|@mrk">
+<xsl:template match="trdgrp">
+  <xsl:variable name="lng" select="@lng"/>
+  <xsl:for-each select="trd">
+    <trd lng="{$lng}">
+      <xsl:apply-templates/>
+    </trd>
+  </xsl:for-each>
+</xsl:template>
+
+<xsl:template match="trd[@lng]">
+  <xsl:copy>
+  <xsl:apply-templates select="@lng|text()|*"/>
+  </xsl:copy>
+</xsl:template>
+
+<xsl:template match="kap|rad|tld|@mrk|@lng">
   <xsl:copy> <xsl:apply-templates/> </xsl:copy>
 </xsl:template>
 
 
+
 </xsl:stylesheet>
+
+
+
 
 
 
