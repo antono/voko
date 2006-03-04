@@ -44,8 +44,10 @@ reguloj por la prezentado de la fontindikoj
   <!-- se enestas strukturitaj fontoj, prezentu ilin en propra alineo -->
   <xsl:if test="//fnt[bib|aut|vrk|lok]">
     <hr />
+    <div class="fontoj">
     <h2>fontoj</h2>
     <xsl:apply-templates select="//fnt[bib|aut|vrk|lok]" mode="fontoj"/>
+    </div>
   </xsl:if>
 </xsl:template>
 

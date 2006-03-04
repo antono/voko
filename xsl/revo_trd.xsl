@@ -8,7 +8,8 @@ reguloj por prezentado de la tradukoj
 -->
 
 <!-- lingvo-informojn memoru en variablo por pli facila aliro -->
-<xsl:variable name="lingvoj" select="document($lingvoj_cfg)/lingvoj"/>
+<!-- kauzas problemon kun sort en xalan :
+<xsl:variable name="lingvoj" select="document($lingvoj_cfg)/lingvoj"/ -->
 
 <!-- tradukoj -->
 
@@ -57,7 +58,7 @@ montru tie, cxar ili estas esenca parto de tiuj -->
 
   <!-- eltrovu la flagon de la lingvo, se lingvo au flago ne ekzistas,
   ellasu ghin -->
-  <xsl:for-each select="$lingvoj/lingvo[(@kodo=$lng)]">
+  <xsl:for-each select="document($lingvoj_cfg)/lingvoj/lingvo[(@kodo=$lng)]">
 
     <xsl:text> </xsl:text>
     <a href="#lng_{$lng}" class="trd_ref">
@@ -73,8 +74,10 @@ montru tie, cxar ili estas esenca parto de tiuj -->
 <xsl:template name="tradukoj">
   <xsl:if test="//trd">
     <hr />
+    <div class="tradukoj">
     <h2>tradukoj</h2>
     <xsl:apply-templates select="//art" mode="tradukoj"/>
+    </div>
   </xsl:if>
 </xsl:template>
 
@@ -84,7 +87,7 @@ montru tie, cxar ili estas esenca parto de tiuj -->
   <xsl:for-each select="(//trdgrp[@lng]|//trd[@lng])
     [count(.|key('lingvoj',@lng)[1])=1]">
 
-    <xsl:sort lang="eo" select="$lingvoj/lingvo[@kodo=current()/@lng]"/>
+    <xsl:sort lang="eo" select="document($lingvoj_cfg)/lingvoj/lingvo[@kodo=current()/@lng]"/>
        
     <xsl:call-template name="lingvo">
       <xsl:with-param name="lng">
@@ -101,7 +104,7 @@ montru tie, cxar ili estas esenca parto de tiuj -->
   <xsl:param name="lng"/>
 
   <!-- se la lingvo ne estas registrita ignoru ghin -->
-  <xsl:for-each select="$lingvoj/lingvo[@kodo=$lng]">
+  <xsl:for-each select="document($lingvoj_cfg)/lingvoj/lingvo[@kodo=$lng]">
 
     <a name="lng_{$lng}"></a>
     <h3>
