@@ -182,7 +182,7 @@
 
   <target name="dosier-listo" depends="init"
     description="faras liston de zip-dosieroj kiel XML-dosiero">
-     <java classname="dirtool.listFiles" output="${tgz}/dosieroj.xml" 
+     <java classname="de.steloj.respiro.DirectoryLister" output="${tgz}/dosieroj.xml" 
      logError="true">
          <arg value="${tgz}"/>
          <arg value="^.*\.zip$"/>

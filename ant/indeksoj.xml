@@ -1,0 +1,62 @@
+<project name="Revo-indeksoj" default="kapvortoj" basedir=".">
+    <description>
+       Reta Vortaro, reguloj por (re)krei indeksojn. 
+    </description>
+
+  <!-- set global properties for this build -->
+  <property name="voko" location="/home/revo/voko"/>
+  <property name="ant" location="${voko}/ant"/>
+  <property name="revo" location="."/>
+  <property name="inx" location="${revo}/inx"/>
+  <property name="xml" location="${revo}/xml"/>
+  <property name="voko_bin" location="${voko}/bin"/>
+  <property name="xsl" location="${voko}/xsl"/>
+  <property name="tmp" location="${revo}/.tmp"/>
+
+  <target name="init">
+    <!-- Create the time stamp -->
+    <tstamp/>
+    <!-- Create the build directory structure used by compile -->
+    <mkdir dir="${inx}" />
+    <mkdir dir="${tmp}" />
+  </target>
+
+  <target name="forigu" 
+      description="forigas chiujn dosierojn en ${inx}">
+ 
+     <delete>
+        <fileset dir="${inx}" includes="*"/>
+     </delete>
+  </target>
+
+  <target name="indeksbazo"
+    description="faras la dosieron indekso.xml el chiuj artikoloj kiel
+    bazo por chiuj indeksoj" depends="init">
+
+    <java classname="de.steloj.respiro.DirectoryTransformer"
+     logError="true">
+         <arg path="${xml}"/>
+         <arg file="${xsl}/inx_eltiro.xsl"/>
+         <arg file="${tmp}/indekso.xml"/>
+         <classpath>
+           <pathelement location="${ant}/respiro.jar"/>
+           <pathelement path="${java.class.path}"/>
+         </classpath>
+    </java>
+
+  </target>
+
+  <target name="kapvortoj" depends="init,indeksbazo">
+     <xslt in="${tmp}/indekso.xml" out="${tmp}/kap.xml"
+       style="${xsl}/inx_kapvortoj.xsl"/>
+  </target>
+
+</project>
+
+
+
+
+
+
+
+
