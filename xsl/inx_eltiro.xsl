@@ -55,7 +55,7 @@
   <xsl:copy> <xsl:apply-templates/> </xsl:copy>
 </xsl:template>
 
-
+<xsl:template match="kap/ofc|kap/fnt"/>
 
 </xsl:stylesheet>
 

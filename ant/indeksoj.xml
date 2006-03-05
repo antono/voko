@@ -46,9 +46,24 @@
 
   </target>
 
-  <target name="kapvortoj" depends="init,indeksbazo">
+  <target name="kapvortoj" depends="init,indeksbazo"
+     description="eltiri la kapvortojn el la indeks-dosiero">
      <xslt in="${tmp}/indekso.xml" out="${tmp}/kap.xml"
-       style="${xsl}/inx_kapvortoj.xsl"/>
+       style="${xsl}/inx_kap.xsl"/>
+  </target>
+
+  <target name="tradukoj" depends="init,indeksbazo"
+     description="eltiri la tradukojn el la indeks-dosiero">
+     <xslt in="${tmp}/indekso.xml" out="${tmp}/trd.xml"
+       style="${xsl}/inx_trd.xsl"/>
+  </target>
+
+  <target name="ordigo" depends="init,tradukoj,kapvortoj"
+     description="ordigi la tradukojn">
+     <xslt in="${tmp}/trd.xml" out="${tmp}/trd_ord.xml"
+       style="${xsl}/inx_sort.xsl"/>
+     <xslt in="${tmp}/kap.xml" out="${tmp}/kap_ord.xml"
+       style="${xsl}/inx_sort.xsl"/>
   </target>
 
 </project>
