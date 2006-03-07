@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<ordigo>
+
+<lingvo lng="eo">
+ <l name="a">aA</l>
+ <l name="b">bB</l>
+ <l name="c">cC</l>
+ <l name="cx">&#x0109;&#x0108;</l>
+ <l name="d">dD</l>
+ <l name="e">eE</l>
+ <l name="f">fF</l>
+ <l name="g">gG</l>
+ <l name="gx">&#x011d;&#x011c;</l>
+ <l name="h">hH</l>
+ <l name="hx">&#x0125;&#x0124;</l>
+ <l name="i">iI</l>
+ <l name="j">jJ</l>
+ <l name="jx">&#x0135;&#x0134;</l>
+ <l name="k">kK</l>
+ <l name="l">lL</l>
+ <l name="m">mM</l>
+ <l name="n">nN</l>
+ <l name="o">oO</l>
+ <l name="p">pP</l>
+ <l name="r">rR</l>
+ <l name="s">sS</l>
+ <l name="sx">&#x015d;&#x015c;</l>
+ <l name="t">tT</l>
+ <l name="u">uU</l>
+ <l name="ux">&#x016d;&#x016c;</l>
+ <l name="v">vV</l>
+ <l name="z">zZ</l>
+</lingvo>
+
+<!-- araba -->
+<lingvo lng="ar"> 
+ <l name="a">&#x0627;&#x0623;&#x0625;&#x0622;&#x0671;&#x0621;</l>
+ <l name="b">&#x0628;</l>
+ <l name="c">&#x062a;&#x0629;</l>
+ <l name="d">&#x062b;</l>
+ <l name="e">&#x062c;</l>
+ <l name="f">&#x062d;</l>
+ <l name="g">&#x062e;</l>
+ <l name="h">&#x062f;</l>
+ <l name="i">&#x0630;</l>
+ <l name="j">&#x0631;</l>
+ <l name="k">&#x0632;</l>
+ <l name="l">&#x0633;</l>
+ <l name="m">&#x0634;</l>
+ <l name="n">&#x0635;</l>
+ <l name="o">&#x0636;</l>
+ <l name="p">&#x0637;</l>
+ <l name="q">&#x0638;</l>
+ <l name="r">&#x0639;</l>
+ <l name="s">&#x063a;</l>
+ <l name="t">&#x0641;</l>
+ <l name="u">&#x0642;</l>
+ <l name="v">&#x0643;</l>
+ <l name="w">&#x0644;</l>
+ <l name="x">&#x0645;</l>
+ <l name="y">&#x0646;</l>
+ <l name="z">&#x0647;</l>
+</lingvo>
+
+<!-- belorusa -->
+<lingvo lng="be">
+ <l name="a">&#x0430;&#x0410;</l>
+ <l name="b">&#x0431;&#x0411;</l>
+ <l name="v">&#x0432;&#x0412;</l>
+ <l name="g">&#x0433;&#x0413;</l>
+ <l name="d">&#x0434;&#x0414;</l>
+ <l name="je">&#x0435;&#x0415;</l>
+ <l name="jo">&#x0451;&#x0401;</l>
+ <l name="zh">&#x0436;&#x0416;</l>
+ <l name="z">&#x0437;&#x0417;</l>
+ <l name="i">&#x0456;&#x0406;</l>
+ <l name="j">&#x0439;&#x0419;</l>
+ <l name="k">&#x043a;&#x041a;</l>
+ <l name="l">&#x043b;&#x041b;</l>
+ <l name="m">&#x043c;&#x041c;</l>
+ <l name="n">&#x043d;&#x041d;</l>
+ <l name="o">&#x043e;&#x041e;</l>
+ <l name="p">&#x043f;&#x041f;</l>
+ <l name="r">&#x0440;&#x0420;</l>
+ <l name="s">&#x0441;&#x0421;</l>
+ <l name="t">&#x0442;&#x0422;</l>
+ <l name="u">&#x0443;&#x0423;&#x045e;&#x040e;</l>
+ <l name="f">&#x0444;&#x0424;</l>
+ <l name="h">&#x0445;&#x0425;</l>
+ <l name="c">&#x0446;&#x0426;</l>
+ <l name="ch">&#x0447;&#x0427;</l>
+ <l name="sh">&#x0448;&#x0428;</l>
+ <l name="y">&#x044b;&#x042b;</l>
+ <l name="mo">&#x044c;&#x042c;</l>
+ <l name="e">&#x044d;&#x042d;</l>
+ <l name="ju">&#x044e;&#x042e;</l>
+ <l name="ja">&#x044f;&#x042f;</l>
+</lingvo>
+
+<!-- bulgara -->
+<lingvo lng="bg">
+ <l name="a">&#x0430;&#x0410;</l>
+ <l name="b">&#x0431;&#x0411;</l>
+ <l name="v">&#x0432;&#x0412;</l>
+ <l name="g">&#x0433;&#x0413;</l>
+ <l name="d">&#x0434;&#x0414;</l>
+ <l name="je">&#x0435;&#x0415;</l>
+ <l name="zh">&#x0436;&#x0416;</l>
+ <l name="z">&#x0437;&#x0417;</l>
+ <l name="i">&#x0438;&#x0418;</l>
+ <l name="j">&#x0439;&#x0419;</l>
+ <l name="k">&#x043a;&#x041a;</l>
+ <l name="l">&#x043b;&#x041b;</l>
+ <l name="m">&#x043c;&#x041c;</l>
+ <l name="n">&#x043d;&#x041d;</l>
+ <l name="o">&#x043e;&#x041e;</l>
+ <l name="p">&#x043f;&#x041f;</l>
+ <l name="r">&#x0440;&#x0420;</l>
+ <l name="s">&#x0441;&#x0421;</l>
+ <l name="t">&#x0442;&#x0422;</l>
+ <l name="u">&#x0443;&#x0423;</l>
+ <l name="f">&#x0444;&#x0424;</l>
+ <l name="h">&#x0445;&#x0425;</l>
+ <l name="c">&#x0446;&#x0426;</l>
+ <l name="ch">&#x0447;&#x0427;</l>
+ <l name="sh">&#x0448;&#x0428;</l>
+ <l name="shch">&#x0449;&#x0429;</l>
+ <l name="mm">&#x044a;&#x042a;</l>
+ <l name="y">&#x044b;&#x042b;</l>
+ <l name="mo">&#x044c;&#x042c;</l>
+ <l name="e">&#x044d;&#x042d;</l>
+ <l name="ju">&#x044e;&#x042e;</l>
+ <l name="ja">&#x044f;&#x042f;</l>
+</lingvo>
+
+<!-- bretona -->
+<lingvo lng="br">
+ <l name="a">aA</l>
+ <l name="b">bB</l>
+ <l name="ch" n="2">chCh</l>
+ <l name="cx" n="3">c'hC'h</l>
+ <l name="d">dD</l>
+ <l name="e">eEjJ</l>
+ <l name="f">fF</l>
+ <l name="g">gG</l>
+ <l name="h">hH</l>
+ <l name="i">iI</l>
+ <l name="j">jJ</l>
+ <l name="k">kK</l>
+ <l name="l">lL</l>
+ <l name="m">mM</l>
+ <l name="n">nNqQ</l>
+ <l name="o">oO</l>
+ <l name="p">pP</l>
+ <l name="r">rR</l>
+ <l name="s">sS</l>
+ <l name="t">tT</l>
+ <l name="u">uUùÙüÜ</l>
+ <l name="v">vV</l>
+ <l name="w">wW</l>
+ <l name="x">xX</l>
+ <l name="y">yY</l>
+ <l name="z">zZ</l>
+</lingvo>
+
+<!-- germana -->
+<lingvo lng="de">
+ <l name="a">aAäÄ</l>
+ <l name="b">bB</l>
+ <l name="c">cC</l>
+ <l name="d">dD</l>
+ <l name="e">eE</l>
+ <l name="f">fF</l>
+ <l name="g">gG</l>
+ <l name="h">hH</l>
+ <l name="i">iI</l>
+ <l name="j">jJ</l>
+ <l name="k">kK</l>
+ <l name="l">lL</l>
+ <l name="m">mM</l>
+ <l name="n">nN</l>
+ <l name="o">oOöÖ</l>
+ <l name="p">pP</l>
+ <l name="q">qQ</l>
+ <l name="r">rR</l>
+ <l name="s">sSß</l>
+ <l name="t">tT</l>
+ <l name="u">uUüÜ</l>
+ <l name="v">vV</l>
+ <l name="w">wW</l>
+ <l name="x">xX</l>
+ <l name="y">yY</l>
+ <l name="z">zZ</l>
+</lingvo>
+</ordigo>

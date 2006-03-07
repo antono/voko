@@ -591,6 +591,17 @@
     </eld>
   </vrk>  
 
+  <vrk mll="HomojMan&gcirc;antaj">
+     <aut><n>Hemmi</n> <a>Y&ocirc;</a></aut>
+     <trd><n>Doi</n> <a>&ccirc;ieko</a></trd>
+     <tit>Homoj man&gcirc;antaj</tit>
+     <eld>
+       <nom>Mevo-Libroj</nom>
+       <lok>Jokohamo</lok>
+       <dat>2002</dat>
+     </eld>
+   </vrk>
+
   <vrk mll="IKEV">
     <aut><a>F.</a> <n>Munniksma</n> (eld.)</aut>
     <tit>Internacia komerca-ekonomika vortaro en 11 lingvoj</tit>
@@ -667,6 +678,18 @@
     </eld>
   </vrk>
 
+  <vrk mll="Jamburg">
+     <url>http://miresperanto.narod.ru/biblioteko/jamburg.htm</url>
+     <aut><a>Mikaelo</a> <n>Bron&scirc;tejn</n></aut>
+     <tit>Oni ne pafas en Jamburg</tit>
+     <eld>
+        <nom>Impeto</nom>
+        <lok>Moskvo</lok>
+        <dat>1993</dat>
+        <isbn>5-7161-0004-X</isbn>
+     </eld>
+  </vrk>
+
   <vrk mll="JuanReg">
     <aut><n>Albault</n></aut>
     <aut><n>Ariste</n></aut>
@@ -708,6 +731,31 @@
     <tit>Kajeroj el la Sudo</tit>
   </vrk>
 
+  <vrk mll="KielAkvo">
+     <aut><a>Raymond</a> <n>Schwartz</n></aut>
+     <tit>Kiel akvo de l' rivero</tit>
+     <eld>
+       <nom>R&eacute;gulo</nom>
+       <lok>La Laguna</lok>
+       <dat>1963</dat>
+     </eld>
+     <eld>
+        <nom>Dansk Esperanto-Forlag</nom>
+        <lok></lok>
+        <dat>1977</dat>
+     </eld>
+     <eld>
+        <nom>Iltis</nom>
+        <lok></lok>
+        <dat>1987</dat>
+     </eld>
+     <eld>
+        <nom>Edistudio</nom>
+        <lok>Pizo</lok>
+        <dat>1991</dat>
+     </eld>
+   </vrk>
+
   <vrk mll="Kiso">
      <url>http://bertilo.com/tekstaro/</url>
      <aut><a>Hjalmar</a> <n>S&ouml;derberg</n></aut>
@@ -723,7 +771,7 @@
   <vrk mll="KompLeks">
     <url>http://purl.oclc.org/NET/voko/URL/KompLeks/</url>
     <aut><a>Sergio</a> <n>Pokrovskij</n></aut>
-    <tit>Komputila Leksikono</tit>
+    <tit>Komputada Leksikono</tit>
   </vrk>
 
   <vrk mll="Kosmo">
@@ -779,6 +827,17 @@
       <lok>Frankfurt a.M.</lok>
       <dat>1927</dat>
     </eld>
+  </vrk>
+
+  <vrk mll="LaFamilio">
+     <aut>Bakin (<n>Li</n> <a>Yaotang</a>)</aut>
+     <trd><n>Wei</n> <a>Yida</a></trd>
+     <tit>La Familio</tit>
+     <eld>
+       <nom>&Ccirc;ina Esperanto-Eldonejo</nom>
+       <lok>Beijing</lok>
+       <dat>1999</dat>
+     </eld>
   </vrk>
 
   <vrk mll="LanLin">
@@ -853,12 +912,6 @@
     </eld>
   </vrk>
 
-  <vrk mll="LSV">
-    <aut><a>E.</a> <n>Lanti</n></aut>
-    <tit>&leftquot;Liberiga Stelo&rightquot; al la
-    Verdru&gcirc;uloj</tit>
-  </vrk>
-
   <vrk mll="LtE">
     <aut><a>Henrik</a> <n>Seppik</n></aut>
     <tit>La tuta Esperanto</tit>
@@ -872,7 +925,7 @@
   </vrk>
 
   <vrk mll="Lusin">
-    <aut>Lusin (<n>Zhou Shuren</n>)</aut>
+    <aut>Lusin (<n>Zhou</n> <a>Shuren</a>)</aut>
     <trd><a>S. J.</a> <n>Zee</n> k.a.</trd>
     <tit>Noveloj de Lusin</tit>
     <eld>
@@ -1016,6 +1069,7 @@
     <eld>
       <nom>Flandra Esperanto-Ligo</nom>
       <lok>Belgio</lok>
+      <dat>de 1980</dat>
     </eld>
   </vrk>
 
@@ -1041,6 +1095,20 @@
     </eld>
   </vrk>
 
+  <vrk mll="Munchhausen">
+     <url>http://www.angelfire.com/mo2/bulteno/barono.html</url>
+     <aut><a>R. E.</a> <n>Raspe</n></aut>
+     <trd><a>J. D.</a> <n>Applebaum</n></trd>
+     <tit>[La Voja&gcirc;oj kaj] Mirigaj Aventuroj de Barono 
+M&uuml;nchhausen</tit>
+     <ald>Biblioteko Tutmonda, numeroj 13-14</ald>
+     <eld>
+        <nom>Rudolf Mosse Esperanto-Fako</nom>
+        <lok>Berlino</lok>
+        <dat>1927</dat>
+     </eld>
+   </vrk>
+
   <vrk mll="MuzTerm">
     <aut><a>M. C.</a> <n>Butler</n></aut>
     <aut><a>F.</a> <n>Merrick</n></aut>
@@ -1053,6 +1121,25 @@
       <dat>1992</dat>
     </eld>
   </vrk>
+
+  <vrk mll="Ne&gcirc;aBlovado">
+     <url>http://esperanto.org/Ondo/Rn-pusk2.htm</url>
+     <aut><a>Aleksandr</a> <n>Pu&scirc;kin</n></aut>
+     <trd><a>Antoni</a> <n>Grabowski</n></trd>
+     <tit>La ne&gcirc;a blovado</tit>
+     <eld>
+        <nom>Kelter</nom>
+        <lok>Varsovio</lok>
+        <dat>1888</dat>
+        <nro>1a eldono</nro>
+     </eld>
+     <eld>
+        <nom>Jekaterinburg</nom>
+        <lok>Sezonoj</lok>
+        <dat>1993</dat>
+     </eld>
+   </vrk>
+
 
   <vrk mll="NeoGlo">
     <aut><a>H.</a> <n>Vatr&eacute;</n></aut>
@@ -1100,6 +1187,14 @@
       <dat>1925-</dat>
     </eld>
   </vrk>
+
+   <vrk mll="OriginoDeSpecioj">
+     <url>http://www4.vc-net.ne.jp/~klivo/origino/</url>
+     <aut><a>&Ccirc;arlz</a> <n>Darvin</n></aut>
+     <trd><a>Klivo</a> <n>Lendon</n></trd>
+     <tit>La Origino de Specioj</tit>
+   </vrk>
+
 
   <vrk mll="OV">
     <aut><a>L. L.</a> <n>Zamenhof</n></aut>
@@ -1165,7 +1260,7 @@
   </vrk>
 
   <vrk mll="PMEG">
-    <url>http://purl.oclc.org/net/pmeg/</url>
+    <url>http://bertilow.com/pmeg/</url>
     <aut><a>Bertilo</a> <n>Wennergren</n></aut>
     <tit>Plena Manlibro de Esperanta Gramatiko</tit>
   </vrk>
@@ -1403,6 +1498,9 @@
   <vrk mll="Viki">
      <url>http://eo.wikipedia.com/</url>
      <tit>Vikipedio</tit>
+     <eld>
+       <dat>de 2001</dat>
+     </eld>
   </vrk>
 
   <vrk mll="VivZam">
