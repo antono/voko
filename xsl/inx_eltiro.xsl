@@ -26,13 +26,13 @@
 
 <xsl:template match="drv">
   <xsl:copy>
-  <xsl:apply-templates select="@mrk|kap|snc|trdgrp|trd"/>
+  <xsl:apply-templates select="@mrk|kap|snc|trdgrp|trd|uzo"/>
   </xsl:copy>
 </xsl:template>
 
 <xsl:template match="snc">
   <xsl:copy>
-  <xsl:apply-templates select="@mrk|kap|trdgrp|trd"/>
+  <xsl:apply-templates select="@mrk|kap|trdgrp|trd|uzo"/>
   </xsl:copy>
 </xsl:template>
 
@@ -51,8 +51,8 @@
   </xsl:copy>
 </xsl:template>
 
-<xsl:template match="kap|rad|tld|@mrk|@lng">
-  <xsl:copy> <xsl:apply-templates/> </xsl:copy>
+<xsl:template match="kap|rad|tld|@mrk|@lng|uzo[@tip='fak']">
+  <xsl:copy><xsl:apply-templates/></xsl:copy>
 </xsl:template>
 
 <xsl:template match="kap/ofc|kap/fnt"/>

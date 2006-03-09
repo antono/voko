@@ -9,8 +9,6 @@
 
 <xsl:output method="xml" encoding="utf-8"/>
 
-<xsl:key name="literoj" match="//kap-oj/v" use="substring(.,1,1)"/>
-
 <xsl:variable name="ordigo">../cfg/ordigo.xml</xsl:variable>
 
 <xsl:template match="/">
@@ -19,25 +17,17 @@
   </indekso>
 </xsl:template>
 
-<!-- xsl:template match="trd-oj">
-  <trd-oj lng="{@lng}">
-    <xsl:for-each select="v">
-       <xsl:sort lang="{@lng}" select="t"/>
-
-       <v mrk="{@mrk}"> 
-         <xsl:apply-templates/>
-       </v><xsl:text>
-</xsl:text>
-    </xsl:for-each>
-  </trd-oj><xsl:text>
-</xsl:text>
-</xsl:template -->
-
-
-
 <xsl:template match="trd-oj">
+   <xsl:message>progreso: traktas lingvon "<xsl:value-of
+      select="@lng"/>"...</xsl:message>
+
+   <!-- lau reguloj de kiu lingvo ordigi? -->
+   <xsl:variable name="ordlng_1" 
+     select="document($ordigo)/ordigo/lingvo[@lng=current()/@lng]/@kiel"/>
+
+   <xsl:variable name="ordlng" select="($ordlng_1|@lng|'en')[1]"/>
    <xsl:variable name="chiuj_literoj"
-     select="translate(normalize-space(document($ordigo)/ordigo/lingvo[@lng=current()/@lng]),
+     select="translate(normalize-space(document($ordigo)/ordigo/lingvo[@lng=$ordlng]),
 ' ','')"/>
 
   <xsl:if test="string-length($chiuj_literoj)>0">
@@ -47,13 +37,23 @@
     <xsl:variable name="trdoj" select="."/>
 
     <xsl:for-each 
-      select="document($ordigo)/ordigo/lingvo[@lng=current()/@lng]/l">
+      select="document($ordigo)/ordigo/lingvo[@lng=$ordlng]/l">
       <xsl:variable name="n" select="substring(concat(@n,'1'),1,1)"/>
+
+<!-- problemo estas ekz. en la hispana kaj kimra, kie ordighas "Ll" en
+alian grupon ol "L", sed vortoj komencighantaj je "Ll" ne aperu ankau
+sub "L" -->
+      <xsl:variable name="minus" select="../l[@name=current()/@minus]"/>      
+      <xsl:variable name="nminus"
+      select="substring(concat(../l[@name=current()/@minus]/@n,'1'),1,1)"/>     
+
       <litero name="{@name}">
 <xsl:text>
 </xsl:text>
-       <xsl:for-each select="$trdoj/v[contains(current(),substring(.,1,$n))]">
-         <xsl:sort lang="{@lng}" select="t"/>
+
+       <xsl:for-each
+         select="$trdoj/v[contains(current(),substring(.,1,$n)) and not(contains($minus,substring(.,1,$nminus)))]">
+         <xsl:sort lang="{$ordlng}" select="t"/>
 
          <v mrk="{@mrk}"> 
            <xsl:apply-templates/>
@@ -72,7 +72,7 @@
    "ch" kaj "c'h") -->
    <litero name="?">
      <xsl:for-each select="$trdoj/v[not(contains($chiuj_literoj,substring(.,1,1)))]">
-         <xsl:sort lang="{@lng}" select="t"/>
+         <xsl:sort lang="{$ordlng}" select="t"/>
 
          <v mrk="{@mrk}"> 
            <xsl:apply-templates/>
@@ -88,42 +88,6 @@
 </xsl:text>
   </xsl:if>
 </xsl:template>
-
-<!-- xsl:template match="kap-oj">
-  <kap-oj lng="{@lng}">
-    <xsl:for-each select="v">
-       <xsl:sort lang="{@lng}" select="."/>
-
-       <v mrk="{@mrk}" lit="{substring(.,1,1)}"> 
-         <xsl:apply-templates/>
-       </v><xsl:text>
-</xsl:text>
-    </xsl:for-each>
-  </kap-oj><xsl:text>
-</xsl:text>
-</xsl:template -->
-
-<!--xsl:template match="kap-oj">
-  <kap-oj lng="{@lng}">
-    <xsl:for-each select="//kap-oj/v
-           [count(.|key('literoj',substring(.,1,1))[1])=1]">
-     <litero lit="{substring(.,1,1)}">
-      <xsl:for-each select="key('literoj',substring(.,1,1))">
-         <xsl:sort lang="{@lng}" select="."/>
-
-         <v mrk="{@mrk}"> 
-           <xsl:apply-templates/>
-         </v><xsl:text>
-</xsl:text>
-      </xsl:for-each>
-     </litero>
-    </xsl:for-each>
-
-  </kap-oj><xsl:text>
-</xsl:text>
-</xsl:template-->
-
-
 
 <xsl:template match="kap-oj">
    <xsl:variable name="chiuj_literoj"
@@ -176,9 +140,34 @@
 </xsl:template>
 
 
+<xsl:template match="fako">
+   <xsl:message>progreso: traktas fakon "<xsl:value-of
+      select="@fak"/>"...</xsl:message>
+
+   <fako fak="{@fak}">
+<xsl:text>
+</xsl:text>
+      <xsl:for-each select="v">
+
+         <xsl:sort lang="eo"/>
+
+         <v mrk="{@mrk}"> 
+           <xsl:apply-templates/>
+         </v>
+<xsl:text>
+</xsl:text>
+      </xsl:for-each>
+  </fako>
+<xsl:text>
+</xsl:text>
+
+</xsl:template>
+
+
 <xsl:template match="k|t">
   <xsl:copy><xsl:apply-templates/></xsl:copy>
 </xsl:template>
+
 
 
 </xsl:stylesheet>

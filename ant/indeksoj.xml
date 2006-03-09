@@ -19,6 +19,11 @@
     <!-- Create the build directory structure used by compile -->
     <mkdir dir="${inx}" />
     <mkdir dir="${tmp}" />
+    <!-- chu necesas refari la dosieron indekso.xml? -->
+    <uptodate property="indekso.aktuala">
+      <srcfiles dir="${xml}" includes="*.xml"/>
+      <mapper type="merge" to="${tmp}/indekso.xml"/>
+    </uptodate>
   </target>
 
   <target name="forigu" 
@@ -29,12 +34,13 @@
      </delete>
   </target>
 
-  <target name="indeksbazo"
-    description="faras la dosieron indekso.xml el chiuj artikoloj kiel
-    bazo por chiuj indeksoj" depends="init">
+  <target name="eltiro" unless="indekso.aktuala"
+    description="faras la dosieron indekso.xml el chiuj artikoloj kiel bazo por chiuj indeksoj" 
+    depends="init">
 
     <java classname="de.steloj.respiro.DirectoryTransformer"
      logError="true">
+         <arg value="-v"/>
          <arg path="${xml}"/>
          <arg file="${xsl}/inx_eltiro.xsl"/>
          <arg file="${tmp}/indekso.xml"/>
@@ -46,24 +52,38 @@
 
   </target>
 
-  <target name="kapvortoj" depends="init,indeksbazo"
+  <target name="kategorioj" depends="init,eltiro"
+     description="eltiri la kapvortojn, tradukojn, fakindikojn ktp. el la indeks-dosiero">
+     <xslt in="${tmp}/indekso.xml" out="${tmp}/inx_kat.xml"
+       style="${xsl}/inx_kategorioj.xsl"/>
+  </target>
+
+  <!-- target name="kapvortoj" depends="init,indeksbazo"
      description="eltiri la kapvortojn el la indeks-dosiero">
      <xslt in="${tmp}/indekso.xml" out="${tmp}/kap.xml"
        style="${xsl}/inx_kap.xsl"/>
-  </target>
+  </target -->
 
-  <target name="tradukoj" depends="init,indeksbazo"
+  <!-- target name="tradukoj" depends="init,indeksbazo"
      description="eltiri la tradukojn el la indeks-dosiero">
      <xslt in="${tmp}/indekso.xml" out="${tmp}/trd.xml"
        style="${xsl}/inx_trd.xsl"/>
-  </target>
+  </target -->
 
-  <target name="ordigo" depends="init,tradukoj,kapvortoj"
-     description="ordigi la tradukojn">
-     <xslt in="${tmp}/trd.xml" out="${tmp}/trd_ord.xml"
+  <!-- target name="fakoj" depends="init,indeksbazo"
+     description="eltiri la fakindikojn el la indeks-dosiero">
+     <xslt in="${tmp}/indekso.xml" out="${tmp}/fak.xml"
+       style="${xsl}/inx_fak.xsl"/>
+  </target -->
+
+  <target name="ordigo" depends="init,kategorioj"
+     description="ordigi la kapvortojn, tradukojn, fakojn ktp.">
+     <xslt in="${tmp}/inx_kat.xml" out="${tmp}/inx_ord.xml"
        style="${xsl}/inx_sort.xsl"/>
-     <xslt in="${tmp}/kap.xml" out="${tmp}/kap_ord.xml"
+<!--     <xslt in="${tmp}/kap.xml" out="${tmp}/kap_ord.xml"
        style="${xsl}/inx_sort.xsl"/>
+     <xslt in="${tmp}/fak.xml" out="${tmp}/fak_ord.xml"
+       style="${xsl}/inx_sort.xsl"/> -->
   </target>
 
 </project>

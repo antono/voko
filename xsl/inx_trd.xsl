@@ -10,12 +10,31 @@
 <xsl:output method="xml" encoding="utf-8"/>
 <xsl:strip-space elements="trd"/>
 
+<xsl:variable name="lngcfg">../cfg/lingvoj.xml</xsl:variable>
 <xsl:key name="lingvoj" match="//trd[@lng]" use="@lng"/>
 
-<xsl:template match="/">
+<!-- xsl:template match="/">
   <indekso>
 
-  <!-- por chiu lingvo elektu reprezentanton -->
+  <xsl:variable name="dummy" select="."/>
+
+  <xsl:for-each select="document($lngcfg)/lingvoj/lingvo">
+   <xsl:variable name="lng" select="@kodo"/>
+
+
+    <trd-oj lng="{$lng}">
+      <xsl:apply-templates
+       select="$dummy//trd[@lng=$lng]"/>
+    </trd-oj>
+
+  </xsl:for-each>
+  </indekso>
+</xsl:template -->
+
+<!-- xsl:template match="/">
+  <indekso>
+
+  <!- por chiu lingvo elektu reprezentanton ->
   <xsl:for-each select="(//trd[@lng])
            [count(.|key('lingvoj',@lng)[1])=1]">
     <trd-oj lng="{@lng}">
@@ -24,7 +43,26 @@
     </trd-oj>
   </xsl:for-each>
   </indekso>
+</xsl:template -->
+
+<!-- tiu varianto bezonas nur dekonon da tempo ol la aliaj du -->
+<xsl:template match="/">
+  <indekso>
+
+  <xsl:variable name="root" select="."/>
+
+  <xsl:for-each select="document($lngcfg)/lingvoj/lingvo">
+   <xsl:variable name="lng" select="@kodo"/>
+   <xsl:message>progreso: traktas tradukojn <xsl:value-of select="."/>jn...</xsl:message>
+   <xsl:for-each select="$root">
+    <trd-oj lng="{$lng}">
+      <xsl:apply-templates select="key('lingvoj',$lng)"/>
+    </trd-oj>
+   </xsl:for-each>
+  </xsl:for-each>
+  </indekso>
 </xsl:template>
+
 
 <xsl:template match="trd">
   <v>
