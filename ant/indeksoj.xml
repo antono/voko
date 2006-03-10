@@ -79,7 +79,7 @@
   <target name="ordigo" depends="init,kategorioj"
      description="ordigi la kapvortojn, tradukojn, fakojn ktp.">
      <xslt in="${tmp}/inx_kat.xml" out="${tmp}/inx_ord.xml"
-       style="${xsl}/inx_sort.xsl"/>
+       style="${xsl}/inx_ordigo.xsl"/>
 <!--     <xslt in="${tmp}/kap.xml" out="${tmp}/kap_ord.xml"
        style="${xsl}/inx_sort.xsl"/>
      <xslt in="${tmp}/fak.xml" out="${tmp}/fak_ord.xml"

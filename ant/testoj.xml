@@ -1,0 +1,256 @@
+<project name="Revo-testoj" basedir="/home/revo/voko/tst">
+    <description>
+       Reta Vortaro, testoj.
+    </description>
+
+  <!-- set global properties for this build -->
+  <property name="voko" location="/home/revo/voko"/>
+  <property name="ant" location="${voko}/ant"/>
+  <property name="revo" location=".test"/>
+  <property name="inx" location="${revo}/inx"/>
+  <property name="xml" location="${revo}/xml"/>
+  <property name="xsl" location="${voko}/xsl"/>
+  <property name="tmp" location="${revo}/.tmp"/>
+
+  <target name="init">
+
+    <!-- kreu vortareton por testo -->
+   <!-- ant antfile="${ant}/indeksoj.xml"
+       dir="${revo}" target="forigu" inheritAll="false"/ -->
+
+    <mkdir dir="${revo}" />
+    <mkdir dir="${xml}" />
+  
+    <echo 
+file="${xml}/test.xml"><![CDATA[<?xml version="1.0"?>
+<vortaro>
+<art mrk="\$$Id: test.xml asdfosdf">
+  <kap><rad>test</rad>/o</kap>
+  <drv mrk="test.0o">
+    <kap><tld/>o</kap>
+    <snc mrk="test.0o.GEOL">
+      <uzo tip="fak">GEOL</uzo>
+      <dif>fusx fusx fusx</dif>
+      <trd lng="de">Test <klr>(GEO)</klr></trd>
+    </snc>
+    <snc mrk="test.0o.XXX">
+      <dif>balbut balbut balbut</dif>
+    </snc>
+    <trd lng="de">Test</trd>
+    <trd lng="en">test</trd>
+  </drv>
+  <drv mrk="test.0i">
+    <kap><tld/>i</kap>
+    <dif>strang strang strang</dif>
+    <trdgrp lng="de">
+      <trd>testen</trd>,
+      <trd>probieren</trd>
+    </trdgrp>
+    <trd lng="en">to test</trd>
+  </drv>
+</art>
+</vortaro>
+]]>
+    </echo>
+
+    <echo 
+file="${xml}/de.xml"><![CDATA[<?xml version="1.0"?>
+<vortaro>
+<art mrk="\$Id: de.xml asdfosdf">
+  <kap><rad>de</rad></kap>
+  <drv mrk="de.0">
+    <trdgrp lng="de">
+      <trd>Aorta</trd>
+      <trd>Apfel</trd>
+      <trd>apfel</trd>
+      <trd>&#x00c4;pfel</trd>
+      <trd>&#x00e4;pfel</trd>
+      <trd>Arie</trd>
+      <trd>Muse</trd>
+      <trd>Mu&#x00df;e</trd>
+      <trd>Mut</trd>
+    </trdgrp>
+    <trdgrp lng="br">
+      <trd>cab</trd>
+      <trd>chb</trd>
+      <trd>c'hb</trd>
+    </trdgrp>
+    <trdgrp lng="cy">
+      <trd>cab</trd>
+      <trd>chb</trd>
+      <trd>ala</trd>
+      <trd>alla</trd>
+      <trd>alma</trd>
+    </trdgrp>
+  </drv>
+</art>
+</vortaro>
+]]>
+    </echo>
+</target>
+
+
+<target name="test-init" depends="init"
+  description="preparas la testilojn">
+
+   <!-- preparu XPath-testojn por indeks-testo -->
+    <echo 
+file="${revo}/testoj.xsl"><![CDATA[<?xml version="1.0"?>
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                version="1.0">
+
+   <xsl:output method="xml" encoding="utf-8"/>
+
+   <xsl:template match="/">
+
+     <x:stylesheet xmlns:x="http://www.w3.org/1999/XSL/Transform"
+                version="1.0">
+       <x:output method="text" encoding="utf-8"/>
+       <x:template match="/">
+         <xsl:apply-templates select="//t"/>
+       </x:template>
+
+       <x:template name="testo">
+         <x:param name="priskribo"/>
+         <x:param name="testo"/>
+    
+         <x:value-of select="$priskribo"/><x:text>: </x:text>
+         <x:choose>
+           <x:when test="$testo"><x:text>bone
+</x:text></x:when>
+           <x:otherwise><x:text>ERARO!
+</x:text></x:otherwise>
+         </x:choose>
+       </x:template>
+     </x:stylesheet>
+  </xsl:template>
+
+  <xsl:template match="t">
+    <x:call-template name="testo">
+      <x:with-param name="priskribo">
+        <x:text><xsl:value-of select="@priskribo"/></x:text>
+      </x:with-param>
+      <x:with-param name="testo">
+        <x:value-of select="{@testo}"/>
+      </x:with-param> 
+    </x:call-template>
+  </xsl:template>
+
+</xsl:stylesheet>
+]]>
+    </echo>
+
+  </target>
+
+  <target name="indeks-testo-xsl" depends="init">
+
+
+    <!-- preparu XPath-testojn por indeks-testo -->
+<!--    <echo 
+file="${revo}/indeks-testo.xsl"><![CDATA[<?xml version="1.0"?>
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                version="1.0">
+<xsl:output method="text" encoding="utf-8"/>
+
+  <xsl:template match="/">
+
+    <xsl:call-template name="testo">
+       <xsl:with-param name="priskribo">
+         <xsl:text>1) Chu kapvorto "testo" mrk "test" ekzistas</xsl:text>
+       </xsl:with-param>
+       <xsl:with-param name="testo">
+         <xsl:value-of select="count(//kap-oj/v[@mrk='test' and .='testo'])=1"/>
+       </xsl:with-param> 
+    </xsl:call-template>
+
+    <xsl:call-template name="testo">
+       <xsl:with-param name="priskribo">
+         <xsl:text>2) Chu kapvorto mrk "test.0o" ne ekzistas</xsl:text>
+       </xsl:with-param>
+       <xsl:with-param name="testo">
+         <xsl:value-of select="count(//kap-oj/v[@mrk='test.0o'])=0"/>
+       </xsl:with-param> 
+    </xsl:call-template>
+
+    <xsl:call-template name="testo">
+       <xsl:with-param name="priskribo">
+         <xsl:text>3) Chu kapvorto "testi" mrk "test.0i" ekzistas</xsl:text>
+       </xsl:with-param>
+       <xsl:with-param name="testo">
+         <xsl:value-of select="count(//kap-oj/v[@mrk='test.0i' and .='testi'])=1"/>
+       </xsl:with-param> 
+    </xsl:call-template>
+
+  </xsl:template>
+
+  <xsl:template name="testo">
+     <xsl:param name="priskribo"/>
+     <xsl:param name="testo"/>
+
+     <xsl:value-of select="$priskribo"/><xsl:text>: </xsl:text>
+     <xsl:choose>
+       <xsl:when test="$testo"><xsl:text>bone
+</xsl:text></xsl:when>
+       <xsl:otherwise><xsl:text>ERARO!
+</xsl:text></xsl:otherwise>
+     </xsl:choose>
+  </xsl:template>
+
+</xsl:stylesheet>
+]]>
+    </echo> -->
+
+ <echo 
+file="${revo}/indeks-testo.xml"><![CDATA[<?xml version="1.0"?>
+<testoj>
+   <file name=".test/.tmp/inx_kat.xml">
+     <t test="count(//kap-oj/v[@mrk='test' and .='testo'])=1">
+         1) Chu kapvorto "testo" mrk "test" ekzistas</t>
+     <t test="count(//kap-oj/v[@mrk='test.0o'])=0">
+         2) Chu kapvorto mrk "test.0o" ne ekzistas</t>
+     <t test="count(//kap-oj/v[@mrk='test.0i' and .='testi'])=1">
+         3) Chu kapvorto "testi" mrk "test.0i" ekzistas</t>
+   </file>
+</testoj>
+]]>
+    </echo>
+  </target>
+
+
+
+
+  <target name="indeks-testo" depends="init,indeks-testo-xsl"
+    description="testas la regulojn en indekso.xml">
+
+ 
+    <ant antfile="${ant}/indeksoj.xml"
+       dir="${revo}" target="eltiro" inheritAll="false"/>
+
+      <!-- testu la dosieron indekso.xml -->
+      <available file="${tmp}/indekso.xml" property="indekso.xml"/>
+
+      <echo>dosiero indekso.xml ekzistas? ${indekso.xml}</echo>
+
+    <ant antfile="${ant}/indeksoj.xml"
+       dir="${revo}" target="kategorioj" inheritAll="false"/>   
+
+      <property name="rezfile" location="${revo}/rezulto-indeks-testo.txt"/>
+      <xslt style="${revo}/testoj.xsl"
+        in="${revo}/indeks-testo.xml" out="${rezfile}"/>
+
+    <ant antfile="${ant}/indeksoj.xml"
+       dir="${revo}" target="ordigo" inheritAll="false"/>
+
+      <loadfile property="rezulto_1" srcFile="${rezfile}"/>
+      <echo>rezultoj de la indeks-testo:
+${rezulto_1}   
+      </echo>
+
+  </target>
+
+</project>
+
+
+
+
+
