@@ -6,6 +6,7 @@
      licenco GPL 2.0
 -->
 
+<xsl:param name="verbose" select="false"/>
 
 <xsl:output method="xml" encoding="utf-8"/>
 
@@ -18,8 +19,10 @@
 </xsl:template>
 
 <xsl:template match="trd-oj">
-   <xsl:message>progreso: traktas lingvon "<xsl:value-of
+   <xsl:if test="$verbose='true'">
+     <xsl:message>progreso: traktas lingvon "<xsl:value-of
       select="@lng"/>"...</xsl:message>
+   </xsl:if>
 
    <!-- lau reguloj de kiu lingvo ordigi? -->
    <xsl:variable name="ordlng_1" 
@@ -89,23 +92,25 @@ sub "L" -->
   </xsl:if>
 </xsl:template>
 
+
 <xsl:template match="kap-oj">
    <xsl:variable name="chiuj_literoj"
      select="translate(normalize-space(document($ordigo)/ordigo/lingvo['eo']),
 ' ','')"/>
  
+   <xsl:variable name="kapoj" select="."/>
+ 
    <xsl:if test="string-length($chiuj_literoj)>0">
    <kap-oj lng="{@lng}">
-    <xsl:variable name="kapoj" select="."/>
     <xsl:for-each 
       select="document($ordigo)/ordigo/lingvo[@lng='eo']/l">
 
       <litero name="{@name}">
 <xsl:text>
 </xsl:text>
-      <xsl:for-each select="$kapoj/v[contains(current(),substring(.,1,1))]">
+      <xsl:for-each select="$kapoj/v[contains(current(),substring(k,1,1))]">
 
-         <xsl:sort lang="eo"/>
+         <xsl:sort lang="eo" select="k"/>
 
          <v mrk="{@mrk}"> 
            <xsl:apply-templates/>
@@ -121,7 +126,7 @@ sub "L" -->
    <!-- traktu chiujn erojn, kiuj ne komencighas per iu litero el la
    ordigoreguloj -->
   <litero name="?">
-     <xsl:for-each select="$kapoj/v[not(contains($chiuj_literoj,substring(.,1,1)))]">
+     <xsl:for-each select="$kapoj/v[not(contains($chiuj_literoj,substring(k,1,1)))]">
          <xsl:sort lang="eo"/>
 
          <v mrk="{@mrk}"> 
@@ -136,13 +141,44 @@ sub "L" -->
   </kap-oj>
 <xsl:text>
 </xsl:text>
+
+   <!-- inversa indekso -->
+
+   <inv lng="{@lng}">
+
+    <xsl:for-each 
+      select="document($ordigo)/ordigo/lingvo[@lng='eo']/l">
+
+      <litero name="{@name}">
+<xsl:text>
+</xsl:text>
+      <xsl:for-each select="$kapoj/v[r and
+         contains(current(),substring(r,1,1))]">
+
+         <xsl:sort lang="eo" select="r"/> 
+
+         <v mrk="{@mrk}"> 
+           <xsl:apply-templates/>
+         </v>
+<xsl:text>
+</xsl:text>
+      </xsl:for-each>
+     </litero>
+<xsl:text>
+</xsl:text>
+    </xsl:for-each>
+   
+    </inv>
+
   </xsl:if>
 </xsl:template>
 
 
 <xsl:template match="fako">
-   <xsl:message>progreso: traktas fakon "<xsl:value-of
-      select="@fak"/>"...</xsl:message>
+   <xsl:if test="$verbose='true'">
+     <xsl:message>progreso: traktas fakon "<xsl:value-of
+        select="@fak"/>"...</xsl:message>
+   </xsl:if>
 
    <fako fak="{@fak}">
 <xsl:text>
@@ -164,7 +200,7 @@ sub "L" -->
 </xsl:template>
 
 
-<xsl:template match="k|t">
+<xsl:template match="k|t|r">
   <xsl:copy><xsl:apply-templates/></xsl:copy>
 </xsl:template>
 

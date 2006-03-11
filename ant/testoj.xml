@@ -181,42 +181,42 @@ file="${testoj}/preparu-teston.xsl"><![CDATA[<?xml version="1.0"?>
     <echo 
 file="${testoj}/indeks-testo.xml"><![CDATA[<?xml version="1.0"?>
 <testoj>
-     <t test="count(//kap-oj/v[@mrk='test' and .='testo'])=1">
-   1) Chu kapvorto "testo" mrk "test" ekzistas</t>
+     <t test="count(//kap-oj/v[@mrk='test' and k='test/o' and r='tset'])=1">
+   1) Chu kapvorto "test/o", inversigita radiko "tset", mrk "test" enestas</t>
 
      <t test="count(//kap-oj/v[@mrk='test.0o'])=0">
-   2) Chu kapvorto mrk "test.0o" ne ekzistas</t>
+   2) Chu kapvorto kun mrk "test.0o" ne enestas</t>
 
-     <t test="count(//kap-oj/v[@mrk='test.0i' and .='testi'])=1">
-   3) Chu kapvorto "testi" mrk "test.0i" ekzistas</t>
+     <t test="count(//kap-oj/v[@mrk='test.0i' and k='testi'])=1">
+   3) Chu kapvorto "testi" mrk "test.0i" enestas</t>
 
      <t test="count(//trd-oj[@lng='de']/v[@mrk='test.0o' and
      k='testo' and t='Test'])=1">
-   4) Chu germana traduko "Test" ekzistas</t>
+   4) Chu germana traduko "Test" enestas</t>
 
      <t test="count(//trd-oj[@lng='de']/v[@mrk='test.0i' and
      k='testi' and t='testen'])=1">
-   5) Chu germana traduko "testen" ekzistas</t>
+   5) Chu germana traduko "testen" enestas</t>
 
      <t test="count(//trd-oj[@lng='de']/v[@mrk='test.0i' and
      k='testi' and t='probieren'])=1">
-   6) Chu germana traduko "probieren" ekzistas</t>
+   6) Chu germana traduko "probieren" enestas</t>
 
      <t test="count(//trd-oj[@lng='en']/v[@mrk='test.0i' and
      k='testi' and t='to test'])=1">
-   7) Chu angla traduko "to test" ekzistas</t>
+   7) Chu angla traduko "to test" enestas</t>
 
      <t test="count(//fako[@fak='GEOL']/v[@mrk='test.0o.GEOL' and
      .='testo'])=1">   
-   8) Chu fakindiko GEOL che kapvorto "testo" ekzistas</t>
+   8) Chu fakindiko GEOL che kapvorto "testo" enestas</t>
  
      <t test="count(//mlg-oj/v[@mrk='test.0o' and
      t='T' and k='testo'])=1">   
-   9) Chu mallongigo T che kapvorto "testo" ekzistas</t>
+   9) Chu mallongigo T che kapvorto "testo" enestas</t>
  
      <t test="count(//bld-oj/v[@mrk='test.0o' and
      t='bildigita testo :-)' and k='testo'])=1">   
-   10) Chu bildo pri kapvorto "testo" ekzistas</t>
+   10) Chu bildo pri kapvorto "testo" enestas</t>
  
 </testoj>
 ]]>

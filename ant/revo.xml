@@ -22,7 +22,7 @@ rezulto en:
 
   <!-- set global properties for this build -->
   <property name="voko" location="/home/revo/voko"/>
-  <property name="revo" location="${basedir}"/>
+  <property name="revo" location="."/>
   <property name="dok" location="${revo}/dok"/>
   <property name="art" location="${revo}/art"/>
   <property name="xml" location="${revo}/xml"/>
@@ -104,6 +104,17 @@ rezulto en:
     <copy todir="${revo}/dtd">
       <fileset dir="${voko}/dtd" casesensitive="yes">
         <include name="*.dtd"/>
+      </fileset>
+    </copy>
+
+  </target>
+
+  <target name="stl" depends="init"
+       description="kopias CSS-stildifinojn el voko">
+
+    <copy todir="${revo}/stl">
+      <fileset dir="${voko}/stl" casesensitive="yes">
+        <include name="*.*"/>
       </fileset>
     </copy>
 

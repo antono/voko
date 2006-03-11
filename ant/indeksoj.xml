@@ -58,35 +58,31 @@
        style="${xsl}/inx_kategorioj.xsl"/>
   </target>
 
-  <!-- target name="kapvortoj" depends="init,indeksbazo"
-     description="eltiri la kapvortojn el la indeks-dosiero">
-     <xslt in="${tmp}/indekso.xml" out="${tmp}/kap.xml"
-       style="${xsl}/inx_kap.xsl"/>
-  </target -->
-
-  <!-- target name="tradukoj" depends="init,indeksbazo"
-     description="eltiri la tradukojn el la indeks-dosiero">
-     <xslt in="${tmp}/indekso.xml" out="${tmp}/trd.xml"
-       style="${xsl}/inx_trd.xsl"/>
-  </target -->
-
-  <!-- target name="fakoj" depends="init,indeksbazo"
-     description="eltiri la fakindikojn el la indeks-dosiero">
-     <xslt in="${tmp}/indekso.xml" out="${tmp}/fak.xml"
-       style="${xsl}/inx_fak.xsl"/>
-  </target -->
-
   <target name="ordigo" depends="init,kategorioj"
      description="ordigi la kapvortojn, tradukojn, fakojn ktp.">
      <xslt in="${tmp}/inx_kat.xml" out="${tmp}/inx_ord.xml"
        style="${xsl}/inx_ordigo.xsl"/>
-<!--     <xslt in="${tmp}/kap.xml" out="${tmp}/kap_ord.xml"
-       style="${xsl}/inx_sort.xsl"/>
-     <xslt in="${tmp}/fak.xml" out="${tmp}/fak_ord.xml"
-       style="${xsl}/inx_sort.xsl"/> -->
+  </target>
+
+  <target name="kapvortoj" depends="init,ordigo"
+     description="kreas la HTML-dosierojn por la alfabeta indekso">
+     <xslt in="${tmp}/inx_ord.xml" out="${inx}/_eo.html"
+       style="${xsl}/inx_kap.xsl"/>
+  </target>
+
+  <target name="cvs-shanghoj"
+     description="kreas raporton pri la lastaj shanghoj per CVS">
+
+     <cvschangelog dir="/home/revo/revo/xml"
+                destfile="${tmp}/inx_shanghoj.xml"
+                daysinpast="14"
+     />
   </target>
 
 </project>
+
+
+
 
 
 

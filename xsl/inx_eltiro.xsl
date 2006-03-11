@@ -20,19 +20,13 @@
 
 <xsl:template match="art">
   <art mrk="{substring-after(substring-before(@mrk,'.xml'),'Id: ')}">
-  <xsl:apply-templates select="kap|drv|snc|trdgrp|trd"/>
+  <xsl:apply-templates select="kap|subart|drv|snc|trdgrp|trd|uzo|bld"/>
   </art>
 </xsl:template>
 
-<xsl:template match="drv">
+<xsl:template match="subart|drv|subdrv|snc|subsnc">
   <xsl:copy>
-  <xsl:apply-templates select="@mrk|kap|snc|trdgrp|trd|uzo"/>
-  </xsl:copy>
-</xsl:template>
-
-<xsl:template match="snc">
-  <xsl:copy>
-  <xsl:apply-templates select="@mrk|kap|trdgrp|trd|uzo"/>
+  <xsl:apply-templates select="@mrk|kap|drv|subdrv|snc|subsnc|trdgrp|trd|uzo|bld|mlg"/>
   </xsl:copy>
 </xsl:template>
 
@@ -51,13 +45,16 @@
   </xsl:copy>
 </xsl:template>
 
-<xsl:template match="kap|rad|tld|@mrk|@lng|uzo[@tip='fak']">
+<xsl:template match="kap|rad|tld|@mrk|@lng|uzo[@tip='fak']|bld|mlg">
   <xsl:copy><xsl:apply-templates/></xsl:copy>
 </xsl:template>
 
 <xsl:template match="kap/ofc|kap/fnt"/>
 
 </xsl:stylesheet>
+
+
+
 
 
 

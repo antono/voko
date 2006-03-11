@@ -6,6 +6,7 @@
      licenco GPL 2.0
 -->
 
+<xsl:param name="verbose" select="false"/>
 
 <xsl:output method="xml" encoding="utf-8"/>
 <xsl:strip-space elements="kap uzo trd"/>
@@ -31,7 +32,10 @@
 
     <xsl:for-each select="document($fakcfg)/fakoj/fako">
       <xsl:variable name="fak" select="@kodo"/>
-      <xsl:message>progreso: traktas fakon <xsl:value-of select="$fak"/>...</xsl:message>
+   
+      <xsl:if test="$verbose='true'">
+        <xsl:message>progreso: traktas fakon <xsl:value-of select="$fak"/>...</xsl:message>
+      </xsl:if>
    
       <xsl:for-each select="$root">
         <fako fak="{$fak}">
@@ -44,7 +48,10 @@
 
     <xsl:for-each select="document($lngcfg)/lingvoj/lingvo">
       <xsl:variable name="lng" select="@kodo"/>
-      <xsl:message>progreso: traktas tradukojn <xsl:value-of select="."/>jn...</xsl:message>
+  
+      <xsl:if test="$verbose='true'">
+        <xsl:message>progreso: traktas tradukojn <xsl:value-of select="."/>jn...</xsl:message>
+      </xsl:if>
 
       <xsl:for-each select="$root">
         <trd-oj lng="{$lng}">
@@ -52,6 +59,18 @@
         </trd-oj>
       </xsl:for-each>
     </xsl:for-each>
+
+    <!-- bildoj -->
+
+    <bld-oj>
+      <xsl:apply-templates select="//bld"/>
+    </bld-oj>
+
+    <!-- mallongigoj -->
+
+    <mlg-oj>
+      <xsl:apply-templates select="//mlg"/>
+    </mlg-oj>
 
   </indekso>
 </xsl:template>
@@ -61,9 +80,34 @@
     <xsl:attribute name="mrk">
       <xsl:value-of select="ancestor::node()[@mrk][1]/@mrk"/>
     </xsl:attribute>
-    <xsl:apply-templates/>
+    <r>
+      <xsl:call-template name="reverse">
+        <xsl:with-param name="string" select="rad"/>
+      </xsl:call-template>
+    </r>
+    <k>
+      <xsl:apply-templates/>
+    </k>
   </v>
 </xsl:template>
+
+<xsl:template name="reverse"> 
+   <xsl:param name="string"/> 
+   <xsl:choose> 
+     <xsl:when test="string-length($string) = 0 or string-length($string) = 
+ 1"> 
+       <xsl:value-of select="$string"/> 
+     </xsl:when> 
+     <xsl:otherwise> 
+       <xsl:value-of select="substring($string,string-length($string), 1)"/> 
+       <xsl:call-template name="reverse"> 
+         <xsl:with-param name="string" select="substring($string, 1, 
+           string-length($string) - 1)"/> 
+       </xsl:call-template> 
+    </xsl:otherwise> 
+  </xsl:choose> 
+</xsl:template> 
+ 
 
 <xsl:template match="drv/kap" mode="kapvortoj">
   <!-- ellasu la derivajhon kun sama kapvorto kiel la artikolo -->
@@ -78,13 +122,16 @@
           <xsl:attribute name="mrk">
             <xsl:value-of select="ancestor::node()[@mrk][1]/@mrk"/>
           </xsl:attribute>
-          <xsl:apply-templates/>
+          <k>
+            <xsl:apply-templates/>
+          </k>
         </v>
       </xsl:if>
 </xsl:template>
 
 <xsl:template name="kap-komparo">
-   <xsl:apply-templates/>
+   <xsl:variable name="kap"><xsl:apply-templates/></xsl:variable>
+   <xsl:value-of select="translate($kap,'/','')"/>
 </xsl:template>
 
 <xsl:template match="tld">
@@ -101,8 +148,8 @@
   </xsl:choose>
 </xsl:template>
 
-<xsl:template match="kap/text()" mode="kapvortoj">
-  <xsl:value-of select="translate(normalize-space(.),'/','')"/>
+<xsl:template match="kap/text()">
+  <xsl:value-of select="normalize-space(.)"/>
 </xsl:template>
 
 <!-- xsl:template match="ofc|fnt"/ -->
@@ -123,7 +170,7 @@
   </v>
 </xsl:template>
 
-<xsl:template match="trd">
+<xsl:template match="trd|mlg|bld">
   <v>
     <xsl:attribute name="mrk">
       <xsl:value-of select="ancestor::node()[@mrk][1]/@mrk"/>
@@ -137,6 +184,8 @@
     </k>
   </v>
 </xsl:template>
+
+
 
 
 </xsl:stylesheet>
