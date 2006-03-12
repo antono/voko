@@ -230,10 +230,47 @@ file="${testoj}/indeks-testo.xml"><![CDATA[<?xml version="1.0"?>
     <ant antfile="${ant}/indeksoj.xml"
        dir="${revo}" target="ordigo" inheritAll="false"/>
 
-      <loadfile property="rezulto_1" srcFile="${testoj}/indeks-testo.rez"/>
-      <echo>REZULTOJ DE LA INDEKS-TESTO (dosiero inx_kat.xml):
+    <ant antfile="${ant}/indeksoj.xml"
+       dir="${revo}" target="html" inheritAll="false"/>
+
+    <echo 
+file="${testoj}/indeks-testo-kap-t.xml"><![CDATA[<?xml version="1.0"?>
+<testoj>
+     <t test="count(//head/title[.='esperanta indekso'])=1">
+   1) Chu titolo en kapo estas "esperanta indekso"</t>
+     <t test="count(//head/link[@rel='stylesheet' and @href='../stl/indeksoj.css'])=1">
+   2) Chu stilfolio estas referencita</t>
+     <t test="count(//td[@class='aktiva']/a[@href='../inx/_eo.html'])=1">
+   3) Chu aktiva menuero estas Esperanto</t>
+     <t test="count(//b[@class='elektita' and .='t'])=1">
+   4) Chu aktiva litero estas "t"</t>
+     <t test="count(//h1[.='esperanta t...'])=1">
+   5) Chu videbla titolo estas "esperanta t..."</t>
+     <t test="count(//a[@href='../art/test.html' and @target='precipa'
+     and .='testo'])=1">
+   6) Chu referenco al test.html enestas</t>
+     <t test="count(//a[@href='../art/test.html#test.0i' and @target='precipa'
+     and .='testi'])=1">
+   7) Chu referenco al test.html#test.0i enestas</t>
+</testoj>
+]]>
+    </echo>
+
+    <antcall target="faru-teston">
+       <param name="testnomo" value="indeks-testo-kap-t"/>
+       <param name="testajho" value="${inx}/kap_t.html"/>
+    </antcall>
+
+
+    <loadfile property="rezulto_1" srcFile="${testoj}/indeks-testo.rez"/>
+    <echo>REZULTOJ DE LA INDEKS-TESTO</echo>
+    <echo>dosiero inx_kat.xml:
 ${rezulto_1}   
-      </echo>
+    </echo>
+    <loadfile property="rezulto_2" srcFile="${testoj}/indeks-testo-kap-t.rez"/>
+    <echo>dosiero kap_t.html:
+${rezulto_2}   
+    </echo>
 
   </target>
 

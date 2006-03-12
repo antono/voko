@@ -64,10 +64,10 @@
        style="${xsl}/inx_ordigo.xsl"/>
   </target>
 
-  <target name="kapvortoj" depends="init,ordigo"
-     description="kreas la HTML-dosierojn por la alfabeta indekso">
+  <target name="html" depends="init,ordigo"
+     description="kreas la HTML-dosierojn de la indeksoj">
      <xslt in="${tmp}/inx_ord.xml" out="${inx}/_eo.html"
-       style="${xsl}/inx_kap.xsl"/>
+       style="${xsl}/inx_html.xsl"/>
   </target>
 
   <target name="cvs-shanghoj"
