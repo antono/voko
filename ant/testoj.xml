@@ -15,7 +15,7 @@
 
   <target name="init">
 
-    <!-- kreu vortareton por testo -->
+   <!-- kreu vortareton por testo -->
    <!-- ant antfile="${ant}/indeksoj.xml"
        dir="${revo}" target="forigu" inheritAll="false"/ -->
 
@@ -62,6 +62,7 @@ file="${xml}/de.xml"><![CDATA[<?xml version="1.0"?>
 <art mrk="\$Id: de.xml asdfosdf">
   <kap><rad>de</rad></kap>
   <drv mrk="de.0">
+    <kap><tld/></kap>
     <trdgrp lng="de">
       <trd>Aorta</trd>
       <trd>Apfel</trd>

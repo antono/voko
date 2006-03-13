@@ -199,6 +199,46 @@ sub "L" -->
 
 </xsl:template>
 
+<xsl:template match="bld-oj">
+   <bld-oj>
+<xsl:text>
+</xsl:text>
+      <xsl:for-each select="v">
+
+         <xsl:sort lang="eo"/>
+
+         <v mrk="{@mrk}"> 
+           <xsl:apply-templates/>
+         </v>
+<xsl:text>
+</xsl:text>
+      </xsl:for-each>
+  </bld-oj>
+<xsl:text>
+</xsl:text>
+
+</xsl:template>
+
+<xsl:template match="mlg-oj">
+   <mlg-oj>
+<xsl:text>
+</xsl:text>
+      <xsl:for-each select="v">
+
+         <xsl:sort lang="eo"/>
+
+         <v mrk="{@mrk}"> 
+           <xsl:apply-templates/>
+         </v>
+<xsl:text>
+</xsl:text>
+      </xsl:for-each>
+  </mlg-oj>
+<xsl:text>
+</xsl:text>
+
+</xsl:template>
+
 
 <xsl:template match="k|t|r">
   <xsl:copy><xsl:apply-templates/></xsl:copy>
