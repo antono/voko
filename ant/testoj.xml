@@ -16,8 +16,8 @@
   <target name="init">
 
    <!-- kreu vortareton por testo -->
-   <!-- ant antfile="${ant}/indeksoj.xml"
-       dir="${revo}" target="forigu" inheritAll="false"/ -->
+   <ant antfile="${ant}/indeksoj.xml"
+       dir="${revo}" target="forigu" inheritAll="false"/>
 
     <mkdir dir="${revo}" />
     <mkdir dir="${xml}" />
@@ -168,6 +168,8 @@ file="${testoj}/preparu-teston.xsl"><![CDATA[<?xml version="1.0"?>
   <target name="indeks-testo" depends="init,test-init"
     description="testas la regulojn en indekso.xml">
 
+    <!-- testu eltiradon de la indeksinformoj -->
+
     <ant antfile="${ant}/indeksoj.xml"
        dir="${revo}" target="eltiro" inheritAll="false"/>
 
@@ -176,11 +178,13 @@ file="${testoj}/preparu-teston.xsl"><![CDATA[<?xml version="1.0"?>
 
       <echo>dosiero indekso.xml ekzistas? ${indekso.xml}</echo>
 
+    <!-- testu kategoriadon de la indeksinformoj -->
+
     <ant antfile="${ant}/indeksoj.xml"
        dir="${revo}" target="kategorioj" inheritAll="false"/>   
 
     <echo 
-file="${testoj}/indeks-testo.xml"><![CDATA[<?xml version="1.0"?>
+file="${testoj}/indeks-testo-kat.xml"><![CDATA[<?xml version="1.0"?>
 <testoj>
      <t test="count(//kap-oj/v[@mrk='test' and k='test/o' and r='tset'])=1">
    1) Chu kapvorto "test/o", inversigita radiko "tset", mrk "test" enestas</t>
@@ -219,17 +223,84 @@ file="${testoj}/indeks-testo.xml"><![CDATA[<?xml version="1.0"?>
      t='bildigita testo :-)' and k='testo'])=1">   
    10) Chu bildo pri kapvorto "testo" enestas</t>
  
+     <t test="count(//trd-oj[@lng='ja'])=0">   
+   11) Chu japanaj tradukoj ne enestas</t>
+
+      <t test="count(//fako[@fak='MAT'])=0">   
+   12) Chu fako MAT ne enestas</t>
+
 </testoj>
 ]]>
     </echo>
 
     <antcall target="faru-teston">
-       <param name="testnomo" value="indeks-testo"/>
+       <param name="testnomo" value="indeks-testo-kat"/>
        <param name="testajho" value="${tmp}/inx_kat.xml"/>
     </antcall>
 
+    <loadfile property="rezulto_1" srcFile="${testoj}/indeks-testo-kat.rez"/>
+    <echo>test-rezultoj pri dosiero inx_kat.xml:
+${rezulto_1}   
+    </echo>
+
+   <!-- testu ordigadon de la indeksinformoj -->
+
+
     <ant antfile="${ant}/indeksoj.xml"
        dir="${revo}" target="ordigo" inheritAll="false"/>
+
+    <echo 
+file="${testoj}/indeks-testo-ord.xml"><![CDATA[<?xml version="1.0"?>
+<testoj>
+     <t test="count(//kap-oj/litero[@name='t']/v[@mrk='test' and k='test/o' and r='tset'])=1">
+   1) Chu kapvorto "test/o" estas sub litero "t"</t>
+
+     <t test="count(//kap-oj/litero[@name='t']/v[@mrk='test.0i' and k='testi'])=1">
+   3) Chu kapvorto "testi" estas sub litero "t"</t>
+
+     <t test="count(//trd-oj[@lng='de']/litero[@name='t']/v[@mrk='test.0o' and
+     k='testo' and t='Test'])=1">
+   4) Chu germana traduko "Test" estas sub litero "t"</t>
+
+     <t test="count(//trd-oj[@lng='de']/litero[@name='t']/v[@mrk='test.0i' and
+     k='testi' and t='testen'])=1">
+   5) Chu germana traduko "testen" estas sub litero "t"</t>
+
+     <t test="count(//trd-oj[@lng='de']/litero[@name='p']/v[@mrk='test.0i' and
+     k='testi' and t='probieren'])=1">
+   6) Chu germana traduko "probieren" estas sub litero "p"</t>
+
+     <t test="count(//trd-oj[@lng='en']/litero[@name='t']/v[@mrk='test.0i' and
+     k='testi' and t='to test'])=1">
+   7) Chu angla traduko "to test" estas sub litero "t"</t>
+
+     <t test="count(//fako[@fak='GEOL']/v[@mrk='test.0o.GEOL' and
+     .='testo'])=1">   
+   8) Chu fakindiko GEOL che kapvorto "testo" enestas</t>
+ 
+     <t test="count(//mlg-oj/v[@mrk='test.0o' and
+     t='T' and k='testo'])=1">   
+   9) Chu mallongigo T che kapvorto "testo" enestas</t>
+ 
+     <t test="count(//bld-oj/v[@mrk='test.0o' and
+     t='bildigita testo :-)' and k='testo'])=1">   
+   10) Chu bildo pri kapvorto "testo" enestas</t>
+
+</testoj>
+]]>
+    </echo>
+
+    <antcall target="faru-teston">
+       <param name="testnomo" value="indeks-testo-ord"/>
+       <param name="testajho" value="${tmp}/inx_ord.xml"/>
+    </antcall>
+
+    <loadfile property="rezulto_2" srcFile="${testoj}/indeks-testo-ord.rez"/>
+    <echo>test-rezultoj pri dosiero inx_ord.xml:
+${rezulto_2}   
+    </echo>
+
+    <!-- testu kreadon de la HTML-indeksdosieroj -->
 
     <ant antfile="${ant}/indeksoj.xml"
        dir="${revo}" target="html" inheritAll="false"/>
@@ -262,17 +333,58 @@ file="${testoj}/indeks-testo-kap-t.xml"><![CDATA[<?xml version="1.0"?>
        <param name="testajho" value="${inx}/kap_t.html"/>
     </antcall>
 
+    <loadfile property="rezulto_3" srcFile="${testoj}/indeks-testo-kap-t.rez"/>
+    <echo>test-rezultoj pri dosiero kap_t.html:
+${rezulto_3}   
+    </echo>
 
-    <loadfile property="rezulto_1" srcFile="${testoj}/indeks-testo.rez"/>
-    <echo>REZULTOJ DE LA INDEKS-TESTO</echo>
+   <echo 
+file="${testoj}/indeks-testo-trd-de.xml"><![CDATA[<?xml version="1.0"?>
+<testoj>
+     <t test="count(//head/title[.='germana indekso'])=1">
+   1) Chu titolo en kapo estas "germana indekso"</t>
+     <t test="count(//head/link[@rel='stylesheet' and @href='../stl/indeksoj.css'])=1">
+   2) Chu stilfolio estas referencita</t>
+     <t test="count(//td[@class='aktiva']/a[@href='../inx/_lng.html'])=1">
+   3) Chu aktiva menuero estas Lingvoj</t>
+     <t test="count(//b[@class='elektita' and .='t'])=1">
+   4) Chu aktiva litero estas "t"</t>
+     <t test="count(//h1[.='germana t...'])=1">
+   5) Chu videbla titolo estas "germana t..."</t>
+     <t test="count(//a[@href='../art/test.html#test.0o' and @target='precipa'
+     and .='testo'])=1">
+   6) Chu referenco al test.html enestas</t>
+     <t test="count(//a[@href='../art/test.html#test.0i' and @target='precipa'
+     and .='testi'])=1">
+   7) Chu referenco al test.html#test.0i enestas</t>
+</testoj>
+]]>
+    </echo>
+
+    <antcall target="faru-teston">
+       <param name="testnomo" value="indeks-testo-trd-de"/>
+       <param name="testajho" value="${inx}/lx_de_t.html"/>
+    </antcall>
+
+    <loadfile property="rezulto_4" srcFile="${testoj}/indeks-testo-trd-de.rez"/>
+    <echo>test-rezultoj pri dosiero lx_de_t.html:
+${rezulto_4}   
+    </echo>
+
+    <echo>---------------------------------------------------------------
+      *** REZULTOJ DE LA INDEKS-TESTOJ ***</echo>
     <echo>dosiero inx_kat.xml:
 ${rezulto_1}   
     </echo>
-    <loadfile property="rezulto_2" srcFile="${testoj}/indeks-testo-kap-t.rez"/>
-    <echo>dosiero kap_t.html:
+    <echo>dosiero inx_ord.xml:
 ${rezulto_2}   
     </echo>
-
+    <echo>dosiero kap_t.html:
+${rezulto_3}   
+    </echo>
+    <echo>dosiero lx_de_t.html:
+${rezulto_4}   
+    </echo>
   </target>
 
 </project>

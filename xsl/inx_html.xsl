@@ -11,12 +11,13 @@
 
 <xsl:output method="xhtml" encoding="utf-8"/>
 
-<xsl:variable name="ordigo">../cfg/ordigo.xml</xsl:variable>
 <xsl:variable name="lingvoj">../cfg/lingvoj.xml</xsl:variable>
 <xsl:variable name="fakoj">../cfg/fakoj.xml</xsl:variable>
-<xsl:variable name="vortaronomo">Revo</xsl:variable>
+<xsl:variable name="enhavo">../cfg/enhavo.xml</xsl:variable>
 
 <xsl:template match="/">
+  <xsl:apply-template select="document($enhavo)/vortaro"/>
+
   <xsl:call-template name="eo"/>
   <xsl:call-template name="lng"/>
   <xsl:call-template name="fak"/>
@@ -26,7 +27,7 @@
 </xsl:template>
 
 <xsl:template match="kap-oj|inv|trd-oj">
-  <xsl:apply-templates select="litero"/>
+  <xsl:apply-templates select="litero[v]"/>
 </xsl:template>
 
 
@@ -49,9 +50,9 @@
  
             <p style="font-size: 120%">
             <xsl:call-template name="literoj">
-               <xsl:with-param name="lng" select="'eo'"/>
+               <xsl:with-param name="context" select="//kap-oj"/>
                <xsl:with-param name="lit" select="'xxx'"/>
-               <xsl:with-param name="pref" select="'kap'"/>
+               <xsl:with-param name="pref" select="'kap_'"/>
             </xsl:call-template>
 
             <br/><a href="mallong.html">mallongigoj</a>
@@ -95,7 +96,7 @@
                 <a>
                   <xsl:attribute name="href">
                     <xsl:value-of select="concat('lx_',@kodo,'_',
-                      $root/trd-oj[@lng=current()/@kodo]/litero[1]/@name,
+                      $root/trd-oj[@lng=current()/@kodo]/litero[v][1]/@name,
                       '.html')"/>
                   </xsl:attribute>
                   <xsl:value-of select="."/>
@@ -170,9 +171,9 @@
             <h1>gravaj pa&#x011d;oj</h1>
              ...
             <h1>diversaj indeksoj</h1>
-             <a href="bildoj.html">bildoj</a><br/>
-             <a href="mallong.html">mallongigoj</a><br/>
-              <a href="inv_a.html">inversa indekso</a><br/>
+            <a href="bildoj.html">bildoj</a><br/>
+            <a href="mallong.html">mallongigoj</a><br/>
+            <a href="inv_{//inv/litero[v][1]/@name}.html">inversa indekso</a><br/>
              ...
             <h1>redaktado</h1>
              ...
@@ -258,8 +259,8 @@
              </xsl:when>
              <xsl:when test="parent::node()[self::trd-oj]">
        <title><xsl:value-of 
-                   select="document($lingvoj)/lingvoj/lingvo[@kodo=../@lng]"/> 
-              <xsl:text>indekso</xsl:text>
+                   select="document($lingvoj)/lingvoj/lingvo[@kodo=current()/../@lng]"/> 
+              <xsl:text> indekso</xsl:text>
        </title>
              </xsl:when>
              <xsl:when test="self::fako">
@@ -314,16 +315,25 @@
             <xsl:otherwise>
 
               <xsl:call-template name="literoj">
-                 <xsl:with-param name="lng" select="../@lng"/>
+                 <xsl:with-param name="context" select=".."/>
                  <xsl:with-param name="lit" select="$lit"/>
                  <xsl:with-param name="pref" select="$pref"/>
               </xsl:call-template>
 
-              <h1><xsl:value-of 
-                 select="document($lingvoj)/lingvoj/lingvo[@kodo=current()/../@lng]"/>
-                  <xsl:text> </xsl:text>
-                  <xsl:value-of 
-                 select="substring(document($ordigo)/ordigo/lingvo[@lng=current()/../@lng]/l[@name=$lit],1,1)"/>...</h1>
+              <h1>
+                <xsl:choose>
+                   <xsl:when test="parent::node()[self::inv]">
+                     <xsl:text>inversa </xsl:text>
+                   </xsl:when>
+                   <xsl:otherwise>
+                     <xsl:value-of 
+                       select="document($lingvoj)/lingvoj/lingvo[@kodo=current()/../@lng]"/>
+                     <xsl:text> </xsl:text>
+                   </xsl:otherwise>
+                 </xsl:choose>
+                 <xsl:value-of select="@min"/>
+                 <xsl:text>...</xsl:text>
+               </h1>
             </xsl:otherwise>
 
          </xsl:choose>
@@ -475,23 +485,28 @@
 
 
 <xsl:template name="literoj">
-  <xsl:param name="lng"/>
+  <xsl:param name="context"/>
   <xsl:param name="lit"/>
   <xsl:param name="pref"/>
 
-  <xsl:for-each select="document($ordigo)/ordigo/lingvo[@lng=$lng]/l">
+<!-- <xsl:message><xsl:value-of select="$context/@lng"/></xsl:message> -->
+
+  <xsl:variable name="lng" select="string($context/@lng)"/>
+  <xsl:for-each select="$context/litero[v]">
+
     <xsl:choose>
       <xsl:when test="$lit=@name">
         <b class="elektita">
-          <xsl:value-of select="substring(.,1,1)"/>
+          <xsl:value-of select="@min"/>
         </b><xsl:text> </xsl:text>
       </xsl:when>
       <xsl:otherwise>
         <a href="{$pref}{@name}.html">
-          <xsl:value-of select="substring(.,1,1)"/>
+          <xsl:value-of select="@min"/>
         </a><xsl:text> </xsl:text>
       </xsl:otherwise>
     </xsl:choose>
+
   </xsl:for-each>
 </xsl:template>
 

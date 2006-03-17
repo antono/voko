@@ -38,9 +38,11 @@
       </xsl:if>
    
       <xsl:for-each select="$root">
-        <fako fak="{$fak}">
-          <xsl:apply-templates select="key('fakoj',$fak)"/>
-        </fako>
+        <xsl:if test="key('fakoj',$fak)">
+          <fako fak="{$fak}">
+            <xsl:apply-templates select="key('fakoj',$fak)"/>
+          </fako>
+        </xsl:if>
       </xsl:for-each>
     </xsl:for-each>
 
@@ -54,23 +56,29 @@
       </xsl:if>
 
       <xsl:for-each select="$root">
-        <trd-oj lng="{$lng}">
-          <xsl:apply-templates select="key('lingvoj',$lng)"/>
-        </trd-oj>
+        <xsl:if test="key('lingvoj',$lng)">
+          <trd-oj lng="{$lng}">
+            <xsl:apply-templates select="key('lingvoj',$lng)"/>
+          </trd-oj>
+        </xsl:if>
       </xsl:for-each>
     </xsl:for-each>
 
     <!-- bildoj -->
 
-    <bld-oj>
-      <xsl:apply-templates select="//bld"/>
-    </bld-oj>
+    <xsl:if test="//bld">
+      <bld-oj>
+        <xsl:apply-templates select="//bld"/>
+      </bld-oj>
+    </xsl:if>
 
     <!-- mallongigoj -->
 
-    <mlg-oj>
-      <xsl:apply-templates select="//mlg"/>
-    </mlg-oj>
+    <xsl:if test="//mlg">
+      <mlg-oj>
+        <xsl:apply-templates select="//mlg"/>
+      </mlg-oj>
+    </xsl:if>
 
   </indekso>
 </xsl:template>
