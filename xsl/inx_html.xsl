@@ -15,52 +15,78 @@
 <xsl:variable name="fakoj">../cfg/fakoj.xml</xsl:variable>
 <xsl:variable name="enhavo">../cfg/enhavo.xml</xsl:variable>
 
+<xsl:variable name="root" select="/"/>
+
 <xsl:template match="/">
-  <xsl:apply-template select="document($enhavo)/vortaro"/>
+  <xsl:apply-templates select="document($enhavo)/vortaro/pagho"/>
 
-  <xsl:call-template name="eo"/>
-  <xsl:call-template name="lng"/>
-  <xsl:call-template name="fak"/>
-  <xsl:call-template name="ktp"/>
-
-  <xsl:apply-templates/>
+  <xsl:call-template name="indeksoj">
+    <xsl:with-param name="kap-oj" select="count(document($enhavo)/vortaro//KAP-OJ)"/>
+    <xsl:with-param name="trd-oj" select="count(document($enhavo)/vortaro//TRD-OJ)"/>
+    <xsl:with-param name="fakoj" select="count(document($enhavo)/vortaro//FAKOJ)"/>
+    <xsl:with-param name="inv" select="count(document($enhavo)/vortaro//INV)"/>
+    <xsl:with-param name="bld-oj" select="count(document($enhavo)/vortaro//BLD-OJ)"/>
+    <xsl:with-param name="mlg-oj" select="count(document($enhavo)/vortaro//MLG-OJ)"/>
+  </xsl:call-template>
 </xsl:template>
+
+
+<xsl:template name="indeksoj">
+  <xsl:param name="kap-oj"/>
+  <xsl:param name="trd-oj"/>
+  <xsl:param name="fakoj"/>
+  <xsl:param name="inv"/>
+  <xsl:param name="bld-oj"/>
+  <xsl:param name="mlg-oj"/>
+
+  <xsl:if test="$kap-oj > 0">
+    <xsl:apply-templates select="//kap-oj"/>
+  </xsl:if>
+
+  <xsl:if test="$trd-oj > 0">
+    <xsl:apply-templates select="//trd-oj"/>
+  </xsl:if>
+
+  <xsl:if test="$fakoj > 0">
+    <xsl:apply-templates select="//fako"/>
+  </xsl:if>
+
+  <xsl:if test="$inv > 0">
+    <xsl:apply-templates select="//inv"/>
+  </xsl:if>
+
+  <xsl:if test="$bld-oj > 0">
+    <xsl:apply-templates select="//bld-oj"/>
+  </xsl:if>
+
+  <xsl:if test="$mlg-oj > 0">
+    <xsl:apply-templates select="//mlg-oj"/>
+  </xsl:if>
+</xsl:template>
+
 
 <xsl:template match="kap-oj|inv|trd-oj">
   <xsl:apply-templates select="litero[v]"/>
 </xsl:template>
 
 
-<xsl:template name="eo">
-  <redirect:write select="'_eo.html'">
+<xsl:template match="pagho">
+  <!-- xsl:message>skribas al <xsl:value-of
+  select="@dosiero"/></xsl:message -->
+  <redirect:write select="@dosiero">
   <html>
     <head>
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
-      <title><xsl:value-of select="$vortaronomo"/>-indekso: Esperanto</title>
+      <title><xsl:value-of select="concat(../@nometo,'-indekso: ',@titolo)"/></title>
       <link title="indekso-stilo" type="text/css" 
             rel="stylesheet" href="../stl/indeksoj.css"/>
     </head>
     <body>
       <table cellspacing="0">
-        <xsl:call-template name="menuo-eo"/>
+        <xsl:call-template name="menuo"/>
         <tr>
-          <td colspan="4" class="enhavo">
-
-            <h1>alfabeta indekso</h1>
- 
-            <p style="font-size: 120%">
-            <xsl:call-template name="literoj">
-               <xsl:with-param name="context" select="//kap-oj"/>
-               <xsl:with-param name="lit" select="'xxx'"/>
-               <xsl:with-param name="pref" select="'kap_'"/>
-            </xsl:call-template>
-
-            <br/><a href="mallong.html">mallongigoj</a>
-            </p>
- 
-            <h1>&#x0109;efaj nocioj</h1>
-              ...
- 
+          <td colspan="{count(../pagho[not(@kashita='jes')])}" class="enhavo">
+            <xsl:apply-templates/>
           </td>
         </tr>
       </table>
@@ -70,155 +96,148 @@
 </xsl:template>
 
 
-<xsl:template name="lng">
-  <xsl:variable name="root" select="indekso"/>
+<xsl:template match="sekcio">
+  <h1><xsl:value-of select="@titolo"/></h1>
+  <xsl:apply-templates/>
+</xsl:template>
 
-  <redirect:write select="'_lng.html'">
-  <html>
-    <head>
-      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
-      <title><xsl:value-of select="$vortaronomo"/>-indekso: lingvoj</title>
-      <link title="indekso-stilo" type="text/css" 
-            rel="stylesheet" href="../stl/indeksoj.css"/>
-    </head>
-    <body>
-      <table cellspacing="0">
-        <xsl:call-template name="menuo-lng"/>
-        <tr>
-          <td colspan="4" class="enhavo">
+ 
+<xsl:template match="ero[@ref]">
+  <a href="{@ref}"><xsl:value-of select="@titolo"/></a><br/>
+</xsl:template>
 
-            <h1>nacilingvaj indeksoj</h1>
-	    
-            <xsl:for-each select="document($lingvoj)/lingvoj/lingvo">
-              <xsl:sort lang="eo"/>
 
-              <xsl:if test="$root/trd-oj[@lng=current()/@kodo]">
-                <a>
-                  <xsl:attribute name="href">
-                    <xsl:value-of select="concat('lx_',@kodo,'_',
-                      $root/trd-oj[@lng=current()/@kodo]/litero[v][1]/@name,
+<xsl:template match="KAP-OJ">
+  <p style="font-size: 120%">
+  <xsl:call-template name="literoj">
+    <xsl:with-param name="context" select="$root//kap-oj"/>
+    <xsl:with-param name="lit" select="'xxx'"/>
+    <xsl:with-param name="pref" select="'kap_'"/>
+  </xsl:call-template>
+  </p>
+</xsl:template>
+
+
+<xsl:template match="TRD-OJ[@lng]">
+  <p>
+  <xsl:for-each select="document($lingvoj)/lingvoj/lingvo[@kodo=current()/@lng]">
+    <xsl:if test="$root//trd-oj[@lng=current()/@kodo]">
+       <a>
+         <xsl:attribute name="href">
+           <xsl:value-of select="concat('lx_',@kodo,'_',
+              $root//trd-oj[@lng=current()/@kodo]/litero[v][1]/@name,
                       '.html')"/>
-                  </xsl:attribute>
-                  <xsl:value-of select="."/>
-                </a><br/>
-              </xsl:if>
-            </xsl:for-each>
-          </td>
-        </tr>
-      </table>
-    </body>
-  </html>
-  </redirect:write>
+           </xsl:attribute>
+           <xsl:value-of select="."/>
+       </a>
+    </xsl:if>
+  </xsl:for-each>
+  </p>
 </xsl:template>
 
 
-<xsl:template name="fak">
-  <xsl:variable name="root" select="indekso"/>
+<xsl:template match="TRD-OJ[@krom]">
+  <p>
+  <xsl:variable name="krom" select="@krom"/>
 
-  <redirect:write select="'_fak.html'">
-  <html>
-    <head>
-      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
-      <title><xsl:value-of select="$vortaronomo"/>-indekso: fakoj</title>
-      <link title="indekso-stilo" type="text/css" 
-            rel="stylesheet" href="../stl/indeksoj.css"/>
-    </head>
-    <body>
-      <table cellspacing="0">
-        <xsl:call-template name="menuo-fak"/>
-        <tr>
-          <td colspan="4" class="enhavo">
+  <xsl:for-each select="document($lingvoj)/lingvoj/lingvo">
+    <xsl:sort lang="eo"/>
 
-            <h1>fakindeksoj</h1>
+    <xsl:if test="$root//trd-oj[@lng=current()/@kodo and @lng != $krom]">
+       <a>
+         <xsl:attribute name="href">
+           <xsl:value-of select="concat('lx_',@kodo,'_',
+              $root//trd-oj[@lng=current()/@kodo]/litero[v][1]/@name,
+                      '.html')"/>
+           </xsl:attribute>
+           <xsl:value-of select="."/>
+       </a><br/>
+    </xsl:if>
+  </xsl:for-each>
+  </p>
+</xsl:template>
 
-            <xsl:for-each select="document($fakoj)/fakoj/fako">
+<xsl:template match="FAKOJ">
+    <xsl:for-each select="document($fakoj)/fakoj/fako">
               <xsl:sort lang="eo"/>
 
-              <xsl:if test="$root/fako[@fak=current()/@kodo]">
+              <xsl:if test="$root//fako[@fak=current()/@kodo]">
                 <a>
                   <xsl:attribute name="href">
                     <xsl:value-of select="concat('fx_',@kodo,'.html')"/>
                   </xsl:attribute>
                   <xsl:value-of select="."/>
                 </a><br/>
-              </xsl:if>
-            </xsl:for-each>
-
-          </td>
-        </tr>
-      </table>
-    </body>
-  </html>
-  </redirect:write>
+             </xsl:if>
+    </xsl:for-each>
 </xsl:template>
 
 
-<xsl:template name="ktp">
-  <redirect:write select="'_ktp.html'">
-  <html>
-    <head>
-      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
-      <title><xsl:value-of select="$vortaronomo"/>-indekso: ktp.</title>
-      <link title="indekso-stilo" type="text/css" 
-            rel="stylesheet" href="../stl/indeksoj.css"/>
-    </head>
-    <body>
-      <table cellspacing="0">
-        <xsl:call-template name="menuo-eo"/>
-        <tr>
-          <td colspan="4" class="enhavo">
-
-            <h1>gravaj pa&#x011d;oj</h1>
-             ...
-            <h1>diversaj indeksoj</h1>
-            <a href="bildoj.html">bildoj</a><br/>
-            <a href="mallong.html">mallongigoj</a><br/>
-            <a href="inv_{//inv/litero[v][1]/@name}.html">inversa indekso</a><br/>
-             ...
-            <h1>redaktado</h1>
-             ...
-          </td>
-        </tr>
-      </table>
-    </body>
-  </html>
-  </redirect:write>
+<xsl:template match="MLG-OJ">
+  <a href="mallong.html"><xsl:value-of select="@titolo"/></a><br/>
 </xsl:template>
+ 
+
+<xsl:template match="BLD-OJ">
+  <a href="bildoj.html"><xsl:value-of select="@titolo"/></a><br/>
+</xsl:template>
+
+
+<xsl:template match="INV">
+  <a href="inv_{$root//inv/litero[v][1]/@name}.html"><xsl:value-of select="@titolo"/></a><br/>
+</xsl:template>
+
+
+<xsl:template name="menuo">
+  <xsl:variable name="aktiva" select="@dosiero"/>
+  <tr>
+    <xsl:for-each select="../pagho[not(@kashita='jes')]">
+      <xsl:choose>
+        <xsl:when test="@dosiero=$aktiva">
+          <td class="aktiva">
+            <a href="../inx/{@dosiero}">
+              <xsl:value-of select="@titolo"/>
+            </a>
+          </td>
+        </xsl:when>
+        <xsl:otherwise>
+          <td class="fona">
+            <a href="../inx/{@dosiero}">
+              <xsl:value-of select="@titolo"/>
+            </a>
+          </td>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:for-each>     
+  </tr>
+</xsl:template>
+
 
 <xsl:template name="menuo-eo">
-  <tr>
-    <td class="aktiva"><a href="../inx/_eo.html">Esperanto</a></td>
-    <td class="fona"><a href="../inx/_lng.html">Lingvoj</a></td>
-    <td class="fona"><a href="../inx/_fak.html">Fakoj</a></td>
-    <td class="fona"><a href="../inx/_ktp.html">ktp.</a></td>
-  </tr>
+  <xsl:for-each select="document($enhavo)//pagho[//KAP-OJ][1]"> 
+    <xsl:call-template name="menuo"/>
+  </xsl:for-each>
 </xsl:template>
+
 
 <xsl:template name="menuo-lng">
-  <tr>
-    <td class="fona"><a href="../inx/_eo.html">Esperanto</a></td>
-    <td class="aktiva"><a href="../inx/_lng.html">Lingvoj</a></td>
-    <td class="fona"><a href="../inx/_fak.html">Fakoj</a></td>
-    <td class="fona"><a href="../inx/_ktp.html">ktp.</a></td>
-  </tr>
+  <xsl:for-each select="document($enhavo)//pagho[//TRD-OJ][1]"> 
+    <xsl:call-template name="menuo"/>
+  </xsl:for-each>
 </xsl:template>
+
 
 <xsl:template name="menuo-fak">
-  <tr>
-    <td class="fona"><a href="../inx/_eo.html">Esperanto</a></td>
-    <td class="fona"><a href="../inx/_lng.html">Lingvoj</a></td>
-    <td class="aktiva"><a href="../inx/_fak.html">Fakoj</a></td>
-    <td class="fona"><a href="../inx/_ktp.html">ktp.</a></td>
-  </tr>
+  <xsl:for-each select="document($enhavo)//pagho[//FAKOJ][1]"> 
+    <xsl:call-template name="menuo"/>
+  </xsl:for-each>
 </xsl:template>
 
+
 <xsl:template name="menuo-ktp">
-  <tr>
-    <td class="fona"><a href="../inx/_eo.html">Esperanto</a></td>
-    <td class="fona"><a href="../inx/_lng.html">Lingvoj</a></td>
-    <td class="fona"><a href="../inx/_fak.html">Fakoj</a></td>
-    <td class="aktiva"><a href="../inx/_ktp.html">ktp.</a></td>
-  </tr>
+  <xsl:for-each select="document($enhavo)//pagho[//BLD-OJ][1]"> 
+    <xsl:call-template name="menuo"/>
+  </xsl:for-each>
 </xsl:template>
 
 
@@ -303,7 +322,7 @@
           <xsl:choose>
             <xsl:when test="self::fako">
               <h1><xsl:value-of 
-                  select="document($fakoj)/fakoj/fako[@kodo=../@fak]"/>
+                  select="document($fakoj)/fakoj/fako[@kodo=current()/@fak]"/>
               </h1>
             </xsl:when>
             <xsl:when test="self::bld-oj">

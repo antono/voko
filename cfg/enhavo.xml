@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE vortaro [
+
+<!ELEMENT vortaro (pagho)*>
+<!ATTLIST vortaro nomo CDATA #REQUIRED
+                  nometo CDATA #REQUIRED>
+<!ELEMENT pagho (sekcio*)>
+<!ATTLIST pagho titolo CDATA #REQUIRED
+                dosiero CDATA #REQUIRED>
+
+<!ELEMENT sekcio (ero|KAP-OJ|TRD-OJ|FAKOJ|INV|BLD-OJ|MLG-OJ)*>
+<!ATTLIST sekcio titolo CDATA #REQUIRED>
+
+<!ATTLIST ero titolo CDATA #REQUIRED
+              ref CDATA #REQUIRED>
+
+<!ELEMENT KAP-OJ EMPTY>
+<!ATTLIST KAP-OJ titolo CDATA #IMPLIED>
+<!ELEMENT TRD-OJ EMPTY>
+<!ATTLIST TRD-OJ titolo CDATA #IMPLIED>
+<!ELEMENT FAKOJ EMPTY>
+<!ATTLIST FAKOJ titolo CDATA #IMPLIED>
+<!ELEMENT INV EMPTY>
+<!ATTLIST INV titolo CDATA #REQUIRED>
+<!ELEMENT BLD-OJ EMPTY>
+<!ATTLIST BLD-OJ titolo CDATA #REQUIRED>
+<!ELEMENT MLG-OJ EMPTY>
+<!ATTLIST MLG-OJ titolo CDATA #REQUIRED>
+
+<!ENTITY % signoj SYSTEM "../dtd/vokosgn.dtd">
+%signoj;
+
+]>
+
+
+<vortaro nomo="Reta Vortaro" nometo="ReVo">
+  <pagho titolo="Esperanto" dosiero="_eo.html">
+     <sekcio titolo="alfabeta indekso">
+       <KAP-OJ/>
+       <MLG-OJ/>
+     </sekcio>
+     <sekcio titolo="cefaj nocioj">
+       <TEZAURO/>
+     </sekcio>
+  </pagho>
+  <pagho titolo="Lingvoj" dosiero="_lng.html">
+    <sekcio titolo="nacilingvaj indeksoj">
+      <TRD-OJ lng="la"/>
+      <TRD-OJ krom="la"/>
+    </sekcio>
+  </pagho>
+  <pagho titolo="Fakoj" dosiero="_fak.html">
+    <sekcio titolo="fakindeksoj">
+      <FAKOJ/>
+    </sekcio>
+  </pagho>
+  <pagho titolo="ktp." dosiero="_ktp.html">
+    <sekcio titolo="gravaj pa&gcirc;oj">
+      <ero ref="../titolo.html" titolo="titolpa&gcirc;o"/>
+      <ero ref="../sercxo.html" titolo="ser&ccirc;o"/>
+      <ero ref="../dok/copying.txt" titolo="permesilo"/>
+      <ero ref="../dok/desxut.html" titolo="de&scirc;uti"/>
+      <ero ref="http://www.uni-leipzig.de/esperanto/voko" titolo="VoKo"/>
+    </sekcio>
+    <sekcio titolo="diversaj indeksoj">
+       <BLD-OJ titolo="listo de bildoj"/>
+       <MLG-OJ titolo="listo de mallongigoj"/>
+       <INV titolo="inversa indekso"/>
+       <ero ref="novaj.html" titolo="novaj artikoloj"/>
+       <ero ref="shanghoj.html" titolo="shanghitaj artikoloj"/>
+       <ero ref="eraroj.html" titolo="eraro-raporto"/>
+       <ero ref="statistiko.html" titolo="statistiko"/>
+       <ero ref="mankantaj.html" titolo="mankantaj tradukoj"/>
+       <ero ref="../dok/mallongigoj.html" titolo="vortaraj mallongigoj"/>
+       <ero ref="../dok/bibliogr.html" titolo="bibliografio la&ubreve; mallongigoj"/>
+       <ero ref="../dok/biblaut.html" titolo="bibliografio la&ubreve; a&ubreve;toroj"/>
+       <ero ref="../dok/bibltit.html" titolo="bibliografio la&ubreve; titoloj"/>
+    </sekcio>
+    <sekcio titolo="redaktado">
+       <ero ref="../dok/redinfo.html" titolo="fari&gcirc;i redaktanto"/>
+       <ero ref="../dok/revolist.html" titolo="dissendolisto"/>
+       <ero ref="../dok/revoserv.html" titolo="redaktoservo"/>
+       <ero ref="../dok/lingva_manlibro.html" titolo="lingva manlibro"/>
+       <ero ref="../dok/manlibro.html" titolo="tehhnika manlibro"/>
+       <ero ref="../dok/vindoza_manlibro.html" titolo="manlibro por Vindozo"/>
+       <ero ref="../dok/dtd.html" titolo="dokumenttipdifino"/>
+       <ero ref="../dok/lng/lingvoj.html" titolo="alfabetoj"/>
+       <ero ref="../dok/fakoj.html" titolo="mll. de fakoj"/>
+       <ero ref="../dok/lingvoj.html" titolo="mll. de lingvoj"/>
+       <ero ref="../dok/stiloj.html" titolo="mll. de stiloj"/>
+       <ero ref="../dok/sxablono.txt" titolo="&scirc;ablono"/>
+    </sekcio>
+  </pagho>
+
+  <pagho kashita="jes" titolo="plena indeksaro" dosiero="_plena.html">
+     <sekcio titolo="alfabeta indekso">
+       <KAP-OJ/>
+       <MLG-OJ/>
+     </sekcio>
+     <sekcio titolo="cefaj nocioj">
+       <TEZAURO/>
+     </sekcio>
+    <sekcio titolo="nacilingvaj indeksoj">
+      <TRD-OJ lng="la"/>
+      <TRD-OJ krom="la"/>
+    </sekcio>
+    <sekcio titolo="fakindeksoj">
+      <FAKOJ/>
+    </sekcio>
+    <sekcio titolo="gravaj pa&gcirc;oj">
+      <ero ref="../titolo.html" titolo="titolpa&gcirc;o"/>
+      <ero ref="../sercxo.html" titolo="ser&ccirc;o"/>
+      <ero ref="../dok/copying.txt" titolo="permesilo"/>
+      <ero ref="../dok/desxut.html" titolo="de&scirc;uti"/>
+      <ero ref="http://www.uni-leipzig.de/esperanto/voko" titolo="VoKo"/>
+    </sekcio>
+    <sekcio titolo="diversaj indeksoj">
+       <BLD-OJ titolo="listo de bildoj"/>
+       <MLG-OJ titolo="listo de mallongigoj"/>
+       <INV titolo="inversa indekso"/>
+       <ero ref="novaj.html" titolo="novaj artikoloj"/>
+       <ero ref="shanghoj.html" titolo="shanghitaj artikoloj"/>
+       <ero ref="eraroj.html" titolo="eraro-raporto"/>
+       <ero ref="statistiko.html" titolo="statistiko"/>
+       <ero ref="mankantaj.html" titolo="mankantaj tradukoj"/>
+       <ero ref="../dok/mallongigoj.html" titolo="vortaraj mallongigoj"/>
+       <ero ref="../dok/bibliogr.html" titolo="bibliografio la&ubreve; mallongigoj"/>
+       <ero ref="../dok/biblaut.html" titolo="bibliografio la&ubreve; a&ubreve;toroj"/>
+       <ero ref="../dok/bibltit.html" titolo="bibliografio la&ubreve; titoloj"/>
+    </sekcio>
+    <sekcio titolo="redaktado">
+       <ero ref="../dok/redinfo.html" titolo="fari&gcirc;i redaktanto"/>
+       <ero ref="../dok/revolist.html" titolo="dissendolisto"/>
+       <ero ref="../dok/revoserv.html" titolo="redaktoservo"/>
+       <ero ref="../dok/lingva_manlibro.html" titolo="lingva manlibro"/>
+       <ero ref="../dok/manlibro.html" titolo="tehhnika manlibro"/>
+       <ero ref="../dok/vindoza_manlibro.html" titolo="manlibro por Vindozo"/>
+       <ero ref="../dok/dtd.html" titolo="dokumenttipdifino"/>
+       <ero ref="../dok/lng/lingvoj.html" titolo="alfabetoj"/>
+       <ero ref="../dok/fakoj.html" titolo="mll. de fakoj"/>
+       <ero ref="../dok/lingvoj.html" titolo="mll. de lingvoj"/>
+       <ero ref="../dok/stiloj.html" titolo="mll. de stiloj"/>
+       <ero ref="../dok/sxablono.txt" titolo="&scirc;ablono"/>
+    </sekcio>
+  </pagho>
+</vortaro> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
