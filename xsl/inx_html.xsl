@@ -108,12 +108,12 @@
 
 
 <xsl:template match="KAP-OJ">
-  <p style="font-size: 120%">
+  <p style="font-size: 120%"><b>
   <xsl:call-template name="literoj">
     <xsl:with-param name="context" select="$root//kap-oj"/>
     <xsl:with-param name="lit" select="'xxx'"/>
     <xsl:with-param name="pref" select="'kap_'"/>
-  </xsl:call-template>
+  </xsl:call-template></b>
   </p>
 </xsl:template>
 
@@ -121,16 +121,28 @@
 <xsl:template match="TRD-OJ[@lng]">
   <p>
   <xsl:for-each select="document($lingvoj)/lingvoj/lingvo[@kodo=current()/@lng]">
-    <xsl:if test="$root//trd-oj[@lng=current()/@kodo]">
-       <a>
-         <xsl:attribute name="href">
-           <xsl:value-of select="concat('lx_',@kodo,'_',
+    <xsl:choose>
+      <xsl:when test="count($root//trd-oj[@lng=current()/@kodo]) &gt; 1000">
+        <a><b>
+          <xsl:attribute name="href">
+            <xsl:value-of select="concat('lx_',@kodo,'_',
               $root//trd-oj[@lng=current()/@kodo]/litero[v][1]/@name,
                       '.html')"/>
-           </xsl:attribute>
-           <xsl:value-of select="."/>
-       </a>
-    </xsl:if>
+          </xsl:attribute>
+          <xsl:value-of select="."/>
+        </b></a>
+      </xsl:when>
+      <xsl:when test="$root//trd-oj[@lng=current()/@kodo]">
+        <a>
+          <xsl:attribute name="href">
+            <xsl:value-of select="concat('lx_',@kodo,'_',
+              $root//trd-oj[@lng=current()/@kodo]/litero[v][1]/@name,
+                      '.html')"/>
+          </xsl:attribute>
+          <xsl:value-of select="."/>
+        </a>
+      </xsl:when>
+    </xsl:choose>
   </xsl:for-each>
   </p>
 </xsl:template>
@@ -214,28 +226,28 @@
 
 
 <xsl:template name="menuo-eo">
-  <xsl:for-each select="document($enhavo)//pagho[//KAP-OJ][1]"> 
+  <xsl:for-each select="document($enhavo)//pagho[.//KAP-OJ][1]"> 
     <xsl:call-template name="menuo"/>
   </xsl:for-each>
 </xsl:template>
 
 
 <xsl:template name="menuo-lng">
-  <xsl:for-each select="document($enhavo)//pagho[//TRD-OJ][1]"> 
+  <xsl:for-each select="document($enhavo)//pagho[.//TRD-OJ][1]"> 
     <xsl:call-template name="menuo"/>
   </xsl:for-each>
 </xsl:template>
 
 
 <xsl:template name="menuo-fak">
-  <xsl:for-each select="document($enhavo)//pagho[//FAKOJ][1]"> 
+  <xsl:for-each select="document($enhavo)//pagho[.//FAKOJ][1]"> 
     <xsl:call-template name="menuo"/>
   </xsl:for-each>
 </xsl:template>
 
 
 <xsl:template name="menuo-ktp">
-  <xsl:for-each select="document($enhavo)//pagho[//BLD-OJ][1]"> 
+  <xsl:for-each select="document($enhavo)//pagho[.//BLD-OJ][1]"> 
     <xsl:call-template name="menuo"/>
   </xsl:for-each>
 </xsl:template>
