@@ -10,6 +10,7 @@
 
 
 <xsl:output method="xhtml" encoding="utf-8"/>
+<xsl:strip-space elements="t t1 k"/>
 
 <xsl:variable name="lingvoj">../cfg/lingvoj.xml</xsl:variable>
 <xsl:variable name="fakoj">../cfg/fakoj.xml</xsl:variable>
@@ -414,7 +415,14 @@
 
 
 <xsl:template match="trd-oj/litero/v">
-  <xsl:apply-templates select="t"/><xsl:text>: </xsl:text>
+  <xsl:choose>
+    <xsl:when test="t1">
+      <xsl:apply-templates select="t1"/><xsl:text>: </xsl:text>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:apply-templates select="t"/><xsl:text>: </xsl:text>
+    </xsl:otherwise>
+  </xsl:choose>
   <a target="precipa">
     <xsl:attribute name="href">
       <xsl:choose>
@@ -430,6 +438,11 @@
     <xsl:apply-templates select="k"/>
   </a>
   <br/>
+</xsl:template>
+
+
+<xsl:template match="u">
+  <u><xsl:apply-templates/></u>
 </xsl:template>
 
 

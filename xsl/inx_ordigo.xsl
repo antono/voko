@@ -11,6 +11,7 @@
 <xsl:param name="verbose" select="false"/>
 
 <xsl:output method="xml" encoding="utf-8"/>
+<xsl:strip-space elements="t t1 k"/>
 
 <xsl:variable name="ordigo">../cfg/ordigo.xml</xsl:variable>
 
@@ -185,9 +186,14 @@
 </xsl:template>
 
 
-<xsl:template match="k|t|r">
+<xsl:template match="k|r|t1|u">
   <xsl:copy><xsl:apply-templates/></xsl:copy>
 </xsl:template>
+
+<xsl:template match="t">
+  <xsl:copy><xsl:value-of select="normalize-space(.)"/></xsl:copy>
+</xsl:template>
+
 
 
 

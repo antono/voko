@@ -102,8 +102,7 @@
 <xsl:template name="reverse"> 
    <xsl:param name="string"/> 
    <xsl:choose> 
-     <xsl:when test="string-length($string) = 0 or string-length($string) = 
- 1"> 
+     <xsl:when test="string-length($string) = 0 or string-length($string) = 1"> 
        <xsl:value-of select="$string"/> 
      </xsl:when> 
      <xsl:otherwise> 
@@ -184,16 +183,55 @@
       <xsl:value-of select="ancestor::node()[@mrk][1]/@mrk"/>
     </xsl:attribute>
     <t>
-      <xsl:apply-templates/>
+      <xsl:value-of select="text()|mll"/>
     </t>
+    <xsl:if test="klr">
+      <t1>
+        <xsl:apply-templates/>
+      </t1>
+    </xsl:if>
     <k>
      <xsl:apply-templates
-  select="(ancestor::art|ancestor::drv)[last()]/kap"/>
+  select="(ancestor::art/kap|ancestor::drv/kap|ancestor::ekz/ind)[last()]"/>
     </k>
   </v>
 </xsl:template>
 
+<xsl:template match="trd[.//ind]">
+  <v>
+    <xsl:attribute name="mrk">
+      <xsl:value-of select="ancestor::node()[@mrk][1]/@mrk"/>
+    </xsl:attribute>
+    <t>
+      <xsl:value-of select=".//ind"/>
+    </t>
+    <t1>
+      <xsl:apply-templates/>
+    </t1>
+    <k>
+     <xsl:apply-templates
+  select="(ancestor::art/kap|ancestor::drv/kap|ancestor::ekz/ind)[last()]"/>
+    </k>
+  </v>
+</xsl:template>
 
+<xsl:template match="trd/ind|mll/ind">
+  <u>
+    <xsl:apply-templates/>
+  </u>
+</xsl:template>
+
+<xsl:template match="mll">
+  <xsl:if test="@tip='kom' or @tip='mez'">...</xsl:if>
+  <xsl:apply-templates/>
+  <xsl:if test="@tip='fin' or @tip='mez'">...</xsl:if>
+</xsl:template>
+
+<xsl:template match="trd/klr">
+  <xsl:text>(</xsl:text>
+  <xsl:apply-templates/>
+  <xsl:text>)</xsl:text>
+</xsl:template> 
 
 
 </xsl:stylesheet>

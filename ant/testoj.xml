@@ -32,7 +32,14 @@ file="${xml}/test.xml"><![CDATA[<?xml version="1.0"?>
     <mlg>T</mlg>
     <snc mrk="test.0o.GEOL">
       <uzo tip="fak">GEOL</uzo>
-      <dif>fusx fusx fusx</dif>
+      <dif>fusx fusx fusx:
+        <ekz><ind>testo malbona chio malbona</ind> 
+             <trd lng="de">Test schlecht alles schlecht</trd></ekz>;
+        <ekz><ind>unu <mll tip="mez">malbona testo</mll> chion
+      malbonigas</ind>
+            <trd lng="de">ein <mll tip="mez">schlechter <ind>Test</ind></mll>
+      verdirbt alles</trd></ekz>.
+      </dif>
       <trd lng="de">Test <klr>(GEO)</klr></trd>
     </snc>
     <snc mrk="test.0o.XXX">
@@ -48,6 +55,10 @@ file="${xml}/test.xml"><![CDATA[<?xml version="1.0"?>
     <trdgrp lng="de">
       <trd>testen</trd>,
       <trd>probieren</trd>
+      <trd>aus<ind>probieren</ind></trd>
+      <trd>klrtest1 <klr>ne en la indekso</klr></trd>
+      <trd>klrtest2 <klr tip="ind">en la indekso</klr></trd>
+      <trd>klrtest3 <klr tip="amb">en la indekso kaj la artikolo</klr></trd>
     </trdgrp>
     <trd lng="en">to test</trd>
   </drv>
@@ -86,6 +97,7 @@ file="${xml}/de.xml"><![CDATA[<?xml version="1.0"?>
       <trd>alla</trd>
       <trd>alma</trd>
     </trdgrp>
+    <trd lng="la">de</trd>
   </drv>
 </art>
 </vortaro>
@@ -173,11 +185,6 @@ file="${testoj}/preparu-teston.xsl"><![CDATA[<?xml version="1.0"?>
     <ant antfile="${ant}/indeksoj.xml"
        dir="${revo}" target="eltiro" inheritAll="false"/>
 
-      <!-- testu la dosieron indekso.xml -->
-      <available file="${tmp}/indekso.xml" property="indekso.xml"/>
-
-      <echo>dosiero indekso.xml ekzistas? ${indekso.xml}</echo>
-
     <!-- testu kategoriadon de la indeksinformoj -->
 
     <ant antfile="${ant}/indeksoj.xml"
@@ -204,8 +211,8 @@ file="${testoj}/indeks-testo-kat.xml"><![CDATA[<?xml version="1.0"?>
    5) Chu germana traduko "testen" enestas</t>
 
      <t test="count(//trd-oj[@lng='de']/v[@mrk='test.0i' and
-     k='testi' and t='probieren'])=1">
-   6) Chu germana traduko "probieren" enestas</t>
+     k='testi' and t='probieren'])=2">
+   6) Chu germanaj tradukoj "probieren" kaj "ausprobieren" enestas</t>
 
      <t test="count(//trd-oj[@lng='en']/v[@mrk='test.0i' and
      k='testi' and t='to test'])=1">
@@ -228,6 +235,31 @@ file="${testoj}/indeks-testo-kat.xml"><![CDATA[<?xml version="1.0"?>
 
       <t test="count(//fako[@fak='MAT'])=0">   
    12) Chu fako MAT ne enestas</t>
+
+     <t test="count(//trd-oj[@lng='de']/v[@mrk='test.0i' and
+     k='testi' and t='probieren' and t1/u='probieren' and t1/text()='aus'])=1">
+   13) Chu germana traduko "aus_probieren_" enestas</t>
+
+     <t test="count(//trd-oj[@lng='de']/v[@mrk='test.0o.GEOL' and
+     k='testo malbona chio malbona' and t='Test schlecht alles schlecht'])=1">
+   14) Chu germana traduko "Test schlecht alles schlecht" enestas</t>
+
+     <t test="count(//trd-oj[@lng='de']/v[@mrk='test.0o.GEOL' and
+     k='...malbona testo...' and t='Test' and t1/u='Test' and
+   contains(t1,'...schlechter ')])=1">
+   15) Chu germana traduko "...schlechter Test..." enestas</t>
+
+     <t test="count(//trd-oj[@lng='de']/v[@mrk='test.0i' and
+     k='testi' and t='klrtest1 '])=1">
+   16) Chu germana traduko "klrtest1" enestas</t>
+
+     <t test="count(//trd-oj[@lng='de']/v[@mrk='test.0i' and
+     k='testi' and t='klrtest2 ' and t1='klrtest2 (en la indekso)'])=1">
+   17) Chu germana traduko "klrtest2 (en la indekso)" enestas</t>
+
+     <t test="count(//trd-oj[@lng='de']/v[@mrk='test.0i' and
+     k='testi' and t='klrtest3 ' and t1='klrtest3 (en la indekso kaj la artikolo)'])=1">
+   18) Chu germana traduko "klrtest3 (en la indekso kaj la artikolo)" enestas</t>
 
 </testoj>
 ]]>
@@ -267,8 +299,8 @@ file="${testoj}/indeks-testo-ord.xml"><![CDATA[<?xml version="1.0"?>
    5) Chu germana traduko "testen" estas sub litero "t"</t>
 
      <t test="count(//trd-oj[@lng='de']/litero[@name='p']/v[@mrk='test.0i' and
-     k='testi' and t='probieren'])=1">
-   6) Chu germana traduko "probieren" estas sub litero "p"</t>
+     k='testi' and t='probieren'])=2">
+   6) Chu germanaj tradukoj "ausprobieren" kaj "probieren" estas sub litero "p"</t>
 
      <t test="count(//trd-oj[@lng='en']/litero[@name='t']/v[@mrk='test.0i' and
      k='testi' and t='to test'])=1">
@@ -357,6 +389,13 @@ file="${testoj}/indeks-testo-trd-de.xml"><![CDATA[<?xml version="1.0"?>
      <t test="count(//a[@href='../art/test.html#test.0i' and @target='precipa'
      and .='testi'])=1">
    7) Chu referenco al test.html#test.0i enestas</t>
+     <t test="count(//a[@href='../art/test.html#test.0o.GEOL' 
+     and .='testo malbona chio malbona'])=1">
+   8) Chu ekzemplo traduko "testo malbona chio malbona" enestas</t>
+    <t test="count(//a[@href='../art/test.html#test.0o.GEOL' and
+   .='...malbona testo...'])=1  and count(//u[.='Test'])=1">
+   9) Chu "...schlechter Test...: ...malbona testo..." enestas</t>
+
 </testoj>
 ]]>
     </echo>
@@ -371,12 +410,73 @@ file="${testoj}/indeks-testo-trd-de.xml"><![CDATA[<?xml version="1.0"?>
 ${rezulto_4}   
     </echo>
 
+   <echo 
+file="${testoj}/indeks-testo-trd-de2.xml"><![CDATA[<?xml version="1.0"?>
+<testoj>
+
+     <t test="count(//b[@class='elektita' and .='k'])=1">
+   1) Chu aktiva litero estas "k"</t>
+     <t test="count(//h1[.='germana k...'])=1">
+   2) Chu videbla titolo estas "germana k..."</t>
+     <t test="count(//a[@href='../art/test.html#test.0i'])=3">
+   3) Chu 3 referencoj al test.0i enestas</t>
+
+    <t test="count(//td[contains(.,'klrtest1:')])=1">
+   4) Chu "klrtest1:" sen indeksa klarigo enestas</t>
+     <t test="count(//td[contains(.,'klrtest2 (en la indekso):')])=1">
+   5) Chu klrtest2 kun indeksa klarigo enestas</t>
+     <t test="count(//td[contains(.,'klrtest3 (en la indekso kaj la artikolo):')])=1">
+   6) Chu klrtest3 kun indeksa klarigo enestas</t>
+
+</testoj>
+]]>
+    </echo>
+    <antcall target="faru-teston">
+       <param name="testnomo" value="indeks-testo-trd-de2"/>
+       <param name="testajho" value="${inx}/lx_de_k.html"/>
+    </antcall>
+
+    <loadfile property="rezulto_5" srcFile="${testoj}/indeks-testo-trd-de2.rez"/>
+    <echo>test-rezultoj pri dosiero lx_de_k.html:
+${rezulto_5}   
+    </echo>
+
+   <echo 
+file="${testoj}/indeks-testo-trd-de3.xml"><![CDATA[<?xml version="1.0"?>
+<testoj>
+
+     <t test="count(//b[@class='elektita' and .='p'])=1">
+   1) Chu aktiva litero estas "p"</t>
+     <t test="count(//h1[.='germana p...'])=1">
+   2) Chu videbla titolo estas "germana p..."</t>
+     <t test="count(//a[@href='../art/test.html#test.0i'])=2">
+   3) Chu 2 referencoj al test.0i enestas</t>
+      <t test="count(//td[contains(.,'aus')])=1 and count(//td/u[.='probieren'])=1">
+   4) Chu 'aus' kaj '_probieren_' enestas</t>
+      <t test="count(//td[contains(.,'probieren:')])=1">
+   5) Chu 'probieren:' enestas</t>
+
+</testoj>
+]]>
+    </echo>
+    <antcall target="faru-teston">
+       <param name="testnomo" value="indeks-testo-trd-de3"/>
+       <param name="testajho" value="${inx}/lx_de_p.html"/>
+    </antcall>
+
+    <loadfile property="rezulto_6" srcFile="${testoj}/indeks-testo-trd-de3.rez"/>
+    <echo>test-rezultoj pri dosiero lx_de_p.html:
+${rezulto_6}   
+    </echo>
+
+
     <echo>---------------------------------------------------------------
       *** REZULTOJ DE LA INDEKS-TESTOJ ***</echo>
     <echo>dosiero inx_kat.xml:
 ${rezulto_1}   
     </echo>
     <echo>dosiero inx_ord.xml:
+
 ${rezulto_2}   
     </echo>
     <echo>dosiero kap_t.html:
@@ -384,6 +484,12 @@ ${rezulto_3}
     </echo>
     <echo>dosiero lx_de_t.html:
 ${rezulto_4}   
+    </echo>
+    <echo>dosiero lx_de_k.html:
+${rezulto_5}   
+    </echo>
+    <echo>dosiero lx_de_p.html:
+${rezulto_6}   
     </echo>
   </target>
 

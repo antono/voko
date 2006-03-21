@@ -20,36 +20,85 @@
 
 <xsl:template match="art">
   <art mrk="{substring-after(substring-before(@mrk,'.xml'),'Id: ')}">
-  <xsl:apply-templates select="kap|subart|drv|snc|trdgrp|trd|uzo|bld"/>
+  <xsl:apply-templates select="kap|subart|drv|snc|trdgrp|trd|uzo|bld|dif|ekz"/>
   </art>
 </xsl:template>
 
 <xsl:template match="subart|drv|subdrv|snc|subsnc">
   <xsl:copy>
-  <xsl:apply-templates select="@mrk|kap|drv|subdrv|snc|subsnc|trdgrp|trd|uzo|bld|mlg"/>
+  <xsl:apply-templates select="@mrk|kap|drv|subdrv|snc|subsnc|trdgrp|trd
+          |uzo|bld|dif|ekz|mlg"/>
   </xsl:copy>
 </xsl:template>
+
+<xsl:template match="dif">
+  <xsl:apply-templates select="ekz|trdgrp|trd"/>
+</xsl:template>
+
+<xsl:template match="ekz[ind]">
+  <xsl:copy>
+  <xsl:apply-templates select="ind|trdgrp|trd"/>
+  </xsl:copy> 
+</xsl:template>
+
+<xsl:template match="ind">
+  <xsl:copy>
+  <xsl:apply-templates/>
+  </xsl:copy> 
+</xsl:template>
+
+<xsl:template match="ekz"/>
 
 <xsl:template match="trdgrp">
   <xsl:variable name="lng" select="@lng"/>
   <xsl:for-each select="trd">
     <trd lng="{$lng}">
-      <xsl:apply-templates/>
+      <xsl:choose>
+        <xsl:when test="mll">
+          <xsl:apply-templates select="mll"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates/>
+        </xsl:otherwise>
+      </xsl:choose>
     </trd>
   </xsl:for-each>
 </xsl:template>
 
 <xsl:template match="trd[@lng]">
   <xsl:copy>
-  <xsl:apply-templates select="@lng|text()|*"/>
+      <xsl:choose>
+        <xsl:when test="mll">
+          <xsl:apply-templates select="@lng|mll"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates select="@lng|text()|*|klr[@tip='ind' or @tip='amb']"/>
+        </xsl:otherwise>
+      </xsl:choose>
   </xsl:copy>
 </xsl:template>
 
-<xsl:template match="kap|rad|tld|@mrk|@lng|uzo[@tip='fak']|bld|mlg">
+<xsl:template match="kap/ofc|kap/fnt|ekz/uzo
+  |klr[not(@tip='ind' or @tip='amb')]"/>
+
+<xsl:template match="ekz/ind[mll]">
+  <xsl:copy><xsl:apply-templates select="mll"/></xsl:copy>
+</xsl:template>
+
+<xsl:template match="kap|rad|tld|@mrk|@lng|uzo[@tip='fak']|bld|mlg
+  |ind|klr[@tip='ind' or @tip='amb']">
   <xsl:copy><xsl:apply-templates/></xsl:copy>
 </xsl:template>
 
-<xsl:template match="kap/ofc|kap/fnt"/>
+<xsl:template match="mll">
+  <mll tip="{@tip}">
+    <xsl:apply-templates/>
+  </mll>
+</xsl:template>
+
+
+
+
 
 </xsl:stylesheet>
 
