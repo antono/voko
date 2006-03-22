@@ -26,13 +26,13 @@
 file="${xml}/test.xml"><![CDATA[<?xml version="1.0"?>
 <vortaro>
 <art mrk="\$$Id: test.xml asdfosdf">
-  <kap><rad>test</rad>/o</kap>
+  <kap><rad>test</rad>/o <var><kap><tld/>oo</kap></var></kap>
   <drv mrk="test.0o">
     <kap><tld/>o</kap>
     <mlg>T</mlg>
     <snc mrk="test.0o.GEOL">
       <uzo tip="fak">GEOL</uzo>
-      <dif>fusx fusx fusx:
+      <dif>fusx (<trd lng="de"><ind>Test</ind> in Definition</trd>) fusx fusx:
         <ekz><ind>testo malbona chio malbona</ind> 
              <trd lng="de">Test schlecht alles schlecht</trd></ekz>;
         <ekz><ind>unu <mll tip="mez">malbona testo</mll> chion
@@ -45,20 +45,20 @@ file="${xml}/test.xml"><![CDATA[<?xml version="1.0"?>
     <snc mrk="test.0o.XXX">
       <dif>balbut balbut balbut</dif>
     </snc>
-    <bld src="test.jpg">bildigita testo :-)</bld>
+    <bld src="test.jpg"><ind>bildigita testo</ind> :-)<trd lng="de"><ind>Test</ind>bild</trd></bld>
     <trd lng="de">Test</trd>
     <trd lng="en">test</trd>
   </drv>
   <drv mrk="test.0i">
-    <kap><tld/>i</kap>
+    <kap><tld/>i <var><kap><tld/>oi</kap></var></kap>
     <dif>strang strang strang</dif>
     <trdgrp lng="de">
       <trd>testen</trd>,
       <trd>probieren</trd>
       <trd>aus<ind>probieren</ind></trd>
-      <trd>klrtest1 <klr>ne en la indekso</klr></trd>
-      <trd>klrtest2 <klr tip="ind">en la indekso</klr></trd>
-      <trd>klrtest3 <klr tip="amb">en la indekso kaj la artikolo</klr></trd>
+      <trd>klrtest1 <klr>(ne en la indekso)</klr></trd>
+      <trd>klrtest2 <klr tip="ind">(en la indekso)</klr></trd>
+      <trd>klrtest3 <klr tip="amb">(en la indekso kaj la artikolo)</klr></trd>
     </trdgrp>
     <trd lng="en">to test</trd>
   </drv>
@@ -185,6 +185,8 @@ file="${testoj}/preparu-teston.xsl"><![CDATA[<?xml version="1.0"?>
     <ant antfile="${ant}/indeksoj.xml"
        dir="${revo}" target="eltiro" inheritAll="false"/>
 
+
+
     <!-- testu kategoriadon de la indeksinformoj -->
 
     <ant antfile="${ant}/indeksoj.xml"
@@ -193,7 +195,8 @@ file="${testoj}/preparu-teston.xsl"><![CDATA[<?xml version="1.0"?>
     <echo 
 file="${testoj}/indeks-testo-kat.xml"><![CDATA[<?xml version="1.0"?>
 <testoj>
-     <t test="count(//kap-oj/v[@mrk='test' and k='test/o' and r='tset'])=1">
+     <t test="count(//kap-oj/v[@mrk='test' and k='testo' and
+     k1='test/o' and r='tset'])=1">
    1) Chu kapvorto "test/o", inversigita radiko "tset", mrk "test" enestas</t>
 
      <t test="count(//kap-oj/v[@mrk='test.0o'])=0">
@@ -261,6 +264,22 @@ file="${testoj}/indeks-testo-kat.xml"><![CDATA[<?xml version="1.0"?>
      k='testi' and t='klrtest3 ' and t1='klrtest3 (en la indekso kaj la artikolo)'])=1">
    18) Chu germana traduko "klrtest3 (en la indekso kaj la artikolo)" enestas</t>
 
+   <t test="count(//kap-oj/v[@mrk='test' and k='testoo'])=1">
+   19) Chu variajho "testoo" mrk "test" enestas</t>
+
+   <t test="count(//kap-oj/v[@mrk='test.0i' and k='testoi'])=1">
+   20) Chu variajho "testoi" mrk "test.0i" enestas</t>
+
+     <t test="count(//trd-oj[@lng='de']/v[@mrk='test.0o.GEOL' and
+     k='testo' and t='Test' and t1/u='Test' and t1/text()=' in Definition'])=1">
+   21) Chu endifina germana traduko "_Test_ in Definition" enestas</t>
+
+     <t test="count(//trd-oj[@lng='de']/v[@mrk='test.0o' and
+     k='bildigita testo' and t='Test' and t1/u='Test' and
+   contains(t1,'bild')])=1">
+   22) Chu germana traduko "Testbild" enestas</t>
+
+
 </testoj>
 ]]>
     </echo>
@@ -284,8 +303,11 @@ ${rezulto_1}
     <echo 
 file="${testoj}/indeks-testo-ord.xml"><![CDATA[<?xml version="1.0"?>
 <testoj>
-     <t test="count(//kap-oj/litero[@name='t']/v[@mrk='test' and k='test/o' and r='tset'])=1">
-   1) Chu kapvorto "test/o" estas sub litero "t"</t>
+     <t test="count(//kap-oj/litero[@name='t']/v[@mrk='test' and k='testo'])=1">
+   1) Chu kapvorto "testo" estas sub litero "t"</t>
+
+     <t test="count(//inv/litero[@name='t']/v[@mrk='test' and k='test/o'])=1">
+   2) Chu kapvorto "testo" estas sub inv/litero "t"</t>
 
      <t test="count(//kap-oj/litero[@name='t']/v[@mrk='test.0i' and k='testi'])=1">
    3) Chu kapvorto "testi" estas sub litero "t"</t>
@@ -317,6 +339,23 @@ file="${testoj}/indeks-testo-ord.xml"><![CDATA[<?xml version="1.0"?>
      <t test="count(//bld-oj/v[@mrk='test.0o' and
      t='bildigita testo :-)' and k='testo'])=1">   
    10) Chu bildo pri kapvorto "testo" enestas</t>
+
+     <t test="count(//kap-oj/litero[@name='t']/v[@mrk='test' and k='testoo'])=1">
+   11) Chu variajho "testoo" estas sub litero "t"</t>
+
+     <t test="count(//kap-oj/litero[@name='t']/v[@mrk='test.0i' and k='testoi'])=1">
+   12) Chu variajho "testoi" estas sub litero "t"</t>
+
+     <t test="count(//trd-oj[@lng='de']/litero[@name='t']/v[@mrk='test.0o.GEOL' and
+     k='testo' and t='Test' and t1/u='Test' and t1/text()=' in Definition'])=1">
+   13) Chu endifina germana traduko "_Test_ in Definition" estas sub
+   litero "t"</t>
+
+     <t test="count(//trd-oj[@lng='de']/litero[@name='t']/v[@mrk='test.0o' and
+     k='bildigita testo' and t='Test' and t1/u='Test' and
+   contains(t1,'bild')])=1">
+   14) Chu germana traduko "Testbild" estas sub litero "t"</t>
+
 
 </testoj>
 ]]>
@@ -356,6 +395,13 @@ file="${testoj}/indeks-testo-kap-t.xml"><![CDATA[<?xml version="1.0"?>
      <t test="count(//a[@href='../art/test.html#test.0i' and @target='precipa'
      and .='testi'])=1">
    7) Chu referenco al test.html#test.0i enestas</t>
+     <t test="count(//a[@href='../art/test.html' and @target='precipa'
+     and .='testoo'])=1">
+   8) Chu referenco al test.html variajho "testoo" enestas</t>
+     <t test="count(//a[@href='../art/test.html#test.0i' and @target='precipa'
+     and .='testoi'])=1">
+   9) Chu referenco al test.html#test.0i variajho "testoi" enestas</t>
+
 </testoj>
 ]]>
     </echo>
@@ -383,9 +429,10 @@ file="${testoj}/indeks-testo-trd-de.xml"><![CDATA[<?xml version="1.0"?>
    4) Chu aktiva litero estas "t"</t>
      <t test="count(//h1[.='germana t...'])=1">
    5) Chu videbla titolo estas "germana t..."</t>
-     <t test="count(//a[@href='../art/test.html#test.0o' and @target='precipa'
-     and .='testo'])=1">
-   6) Chu referenco al test.html enestas</t>
+     <t test="count(//a[(@href='../art/test.html#test.0o.GEOL' or
+     @href='../art/test.html') and @target='precipa'
+     and .='testo'])=2">
+   6) Chu referenco al test.html au test.html#test.0o.GEOL enestas</t>
      <t test="count(//a[@href='../art/test.html#test.0i' and @target='precipa'
      and .='testi'])=1">
    7) Chu referenco al test.html#test.0i enestas</t>
@@ -393,8 +440,13 @@ file="${testoj}/indeks-testo-trd-de.xml"><![CDATA[<?xml version="1.0"?>
      and .='testo malbona chio malbona'])=1">
    8) Chu ekzemplo traduko "testo malbona chio malbona" enestas</t>
     <t test="count(//a[@href='../art/test.html#test.0o.GEOL' and
-   .='...malbona testo...'])=1  and count(//u[.='Test'])=1">
+   .='...malbona testo...'])=1  and count(//u[.='Test'])=3">
    9) Chu "...schlechter Test...: ...malbona testo..." enestas</t>
+     <t test="count(//td[contains(.,'in Definition:')])=1">
+   10) Chu "in Definition" enestas</t>
+   <t test="count(//a[@href='../art/test.html#test.0o' and
+   .='bildigita testo'])=1  and count(//u[.='Test'])=3">
+   11) Chu "Testbild" enestas</t>
 
 </testoj>
 ]]>

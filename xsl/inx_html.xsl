@@ -16,6 +16,8 @@
 <xsl:variable name="fakoj">../cfg/fakoj.xml</xsl:variable>
 <xsl:variable name="enhavo">../cfg/enhavo.xml</xsl:variable>
 
+<xsl:key name="trd-oj" match="//trd-oj/litero/v" use="concat(../../@lng,'-',../@name,'-',t)"/>
+
 <xsl:variable name="root" select="/"/>
 
 <xsl:template match="/">
@@ -175,6 +177,8 @@
               <xsl:sort lang="eo"/>
 
               <xsl:if test="$root//fako[@fak=current()/@kodo]">
+                <img src="{@vinjeto}" alt="{@kodo}" border="0" align="middle"/>
+                <xsl:text>&#xa0;</xsl:text>
                 <a>
                   <xsl:attribute name="href">
                     <xsl:value-of select="concat('fx_',@kodo,'.html')"/>
@@ -381,7 +385,7 @@
                <xsl:apply-templates/>
              </dl>
            </xsl:when>
-            <xsl:otherwise>
+           <xsl:otherwise>
              <xsl:apply-templates/>
            </xsl:otherwise>
         </xsl:choose>
@@ -414,7 +418,7 @@
 </xsl:template>
 
 
-<xsl:template match="trd-oj/litero/v">
+<!-- xsl:template match="trd-oj/litero/v">
   <xsl:choose>
     <xsl:when test="t1">
       <xsl:apply-templates select="t1"/><xsl:text>: </xsl:text>
@@ -438,6 +442,93 @@
     <xsl:apply-templates select="k"/>
   </a>
   <br/>
+</xsl:template -->
+
+<xsl:template match="trd-oj/litero/v">
+  <xsl:choose>
+
+    <!-- se key('trd-oj') enhavas nur unu tian eron montru kiel "t: k" -->
+    <xsl:when test="count(key('trd-oj',concat(../../@lng,'-',../@name,'-',t)))=1">
+
+      <xsl:choose>
+        <xsl:when test="t1">
+          <xsl:apply-templates select="t1"/><xsl:text>: </xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates select="t"/><xsl:text>: </xsl:text>
+        </xsl:otherwise>
+      </xsl:choose>
+
+      <a target="precipa">
+        <xsl:attribute name="href">
+          <xsl:choose>
+            <xsl:when test="contains(@mrk,'.')">
+              <xsl:value-of select="concat('../art/',
+                substring-before(@mrk,'.'),'.html#',@mrk)"/> 
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="concat('../art/',@mrk,'.html')"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:attribute>
+        <xsl:apply-templates select="k"/>
+      </a>
+      <br/>
+
+    </xsl:when>
+
+    <!-- aliokaze montru kiel "t: k, k, ...; t1: k; t1: k; ... " aus simile --> 
+    <xsl:when test="count(.|key('trd-oj',concat(../../@lng,'-',../@name,'-',t))[1])=1">
+
+      <xsl:apply-templates select="t"/><xsl:text>: </xsl:text>
+     
+      <xsl:for-each select="key('trd-oj',concat(../../@lng,'-',../@name,'-',t))[not(t1)]">
+        <xsl:sort lang="eo" select="k"/> 
+     
+        <xsl:if test="not(following-sibling::v[k=current()/k and t=current()/t and not(t1)])">
+          <a target="precipa">
+            <xsl:attribute name="href">
+              <xsl:choose>
+                <xsl:when test="contains(@mrk,'.')">
+                  <xsl:value-of select="concat('../art/',
+                    substring-before(@mrk,'.'),'.html#',@mrk)"/> 
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="concat('../art/',@mrk,'.html')"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:attribute>
+            <xsl:apply-templates select="k"/>
+          </a>
+          <xsl:if test="not(position()=last())"><xsl:text>, </xsl:text></xsl:if>
+        </xsl:if>
+      </xsl:for-each>
+      <br/>
+
+      <xsl:for-each select="key('trd-oj',concat(../../@lng,'-',../@name,'-',t))[t1]">
+        <xsl:sort lang="eo" select="k"/> 
+
+        <xsl:text>&#xa0;&#xa0;&#xa0;</xsl:text>
+        <xsl:apply-templates select="t1"/><xsl:text>: </xsl:text>
+        <a target="precipa">
+          <xsl:attribute name="href">
+            <xsl:choose>
+              <xsl:when test="contains(@mrk,'.')">
+                <xsl:value-of select="concat('../art/',
+                  substring-before(@mrk,'.'),'.html#',@mrk)"/> 
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="concat('../art/',@mrk,'.html')"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:attribute>
+          <xsl:apply-templates select="k"/>
+        </a><br/>
+      </xsl:for-each>
+
+    </xsl:when>
+
+  </xsl:choose>
 </xsl:template>
 
 
@@ -522,9 +613,9 @@
 </xsl:template>
 
 
-<xsl:template match="k">
+<!-- xsl:template match="k">
   <xsl:value-of select="translate(.,'/','')"/>
-</xsl:template>
+</xsl:template -->
 
 
 

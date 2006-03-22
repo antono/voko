@@ -120,6 +120,17 @@ rezulto en:
 
   </target>
 
+  <target name="smb" depends="init"
+       description="kopias simbolojn el voko">
+
+    <copy todir="${revo}/smb">
+      <fileset dir="${voko}/smb" casesensitive="yes">
+        <include name="*.*"/>
+      </fileset>
+    </copy>
+
+  </target>
+
   <target name="art" depends="init" if="dosiero"
        description="kreas artikolon el xml-dosiero (donu -Ddosiero=iuradik en komandlinio)">
   

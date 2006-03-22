@@ -23,7 +23,7 @@
     <!-- kapvortoj -->
 
     <kap-oj lng="eo">
-      <xsl:apply-templates select="//kap" mode="kapvortoj"/>
+      <xsl:apply-templates select="//art/kap|//drv/kap" mode="kapvortoj"/>
     </kap-oj>
 
     <xsl:variable name="root" select="."/>
@@ -68,7 +68,7 @@
 
     <xsl:if test="//bld">
       <bld-oj>
-        <xsl:apply-templates select="//bld"/>
+        <xsl:apply-templates select="//bld" mode="bildoj"/>
       </bld-oj>
     </xsl:if>
 
@@ -83,20 +83,24 @@
   </indekso>
 </xsl:template>
 
-<xsl:template match="kap" mode="kapvortoj">
+<xsl:template match="kap[rad]" mode="kapvortoj">
   <v>
     <xsl:attribute name="mrk">
       <xsl:value-of select="ancestor::node()[@mrk][1]/@mrk"/>
     </xsl:attribute>
-    <r>
+    <r> <!-- inversigita radiko por la inversa indekso -->
       <xsl:call-template name="reverse">
         <xsl:with-param name="string" select="rad"/>
       </xsl:call-template>
     </r>
     <k>
-      <xsl:apply-templates/>
+      <xsl:apply-templates select="text()|rad"/>
     </k>
+    <k1> <!-- kun "/" post radiko por la inversa indekso -->
+      <xsl:apply-templates select="text()|rad" mode="inv"/>
+    </k1>
   </v>
+  <xsl:apply-templates select="var" mode="kapvortoj"/>
 </xsl:template>
 
 <xsl:template name="reverse"> 
@@ -116,7 +120,7 @@
 </xsl:template> 
  
 
-<xsl:template match="drv/kap" mode="kapvortoj">
+<xsl:template match="drv/kap|var/kap" mode="kapvortoj">
   <!-- ellasu la derivajhon kun sama kapvorto kiel la artikolo -->
       <xsl:variable name="art-kap"><xsl:for-each
         select="ancestor::node()[self::art]/kap"
@@ -130,14 +134,15 @@
             <xsl:value-of select="ancestor::node()[@mrk][1]/@mrk"/>
           </xsl:attribute>
           <k>
-            <xsl:apply-templates/>
+            <xsl:apply-templates select="text()|tld"/>
           </k>
         </v>
       </xsl:if>
+  <xsl:apply-templates select="var" mode="kapvortoj"/>
 </xsl:template>
 
 <xsl:template name="kap-komparo">
-   <xsl:variable name="kap"><xsl:apply-templates/></xsl:variable>
+   <xsl:variable name="kap"><xsl:apply-templates select="text()|rad|tld"/></xsl:variable>
    <xsl:value-of select="translate($kap,'/','')"/>
 </xsl:template>
 
@@ -156,13 +161,21 @@
 </xsl:template>
 
 <xsl:template match="kap/text()">
+  <xsl:value-of select="translate(normalize-space(.),'/','')"/>
+</xsl:template>
+
+<xsl:template match="kap/text()" mode="inv">
   <xsl:value-of select="normalize-space(.)"/>
+</xsl:template>
+
+<xsl:template match="rad" mode="inv">
+  <xsl:apply-templates/>
 </xsl:template>
 
 <!-- xsl:template match="ofc|fnt"/ -->
 
 <xsl:template match="kap">
-    <xsl:apply-templates/>
+    <xsl:apply-templates select="text()|rad|tld"/>
 </xsl:template>
 
 <xsl:template match="uzo">
@@ -176,6 +189,22 @@
 
   </v>
 </xsl:template>
+
+<xsl:template match="bld" mode="bildoj">
+  <v>
+    <xsl:attribute name="mrk">
+      <xsl:value-of select="ancestor::node()[@mrk][1]/@mrk"/>
+    </xsl:attribute>
+    <t>
+      <xsl:apply-templates select="text()|ind|klr"/>
+    </t>
+    <k>
+     <xsl:apply-templates
+  select="(ancestor::art/kap|ancestor::drv/kap)[last()]"/>
+    </k>
+  </v>
+</xsl:template>
+
 
 <xsl:template match="trd|mlg|bld">
   <v>
@@ -192,7 +221,7 @@
     </xsl:if>
     <k>
      <xsl:apply-templates
-  select="(ancestor::art/kap|ancestor::drv/kap|ancestor::ekz/ind)[last()]"/>
+  select="(ancestor::art/kap|ancestor::drv/kap|ancestor::ekz/ind|ancestor::bld/ind)[last()]"/>
     </k>
   </v>
 </xsl:template>
@@ -210,7 +239,7 @@
     </t1>
     <k>
      <xsl:apply-templates
-  select="(ancestor::art/kap|ancestor::drv/kap|ancestor::ekz/ind)[last()]"/>
+  select="(ancestor::art/kap|ancestor::drv/kap|ancestor::ekz/ind|ancestor::bld/ind)[last()]"/>
     </k>
   </v>
 </xsl:template>
@@ -228,13 +257,13 @@
 </xsl:template>
 
 <xsl:template match="trd/klr">
-  <xsl:text>(</xsl:text>
   <xsl:apply-templates/>
-  <xsl:text>)</xsl:text>
 </xsl:template> 
 
 
 </xsl:stylesheet>
+
+
 
 
 

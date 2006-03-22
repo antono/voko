@@ -59,7 +59,7 @@
   	     select="$trdoj/v[contains(current(),substring(.,1,$n)) 
              and not(contains($minus,substring(.,1,$nminus)))]">
 
-            <xsl:sort lang="{$ordlng}" select="t"/>
+            <xsl:sort lang="{$ordlng}" select="concat(t,'|',t1)"/>
             <xsl:call-template name="v"/>
 
           </xsl:for-each>
@@ -133,7 +133,7 @@
              contains(current(),substring(r,1,1))]">
 
             <xsl:sort lang="eo" select="r"/> 
-            <xsl:call-template name="v"/>
+            <xsl:call-template name="v-inv"/>
           </xsl:for-each>
         </litero>
 
@@ -153,7 +153,7 @@
   <fako fak="{@fak}">
     <xsl:for-each select="v">
       <xsl:sort lang="eo"/>
-      <xsl:call-template name="v"/>
+      <xsl:call-template name="v-fak"/>
     </xsl:for-each>
   </fako>
 </xsl:template>
@@ -181,10 +181,21 @@
 
 <xsl:template name="v">
   <v mrk="{@mrk}">
+    <xsl:apply-templates select="k|t|t1"/>
+  </v>
+</xsl:template>
+
+<xsl:template name="v-fak">
+  <v mrk="{@mrk}">
     <xsl:apply-templates/>
   </v>
 </xsl:template>
 
+<xsl:template name="v-inv">
+  <v mrk="{@mrk}">
+    <k><xsl:apply-templates select="k1"/></k>
+  </v>
+</xsl:template>
 
 <xsl:template match="k|r|t1|u">
   <xsl:copy><xsl:apply-templates/></xsl:copy>

@@ -85,7 +85,7 @@
   <xsl:copy><xsl:apply-templates select="mll"/></xsl:copy>
 </xsl:template>
 
-<xsl:template match="kap|rad|tld|@mrk|@lng|uzo[@tip='fak']|bld|mlg
+<xsl:template match="kap|rad|var|tld|@mrk|@lng|uzo[@tip='fak']|bld|mlg
   |ind|klr[@tip='ind' or @tip='amb']">
   <xsl:copy><xsl:apply-templates/></xsl:copy>
 </xsl:template>
