@@ -38,10 +38,16 @@
   <pagho titolo="Esperanto" dosiero="_eo.html">
      <sekcio titolo="alfabeta indekso">
        <KAP-OJ/>
-       <MLG-OJ/>
+       <MLG-OJ titolo="mallongigoj" style="font-weight: bold"/>
      </sekcio>
-     <sekcio titolo="cefaj nocioj">
-       <TEZAURO/>
+     <sekcio titolo="&ccirc;efaj nocioj">
+       <!-- TEZAURO/ -->
+       <!-- provizore -->
+       <ero ref="../tez/tz_art_0o.html" titolo="arto" style="font-weight: bold"/>
+       <!-- ero ref="../tez/tz_histor_0o_okazajxoj.html" titolo="historio"/ -->
+       <ero ref="../tez/tz_scienc_0o_tuto.html" titolo="scienco" style="font-weight: bold"/>
+       <ero ref="../tez/tz_univer_0o.html" titolo="universo" style="font-weight: bold"/>
+       <ero ref="../tez/tz_viv_0ajxo.html" titolo="viva&jcirc;o" style="font-weight: bold"/>
      </sekcio>
   </pagho>
   <pagho titolo="Lingvoj" dosiero="_lng.html">
@@ -65,7 +71,7 @@
     </sekcio>
     <sekcio titolo="diversaj indeksoj">
        <BLD-OJ titolo="listo de bildoj"/>
-       <MLG-OJ titolo="listo de mallongigoj"/>
+       <MLG-OJ titolo="listo de mallongigoj" style="font-weight: bold"/>
        <INV titolo="inversa indekso"/>
        <ero ref="novaj.html" titolo="novaj artikoloj"/>
        <ero ref="shanghoj.html" titolo="shanghitaj artikoloj"/>
@@ -96,10 +102,16 @@
   <pagho kashita="jes" titolo="plena indeksaro" dosiero="_plena.html">
      <sekcio titolo="alfabeta indekso">
        <KAP-OJ/>
-       <MLG-OJ/>
+       <MLG-OJ titolo="mallongigoj"/>
      </sekcio>
-     <sekcio titolo="cefaj nocioj">
-       <TEZAURO/>
+     <sekcio titolo="&ccirc;efaj nocioj">
+       <!-- TEZAURO/ -->
+       <!-- provizore -->
+       <ero ref="../tez/tz_art_0o.html" titolo="arto" style="font-weight: bold"/>
+       <!-- ero ref="../tez/tz_histor_0o_okazajxoj.html" titolo="historio"/ -->
+       <ero ref="../tez/tz_scienc_0o_tuto.html" titolo="scienco" style="font-weight: bold"/>
+       <ero ref="../tez/tz_univer_0o.html" titolo="universo" style="font-weight: bold"/>
+       <ero ref="../tez/tz_viv_0ajxo.html" titolo="viva&jcirc;o" style="font-weight: bold"/>
      </sekcio>
     <sekcio titolo="nacilingvaj indeksoj">
       <TRD-OJ lng="la"/>
