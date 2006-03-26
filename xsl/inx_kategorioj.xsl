@@ -94,10 +94,12 @@
       </xsl:call-template>
     </r>
     <k>
-      <xsl:apply-templates select="text()|rad"/>
+      <xsl:call-template name="kap-kap"/> 
+          <!-- apply-templates select="text()|rad"/ -->
     </k>
     <k1> <!-- kun "/" post radiko por la inversa indekso -->
-      <xsl:apply-templates select="text()|rad" mode="inv"/>
+      <xsl:call-template name="kap-inv"/> 
+          <!-- apply-templates select="text()|rad" mode="inv"/ -->
     </k1>
   </v>
   <xsl:apply-templates select="var" mode="kapvortoj"/>
@@ -134,7 +136,7 @@
             <xsl:value-of select="ancestor::node()[@mrk][1]/@mrk"/>
           </xsl:attribute>
           <k>
-            <xsl:apply-templates select="text()|tld"/>
+            <xsl:call-template name="kap-kap"/> <!-- apply-templates select="text()|tld"/ -->
           </k>
         </v>
       </xsl:if>
@@ -143,7 +145,17 @@
 
 <xsl:template name="kap-komparo">
    <xsl:variable name="kap"><xsl:apply-templates select="text()|rad|tld"/></xsl:variable>
-   <xsl:value-of select="translate($kap,'/','')"/>
+   <xsl:value-of select="translate(normalize-space($kap),'/','')"/>
+</xsl:template>
+
+<xsl:template name="kap-kap">
+   <xsl:variable name="kap"><xsl:apply-templates select="text()|rad|tld"/></xsl:variable>
+   <xsl:value-of select="translate(normalize-space($kap),'/','')"/>
+</xsl:template>
+
+<xsl:template name="kap-inv">
+   <xsl:variable name="kap"><xsl:apply-templates select="text()|rad"/></xsl:variable>
+   <xsl:value-of select="normalize-space($kap)"/>
 </xsl:template>
 
 <xsl:template match="tld">
@@ -160,13 +172,13 @@
   </xsl:choose>
 </xsl:template>
 
-<xsl:template match="kap/text()">
+<!-- xsl:template match="kap/text()">
   <xsl:value-of select="translate(normalize-space(.),'/','')"/>
-</xsl:template>
+</xsl:template -->
 
-<xsl:template match="kap/text()" mode="inv">
+<!-- xsl:template match="kap/text()" mode="inv">
   <xsl:value-of select="normalize-space(.)"/>
-</xsl:template>
+</xsl:template -->
 
 <xsl:template match="rad" mode="inv">
   <xsl:apply-templates/>
@@ -175,7 +187,8 @@
 <!-- xsl:template match="ofc|fnt"/ -->
 
 <xsl:template match="kap">
-    <xsl:apply-templates select="text()|rad|tld"/>
+    <xsl:call-template name="kap-kap"/> 
+       <!-- apply-templates select="text()|rad|tld"/ -->
 </xsl:template>
 
 <xsl:template match="uzo">

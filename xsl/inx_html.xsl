@@ -106,7 +106,7 @@
 
  
 <xsl:template match="ero[@ref]">
-  <a href="{@ref}"><xsl:value-of select="@titolo"/></a><br/>
+  <a href="{@ref}" style="{@style}"><xsl:value-of select="@titolo"/></a><br/>
 </xsl:template>
 
 
@@ -191,7 +191,7 @@
 
 
 <xsl:template match="MLG-OJ">
-  <a href="mallong.html"><xsl:value-of select="@titolo"/></a><br/>
+  <a href="mallong.html" style="{@style}"><xsl:value-of select="@titolo"/></a><br/>
 </xsl:template>
  
 
