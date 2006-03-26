@@ -62,6 +62,9 @@ file="${xml}/test.xml"><![CDATA[<?xml version="1.0"?>
     </trdgrp>
     <trd lng="en">to test</trd>
   </drv>
+  <drv mrk="test.bona0o">
+     <kap>bona <tld/>o</kap>
+  </drv>
 </art>
 </vortaro>
 ]]>
@@ -279,6 +282,8 @@ file="${testoj}/indeks-testo-kat.xml"><![CDATA[<?xml version="1.0"?>
    contains(t1,'bild')])=1">
    22) Chu germana traduko "Testbild" enestas</t>
 
+    <t test="count(//kap-oj/v[@mrk='test.bona0o' and k='bona testo'])=1">
+   23) Chu kapvorto "bona testo" mrk "test.bona0o" enestas kaj kun spacsigno</t>
 
 </testoj>
 ]]>
