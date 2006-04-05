@@ -107,6 +107,9 @@ rezulto en:
       </fileset>
     </copy>
 
+    <xslt in="${voko_cfg}/ordigo2.xml" out="${xsl}/ordigo.dtd"
+       style="${xsl}/dtd_ordigo.xsl"/>
+
   </target>
 
   <target name="stl" depends="init"

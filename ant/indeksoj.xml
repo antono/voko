@@ -61,7 +61,14 @@
   <target name="ordigo" depends="init,kategorioj"
      description="ordigi la kapvortojn, tradukojn, fakojn ktp.">
      <xslt in="${tmp}/inx_kat.xml" out="${tmp}/inx_ord.xml"
-       style="${xsl}/inx_ordigo.xsl"/>
+       style="${xsl}/inx_ordigo2.xsl">
+        <classpath>
+          <pathelement location="/opt/java/saxon-8.7/saxon8.jar"/>
+          <pathelement path="${classpath}"/>
+        </classpath>
+      </xslt>
+
+ 
   </target>
 
   <target name="html" depends="init,ordigo"

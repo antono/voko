@@ -78,27 +78,38 @@ file="${xml}/de.xml"><![CDATA[<?xml version="1.0"?>
   <drv mrk="de.0">
     <kap><tld/></kap>
     <trdgrp lng="de">
-      <trd>Aorta</trd>
-      <trd>Apfel</trd>
-      <trd>apfel</trd>
-      <trd>&#x00c4;pfel</trd>
-      <trd>&#x00e4;pfel</trd>
-      <trd>Arie</trd>
-      <trd>Muse</trd>
-      <trd>Mu&#x00df;e</trd>
-      <trd>Mut</trd>
+      <trd>de-T&#x00f6;ne</trd>
+      <trd>de-Tod</trd>
+      <trd>de-Tofu</trd>
+      <trd>de-Ton</trd>
+      <trd>de-Topas</trd>
+      <trd>de-Muse</trd>
+      <trd>de-Mu&#x00df;e</trd>
+      <trd>de-Mut</trd>
     </trdgrp>
     <trdgrp lng="br">
-      <trd>cab</trd>
-      <trd>chb</trd>
-      <trd>c'hb</trd>
+      <trd>br-cz</trd>
+      <trd>br-ch</trd>
+      <trd>br-c'h</trd>
     </trdgrp>
     <trdgrp lng="cy">
-      <trd>cab</trd>
-      <trd>chb</trd>
-      <trd>ala</trd>
-      <trd>alla</trd>
-      <trd>alma</trd>
+      <trd>cy-ca</trd>
+      <trd>cy-cz</trd>
+      <trd>cy-ch</trd>
+      <trd>cy-la</trd>
+      <trd>cy-lm</trd>
+      <trd>cy-ll</trd>
+    </trdgrp>
+    <trdgrp lng="es">
+      <trd>es-cat</trd>
+      <trd>es-czar</trd>
+      <trd>es-churo</trd>
+      <trd>es-darn</trd>
+    </trdgrp>
+    <trdgrp lng="hu">
+      <trd>hu-dza</trd>
+      <trd>hu-dzt</trd>
+      <trd>hu-dzs</trd>
     </trdgrp>
     <trd lng="la">de</trd>
   </drv>
@@ -138,6 +149,7 @@ file="${testoj}/testshablono.tmp"><![CDATA[<?xml version="1.0"?>
          </xsl:choose>
 
    </xsl:template>
+
 </xsl:stylesheet>
 ]]>
    </echo>
@@ -156,6 +168,17 @@ file="${testoj}/preparu-teston.xsl"><![CDATA[<?xml version="1.0"?>
       &lt;/xsl:with-param&gt;
       &lt;xsl:with-param name="testo"&gt;
         &lt;xsl:value-of select="<xsl:value-of select="@test"/>"/&gt;
+      &lt;/xsl:with-param&gt;
+    &lt;/xsl:call-template&gt;
+  </xsl:template> 
+
+   <xsl:template match="//v">
+     &lt;xsl:call-template name="testo"&gt;
+       &lt;xsl:with-param name="priskribo"&gt;
+        &lt;xsl:text&gt;<xsl:value-of select="."/>&lt;/xsl:text&gt;
+      &lt;/xsl:with-param&gt;
+      &lt;xsl:with-param name="testo"&gt;
+        &lt;xsl:value-of select="<xsl:value-of select="concat(@pado,'/',@el1,'/following-sibling::',@el2)"/>"/&gt;
       &lt;/xsl:with-param&gt;
     &lt;/xsl:call-template&gt;
   </xsl:template> 
@@ -299,6 +322,8 @@ file="${testoj}/indeks-testo-kat.xml"><![CDATA[<?xml version="1.0"?>
 ${rezulto_1}   
     </echo>
 
+
+
    <!-- testu ordigadon de la indeksinformoj -->
 
 
@@ -361,6 +386,32 @@ file="${testoj}/indeks-testo-ord.xml"><![CDATA[<?xml version="1.0"?>
    contains(t1,'bild')])=1">
    14) Chu germana traduko "Testbild" estas sub litero "t"</t>
 
+     <t test="//trd-oj[@lng='de']/litero[@name='d']/v[t='de-Ton']/following-sibling::v[t='de-T&#x00f6;ne']">
+   15) Chu "de-Ton" antau "de-T&#x00f6;ne"</t>
+
+     <v pado="//trd-oj[@lng='de']/litero[@name='d']" el1="v[t='de-T&#x00f6;ne']" el2="v[t='de-Topas']">
+   16) Chu "de-T&#x00f6;ne" antau "de-Topas"</v>
+
+     <v pado="//trd-oj[@lng='hu']/litero[@name='h']" el1="v[t='hu-dza']" el2="v[t='hu-dzt']">
+   17) Chu "hu-dza" antau "hu-dzt"</v>
+
+     <v pado="//trd-oj[@lng='hu']/litero[@name='h']" el1="v[t='hu-dzt']" el2="v[t='hu-dzs']">
+   18) Chu "hu-dzt" antau "hu-dzs"</v>
+
+     <v pado="//trd-oj[@lng='es']/litero[@name='e']" el1="v[t='es-czar']" el2="v[t='es-churo']">
+   19) Chu "es-czar" antau "es-churo"</v>
+
+     <v pado="//trd-oj[@lng='cy']/litero[@name='c']" el1="v[t='cy-lm']" el2="v[t='cy-ll']">
+   20) Chu "cy-lm" antau "cy-ll"</v>
+
+     <v pado="//trd-oj[@lng='cy']/litero[@name='c']" el1="v[t='cy-cz']" el2="v[t='cy-ch']">
+   21) Chu "cy-cz" antau "cy-ch"</v>
+
+     <v pado="//trd-oj[@lng='br']/litero[@name='b']" el1="v[t='br-cz']" el2="v[t='br-ch']">
+   22) Chu "br-cz" antau "br-ch"</v>
+
+<!--     <v pado="//trd-oj[@lng='br']/litero[@name='b']" el1="v[t='br-ch']" el2="v[t='br-c&amp;#39;h']">
+   23) Chu "br-ch" antau "br-c&amp;#39;h"</v> -->
 
 </testoj>
 ]]>
