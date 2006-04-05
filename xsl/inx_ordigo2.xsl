@@ -25,6 +25,9 @@
 <xsl:strip-space elements="t t1 k"/>
 
 <saxon:collation name="unicode" class="net.sf.saxon.sort.CodepointCollator"/>
+
+<saxon:collation name="br" lang="br" rules="&sort-br;"/>
+<saxon:collation name="cy" lang="cy" rules="&sort-cy;"/>
 <saxon:collation name="es" lang="es" rules="&sort-es;"/>
 
 <xsl:variable name="ordigo">../cfg/ordigo.xml</xsl:variable>
@@ -68,17 +71,13 @@
         <xsl:variable name="nminus"
            select="number(substring(concat(../l[@name=current()/@minus]/@n,'1'),1,1))"/>     
 
-        <litero name="{@name}" min="{substring(.,1,1)}">
-          <xsl:for-each
-  	     select="$trdoj/v[contains(current(),substring(.,1,$n)) 
-             and not(contains($minus,substring(.,1,$nminus)))]">
-
-            <!-- xsl:sort collation="de" lang="{$ordlng}" select="concat(t,'|',t1)"/ --> 
-            <xsl:sort lang="{$ordlng}" select="concat(t,'|',t1)"/> 
-            <xsl:call-template name="v"/>
-
-          </xsl:for-each>
-        </litero>
+        <xsl:call-template name="trd-litero">
+           <xsl:with-param name="trdoj" select="$trdoj/v[contains(current(),substring(.,1,$n)) 
+             and not(contains($minus,substring(.,1,$nminus)))]"/>
+           <xsl:with-param name="ordlng" select="$ordlng"/>
+           <xsl:with-param name="lit-name" select="@name"/>
+           <xsl:with-param name="lit-min" select="substring(.,1,1)"/>
+        </xsl:call-template>
 
       </xsl:for-each>
 
@@ -88,19 +87,62 @@
            ekz. en la bretona vortojn kiel "cabdefg", 
            char "c" jam aperas en la grupoj "ch" kaj "c'h") -->
 
-      <litero name="?">
-        <xsl:for-each 
-           select="$trdoj/v[not(contains($chiuj_literoj,substring(.,1,1)))]">
 
-          <xsl:sort lang="{$ordlng}" select="t"/>
-          <xsl:call-template name="v"/>
+        <xsl:call-template name="trd-litero">
+           <xsl:with-param name="trdoj"
+              select="$trdoj/v[not(contains($chiuj_literoj,substring(.,1,1)))]"/>
+           <xsl:with-param name="ordlng" select="$ordlng"/>
+           <xsl:with-param name="lit-name" select="'?'"/>
+           <xsl:with-param name="lit-min" select="'?'"/>
+        </xsl:call-template>
 
-        </xsl:for-each>
-      </litero>
     </trd-oj>
   </xsl:if>
 </xsl:template>
 
+
+<xsl:template name="trd-litero">
+  <xsl:param name="trdoj"/>
+  <xsl:param name="ordlng"/>
+  <xsl:param name="lit-name"/>
+  <xsl:param name="lit-min"/>
+
+  <xsl:choose>
+    <xsl:when test="$ordlng='br'">
+      <litero name="{$lit-name}" min="{$lit-min}">
+        <xsl:for-each select="$trdoj">
+          <xsl:sort collation="br" lang="{$ordlng}" select="concat(t,'|',t1)"/> 
+          <xsl:call-template name="v"/>
+        </xsl:for-each>
+      </litero>           
+    </xsl:when>
+    <xsl:when test="$ordlng='cy'">
+      <litero name="{$lit-name}" min="{$lit-min}">
+        <xsl:for-each select="$trdoj">
+          <xsl:sort collation="cy" lang="{$ordlng}" select="concat(t,'|',t1)"/> 
+          <xsl:call-template name="v"/>
+        </xsl:for-each>
+      </litero>           
+    </xsl:when>
+    <xsl:when test="$ordlng='es'">
+      <litero name="{$lit-name}" min="{$lit-min}">
+        <xsl:for-each select="$trdoj">
+          <xsl:sort collation="es" lang="{$ordlng}" select="concat(t,'|',t1)"/> 
+          <xsl:call-template name="v"/>
+        </xsl:for-each>
+      </litero>           
+    </xsl:when>
+    <xsl:otherwise>
+      <litero name="{$lit-name}" min="{$lit-min}">
+        <xsl:for-each select="$trdoj">
+          <xsl:sort lang="{$ordlng}" select="concat(t,'|',t1)"/> 
+          <xsl:call-template name="v"/>
+        </xsl:for-each>
+      </litero>  
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+     
 
 <xsl:template match="kap-oj">
   <xsl:variable name="chiuj_literoj"
