@@ -165,33 +165,33 @@
 </lingvo>
 
 <!-- kataluna -->
-<lingvo lng="ca">
- <l name="a">aAàÀ</l>
- <l name="b">bB</l>
- <l name="c">cCçÇ</l>
- <l name="d">dD</l>
- <l name="e">eEéÉèÈ</l>
- <l name="f">fF</l>
- <l name="g">gG</l>
- <l name="h">hH</l>
- <l name="i">iIíÍïÏ</l>
- <l name="j">jJ</l>
- <l name="k">kK</l>
- <l name="l">lL</l>
- <l name="m">mM</l>
- <l name="n">nN</l>
- <l name="o">oOóÓòÒ</l>
- <l name="p">pP</l>
- <l name="q">qQ</l>
- <l name="r">rR</l>
- <l name="s">sS</l>
- <l name="t">tT</l>
- <l name="u">uUúÚüÜ</l>
- <l name="v">vV</l>
- <l name="w">wW</l>
- <l name="x">xX</l>
- <l name="y">yY</l>
- <l name="z">zZ</l>
+<lingvo lng="ca" kreu-regulojn="jes">
+ <l name="a">a,A,à,À</l>
+ <l name="b">b,B</l>
+ <l name="c">c,C,ç,Ç</l>
+ <l name="d">d,D</l>
+ <l name="e">e,E,é,É,è,È</l>
+ <l name="f">f,F</l>
+ <l name="g">g,G</l>
+ <l name="h">h,H</l>
+ <l name="i">i,I,í,Í,ï,Ï</l>
+ <l name="j">j,J</l>
+ <l name="k">k,K</l>
+ <l name="l">l,L,l·,L·</l>
+ <l name="m">m,M</l>
+ <l name="n">n,N</l>
+ <l name="o">o,O,ó,Ó,ò,Ò</l>
+ <l name="p">p,P</l>
+ <l name="q">q,Q</l>
+ <l name="r">r,R</l>
+ <l name="s">s,S</l>
+ <l name="t">t,T</l>
+ <l name="u">u,U,ú,Ú,ü,Ü</l>
+ <l name="v">v,V</l>
+ <l name="w">w,W</l>
+ <l name="x">x,X</l>
+ <l name="y">y,Y</l>
+ <l name="z">z,Z</l>
 </lingvo>
 
 <!-- chehha -->

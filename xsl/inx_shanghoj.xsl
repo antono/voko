@@ -1,19 +1,28 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                version="1.0">
+                version="1.0"
+    xmlns:redirect="http://xml.apache.org/xalan/redirect"
+    extension-element-prefixes="redirect">
 
 
 <!-- (c) 2006 che Wolfram Diestel
      licenco GPL 2.0
 -->
 
+
 <xsl:output method="xhtml" encoding="utf-8"/>
-<xsl:strip-space elements="kap uzo trd"/>
 
 <xsl:variable name="enhavo">../cfg/enhavo.xml</xsl:variable>
 
 <xsl:key name="autoroj" match="//entry" use="substring-before(msg,':')"/>
 
+
 <xsl:template match="/">
+  <xsl:call-template name="shanghoj"/>
+  <xsl:call-template name="novaj"/>
+</xsl:template>
+
+
+<xsl:template name="shanghoj">
   <html>
     <head>
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
@@ -81,6 +90,42 @@
   </html>
 </xsl:template>
 
+
+<xsl:template name="novaj">
+  <redirect:write select="'novaj.html'">
+  <html>
+    <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
+      <title>novaj artikoloj</title>
+      <link title="indekso-stilo" type="text/css" 
+            rel="stylesheet" href="../stl/indeksoj.css"/>
+    </head>
+    <body>
+      <table cellspacing="0">
+        <xsl:call-template name="menuo-ktp"/>
+        <tr>
+          <td colspan="{count(document($enhavo)//pagho[not(@kashita='jes')])}" 
+              class="enhavo">
+            <h1>novaj artikoloj</h1>
+            <dl>
+            <xsl:for-each
+               select="//entry[substring-after(msg,':')=' nova artikolo']">
+ 
+              <xsl:sort lang="eo" select="file/name"/>
+
+              <xsl:call-template name="nova_artikolo"/>
+
+            </xsl:for-each>
+            </dl>
+          </td>
+        </tr>
+      </table>
+    </body>
+  </html>
+  </redirect:write>
+</xsl:template>
+
+
 <xsl:template name="autoro">
   <xsl:param name="spaco"/>
   <xsl:choose>
@@ -93,11 +138,13 @@
   </xsl:choose>
 </xsl:template>
 
+
 <xsl:template name="menuo-ktp">
   <xsl:for-each select="document($enhavo)//pagho[.//BLD-OJ][1]"> 
     <xsl:call-template name="menuo"/>
   </xsl:for-each>
 </xsl:template>
+
 
 <xsl:template name="menuo">
   <xsl:variable name="aktiva" select="@dosiero"/>
@@ -123,6 +170,7 @@
   </tr>
 </xsl:template>
 
+
 <xsl:template match="entry">
   <dt>
     <a target="precipa">
@@ -147,6 +195,29 @@
     </xsl:choose>
   </dd>
 </xsl:template>
+
+
+<xsl:template name="nova_artikolo">
+  <dt>
+    <a target="precipa">
+     <xsl:attribute name="href">
+       <xsl:text>../art/</xsl:text>
+       <xsl:value-of select="substring-before(file/name,'.xml')"/>
+       <xsl:text>.html</xsl:text>
+     </xsl:attribute>
+     <b><xsl:value-of select="substring-before(file/name,'.xml')"/></b>
+    </a> 
+    <xsl:text> </xsl:text>
+    <span class="dato"><xsl:value-of select="date"/></span>
+  </dt>
+  <dd>
+    <xsl:text>de </xsl:text>
+    <xsl:call-template name="autoro">
+      <xsl:with-param name="spaco" select="' '"/>
+    </xsl:call-template>
+  </dd>
+</xsl:template>
+
 
 </xsl:stylesheet>
 

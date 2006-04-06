@@ -71,7 +71,7 @@
     </sekcio>
     <sekcio titolo="diversaj indeksoj">
        <BLD-OJ titolo="listo de bildoj"/>
-       <MLG-OJ titolo="listo de mallongigoj" style="font-weight: bold"/>
+       <MLG-OJ titolo="listo de mallongigoj"/>
        <INV titolo="inversa indekso"/>
        <ero ref="novaj.html" titolo="novaj artikoloj"/>
        <ero ref="shanghoj.html" titolo="shanghitaj artikoloj"/>
@@ -102,7 +102,7 @@
   <pagho kashita="jes" titolo="plena indeksaro" dosiero="_plena.html">
      <sekcio titolo="alfabeta indekso">
        <KAP-OJ/>
-       <MLG-OJ titolo="mallongigoj"/>
+       <MLG-OJ titolo="mallongigoj" style="font-weight: bold"/>
      </sekcio>
      <sekcio titolo="&ccirc;efaj nocioj">
        <!-- TEZAURO/ -->
