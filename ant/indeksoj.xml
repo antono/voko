@@ -19,6 +19,11 @@
     <!-- Create the build directory structure used by compile -->
     <mkdir dir="${inx}" />
     <mkdir dir="${tmp}" />
+
+    <!-- (re)kreu inx_ordigo2.inc laubezone -->
+    <xslt in="${voko}/cfg/ordigo2.xml" out="${xsl}/inx_ordigo2.inc"
+       style="${xsl}/inc_ordigo2.xsl"/>
+
     <!-- chu necesas refari la dosieron indekso.xml? -->
     <uptodate property="indekso.aktuala">
       <srcfiles dir="${xml}" includes="*.xml"/>

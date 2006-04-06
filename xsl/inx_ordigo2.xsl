@@ -1,10 +1,4 @@
-<!DOCTYPE xsl:transform
-[
-
-<!ENTITY % sort-rules SYSTEM "ordigo.dtd">
-%sort-rules;
-
-]>
+<!DOCTYPE xsl:transform>
 
 <xsl:transform
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -24,11 +18,10 @@
 <xsl:output method="xml" encoding="utf-8" indent="yes"/>
 <xsl:strip-space elements="t t1 k"/>
 
-<saxon:collation name="unicode" class="net.sf.saxon.sort.CodepointCollator"/>
+<!-- saxon:collation name="unicode"
+class="net.sf.saxon.sort.CodepointCollator"/ -->
 
-<saxon:collation name="br" lang="br" rules="&sort-br;"/>
-<saxon:collation name="cy" lang="cy" rules="&sort-cy;"/>
-<saxon:collation name="es" lang="es" rules="&sort-es;"/>
+<xsl:include href="inx_ordigo2.inc"/>
 
 <xsl:variable name="ordigo">../cfg/ordigo.xml</xsl:variable>
 
@@ -100,49 +93,6 @@
   </xsl:if>
 </xsl:template>
 
-
-<xsl:template name="trd-litero">
-  <xsl:param name="trdoj"/>
-  <xsl:param name="ordlng"/>
-  <xsl:param name="lit-name"/>
-  <xsl:param name="lit-min"/>
-
-  <xsl:choose>
-    <xsl:when test="$ordlng='br'">
-      <litero name="{$lit-name}" min="{$lit-min}">
-        <xsl:for-each select="$trdoj">
-          <xsl:sort collation="br" lang="{$ordlng}" select="concat(t,'|',t1)"/> 
-          <xsl:call-template name="v"/>
-        </xsl:for-each>
-      </litero>           
-    </xsl:when>
-    <xsl:when test="$ordlng='cy'">
-      <litero name="{$lit-name}" min="{$lit-min}">
-        <xsl:for-each select="$trdoj">
-          <xsl:sort collation="cy" lang="{$ordlng}" select="concat(t,'|',t1)"/> 
-          <xsl:call-template name="v"/>
-        </xsl:for-each>
-      </litero>           
-    </xsl:when>
-    <xsl:when test="$ordlng='es'">
-      <litero name="{$lit-name}" min="{$lit-min}">
-        <xsl:for-each select="$trdoj">
-          <xsl:sort collation="es" lang="{$ordlng}" select="concat(t,'|',t1)"/> 
-          <xsl:call-template name="v"/>
-        </xsl:for-each>
-      </litero>           
-    </xsl:when>
-    <xsl:otherwise>
-      <litero name="{$lit-name}" min="{$lit-min}">
-        <xsl:for-each select="$trdoj">
-          <xsl:sort lang="{$ordlng}" select="concat(t,'|',t1)"/> 
-          <xsl:call-template name="v"/>
-        </xsl:for-each>
-      </litero>  
-    </xsl:otherwise>
-  </xsl:choose>
-</xsl:template>
-     
 
 <xsl:template match="kap-oj">
   <xsl:variable name="chiuj_literoj"
