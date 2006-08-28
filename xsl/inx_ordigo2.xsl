@@ -94,6 +94,11 @@ class="net.sf.saxon.sort.CodepointCollator"/ -->
 </xsl:template>
 
 
+<xsl:template match="mankoj">
+  <xsl:copy-of select="."/>
+</xsl:template>
+
+
 <xsl:template match="kap-oj">
   <xsl:variable name="chiuj_literoj"
      select="translate(normalize-space(document($ordigo)/ordigo/lingvo[@lng='eo']),' ','')"/>

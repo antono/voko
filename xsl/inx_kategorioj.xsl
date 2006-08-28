@@ -82,9 +82,28 @@
 
       <xsl:for-each select="$root">
         <xsl:if test="key('lingvoj',$lng)">
+          <!-- tradukoj de tiu lingvo --> 
           <trd-oj lng="{$lng}" n="{count(key('lingvoj',$lng))}" p="{$ptrd}">
             <xsl:apply-templates select="key('lingvoj',$lng)"/>
           </trd-oj>
+          <!-- kelkaj netradukitaj sencoj de tiu lingvo -->
+          <xsl:if test="($trd-snc - $ptrd) div $trd-snc &lt; 0.34">
+             <mankoj lng="{$lng}">
+                <xsl:for-each select="(//drv[
+                       (not (child::snc 
+                          or child::uzo[text()='EVI' or text()='ARK'])) 
+                   and not (child::trd[@lng=$lng])]
+                | //snc[
+                       (not (child::uzo[text()='EVI' or text()='ARK'])) 
+                   and (not (../uzo[text()='EVI' or text()='ARK']))
+                   and not (child::trd[@lng=$lng] or ../trd[@lng=$lng])])[position() &lt;= 777]">
+                   <v mrk="{ancestor-or-self::node()[@mrk][1]/@mrk}">
+                     <xsl:apply-templates
+                       select="ancestor-or-self::node()[self::art or self::drv][kap][1]/kap"/>
+                   </v>
+                </xsl:for-each>
+             </mankoj>
+          </xsl:if>
         </xsl:if>
       </xsl:for-each>
     </xsl:for-each>

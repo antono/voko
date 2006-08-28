@@ -26,6 +26,7 @@
   <xsl:call-template name="indeksoj">
     <xsl:with-param name="kap-oj" select="count(document($enhavo)/vortaro//KAP-OJ)"/>
     <xsl:with-param name="trd-oj" select="count(document($enhavo)/vortaro//TRD-OJ)"/>
+    <xsl:with-param name="mankoj" select="count(document($enhavo)/vortaro//MANKOJ)"/>
     <xsl:with-param name="fakoj" select="count(document($enhavo)/vortaro//FAKOJ)"/>
     <xsl:with-param name="inv" select="count(document($enhavo)/vortaro//INV)"/>
     <xsl:with-param name="bld-oj" select="count(document($enhavo)/vortaro//BLD-OJ)"/>
@@ -38,6 +39,7 @@
 <xsl:template name="indeksoj">
   <xsl:param name="kap-oj"/>
   <xsl:param name="trd-oj"/>
+  <xsl:param name="mankoj"/>
   <xsl:param name="fakoj"/>
   <xsl:param name="inv"/>
   <xsl:param name="bld-oj"/>
@@ -50,6 +52,10 @@
 
   <xsl:if test="$trd-oj > 0">
     <xsl:apply-templates select="//trd-oj"/>
+  </xsl:if>
+
+  <xsl:if test="$mankoj > 0">
+    <xsl:apply-templates select="//mankoj"/>
   </xsl:if>
 
   <xsl:if test="$fakoj > 0">
@@ -92,7 +98,7 @@
     </head>
     <body>
       <table cellspacing="0">
-        <xsl:call-template name="menuo"/>
+        <xsl:call-template name="menuo-ktp"/>
         <tr>
           <td colspan="{count(../pagho[not(@kashita='jes')])}" class="enhavo">
             <xsl:apply-templates/>
@@ -177,6 +183,52 @@
   </xsl:for-each>
   </p>
 </xsl:template>
+
+
+<xsl:template match="MANKOJ">
+  <a href="mankantaj.html"><xsl:value-of select="@titolo"/></a><br/>
+
+  <redirect:write select="'mankantaj.html'">
+  <html>
+    <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
+      <title><xsl:value-of select="concat(../@nometo,'-indekso: ',@titolo)"/></title>
+      <link title="indekso-stilo" type="text/css" 
+            rel="stylesheet" href="../stl/indeksoj.css"/>
+    </head>
+    <body>
+      <table cellspacing="0">
+
+        <xsl:for-each select="ancestor::pagho">
+          <xsl:call-template name="menuo"/>
+        </xsl:for-each>
+
+        <tr>
+          <td colspan="{count(ancestor::pagho/../pagho[not(@kashita='jes')])}" class="enhavo">
+            <h1>listoj de mankantaj tradukoj</h1>
+
+            <xsl:for-each select="document($lingvoj)/lingvoj/lingvo">
+              <xsl:sort lang="eo"/>
+
+              <xsl:if test="$root//mankoj[@lng=current()/@kodo]">
+                <a>
+                  <xsl:attribute name="href">
+                    <xsl:value-of select="concat('mx_',@kodo,'.html')"/>
+                  </xsl:attribute>
+                  <xsl:value-of select="."/>
+                </a>
+                <br/>
+              </xsl:if>
+            </xsl:for-each>
+
+          </td>
+        </tr>
+      </table>
+    </body>
+  </html>
+  </redirect:write>
+</xsl:template>
+
 
 <xsl:template match="FAKOJ">
     <xsl:for-each select="document($fakoj)/fakoj/fako">
@@ -270,7 +322,7 @@
 
 
 <!-- kreas unuopan indeksdosieron per "redirect" -->
-<xsl:template match="litero|fako|bld-oj|mlg-oj|stat">
+<xsl:template match="litero|fako|bld-oj|mlg-oj|stat|mankoj">
 
    <!-- konstruu dosiernomon -->
 
@@ -282,6 +334,9 @@
        </xsl:when>
        <xsl:when test="parent::node()[self::trd-oj]">
          <xsl:value-of select="concat('lx_',../@lng,'_')"/>
+       </xsl:when>
+       <xsl:when test="self::mankoj">
+         <xsl:value-of select="concat('mx_',@lng)"/>
        </xsl:when>
        <xsl:when test="self::fako">
          <xsl:value-of select="concat('fx_',@fak)"/>
@@ -314,6 +369,11 @@
        <title><xsl:value-of 
                    select="document($lingvoj)/lingvoj/lingvo[@kodo=current()/../@lng]"/> 
               <xsl:text> indekso</xsl:text>
+       </title>
+             </xsl:when>
+             <xsl:when test="self::mankoj">
+       <title><xsl:text>netradukitaj sencoj de la lingvo </xsl:text><xsl:value-of 
+                   select="document($lingvoj)/lingvoj/lingvo[@kodo=current()/@lng]"/> 
        </title>
              </xsl:when>
              <xsl:when test="self::fako">
@@ -366,6 +426,24 @@
 
               <h1><xsl:value-of 
                   select="document($fakoj)/fakoj/fako[@kodo=current()/@fak]"/>
+              </h1>
+            </xsl:when>
+            <xsl:when test="self::mankoj">
+              <h1>
+                <xsl:choose>
+                   <xsl:when test="../trd-snc/@p - ../trd-oj[@lng=current()/@lng]/@p = count(v)">
+                      <xsl:text>La </xsl:text>
+                      <xsl:value-of select="count(v)"/>
+                   </xsl:when>
+                   <xsl:otherwise>
+                     <xsl:value-of select="count(v)"/>
+                     <xsl:text> el </xsl:text>
+                     <xsl:value-of select="../trd-snc/@p - ../trd-oj[@lng=current()/@lng]/@p"/> 
+                   </xsl:otherwise>
+                </xsl:choose>
+                <xsl:text> netradukitaj sencoj de la lingvo </xsl:text>
+                <xsl:value-of 
+                       select="document($lingvoj)/lingvoj/lingvo[@kodo=current()/@lng]"/>
               </h1>
             </xsl:when>
             <xsl:when test="self::bld-oj">
@@ -617,6 +695,27 @@
 </xsl:template>
 
 
+<xsl:template match="mankoj/v">
+  <xsl:number/>
+  <xsl:text>: </xsl:text>
+  <a target="precipa">
+    <xsl:attribute name="href">
+      <xsl:choose>
+        <xsl:when test="contains(@mrk,'.')">
+          <xsl:value-of select="concat('../art/',
+             substring-before(@mrk,'.'),'.html#',@mrk)"/> 
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="concat('../art/',@mrk,'.html')"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:attribute>
+    <xsl:apply-templates/>
+  </a>
+  <br/>
+</xsl:template>
+
+
 <xsl:template match="inv/litero/v">
   <a target="precipa">
     <xsl:attribute name="href">
@@ -634,6 +733,7 @@
   </a>
   <br/>
 </xsl:template>
+
 
 <xsl:template match="fako/v">
   <a target="precipa">
