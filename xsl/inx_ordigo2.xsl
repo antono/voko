@@ -48,7 +48,7 @@ class="net.sf.saxon.sort.CodepointCollator"/ -->
 
   <xsl:if test="string-length($chiuj_literoj) > 0">
   
-    <trd-oj lng="{@lng}">
+    <trd-oj lng="{@lng}" n="{@n}" p="{@p}">
       <xsl:variable name="trdoj" select="."/>
 
       <xsl:for-each select="document($ordigo)/ordigo/lingvo[@lng=$ordlng]/l">
@@ -65,8 +65,8 @@ class="net.sf.saxon.sort.CodepointCollator"/ -->
            select="number(substring(concat(../l[@name=current()/@minus]/@n,'1'),1,1))"/>     
 
         <xsl:call-template name="trd-litero">
-           <xsl:with-param name="trdoj" select="$trdoj/v[contains(current(),substring(.,1,$n)) 
-             and not(contains($minus,substring(.,1,$nminus)))]"/>
+           <xsl:with-param name="trdoj" select="$trdoj/v[contains(current(),substring(t,1,$n)) 
+             and not(contains($minus,substring(t,1,$nminus)))]"/>
            <xsl:with-param name="ordlng" select="$ordlng"/>
            <xsl:with-param name="lit-name" select="@name"/>
            <xsl:with-param name="lit-min" select="substring(.,1,1)"/>
@@ -83,9 +83,9 @@ class="net.sf.saxon.sort.CodepointCollator"/ -->
 
         <xsl:call-template name="trd-litero">
            <xsl:with-param name="trdoj"
-              select="$trdoj/v[not(contains($chiuj_literoj,substring(.,1,1)))]"/>
+              select="$trdoj/v[not(contains($chiuj_literoj,substring(t,1,1)))]"/>
            <xsl:with-param name="ordlng" select="$ordlng"/>
-           <xsl:with-param name="lit-name" select="'?'"/>
+           <xsl:with-param name="lit-name" select="'0'"/>
            <xsl:with-param name="lit-min" select="'?'"/>
         </xsl:call-template>
 
@@ -119,7 +119,7 @@ class="net.sf.saxon.sort.CodepointCollator"/ -->
       <!-- traktu chiujn erojn, kiuj ne komencighas 
            per iu litero el la ordigoreguloj -->
 
-      <litero name="?">
+      <litero name="0" min="?">
         <xsl:for-each 
            select="$kapoj/v[not(contains($chiuj_literoj,substring(k,1,1)))]">
  
@@ -157,7 +157,7 @@ class="net.sf.saxon.sort.CodepointCollator"/ -->
        select="@fak"/>"...</xsl:message>
   </xsl:if>
 
-  <fako fak="{@fak}">
+  <fako fak="{@fak}" n="{@n}">
     <xsl:for-each select="v">
       <xsl:sort lang="eo"/>
       <xsl:call-template name="v-fak"/>
@@ -186,17 +186,28 @@ class="net.sf.saxon.sort.CodepointCollator"/ -->
 </xsl:template>
 
 
-<xsl:template name="v">
+<xsl:template match="stat|trd-snc">
+  <xsl:copy-of select="."/>
+</xsl:template>
+
+
+<!-- xsl:template name="v">
   <v mrk="{@mrk}">
     <xsl:apply-templates select="k|t|t1"/>
   </v>
-</xsl:template>
+</xsl:template -->
 
-<xsl:template name="v-fak">
+<xsl:template name="v"><xsl:copy-of select="."/></xsl:template>
+
+
+<!-- xsl:template name="v-fak">
   <v mrk="{@mrk}">
     <xsl:apply-templates/>
   </v>
-</xsl:template>
+</xsl:template -->
+
+<xsl:template name="v-fak"><xsl:copy-of select="."/></xsl:template>
+
 
 <xsl:template name="v-inv">
   <v mrk="{@mrk}">
@@ -204,13 +215,15 @@ class="net.sf.saxon.sort.CodepointCollator"/ -->
   </v>
 </xsl:template>
 
-<xsl:template match="k|r|t1|u">
+<!-- xsl:template match="k|r|t1|u">
   <xsl:copy><xsl:apply-templates/></xsl:copy>
-</xsl:template>
+</xsl:template -->
 
-<xsl:template match="t">
+<xsl:template match="k|r|t1|u|t"><xsl:copy-of select="."/></xsl:template>
+
+<!-- xsl:template match="t">
   <xsl:copy><xsl:value-of select="normalize-space(.)"/></xsl:copy>
-</xsl:template>
+</xsl:template --> 
 
 
 

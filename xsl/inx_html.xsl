@@ -30,6 +30,7 @@
     <xsl:with-param name="inv" select="count(document($enhavo)/vortaro//INV)"/>
     <xsl:with-param name="bld-oj" select="count(document($enhavo)/vortaro//BLD-OJ)"/>
     <xsl:with-param name="mlg-oj" select="count(document($enhavo)/vortaro//MLG-OJ)"/>
+    <xsl:with-param name="stat" select="count(document($enhavo)/vortaro//STAT)"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -41,6 +42,7 @@
   <xsl:param name="inv"/>
   <xsl:param name="bld-oj"/>
   <xsl:param name="mlg-oj"/>
+  <xsl:param name="stat"/>
 
   <xsl:if test="$kap-oj > 0">
     <xsl:apply-templates select="//kap-oj"/>
@@ -64,6 +66,10 @@
 
   <xsl:if test="$mlg-oj > 0">
     <xsl:apply-templates select="//mlg-oj"/>
+  </xsl:if>
+
+  <xsl:if test="$stat > 0">
+    <xsl:apply-templates select="//stat"/>
   </xsl:if>
 </xsl:template>
 
@@ -200,6 +206,11 @@
 </xsl:template>
 
 
+<xsl:template match="STAT">
+  <a href="statistiko.html"><xsl:value-of select="@titolo"/></a><br/>
+</xsl:template>
+
+
 <xsl:template match="INV">
   <a href="inv_{$root//inv/litero[v][1]/@name}.html"><xsl:value-of select="@titolo"/></a><br/>
 </xsl:template>
@@ -258,7 +269,10 @@
 </xsl:template>
 
 
-<xsl:template match="litero|fako|bld-oj|mlg-oj">
+<!-- kreas unuopan indeksdosieron per "redirect" -->
+<xsl:template match="litero|fako|bld-oj|mlg-oj|stat">
+
+   <!-- konstruu dosiernomon -->
 
    <xsl:variable name="lit" select="@name"/>
    <xsl:variable name="pref">
@@ -280,6 +294,9 @@
        </xsl:when>
        <xsl:when test="parent::node()[self::inv]">
          <xsl:text>inv_</xsl:text>
+       </xsl:when>
+       <xsl:when test="self::stat">
+         <xsl:text>statistiko</xsl:text>
        </xsl:when>
     </xsl:choose>
   </xsl:variable>
@@ -313,6 +330,9 @@
             <xsl:when test="self::mlg-oj">
        <title>mallongigo-indekso</title>
             </xsl:when>
+            <xsl:when test="self::stat">
+       <title>statistiko</title>
+            </xsl:when>
           </xsl:choose>
       <link title="indekso-stilo" type="text/css" 
             rel="stylesheet" href="../stl/indeksoj.css"/>
@@ -336,8 +356,14 @@
         <tr>
           <td colspan="4" class="enhavo">
 
+          <!-- titolo -->
+
           <xsl:choose>
             <xsl:when test="self::fako">
+
+              <b class="elektita">alfabete</b><xsl:text> </xsl:text>
+              <a href="fxs_{@name}.html">strukture</a><xsl:text> </xsl:text>
+
               <h1><xsl:value-of 
                   select="document($fakoj)/fakoj/fako[@kodo=current()/@fak]"/>
               </h1>
@@ -347,6 +373,9 @@
             </xsl:when>
             <xsl:when test="self::mlg-oj">
               <h1>mallongigoj</h1>
+            </xsl:when>
+            <xsl:when test="self::stat">
+              <h1>statistiko</h1>
             </xsl:when>
             <xsl:otherwise>
 
@@ -374,6 +403,8 @@
 
          </xsl:choose>
 
+         <!-- enhavo -->
+
          <xsl:choose>
            <xsl:when test="self::mlg-oj">
              <dl compact="compact">
@@ -384,6 +415,55 @@
              <dl>
                <xsl:apply-templates/>
              </dl>
+           </xsl:when>
+           <xsl:when test="self::stat">
+
+              <h2>kapvortoj k.a.</h2>
+              <table>
+                <xsl:for-each select="ero">
+                  <tr>
+                    <td><xsl:value-of select="@t"/><xsl:text>: </xsl:text></td>
+                    <td align="right"><xsl:value-of select="@n"/></td>
+                  </tr>
+                </xsl:for-each>
+              </table>
+
+              <h2>tradukoj</h2>
+              <table>
+                <xsl:variable name="trd-snc" select="../trd-snc/@p"/>
+                <xsl:for-each select="../trd-oj">
+                  <xsl:sort select="@n" data-type="number" order="descending"/>
+                  <xsl:sort select="@lng"/>
+                  <tr>
+                    <xsl:for-each select="document($lingvoj)/lingvoj/lingvo[@kodo=current()/@lng]">
+                      <td><xsl:value-of select="."/><xsl:text>: </xsl:text></td>
+                    </xsl:for-each>
+                    <td align="right"><xsl:value-of select="@n"/></td>
+                    <td align="right"><xsl:text>~</xsl:text>
+                      <xsl:value-of select="round(@p * 1000 div $trd-snc) div 10"/>
+                      <xsl:text>%</xsl:text>
+                    </td>
+                  </tr>
+                </xsl:for-each>
+              </table>
+              (la procentoj rezultas el nombro de tradukitaj sencoj je la nombro de 
+               tradukendaj sencoj)
+
+              <h2>fakoj</h2>
+              <table>
+                <xsl:for-each select="../fako">
+                  <xsl:sort select="@n" data-type="number" order="descending"/>
+                  <xsl:sort select="@fak"/>
+                  <tr>
+                    <xsl:for-each select="document($fakoj)/fakoj/fako[@kodo=current()/@fak]">
+                      <td><img src="{@vinjeto}" alt="{@fak}" border="0" align="middle"/></td>
+                      <td><xsl:value-of select="."/><xsl:text>: </xsl:text></td>
+                    </xsl:for-each>
+                    <td align="right"><xsl:value-of select="@n"/></td>
+                  </tr>
+                </xsl:for-each>
+              </table>
+
            </xsl:when>
            <xsl:otherwise>
              <xsl:apply-templates/>
@@ -644,6 +724,7 @@
 
   </xsl:for-each>
 </xsl:template>
+
 
 </xsl:stylesheet>
 

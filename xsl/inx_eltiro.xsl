@@ -27,12 +27,12 @@
 <xsl:template match="subart|drv|subdrv|snc|subsnc">
   <xsl:copy>
   <xsl:apply-templates select="@mrk|kap|drv|subdrv|snc|subsnc|trdgrp|trd
-          |uzo|bld|dif|ekz|mlg"/>
+          |uzo|bld|dif|ekz|mlg|refgrp|ref"/>
   </xsl:copy>
 </xsl:template>
 
 <xsl:template match="dif">
-  <xsl:apply-templates select="ekz|trdgrp|trd"/>
+  <xsl:apply-templates select="ekz|trdgrp|trd|refgrp|ref"/>
 </xsl:template>
 
 <xsl:template match="ekz[ind]">
@@ -72,13 +72,13 @@
           <xsl:apply-templates select="@lng|mll"/>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:apply-templates select="@lng|text()|*|klr[@tip='ind' or @tip='amb']"/>
+          <xsl:apply-templates select="@lng|text()|ind|klr[@tip='ind' or @tip='amb']"/>
         </xsl:otherwise>
       </xsl:choose>
   </xsl:copy>
 </xsl:template>
 
-<xsl:template match="kap/ofc|kap/fnt|ekz/uzo
+<xsl:template match="kap/ofc|kap/fnt|ekz/uzo|trd/ofc
   |klr[not(@tip='ind' or @tip='amb')]"/>
 
 <xsl:template match="ekz/ind[mll]">
@@ -96,9 +96,13 @@
   </mll>
 </xsl:template>
 
+<xsl:template match="refgrp">
+  <xsl:apply-templates select="ref"/>
+</xsl:template>
 
-
-
+<xsl:template match="ref">
+  <ref tip="{ancestor-or-self::*/@tip}"><xsl:apply-templates/></ref>
+</xsl:template>
 
 </xsl:stylesheet>
 

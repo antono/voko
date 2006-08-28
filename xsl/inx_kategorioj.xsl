@@ -17,6 +17,8 @@
 <xsl:key name="fakoj" match="//uzo" use="."/>
 <xsl:key name="lingvoj" match="//trd[@lng]" use="@lng"/>
 
+
+
 <xsl:template match="/">
   <indekso>
 
@@ -36,10 +38,10 @@
       <xsl:if test="$verbose='true'">
         <xsl:message>progreso: traktas fakon <xsl:value-of select="$fak"/>...</xsl:message>
       </xsl:if>
-   
+
       <xsl:for-each select="$root">
         <xsl:if test="key('fakoj',$fak)">
-          <fako fak="{$fak}">
+          <fako fak="{$fak}" n="{count(key('fakoj',$fak))}">
             <xsl:apply-templates select="key('fakoj',$fak)"/>
           </fako>
         </xsl:if>
@@ -48,16 +50,39 @@
 
     <!-- tradukoj -->
 
+    <xsl:variable name="trd-snc" select="count(//drv[
+                       (not (child::snc 
+                          or child::uzo[text()='EVI' or text()='ARK']))])
+                + count(//snc[
+                       (not (child::uzo[text()='EVI' or text()='ARK'])) 
+                   and (not (../uzo[text()='EVI' or text()='ARK']))])
+             "/>  <!-- = sumo de tradukendaj sencoj kaj derivajhoj -->
+
+    <trd-snc p="{$trd-snc}"/>
+
     <xsl:for-each select="document($lngcfg)/lingvoj/lingvo">
       <xsl:variable name="lng" select="@kodo"/>
-  
+      <xsl:variable name="ptrd">
+         <xsl:for-each select="$root">
+            <xsl:value-of select="count(//drv[
+                       (not (child::snc 
+                          or child::uzo[text()='EVI' or text()='ARK'])) 
+                   and child::trd[@lng=$lng]])
+                + count(//snc[
+                       (not (child::uzo[text()='EVI' or text()='ARK'])) 
+                   and (not (../uzo[text()='EVI' or text()='ARK']))
+                   and (child::trd[@lng=$lng] or ../trd[@lng=$lng])])
+             "/>  <!-- = nombro de tradukitaj sencoj kaj derivajhoj --> 
+        </xsl:for-each>
+      </xsl:variable>
+
       <xsl:if test="$verbose='true'">
         <xsl:message>progreso: traktas tradukojn <xsl:value-of select="."/>jn...</xsl:message>
       </xsl:if>
 
       <xsl:for-each select="$root">
         <xsl:if test="key('lingvoj',$lng)">
-          <trd-oj lng="{$lng}">
+          <trd-oj lng="{$lng}" n="{count(key('lingvoj',$lng))}" p="{$ptrd}">
             <xsl:apply-templates select="key('lingvoj',$lng)"/>
           </trd-oj>
         </xsl:if>
@@ -79,6 +104,58 @@
         <xsl:apply-templates select="//mlg"/>
       </mlg-oj>
     </xsl:if>
+
+    <!-- statistiko -->
+    <stat>
+      <ero t="artikoloj" n="{count(//art)}"/>
+      <ero t="deriva&#x0135;oj" n="{count(//drv)}"/>
+      <ero t="sencoj" n="{count(//snc)+count(//drv[not(child::snc)])}"/>
+      <ero t="bildoj" n="{count(//bld)}"/>
+      <ero t="mallongigoj" n="{count(//mlg)}"/> 
+
+      <!-- statistiko de la tradukoj -->
+<!--      <trd-snc p="{$trd-snc}"/> --> <!-- = sumo de tradukendaj sencoj kaj derivajhoj -->
+<!--  count(//drv[
+                       (not (child::snc 
+                          or child::uzo[text()='EVI' or text()='ARK']))])
+                + count(//snc[
+                       (not (child::uzo[text()='EVI' or text()='ARK'])) 
+                   and (not (../uzo[text()='EVI' or text()='ARK']))])
+             }"/ -->  <!-- = sumo de tradukendaj sencoj kaj derivajhoj -->
+
+<!--      <xsl:for-each select="document($lngcfg)/lingvoj/lingvo">
+        <xsl:variable name="lng" select="@kodo"/>
+   
+        <xsl:for-each select="$root">
+          <xsl:if test="key('lingvoj',$lng)">
+
+            <trd lng="{$lng}" n="{count(key('lingvoj',$lng))}"
+               p="{count(//drv[
+                       (not (child::snc 
+                          or child::uzo[text()='EVI' or text()='ARK'])) 
+                   and child::trd[@lng=$lng]])
+                + count(//snc[
+                       (not (child::uzo[text()='EVI' or text()='ARK'])) 
+                   and (not (../uzo[text()='EVI' or text()='ARK']))
+                   and (child::trd[@lng=$lng] or ../trd[@lng=$lng])])
+             }"/ -->  <!-- = nombro de tradukitaj sencoj kaj derivajhoj -->
+<!--          </xsl:if>
+        </xsl:for-each>
+      </xsl:for-each -->
+
+
+      <!-- statistiko de la fakoj -->
+      <!-- xsl:for-each select="document($fakcfg)/fakoj/fako">
+        <xsl:variable name="fak" select="@kodo"/>
+   
+        <xsl:for-each select="$root">
+          <xsl:if test="key('fakoj',$fak)">
+            <fak fak="{$fak}" n="{count(key('fakoj',$fak))}"/>
+          </xsl:if>
+        </xsl:for-each>
+      </xsl:for-each -->
+
+    </stat>
 
   </indekso>
 </xsl:template>
@@ -209,7 +286,7 @@
       <xsl:value-of select="ancestor::node()[@mrk][1]/@mrk"/>
     </xsl:attribute>
     <t>
-      <xsl:apply-templates select="text()|ind|klr"/>
+      <xsl:apply-templates select="text()|ind|klr|tld"/>
     </t>
     <k>
      <xsl:apply-templates
@@ -225,7 +302,7 @@
       <xsl:value-of select="ancestor::node()[@mrk][1]/@mrk"/>
     </xsl:attribute>
     <t>
-      <xsl:value-of select="text()|mll"/>
+      <xsl:value-of select="normalize-space(text()|mll)"/>
     </t>
     <xsl:if test="klr">
       <t1>
@@ -245,7 +322,7 @@
       <xsl:value-of select="ancestor::node()[@mrk][1]/@mrk"/>
     </xsl:attribute>
     <t>
-      <xsl:value-of select=".//ind"/>
+      <xsl:value-of select="normalize-space(.//ind)"/>
     </t>
     <t1>
       <xsl:apply-templates/>
