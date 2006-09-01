@@ -14,13 +14,12 @@
   <property name="tmp" location="${revo}/.tmp"/>
 
   <target name="init">
-
-   <!-- kreu vortareton por testo -->
-   <ant antfile="${ant}/indeksoj.xml"
-       dir="${revo}" target="forigu" inheritAll="false"/>
-
     <mkdir dir="${revo}" />
     <mkdir dir="${xml}" />
+
+    <!-- kreu vortareton por testo -->
+    <ant antfile="${ant}/indeksoj.xml"
+       dir="${revo}" target="forigu" inheritAll="false"/>
  
     <echo 
 file="${xml}/test.xml"><![CDATA[<?xml version="1.0"?>
@@ -45,16 +44,20 @@ file="${xml}/test.xml"><![CDATA[<?xml version="1.0"?>
     <snc mrk="test.0o.XXX">
       <dif>balbut balbut balbut</dif>
     </snc>
-    <bld src="test.jpg"><ind>bildigita testo</ind> :-)<trd lng="de"><ind>Test</ind>bild</trd></bld>
+    <bld lok="test.jpg"><ind>bildigita <tld/>o</ind> :-)<trd lng="de"><ind>Test</ind>bild</trd></bld>
+    <bld lok="test2.jpg">dua bildigita <tld/>o</bld>
     <trd lng="de">Test</trd>
     <trd lng="en">test</trd>
   </drv>
   <drv mrk="test.0i">
     <kap><tld/>i <var><kap><tld/>oi</kap></var></kap>
     <dif>strang strang strang</dif>
+    <refgrp tip="sin">
+       <ref cel="prov.0i">provi</ref>
+    </refgrp>
     <trdgrp lng="de">
       <trd>testen</trd>,
-      <trd>probieren</trd>
+      <trd><ofc>*</ofc> probieren</trd>
       <trd>aus<ind>probieren</ind></trd>
       <trd>klrtest1 <klr>(ne en la indekso)</klr></trd>
       <trd>klrtest2 <klr tip="ind">(en la indekso)</klr></trd>
@@ -64,6 +67,19 @@ file="${xml}/test.xml"><![CDATA[<?xml version="1.0"?>
   </drv>
   <drv mrk="test.bona0o">
      <kap>bona <tld/>o</kap>
+  </drv>
+</art>
+</vortaro>
+]]>
+    </echo>
+
+    <echo 
+file="${xml}/prov.xml"><![CDATA[<?xml version="1.0"?>
+<vortaro>
+<art mrk="\$$Id: prov.xml asdfosdf">
+  <kap><rad>prov</rad>/i</kap>
+  <drv mrk="prov.0i">
+    <ref tip="sin" cel="test.0i">testi</ref>
   </drv>
 </art>
 </vortaro>
@@ -279,15 +295,15 @@ file="${testoj}/indeks-testo-kat.xml"><![CDATA[<?xml version="1.0"?>
    15) Chu germana traduko "...schlechter Test..." enestas</t>
 
      <t test="count(//trd-oj[@lng='de']/v[@mrk='test.0i' and
-     k='testi' and t='klrtest1 '])=1">
+     k='testi' and t='klrtest1'])=1">
    16) Chu germana traduko "klrtest1" enestas</t>
 
      <t test="count(//trd-oj[@lng='de']/v[@mrk='test.0i' and
-     k='testi' and t='klrtest2 ' and t1='klrtest2 (en la indekso)'])=1">
+     k='testi' and t='klrtest2' and t1='klrtest2 (en la indekso)'])=1">
    17) Chu germana traduko "klrtest2 (en la indekso)" enestas</t>
 
      <t test="count(//trd-oj[@lng='de']/v[@mrk='test.0i' and
-     k='testi' and t='klrtest3 ' and t1='klrtest3 (en la indekso kaj la artikolo)'])=1">
+     k='testi' and t='klrtest3' and t1='klrtest3 (en la indekso kaj la artikolo)'])=1">
    18) Chu germana traduko "klrtest3 (en la indekso kaj la artikolo)" enestas</t>
 
    <t test="count(//kap-oj/v[@mrk='test' and k='testoo'])=1">
@@ -430,7 +446,7 @@ ${rezulto_2}
     <!-- testu kreadon de la HTML-indeksdosieroj -->
 
     <ant antfile="${ant}/indeksoj.xml"
-       dir="${revo}" target="html" inheritAll="false"/>
+       dir="${revo}" target="tuto" inheritAll="false"/>
 
     <echo 
 file="${testoj}/indeks-testo-kap-t.xml"><![CDATA[<?xml version="1.0"?>
@@ -486,9 +502,9 @@ file="${testoj}/indeks-testo-trd-de.xml"><![CDATA[<?xml version="1.0"?>
      <t test="count(//h1[.='germana t...'])=1">
    5) Chu videbla titolo estas "germana t..."</t>
      <t test="count(//a[(@href='../art/test.html#test.0o.GEOL' or
-     @href='../art/test.html') and @target='precipa'
+     @href='../art/test.html#test.0o' or @href='../art/test.html') and @target='precipa'
      and .='testo'])=2">
-   6) Chu referenco al test.html au test.html#test.0o.GEOL enestas</t>
+   6) Chu referenco al test.html au test.html#test.0o au test.html#test.0o.GEOL enestas</t>
      <t test="count(//a[@href='../art/test.html#test.0i' and @target='precipa'
      and .='testi'])=1">
    7) Chu referenco al test.html#test.0i enestas</t>

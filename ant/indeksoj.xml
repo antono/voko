@@ -11,7 +11,16 @@
   <property name="xml" location="${revo}/xml"/>
   <property name="voko_bin" location="${voko}/bin"/>
   <property name="xsl" location="${voko}/xsl"/>
-  <property name="tmp" location="${revo}/.tmp"/>
+  <property name="tmp" location="/home/revo/tmp/inx_tmp"/>
+  <!-- property name="tmp" location="${revo}/.tmp"/ -->
+  <property name="saxon" location="/usr/local/lib/saxon/saxon8.jar"/>
+
+  <!-- ial Formiko foje ne trovas Saxon per klapado donita en la tasko mem,
+      tial difino mediovariablon CLASSPATH aldonante la Saxon-arkivon antau voki Formikon -->
+  <path id="saxon.classpath">
+     <pathelement location="${saxon}"/>
+     <pathelement path="${java.class.path}"/>
+  </path>
 
   <target name="init">
     <!-- Create the time stamp -->
@@ -19,6 +28,7 @@
     <!-- Create the build directory structure used by compile -->
     <mkdir dir="${inx}" />
     <mkdir dir="${tmp}" />
+    <mkdir dir="${tmp}/inx" />
 
     <!-- (re)kreu inx_ordigo2.inc laubezone -->
     <xslt in="${voko}/cfg/ordigo2.xml" out="${xsl}/inx_ordigo2.inc"
@@ -32,7 +42,8 @@
   </target>
 
   <target name="forigu" 
-      description="forigas chiujn dosierojn en ${tmp}/inx">
+      description="forigas chiujn dosierojn en ${tmp}/inx"
+      depends="init">
  
      <delete>
         <fileset dir="${tmp}/inx" includes="*"/>
@@ -66,11 +77,12 @@
   <target name="ordigo" depends="init,kategorioj"
      description="ordigi la kapvortojn, tradukojn, fakojn ktp.">
      <xslt in="${tmp}/inx_kat.xml" out="${tmp}/inx_ord.xml"
-       style="${xsl}/inx_ordigo2.xsl">
-        <classpath>
-          <pathelement location="/opt/java/saxon-8.7/saxon8.jar"/>
-          <pathelement path="${classpath}"/>
-        </classpath>
+       style="${xsl}/inx_ordigo2.xsl" classpathref="saxon.classpath">
+        <!-- classpathref >
+          <pathelement location="/usr/local/lib/saxon/saxon8.jar"/>
+          <pathelement path="${java.class.path}"/>
+        </classpath -->
+        <factory name="net.sf.saxon.TransformerFactoryImpl"/>
       </xslt>
 
  
