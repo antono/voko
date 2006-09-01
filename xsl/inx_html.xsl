@@ -118,7 +118,14 @@
 
  
 <xsl:template match="ero[@ref]">
-  <a href="{@ref}" style="{@style}"><xsl:value-of select="@titolo"/></a><br/>
+  <a href="{@ref}" style="{@style}">
+     <xsl:if test="../@kadro">
+       <xsl:attribute name="target">
+          <xsl:value-of select="../@kadro"/>
+       </xsl:attribute>
+     </xsl:if>
+     <xsl:value-of select="@titolo"/>
+  </a><br/>
 </xsl:template>
 
 
@@ -422,7 +429,7 @@
             <xsl:when test="self::fako">
 
               <b class="elektita">alfabete</b><xsl:text> </xsl:text>
-              <a href="fxs_{@name}.html">strukture</a><xsl:text> </xsl:text>
+              <a href="../tez/fxs_{@fak}.html">strukture</a><xsl:text> </xsl:text>
 
               <h1><xsl:value-of 
                   select="document($fakoj)/fakoj/fako[@kodo=current()/@fak]"/>
@@ -711,6 +718,12 @@
       </xsl:choose>
     </xsl:attribute>
     <xsl:apply-templates/>
+    <xsl:if test="@n">
+      <xsl:text> </xsl:text>
+      <sup><i>
+        <xsl:value-of select="@n"/>
+      </i></sup>
+    </xsl:if>
   </a>
   <br/>
 </xsl:template>

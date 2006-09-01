@@ -61,7 +61,7 @@
     <trd-snc p="{$trd-snc}"/>
 
     <xsl:for-each select="document($lngcfg)/lingvoj/lingvo">
-      <xsl:variable name="lng" select="@kodo"/>
+      <xsl:variable name="lng" select="string(@kodo)"/>
       <xsl:variable name="ptrd">
          <xsl:for-each select="$root">
             <xsl:value-of select="count(//drv[
@@ -87,7 +87,7 @@
             <xsl:apply-templates select="key('lingvoj',$lng)"/>
           </trd-oj>
           <!-- kelkaj netradukitaj sencoj de tiu lingvo -->
-          <xsl:if test="($trd-snc - $ptrd) div $trd-snc &lt; 0.34">
+          <xsl:if test="($trd-snc - $ptrd) div $trd-snc &lt; 0.7">
              <mankoj lng="{$lng}">
                 <xsl:for-each select="(//drv[
                        (not (child::snc 
@@ -98,6 +98,11 @@
                    and (not (../uzo[text()='EVI' or text()='ARK']))
                    and not (child::trd[@lng=$lng] or ../trd[@lng=$lng])])[position() &lt;= 777]">
                    <v mrk="{ancestor-or-self::node()[@mrk][1]/@mrk}">
+                     <xsl:if test="self::snc and count(../snc)>1">
+                       <xsl:attribute name="n">
+                         <xsl:number/>
+                       </xsl:attribute>
+                     </xsl:if>
                      <xsl:apply-templates
                        select="ancestor-or-self::node()[self::art or self::drv][kap][1]/kap"/>
                    </v>
