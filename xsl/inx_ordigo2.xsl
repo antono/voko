@@ -13,7 +13,8 @@
      licenco GPL 2.0
 -->
 
-<xsl:param name="verbose" select="false"/>
+<xsl:param name="verbose" select="'true'"/>
+<xsl:param name="debug" select="'true'"/>
 
 <xsl:output method="xml" encoding="utf-8" indent="yes"/>
 <xsl:strip-space elements="t t1 k"/>
@@ -40,18 +41,42 @@ class="net.sf.saxon.sort.CodepointCollator"/ -->
 
   <!-- lau reguloj de kiu lingvo ordigi? -->
   <xsl:variable name="ordlng_1" 
-     select="document($ordigo)/ordigo/lingvo[@lng=current()/@lng]/@kiel"/>
+     select="document($ordigo)/ordigo/lingvo[string(@lng)=string(current()/@lng)]"/>
 
-  <xsl:variable name="ordlng" select="($ordlng_1|@lng)[1]"/>
+  <!-- xsl:variable name="ordlng" select="($ordlng_1|@lng)[1]"/ -->
+
+  <xsl:variable name="ordlng">
+    <xsl:choose>
+      <xsl:when test="$ordlng_1/@kiel">
+         <xsl:value-of select="$ordlng_1/@kiel"/>
+      </xsl:when>
+      <xsl:when test="$ordlng_1">
+        <xsl:value-of select="@lng"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="'la'"/> <!-- se ne aperas en ordigo.xml, uzu latinajn regulojn -->
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+      
+  <xsl:if test="$debug='true'">
+    <xsl:message>DBG: ordigi lau lingvo: "<xsl:value-of select="$ordlng"/>"...</xsl:message>
+  </xsl:if>
+
   <xsl:variable name="chiuj_literoj"
       select="translate(normalize-space(document($ordigo)/ordigo/lingvo[@lng=$ordlng]),' ','')"/>
+
+  <xsl:if test="$debug='true'">
+    <xsl:message>DBG: literoj: "<xsl:value-of select="$chiuj_literoj"/>"...</xsl:message>
+  </xsl:if>
+
 
   <xsl:if test="string-length($chiuj_literoj) > 0">
   
     <trd-oj lng="{@lng}" n="{@n}" p="{@p}">
       <xsl:variable name="trdoj" select="."/>
 
-      <xsl:for-each select="document($ordigo)/ordigo/lingvo[@lng=$ordlng]/l">
+      <xsl:for-each select="document($ordigo)/ordigo/lingvo[string(@lng)=$ordlng]/l">
         <xsl:variable name="n" select="number(substring(concat(@n,'1'),1,1))"/>
 
         <!-- la sekva solvas la problemon 

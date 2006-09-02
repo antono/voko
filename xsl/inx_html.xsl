@@ -98,7 +98,7 @@
     </head>
     <body>
       <table cellspacing="0">
-        <xsl:call-template name="menuo-ktp"/>
+        <xsl:call-template name="menuo"/>
         <tr>
           <td colspan="{count(../pagho[not(@kashita='jes')])}" class="enhavo">
             <xsl:apply-templates/>

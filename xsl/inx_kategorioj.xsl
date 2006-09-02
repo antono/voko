@@ -8,7 +8,7 @@
 
 <xsl:param name="verbose" select="false"/>
 
-<xsl:output method="xml" encoding="utf-8"/>
+<xsl:output method="xml" encoding="utf-8" indent="yes"/>
 <xsl:strip-space elements="kap uzo trd"/>
 
 <xsl:variable name="fakcfg">../cfg/fakoj.xml</xsl:variable>
@@ -61,7 +61,7 @@
     <trd-snc p="{$trd-snc}"/>
 
     <xsl:for-each select="document($lngcfg)/lingvoj/lingvo">
-      <xsl:variable name="lng" select="string(@kodo)"/>
+      <xsl:variable name="lng" select="@kodo"/>
       <xsl:variable name="ptrd">
          <xsl:for-each select="$root">
             <xsl:value-of select="count(//drv[
@@ -81,9 +81,10 @@
       </xsl:if>
 
       <xsl:for-each select="$root">
-        <xsl:if test="key('lingvoj',$lng)">
+        <xsl:variable name="n" select="count(key('lingvoj',$lng))"/>
+        <xsl:if test="$n &gt; 0">
           <!-- tradukoj de tiu lingvo --> 
-          <trd-oj lng="{$lng}" n="{count(key('lingvoj',$lng))}" p="{$ptrd}">
+          <trd-oj lng="{$lng}" n="{$n}" p="{$ptrd}">
             <xsl:apply-templates select="key('lingvoj',$lng)"/>
           </trd-oj>
           <!-- kelkaj netradukitaj sencoj de tiu lingvo -->
