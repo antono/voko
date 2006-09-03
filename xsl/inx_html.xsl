@@ -1,7 +1,17 @@
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+<!DOCTYPE xsl:transform>
+
+<xsl:transform
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xmlns:saxon="http://saxon.sf.net/"
+  version="2.0"
+  extension-element-prefixes="saxon" 
+>
+
+<!-- xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 version="1.0"
   xmlns:redirect="http://xml.apache.org/xalan/redirect"
-    extension-element-prefixes="redirect">
+    extension-element-prefixes="redirect" -->
 
 
 <!-- (c) 2006 che Wolfram Diestel
@@ -9,7 +19,7 @@
 -->
 
 
-<xsl:output method="xhtml" encoding="utf-8"/>
+<xsl:output method="html" encoding="utf-8"/>
 <xsl:strip-space elements="t t1 k"/>
 
 <xsl:variable name="lingvoj">../cfg/lingvoj.xml</xsl:variable>
@@ -33,6 +43,12 @@
     <xsl:with-param name="mlg-oj" select="count(document($enhavo)/vortaro//MLG-OJ)"/>
     <xsl:with-param name="stat" select="count(document($enhavo)/vortaro//STAT)"/>
   </xsl:call-template>
+
+  <xsl:if test="count(document($enhavo)/vortaro//MANKOJ) &gt; 0">
+    <xsl:for-each select="(document($enhavo)/vortaro//MANKOJ)[1]">
+      <xsl:call-template name="MANKO-LISTOJ"/>
+    </xsl:for-each>
+  </xsl:if>
 </xsl:template>
 
 
@@ -88,7 +104,8 @@
 <xsl:template match="pagho">
   <!-- xsl:message>skribas al <xsl:value-of
   select="@dosiero"/></xsl:message -->
-  <redirect:write select="@dosiero">
+  <!-- redirect:write select="@dosiero" -->
+  <xsl:result-document href="{@dosiero}" method="html" encoding="utf-8" indent="no">
   <html>
     <head>
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
@@ -107,7 +124,8 @@
       </table>
     </body>
   </html>
-  </redirect:write>
+  <!-- /redirect:write -->
+  </xsl:result-document>
 </xsl:template>
 
 
@@ -118,10 +136,13 @@
 
  
 <xsl:template match="ero[@ref]">
-  <a href="{@ref}" style="{@style}">
-     <xsl:if test="../@kadro">
+  <a href="{@ref}">
+     <xsl:if test="@style">
+       <xsl:attribute name="style"><xsl:value-of select="@style"/></xsl:attribute>
+     </xsl:if>
+     <xsl:if test="ancestor-or-self::node()/@kadro">
        <xsl:attribute name="target">
-          <xsl:value-of select="../@kadro"/>
+          <xsl:value-of select="(ancestor-or-self::node()/@kadro)[last()]"/>
        </xsl:attribute>
      </xsl:if>
      <xsl:value-of select="@titolo"/>
@@ -144,7 +165,7 @@
   <p>
   <xsl:for-each select="document($lingvoj)/lingvoj/lingvo[@kodo=current()/@lng]">
     <xsl:choose>
-      <xsl:when test="count($root//trd-oj[@lng=current()/@kodo]) &gt; 1000">
+      <xsl:when test="$root//trd-oj[@lng=current()/@kodo]/@n &gt; 1000">
         <a><b>
           <xsl:attribute name="href">
             <xsl:value-of select="concat('lx_',@kodo,'_',
@@ -194,8 +215,11 @@
 
 <xsl:template match="MANKOJ">
   <a href="mankantaj.html"><xsl:value-of select="@titolo"/></a><br/>
+</xsl:template>
 
-  <redirect:write select="'mankantaj.html'">
+<xsl:template name="MANKO-LISTOJ">
+  <!-- redirect:write select="'mankantaj.html'" -->
+  <xsl:result-document href="mankantaj.html" method="html" encoding="utf-8" indent="no">
   <html>
     <head>
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
@@ -233,7 +257,8 @@
       </table>
     </body>
   </html>
-  </redirect:write>
+  <!-- /redirect:write -->
+  </xsl:result-document>
 </xsl:template>
 
 
@@ -363,7 +388,8 @@
     </xsl:choose>
   </xsl:variable>
 
-  <redirect:write select="concat($pref,$lit,'.html')">
+  <!-- redirect:write select="concat($pref,$lit,'.html')" -->
+  <xsl:result-document href="{concat($pref,$lit,'.html')}" method="html" encoding="utf-8" indent="no">
 
   <html>
     <head>
@@ -560,7 +586,8 @@
       </table>
     </body>
   </html>
-  </redirect:write>
+  <!-- /redirect:write -->
+  </xsl:result-document>
 
 </xsl:template>
 
@@ -839,7 +866,8 @@
 </xsl:template>
 
 
-</xsl:stylesheet>
+<!-- /xsl:stylesheet -->
+</xsl:transform>
 
 
 

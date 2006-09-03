@@ -11,28 +11,22 @@
 
 <xsl:output method="html" version="4.0" encoding="utf-8"/>
 
+<xsl:variable name="enhavo">../cfg/enhavo.xml</xsl:variable>
+
+
 <xsl:template match="mallongigoj">
   <html>
     <head>
-      <title>mallongigoj</title>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
+      <title><xsl:value-of select="concat(../@nometo,'-indekso: ',@titolo)"/></title>
       <link title="indekso-stilo" type="text/css" 
             rel="stylesheet" href="../stl/indeksoj.css"/>
     </head>
     <body>
-    <script type="text/javascript" src="../smb/butonoj.js"/>
-    <a href="../inx/_eo.html" onMouseOver="highlight(0)" 
-                              onMouseOut="normalize(0)"><img 
-       src="../smb/nav_eo1.png" alt="[Esperanto]" border="0"/></a>
-    <a href="../inx/_lng.html" onMouseOver="highlight(1)" 
-                               onMouseOut="normalize(1)"><img 
-       src="../smb/nav_lng1.png" alt="[Lingvoj]" border="0"/></a>
-    <a href="../inx/_fak.html" onMouseOver="highlight(2)" 
-                               onMouseOut="normalize(2)"><img 
-       src="../smb/nav_fak1.png" alt="[Fakoj]" border="0"/></a>
-    <a href="../inx/_ktp.html" onMouseOver="highlight(3)" 
-                               onMouseOut="normalize(3)"><img 
-       src="../smb/nav_ktp1.png" alt="[ktp.]" border="0"/></a>
-    <br/>
+      <table cellspacing="0">
+        <xsl:call-template name="menuo-ktp"/>
+        <tr>
+          <td colspan="{count(document($enhavo)//pagho[not(@kashita='jes')])}" class="enhavo">
 
     <h1>mallongigoj</h1>
 
@@ -43,8 +37,45 @@
       <dd><xsl:value-of select="."/></dd>
     </xsl:for-each>
     </dl>
-  </body>
+
+          </td>
+        </tr>
+      </table>
+    </body>
   </html>
+
+</xsl:template>
+
+
+<xsl:template name="menuo-ktp">
+  <xsl:for-each select="document($enhavo)//pagho[.//BLD-OJ][1]"> 
+    <xsl:call-template name="menuo"/>
+  </xsl:for-each>
+</xsl:template>
+
+
+<xsl:template name="menuo">
+  <xsl:variable name="aktiva" select="@dosiero"/>
+  <tr>
+    <xsl:for-each select="../pagho[not(@kashita='jes')]">
+      <xsl:choose>
+        <xsl:when test="@dosiero=$aktiva">
+          <td class="aktiva">
+            <a href="../inx/{@dosiero}">
+              <xsl:value-of select="@titolo"/>
+            </a>
+          </td>
+        </xsl:when>
+        <xsl:otherwise>
+          <td class="fona">
+            <a href="../inx/{@dosiero}">
+              <xsl:value-of select="@titolo"/>
+            </a>
+          </td>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:for-each>     
+  </tr>
 </xsl:template>
 
 </xsl:stylesheet>

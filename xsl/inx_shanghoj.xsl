@@ -1,7 +1,17 @@
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+<!DOCTYPE xsl:transform>
+
+<xsl:transform
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xmlns:saxon="http://saxon.sf.net/"
+  version="2.0"
+  extension-element-prefixes="saxon" 
+>
+
+<!-- xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 version="1.0"
     xmlns:redirect="http://xml.apache.org/xalan/redirect"
-    extension-element-prefixes="redirect">
+    extension-element-prefixes="redirect" -->
 
 
 <!-- (c) 2006 che Wolfram Diestel
@@ -78,7 +88,9 @@
                   </xsl:call-template>
                 </h2>
                 <dl>
-                  <xsl:apply-templates select="key('autoroj',substring-before(msg,':'))"/>
+                  <xsl:apply-templates select="key('autoroj',substring-before(msg,':'))">
+                    <xsl:sort select="date" order="descending"/>
+                  </xsl:apply-templates>
                 </dl>
               
             </xsl:for-each>
@@ -92,7 +104,8 @@
 
 
 <xsl:template name="novaj">
-  <redirect:write select="'novaj.html'">
+  <xsl:result-document href="novaj.html" method="xhtml" encoding="utf-8">
+  <!-- redirect:write select="'novaj.html'" -->
   <html>
     <head>
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
@@ -109,10 +122,12 @@
             <h1>novaj artikoloj</h1>
             <dl>
             <xsl:for-each
-               select="//entry[substring-after(msg,':')=' nova artikolo']">
+               select="//entry[substring-after(msg,':')=' nova artikolo']/file">
  
-              <xsl:sort lang="eo" select="file/name"/>
-
+              <!-- xsl:sort lang="eo" select="name"/ -->
+              <xsl:sort select="../date" order="descending"/>
+              <xsl:sort lang="eo" select="name"/>
+         
               <xsl:call-template name="nova_artikolo"/>
 
             </xsl:for-each>
@@ -122,15 +137,16 @@
       </table>
     </body>
   </html>
-  </redirect:write>
+  <!-- /redirect:write -->
+  </xsl:result-document>
 </xsl:template>
 
 
 <xsl:template name="autoro">
   <xsl:param name="spaco"/>
   <xsl:choose>
-    <xsl:when test="substring-before(msg,':')">
-      <xsl:value-of select="translate(substring-before(msg,':'),' ',$spaco)"/>
+    <xsl:when test="substring-before(ancestor-or-self::entry/msg,':')">
+      <xsl:value-of select="translate(substring-before(ancestor-or-self::entry/msg,':'),' ',$spaco)"/>
     </xsl:when>
     <xsl:otherwise>
       <xsl:text>revo</xsl:text>
@@ -172,25 +188,29 @@
 
 
 <xsl:template match="entry">
+  <xsl:apply-templates select="file"/>
+</xsl:template>
+
+<xsl:template match="entry/file">
   <dt>
     <a target="precipa">
      <xsl:attribute name="href">
        <xsl:text>../art/</xsl:text>
-       <xsl:value-of select="substring-before(file/name,'.xml')"/>
+       <xsl:value-of select="substring-before(name,'.xml')"/>
        <xsl:text>.html</xsl:text>
      </xsl:attribute>
-     <b><xsl:value-of select="substring-before(file/name,'.xml')"/></b>
+     <b><xsl:value-of select="substring-before(name,'.xml')"/></b>
     </a> 
     <xsl:text> </xsl:text>
-    <span class="dato"><xsl:value-of select="date"/></span>
+    <span class="dato"><xsl:value-of select="../date"/></span>
   </dt>
   <dd>
     <xsl:choose>
-      <xsl:when test="substring-after(msg,':')">
-        <xsl:value-of select="substring-after(msg,':')"/>
+      <xsl:when test="substring-after(../msg,':')">
+        <xsl:value-of select="substring-after(../msg,':')"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="msg"/>
+        <xsl:value-of select="../msg"/>
       </xsl:otherwise>
     </xsl:choose>
   </dd>
@@ -202,13 +222,13 @@
     <a target="precipa">
      <xsl:attribute name="href">
        <xsl:text>../art/</xsl:text>
-       <xsl:value-of select="substring-before(file/name,'.xml')"/>
+       <xsl:value-of select="substring-before(name,'.xml')"/>
        <xsl:text>.html</xsl:text>
      </xsl:attribute>
-     <b><xsl:value-of select="substring-before(file/name,'.xml')"/></b>
+     <b><xsl:value-of select="substring-before(name,'.xml')"/></b>
     </a> 
     <xsl:text> </xsl:text>
-    <span class="dato"><xsl:value-of select="date"/></span>
+    <span class="dato"><xsl:value-of select="../date"/></span>
   </dt>
   <dd>
     <xsl:text>de </xsl:text>
@@ -219,7 +239,8 @@
 </xsl:template>
 
 
-</xsl:stylesheet>
+<!-- /xsl:stylesheet -->
+</xsl:transform>
 
 
 

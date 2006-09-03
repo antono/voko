@@ -70,8 +70,11 @@
 
   <target name="kategorioj" depends="init,eltiro"
      description="eltiri la kapvortojn, tradukojn, fakindikojn ktp. el la indeks-dosiero">
-     <xslt in="${tmp}/indekso.xml" out="${tmp}/inx_kat.xml"
-       style="${xsl}/inx_kategorioj.xsl"/>
+     <xslt in="${tmp}/indekso.xml" out="${tmp}/inx_kat.xml"  style="${xsl}/inx_kategorioj.xsl"/>
+<!--       classpathref="saxon.classpath">
+        <factory name="net.sf.saxon.TransformerFactoryImpl"/>
+      </xslt> -->
+      
   </target>
 
   <target name="ordigo" depends="init,kategorioj"
@@ -97,10 +100,10 @@
   <target name="cvs-shanghoj"
      description="kreas raporton pri la lastaj shanghoj per CVS">
 
-     <!-- cvschangelog dir="/home/revo/revo/xml"
+     <cvschangelog dir="${xml}"
                 destfile="${tmp}/inx_shanghoj.xml"
-                daysinpast="14"
-     /-->
+                daysinpast="14"     
+     />
  
      <xslt in="${tmp}/inx_shanghoj.xml" out="${tmp}/inx/shanghoj.html"
        style="${xsl}/inx_shanghoj.xsl"/>
