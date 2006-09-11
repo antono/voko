@@ -13,8 +13,8 @@
      licenco GPL 2.0
 -->
 
-<xsl:param name="verbose" select="'true'"/>
-<xsl:param name="debug" select="'true'"/>
+<xsl:param name="verbose" select="'false'"/>
+<xsl:param name="debug" select="'false'"/>
 
 <xsl:output method="xml" encoding="utf-8" indent="yes"/>
 <xsl:strip-space elements="t t1 k"/>

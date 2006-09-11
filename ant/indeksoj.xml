@@ -15,8 +15,8 @@
   <!-- property name="tmp" location="${revo}/.tmp"/ -->
   <property name="saxon" location="/usr/local/lib/saxon/saxon8.jar"/>
 
-  <!-- ial Formiko foje ne trovas Saxon per klapado donita en la tasko mem,
-      tial difino mediovariablon CLASSPATH aldonante la Saxon-arkivon antau voki Formikon -->
+  <!-- ial Formiko foje ne trovas Saxon per klaspado donita en la tasko mem,
+      tial difinu mediovariablon CLASSPATH aldonante la Saxon-arkivon antau voki Formikon -->
   <path id="saxon.classpath">
      <pathelement location="${saxon}"/>
      <pathelement path="${java.class.path}"/>

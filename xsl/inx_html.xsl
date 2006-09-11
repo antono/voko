@@ -164,28 +164,16 @@
 <xsl:template match="TRD-OJ[@lng]">
   <p>
   <xsl:for-each select="document($lingvoj)/lingvoj/lingvo[@kodo=current()/@lng]">
-    <xsl:choose>
-      <xsl:when test="$root//trd-oj[@lng=current()/@kodo]/@n &gt; 1000">
-        <a><b>
-          <xsl:attribute name="href">
-            <xsl:value-of select="concat('lx_',@kodo,'_',
-              $root//trd-oj[@lng=current()/@kodo]/litero[v][1]/@name,
-                      '.html')"/>
-          </xsl:attribute>
-          <xsl:value-of select="."/>
-        </b></a>
-      </xsl:when>
-      <xsl:when test="$root//trd-oj[@lng=current()/@kodo]">
         <a>
           <xsl:attribute name="href">
             <xsl:value-of select="concat('lx_',@kodo,'_',
               $root//trd-oj[@lng=current()/@kodo]/litero[v][1]/@name,
                       '.html')"/>
           </xsl:attribute>
-          <xsl:value-of select="."/>
+          <b>
+            <xsl:value-of select="."/>
+          </b>
         </a>
-      </xsl:when>
-    </xsl:choose>
   </xsl:for-each>
   </p>
 </xsl:template>
@@ -199,14 +187,31 @@
     <xsl:sort lang="eo"/>
 
     <xsl:if test="$root//trd-oj[@lng=current()/@kodo and @lng != $krom]">
-       <a>
+      <xsl:choose>
+        <xsl:when test="number($root//trd-oj[@lng=current()/@kodo]/@n) &gt; 1000">
+        <a>
+          <xsl:attribute name="href">
+            <xsl:value-of select="concat('lx_',@kodo,'_',
+              $root//trd-oj[@lng=current()/@kodo]/litero[v][1]/@name,
+                      '.html')"/>
+          </xsl:attribute>
+          <b>
+            <xsl:value-of select="."/>
+          </b>
+        </a> <br/>
+        </xsl:when>
+        <xsl:when test="$root//trd-oj[@lng=current()/@kodo]">
+        <a>
          <xsl:attribute name="href">
            <xsl:value-of select="concat('lx_',@kodo,'_',
               $root//trd-oj[@lng=current()/@kodo]/litero[v][1]/@name,
                       '.html')"/>
            </xsl:attribute>
            <xsl:value-of select="."/>
-       </a><br/>
+        </a> <br/>
+        </xsl:when>
+      </xsl:choose>
+       
     </xsl:if>
   </xsl:for-each>
   </p>

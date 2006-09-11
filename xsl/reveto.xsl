@@ -63,10 +63,6 @@ name="redcgi">/cgi-bin/vokomail.pl?art=</xsl:variable -->
   <xsl:text>]</xsl:text>
 </xsl:template>
 
-<xsl:template match="ref">
-  <a href="{@cel}"><xsl:apply-templates/></a>
-</xsl:template>
-
 <xsl:template match="url">
   <xsl:apply-templates/>
   (<xsl:value-of select="@ref"/>)

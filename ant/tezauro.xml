@@ -1,0 +1,88 @@
+<project name="Revo-indeksoj" default="tuto" basedir=".">
+    <description>
+       Reta Vortaro, reguloj por (re)krei tezauron. 
+    </description>
+
+  <!-- set global properties for this build -->
+  <property name="voko" location="/home/revo/voko"/>
+  <property name="ant" location="${voko}/ant"/>
+  <property name="revo" location="."/>
+  <!-- property name="inx" location="${revo}/inx"/ -->
+  <property name="tez" location="${revo}/tez"/>
+  <!-- property name="xml" location="${revo}/xml"/ -->
+  <property name="voko_bin" location="${voko}/bin"/>
+  <property name="xsl" location="${voko}/xsl"/>
+  <property name="tmp" location="/home/revo/tmp/inx_tmp"/>
+  <!-- property name="tmp" location="${revo}/.tmp"/ -->
+  <property name="saxon" location="/usr/local/lib/saxon/saxon8.jar"/>
+
+  <!-- ial Formiko foje ne trovas Saxon per klaspado donita en la tasko mem,
+      tial difinu mediovariablon CLASSPATH aldonante la Saxon-arkivon antau voki Formikon -->
+  <path id="saxon.classpath">
+     <pathelement location="${saxon}"/>
+     <pathelement path="${java.class.path}"/>
+  </path>
+
+  <target name="init">
+    <tstamp/>
+  </target>
+
+
+  <target name="eltiro" description="faras la dosieron indekso.xml el chiuj artikoloj kiel bazo por la tezauro (vokas indekso.xml)" 
+    depends="init">
+    <ant antfile="${ant}/indeksoj.xml"
+       dir="${revo}" target="eltiro" inheritAll="true"/>
+  </target>
+
+  <target name="forigu" 
+      description="forigas chiujn dosierojn en ${tmp}/tez"
+      depends="init">
+ 
+     <delete>
+        <fileset dir="${tmp}/tez" includes="*"/>
+     </delete>
+  </target>
+
+  <target name="retigo" depends="init,eltiro"
+     description="retigi la tezauronodojn">
+     <xslt in="${tmp}/indekso.xml" out="${tmp}/tez_ret.xml"
+       style="${xsl}/tez_retigo.xsl">
+     </xslt>
+  </target>
+
+  <target name="html" depends="init,retigo"
+     description="kreas la HTML-dosierojn de la tezauro">
+     <xslt in="${tmp}/tez_ret.xml" out="${tmp}/tez/.tempo"
+       style="${xsl}/tez_html.xsl"/>
+  </target>
+
+  <target name="tuto" depends="init,html"
+     description="kopias fine chiujn enhave shanghitajn dosierojn al la
+     tezaurodosierujo kaj tie forigas forfalintajn">
+
+    <copy todir="${tez}">
+      <fileset dir="${tmp}/tez" includes="*">
+        <different targetdir="${tez}" ignoreFileTimes="true"/>
+      </fileset>
+    </copy>
+
+    <delete>
+      <fileset dir="${tez}" includes="*">
+         <present present="srconly" targetdir="${tmp}/tez"/>
+      </fileset>
+    </delete>
+
+  </target>
+
+</project>
+
+
+
+
+
+
+
+
+
+
+

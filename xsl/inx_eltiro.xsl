@@ -20,14 +20,14 @@
 
 <xsl:template match="art">
   <art mrk="{substring-after(substring-before(@mrk,'.xml'),'Id: ')}">
-  <xsl:apply-templates select="kap|subart|drv|snc|trdgrp|trd|uzo|bld|dif|ekz"/>
+  <xsl:apply-templates select="kap|subart|drv|snc|trdgrp|trd|uzo|bld|dif|ekz|tezrad"/>
   </art>
 </xsl:template>
 
 <xsl:template match="subart|drv|subdrv|snc|subsnc">
   <xsl:copy>
   <xsl:apply-templates select="@mrk|kap|drv|subdrv|snc|subsnc|trdgrp|trd
-          |uzo|bld|dif|ekz|mlg|refgrp|ref"/>
+          |uzo|bld|dif|ekz|mlg|refgrp|ref|tezrad"/>
   </xsl:copy>
 </xsl:template>
 
@@ -38,12 +38,6 @@
 <xsl:template match="ekz[ind]">
   <xsl:copy>
   <xsl:apply-templates select="ind|trdgrp|trd"/>
-  </xsl:copy> 
-</xsl:template>
-
-<xsl:template match="ind">
-  <xsl:copy>
-  <xsl:apply-templates/>
   </xsl:copy> 
 </xsl:template>
 
@@ -101,7 +95,11 @@
 </xsl:template>
 
 <xsl:template match="ref">
-  <ref tip="{ancestor-or-self::*/@tip}"><xsl:apply-templates/></ref>
+  <ref tip="{ancestor-or-self::*/@tip}" cel="{@cel}"/>
+</xsl:template>
+
+<xsl:template match="tezrad">
+  <xsl:copy-of select="."/>
 </xsl:template>
 
 </xsl:stylesheet>
