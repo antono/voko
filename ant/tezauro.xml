@@ -3,17 +3,22 @@
        Reta Vortaro, reguloj por (re)krei tezauron. 
     </description>
 
-  <!-- set global properties for this build -->
-  <property name="voko" location="/home/revo/voko"/>
-  <property name="ant" location="${voko}/ant"/>
-  <property name="revo" location="."/>
-  <!-- property name="inx" location="${revo}/inx"/ -->
-  <property name="tez" location="${revo}/tez"/>
-  <!-- property name="xml" location="${revo}/xml"/ -->
-  <property name="voko_bin" location="${voko}/bin"/>
-  <property name="xsl" location="${voko}/xsl"/>
-  <property name="tmp" location="/home/revo/tmp/inx_tmp"/>
-  <!-- property name="tmp" location="${revo}/.tmp"/ -->
+  <!-- legu agorditajn variablojn el dosiero -->
+  <property file="${user.dir}/cfg/agordo" prefix="mi."/>
+
+  <!-- donu valorojn al la variabloj, se ili ne jam aperis en la agordo-dosiero -->
+  <property name="mi.voko" location="/home/revo/voko"/>
+  <property name="mi.voko.ant" location="${mi.voko}/ant"/>
+  <property name="mi.bazo" location="${user.dir}"/>
+  <!-- property name="mi.bazo.inx" location="${mi.bazo}/inx"/ -->
+  <!-- property name="mi.bazo.xml" location="${mi.bazo}/xml"/ -->
+  <property name="mi.tez" location="${mi.bazo}/tez"/>
+  <property name="mi.voko.bin" location="${mi.voko}/bin"/>
+  <property name="mi.voko.xsl" location="${mi.voko}/xsl"/>
+  <!-- property name="tmp" location="/home/revo/tmp/inx_tmp"/ -->
+  <property name="mi.tmp" location="${mi.bazo}/.tmp"/>
+  <property name="mi.outputformat" value="html"/>
+
   <property name="saxon" location="/usr/local/lib/saxon/saxon8.jar"/>
 
   <!-- ial Formiko foje ne trovas Saxon per klaspado donita en la tasko mem,
@@ -30,45 +35,49 @@
 
   <target name="eltiro" description="faras la dosieron indekso.xml el chiuj artikoloj kiel bazo por la tezauro (vokas indekso.xml)" 
     depends="init">
-    <ant antfile="${ant}/indeksoj.xml"
-       dir="${revo}" target="eltiro" inheritAll="true"/>
+    <ant antfile="${mi.voko.ant}/indeksoj.xml"
+       dir="${mi.bazo}" target="eltiro" inheritAll="true"/>
   </target>
 
   <target name="forigu" 
-      description="forigas chiujn dosierojn en ${tmp}/tez"
+      description="forigas chiujn dosierojn en ${mi.tmp}/tez"
       depends="init">
  
      <delete>
-        <fileset dir="${tmp}/tez" includes="*"/>
+        <fileset dir="${mi.tmp}/tez" includes="*"/>
      </delete>
   </target>
 
   <target name="retigo" depends="init,eltiro"
      description="retigi la tezauronodojn">
-     <xslt in="${tmp}/indekso.xml" out="${tmp}/tez_ret.xml"
-       style="${xsl}/tez_retigo.xsl">
+     <xslt in="${mi.tmp}/indekso.xml" out="${mi.tmp}/tez_ret.xml"
+       style="${mi.voko.xsl}/tez_retigo.xsl">
      </xslt>
   </target>
 
   <target name="html" depends="init,retigo"
      description="kreas la HTML-dosierojn de la tezauro">
-     <xslt in="${tmp}/tez_ret.xml" out="${tmp}/tez/.tempo"
-       style="${xsl}/tez_html.xsl"/>
+
+    <filter token="format" value="${mi.outputformat}"/>
+    <copy file="${mi.voko.xsl}/tez_html.xsl" tofile="${mi.voko.xsl}/tez_html_${mi.outputformat}.xsl" 
+       filtering="true"/>
+     <xslt in="${mi.tmp}/tez_ret.xml" out="${mi.tmp}/tez/.tempo"
+       style="${mi.voko.xsl}/tez_html_${mi.outputformat}.xsl"/>
   </target>
 
   <target name="tuto" depends="init,html"
      description="kopias fine chiujn enhave shanghitajn dosierojn al la
      tezaurodosierujo kaj tie forigas forfalintajn">
 
-    <copy todir="${tez}">
-      <fileset dir="${tmp}/tez" includes="*">
-        <different targetdir="${tez}" ignoreFileTimes="true"/>
+    <copy todir="${mi.tez}">
+      <fileset dir="${mi.tmp}/tez" includes="*">
+        <different targetdir="${mi.tez}" ignoreFileTimes="true"/>
       </fileset>
     </copy>
 
     <delete>
-      <fileset dir="${tez}" includes="*">
-         <present present="srconly" targetdir="${tmp}/tez"/>
+      <fileset dir="${mi.tez}" includes="*">
+         <present present="srconly" targetdir="${mi.tmp}/tez"/>
       </fileset>
     </delete>
 

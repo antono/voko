@@ -18,8 +18,7 @@
      licenco GPL 2.0
 -->
 
-
-<xsl:output method="html" encoding="utf-8"/>
+<xsl:output method="@format@" encoding="utf-8"/>
 <xsl:strip-space elements="t t1 k"/>
 
 <xsl:variable name="lingvoj">../cfg/lingvoj.xml</xsl:variable>
@@ -105,7 +104,7 @@
   <!-- xsl:message>skribas al <xsl:value-of
   select="@dosiero"/></xsl:message -->
   <!-- redirect:write select="@dosiero" -->
-  <xsl:result-document href="{@dosiero}" method="html" encoding="utf-8" indent="no">
+  <xsl:result-document href="{@dosiero}" method="@format@" encoding="utf-8" indent="no">
   <html>
     <head>
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
@@ -224,7 +223,7 @@
 
 <xsl:template name="MANKO-LISTOJ">
   <!-- redirect:write select="'mankantaj.html'" -->
-  <xsl:result-document href="mankantaj.html" method="html" encoding="utf-8" indent="no">
+  <xsl:result-document href="mankantaj.html" method="@format@" encoding="utf-8" indent="no">
   <html>
     <head>
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
@@ -394,7 +393,7 @@
   </xsl:variable>
 
   <!-- redirect:write select="concat($pref,$lit,'.html')" -->
-  <xsl:result-document href="{concat($pref,$lit,'.html')}" method="html" encoding="utf-8" indent="no">
+  <xsl:result-document href="{concat($pref,$lit,'.html')}" method="@format@" encoding="utf-8" indent="no">
 
   <html>
     <head>
