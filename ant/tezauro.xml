@@ -28,8 +28,14 @@
      <pathelement path="${java.class.path}"/>
   </path>
 
+
   <target name="init">
     <tstamp/>
+  </target>
+
+
+  <target name="agordo" description="eligas la agordeblajn variablojn por kontrolo">
+    <echoproperties prefix="mi."/>
   </target>
 
 
@@ -48,6 +54,7 @@
      </delete>
   </target>
 
+
   <target name="retigo" depends="init,eltiro"
      description="retigi la tezauronodojn">
      <xslt in="${mi.tmp}/indekso.xml" out="${mi.tmp}/tez_ret.xml"
@@ -55,15 +62,17 @@
      </xslt>
   </target>
 
+
   <target name="html" depends="init,retigo"
      description="kreas la HTML-dosierojn de la tezauro">
 
     <filter token="format" value="${mi.outputformat}"/>
-    <copy file="${mi.voko.xsl}/tez_html.xsl" tofile="${mi.voko.xsl}/tez_html_${mi.outputformat}.xsl" 
+    <copy file="${mi.voko.xsl}/tez_html.xsl" tofile="${mi.voko.xsl}/tez_html_${mi.outputformat}.xsl~" 
        filtering="true"/>
      <xslt in="${mi.tmp}/tez_ret.xml" out="${mi.tmp}/tez/.tempo"
-       style="${mi.voko.xsl}/tez_html_${mi.outputformat}.xsl"/>
+       style="${mi.voko.xsl}/tez_html_${mi.outputformat}.xsl~"/>
   </target>
+
 
   <target name="tuto" depends="init,html"
      description="kopias fine chiujn enhave shanghitajn dosierojn al la

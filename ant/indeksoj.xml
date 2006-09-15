@@ -67,7 +67,7 @@
 
     <java classname="de.steloj.respiro.DirectoryTransformer"
      logError="true">
-         <arg value="-v"/>
+         <!-- arg value="-v"/ -->
          <arg path="${mi.bazo.xml}"/>
          <arg file="${mi.voko.xsl}/inx_eltiro.xsl"/>
          <arg file="${mi.tmp}/indekso.xml"/>
@@ -102,16 +102,18 @@
  
   </target>
 
+
   <target name="html" depends="init,ordigo"
      description="kreas la HTML-dosierojn de la indeksoj">
 
     <filter token="format" value="${mi.outputformat}"/>
-    <copy file="${mi.voko.xsl}/inx_html.xsl" tofile="${mi.voko.xsl}/inx_html_${mi.outputformat}.xsl" 
+    <copy file="${mi.voko.xsl}/inx_html.xsl" tofile="${mi.voko.xsl}/inx_html_${mi.outputformat}.xsl~" 
        filtering="true"/>
 
      <xslt in="${mi.tmp}/inx_ord.xml" out="${mi.tmp}/inx/.tempo"
-       style="${mi.voko.xsl}/inx_html_${mi.outputformat}.xsl"/>
+       style="${mi.voko.xsl}/inx_html_${mi.outputformat}.xsl~"/>
   </target>
+
 
   <target name="cvs-shanghoj"
      description="kreas raporton pri la lastaj shanghoj per CVS">
@@ -124,6 +126,7 @@
      <xslt in="${mi.tmp}/inx_shanghoj.xml" out="${mi.tmp}/inx/shanghoj.html"
        style="${mi.voko.xsl}/inx_shanghoj.xsl"/>
   </target>
+
 
   <target name="tuto" depends="init,html"
      description="kopias fine chiujn enhave shanghitajn dosierojn al la

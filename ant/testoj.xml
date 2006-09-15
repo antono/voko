@@ -12,6 +12,7 @@
   <property name="mi.voko.ant" location="${mi.voko}/ant"/>
   <property name="mi.bazo" location="${user.dir}/vokotesto"/>
   <property name="mi.bazo.inx" location="${mi.bazo}/inx"/>
+  <property name="mi.bazo.tez" location="${mi.bazo}/tez"/>
   <property name="mi.bazo.xml" location="${mi.bazo}/xml"/>
   <property name="mi.voko.xsl" location="${mi.voko}/xsl"/>
   <property name="mi.tmp" location="${mi.bazo}/.tmp"/>
@@ -41,7 +42,9 @@ outputformat=xhtml
     <!-- kreu vortareton por testo -->
     <ant antfile="${mi.voko.ant}/indeksoj.xml"
        dir="${mi.bazo}" target="forigu" inheritAll="false"/>
- 
+    <ant antfile="${mi.voko.ant}/tezauro.xml"
+       dir="${mi.bazo}" target="forigu" inheritAll="false"/>
+
     <echo 
 file="${mi.bazo.xml}/test.xml"><![CDATA[<?xml version="1.0"?>
 <vortaro>
@@ -66,6 +69,7 @@ file="${mi.bazo.xml}/test.xml"><![CDATA[<?xml version="1.0"?>
       <trd lng="de">Test <klr>(GEO)</klr></trd>
     </snc>
     <snc mrk="test.0o.XXX">
+      <uzo tip="fak">SCI</uzo>
       <dif>balbut balbut balbut</dif>
     </snc>
     <bld lok="test.jpg"><ind>bildigita <tld/>o</ind> :-)<trd lng="de"><ind>Test</ind>bild</trd></bld>
@@ -660,16 +664,19 @@ ${rezulto_6}
     <echo 
 file="${mi.testoj}/tezauro-testo-ret.xml"><![CDATA[<?xml version="1.0"?>
 <testoj>
-     <t test="count(//tez/n[@mrk='test.0o.GEOL' and k='testo' and
+     <t test="count(//tez/nod[@mrk='test.0o.GEOL' and k[@n='1'] and k='testo' and
      super/r[@c='test.0o.XXX']])=1">
-   1) Chu nodo "test.0o.GEOL", kun kapvorto kaj referenco al test.0o.XXX enestas</t>
+   1) Chu nodo "test.0o.GEOL", kun kapvorto testo(1) kaj referenco al test.0o.XXX enestas</t>
 
-     <t test="count(//tez/n[@mrk='test.0o.GEOL' and tezrad[not(@fak)] and tezrad[@fak='GEOL']])=1">
+     <t test="count(//tez/nod[@mrk='test.0o.GEOL' and tezrad[not(@fak)] and tezrad[@fak='GEOL']])=1">
    2) Chu nodo "test.0o.GEOL" enhavas tezrad kaj tezrad(GEOL)</t>
 
-     <t test="count(//tez/n[@mrk='test.0o.XXX' and k='testo' and
+     <t test="count(//tez/nod[@mrk='test.0o.GEOL' and uzo='GEOL'])=1">
+   3) Chu nodo "test.0o.GEOL" enhavas uzo(GEOL)</t>
+
+     <t test="count(//tez/nod[@mrk='test.0o.XXX' and k[@n='2'] and k='testo' and
        sub/r[@c='test.0o.GEOL']])=1">
-   3) Chu nodo "test.0o.XXX" kun kapvorto kaj referenco al test.0o.GEOL enestas</t>
+   4) Chu nodo "test.0o.XXX" kun kapvorto testo(2) kaj referenco al test.0o.GEOL enestas</t>
 
 </testoj>
 ]]>
@@ -690,7 +697,159 @@ ${rezulto_1}
     <!-- testu HTML-dosierojn de la tezauro -->
 
     <ant antfile="${mi.voko.ant}/tezauro.xml"
-       dir="${mi.bazo}" target="html" inheritAll="false"/>   
+       dir="${mi.bazo}" target="tuto" inheritAll="false"/>   
+
+
+   <echo 
+file="${mi.testoj}/tezauro-testo-testo_GEOL.xml"><![CDATA[<?xml version="1.0"?>
+<testoj>
+
+     <t test="count(//a[@href='fxs_GEOL.html'])=1">
+   1) Chu enestas ligo al struktura GEOL</t>
+     <t test="count(//img[@src='../smb/GEOL.gif' and @alt='GEOL'])=1">
+   2) Chu enestas bildeto de GEOL</t>
+     <t test="count(//h1[a[@href='../art/test.html#test.0o.GEOL' and @target='precipa' 
+        and contains(.,'testo')]])=1">
+   3) Chu titolo estas testo kaj referencas al la artikolo</t>
+      <t test="count(//i[@class='griza' and .='speco de'])=1">
+   4) Chu enestas subtitolo 'speco de'</t>
+      <t test="count(//a[@href='tz_test_0o_XXX.html' and img/@src='../smb/super.gif'])=1">
+   5) Chu enestas referenco al supernocio test.0o.XXX</t>
+      <t test="count(//a[@href='../art/test.html#test.0o.XXX' and @target='precipa' 
+        and contains(.,'testo')])=1">
+   6) Chu enestas referenco al la senco test.0o.XXX en la artikolo test.html</t>
+
+</testoj>
+]]>
+    </echo>
+    <antcall target="faru-teston">
+       <param name="testnomo" value="tezauro-testo-testo_GEOL"/>
+       <param name="testajho" value="${mi.bazo.tez}/tz_test_0o_GEOL.html"/>
+    </antcall>
+
+    <loadfile property="rezulto_2" srcFile="${mi.testoj}/tezauro-testo-testo_GEOL.rez"/>
+    <echo>test-rezultoj pri dosiero tz_test_0o_GEOL.html:
+${rezulto_2}   
+    </echo>
+
+
+   <echo 
+file="${mi.testoj}/tezauro-testo-testo_XXX.xml"><![CDATA[<?xml version="1.0"?>
+<testoj>
+
+     <t test="count(//a[@href='fxs_SCI.html'])=1">
+   1) Chu enestas ligo al struktura SCI</t>
+     <t test="count(//img[@src='../smb/SCI.gif' and @alt='SCI'])=1">
+   2) Chu enestas bildeto de SCI</t>
+     <t test="count(//h1[a[@href='../art/test.html#test.0o.XXX' and @target='precipa' 
+        and contains(.,'testo')]])=1">
+   3) Chu titolo estas testo kaj referencas al la artikolo</t>
+      <t test="count(//i[@class='griza' and .='specoj'])=1">
+   4) Chu enestas subtitolo 'specoj'</t>
+      <t test="count(//a[@href='tz_test_0o_GEOL.html' and img/@src='../smb/sub.gif'])=1">
+   5) Chu enestas referenco al subnocio test.0o.GEOL</t>
+      <t test="count(//a[@href='../art/test.html#test.0o.GEOL' and @target='precipa' 
+         and contains(.,'testo')])=1">
+   6) Chu enestas referenco al la senco test.0o.GEOL en la artikolo test.html</t>
+
+</testoj>
+]]>
+    </echo>
+    <antcall target="faru-teston">
+       <param name="testnomo" value="tezauro-testo-testo_XXX"/>
+       <param name="testajho" value="${mi.bazo.tez}/tz_test_0o_XXX.html"/>
+    </antcall>
+
+    <loadfile property="rezulto_3" srcFile="${mi.testoj}/tezauro-testo-testo_XXX.rez"/>
+    <echo>test-rezultoj pri dosiero tz_test_0o_XXX.html:
+${rezulto_3}   
+    </echo>
+
+
+
+   <echo 
+file="${mi.testoj}/tezauro-testo-fxs_GEOL.xml"><![CDATA[<?xml version="1.0"?>
+<testoj>
+
+     <t test="count(//b[@class='elektita' and .='strukture'])=1">
+   1) Chu enestas indiko "strukture"</t>
+     <t test="count(//a[@href='../inx/fx_GEOL.html' and .='alfabete'])=1">
+   2) Chu enestas referenco al alfabeta fakindekso</t>
+     <t test="count(//h1[.='geologio'])=1">
+   3) Chu titolo estas "geologio"</t>
+      <t test="count(//a[@href='tz_test_0o_GEOL.html' and img[@src='../smb/vid.gif']])=1">
+   4) Chu enestas referenco al tezauro-dosiero tz_test_0o_GEOL</t>
+      <t test="count(//a[@href='../art/test.html#test.0o.GEOL' and @target='precipa' 
+         and contains(.,'testo')])=1">
+   5) Chu enestas referenco al test.0o.GEOL en la artikolo test.html</t>
+
+
+</testoj>
+]]>
+    </echo>
+    <antcall target="faru-teston">
+       <param name="testnomo" value="tezauro-testo-fxs_GEOL"/>
+       <param name="testajho" value="${mi.bazo.tez}/fxs_GEOL.html"/>
+    </antcall>
+
+    <loadfile property="rezulto_4" srcFile="${mi.testoj}/tezauro-testo-fxs_GEOL.rez"/>
+    <echo>test-rezultoj pri dosiero fxs_GEOL.html:
+${rezulto_4}   
+    </echo>
+
+
+   <echo 
+file="${mi.testoj}/tezauro-testo-fxs_SCI.xml"><![CDATA[<?xml version="1.0"?>
+<testoj>
+
+     <t test="count(//b[@class='elektita' and .='strukture'])=1">
+   1) Chu enestas indiko "strukture"</t>
+     <t test="count(//a[@href='../inx/fx_SCI.html' and .='alfabete'])=1">
+   2) Chu enestas referenco al alfabeta fakindekso</t>
+     <t test="count(//h1[.='sciencoj'])=1">
+   3) Chu titolo estas "sciencoj"</t>
+      <t test="count(//a[@href='tz_test_0o_XXX.html' and img[@src='../smb/vid.gif']])=1">
+   4) Chu enestas referenco al tezauro-dosiero tz_test_0o_XXX</t>
+      <t test="count(//a[@href='../art/test.html#test.0o.XXX' and @target='precipa' 
+        and contains(.,'testo')])=1">
+   5) Chu enestas referenco al test.0o.XXX en la artikolo test.html</t>
+
+
+</testoj>
+]]>
+    </echo>
+    <antcall target="faru-teston">
+       <param name="testnomo" value="tezauro-testo-fxs_SCI"/>
+       <param name="testajho" value="${mi.bazo.tez}/fxs_SCI.html"/>
+    </antcall>
+
+    <loadfile property="rezulto_5" srcFile="${mi.testoj}/tezauro-testo-fxs_SCI.rez"/>
+    <echo>test-rezultoj pri dosiero fxs_SCI.html:
+${rezulto_5}   
+    </echo>
+
+
+   <echo 
+file="${mi.testoj}/tezauro-testo-tz_testi.xml"><![CDATA[<?xml version="1.0"?>
+<testoj>
+
+     <t test="count(//a[@href='tz_prov_0i.html'])=1">
+   1) Chu enestas referenco al provi nur unufoje</t>
+
+
+</testoj>
+]]>
+    </echo>
+    <antcall target="faru-teston">
+       <param name="testnomo" value="tezauro-testo-tz_testi"/>
+       <param name="testajho" value="${mi.bazo.tez}/tz_test_0i.html"/>
+    </antcall>
+
+    <loadfile property="rezulto_6" srcFile="${mi.testoj}/tezauro-testo-tz_testi.rez"/>
+    <echo>test-rezultoj pri dosiero fxs_SCI.html:
+${rezulto_6}   
+    </echo>
+
 
 
    <echo>---------------------------------------------------------------
@@ -698,7 +857,21 @@ ${rezulto_1}
     <echo>dosiero tez_ret.xml:
 ${rezulto_1}   
     </echo>
-
+    <echo>dosiero tz_test_0o_GEOL.xml:
+${rezulto_2}   
+    </echo>
+    <echo>dosiero tz_test_0o_XXX.xml:
+${rezulto_3}   
+    </echo>
+    <echo>dosiero fxs_GEOL.xml:
+${rezulto_4}   
+    </echo>
+    <echo>dosiero fxs_SCI.xml:
+${rezulto_5}   
+    </echo>   
+    <echo>dosiero tz_test_0i.xml:
+${rezulto_6}   
+    </echo>
   </target>
 
 </project>
