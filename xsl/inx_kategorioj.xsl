@@ -25,6 +25,10 @@
     <!-- kapvortoj -->
 
     <kap-oj lng="eo">
+      <tez> <!-- tezauro-radikoj -->
+        <xsl:apply-templates select="//tezrad[not(@fak)]" mode="tez"/>
+      </tez>
+
       <xsl:apply-templates select="//art/kap|//drv/kap" mode="kapvortoj"/>
     </kap-oj>
 
@@ -42,6 +46,11 @@
       <xsl:for-each select="$root">
         <xsl:if test="key('fakoj',$fak)">
           <fako fak="{$fak}" n="{count(key('fakoj',$fak))}">
+
+            <tez> <!-- tezauro-radikoj -->
+              <xsl:apply-templates select="//tezrad[@fak=$fak]" mode="tez"/>
+            </tez>
+
             <xsl:apply-templates select="key('fakoj',$fak)"/>
           </fako>
         </xsl:if>
@@ -374,6 +383,13 @@
 <xsl:template match="trd/klr">
   <xsl:apply-templates/>
 </xsl:template> 
+
+<xsl:template match="tezrad" mode="tez">
+  <v mrk="{ancestor-or-self::node()[@mrk][1]/@mrk}">
+    <xsl:apply-templates
+       select="ancestor-or-self::node()[self::art or self::drv][kap][1]/kap"/>
+  </v>
+</xsl:template>
 
 
 </xsl:stylesheet>

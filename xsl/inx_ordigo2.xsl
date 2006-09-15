@@ -133,6 +133,8 @@ class="net.sf.saxon.sort.CodepointCollator"/ -->
   <xsl:if test="string-length($chiuj_literoj) > 0">
  
     <kap-oj lng="{@lng}">
+      <xsl:apply-templates select="$kapoj/tez[v]"/>
+
       <xsl:for-each select="document($ordigo)/ordigo/lingvo[@lng='eo']/l">
 
         <litero name="{@name}" min="{substring(.,1,1)}">
@@ -188,6 +190,7 @@ class="net.sf.saxon.sort.CodepointCollator"/ -->
   </xsl:if>
 
   <fako fak="{@fak}" n="{@n}">
+    <xsl:apply-templates select="tez[v]"/>
     <xsl:for-each select="v">
       <xsl:sort lang="eo"/>
       <xsl:call-template name="v-fak"/>
@@ -213,6 +216,16 @@ class="net.sf.saxon.sort.CodepointCollator"/ -->
       <xsl:call-template name="v"/>
     </xsl:for-each>
   </mlg-oj>
+</xsl:template>
+
+
+<xsl:template match="tez">
+  <tez>
+    <xsl:for-each select="v">
+      <xsl:sort lang="eo"/>
+      <xsl:call-template name="v"/>
+    </xsl:for-each>
+  </tez>
 </xsl:template>
 
 

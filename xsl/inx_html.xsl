@@ -160,6 +160,21 @@
 </xsl:template>
 
 
+<xsl:template match="TEZAURO">
+  <xsl:for-each select="$root//kap-oj/tez">
+    <xsl:call-template name="tezauro"/>
+  </xsl:for-each>
+</xsl:template>
+
+
+<xsl:template name="tezauro">
+  <xsl:for-each select="v">
+    <a href="{concat('../tez/tz_',translate(@mrk,'.','_'),'.html')}" 
+       style="font-weight: bold"><xsl:apply-templates/></a><br/>
+  </xsl:for-each>
+</xsl:template>
+
+
 <xsl:template match="TRD-OJ[@lng]">
   <p>
   <xsl:for-each select="document($lingvoj)/lingvoj/lingvo[@kodo=current()/@lng]">
@@ -458,8 +473,8 @@
           <xsl:choose>
             <xsl:when test="self::fako">
 
-              <b class="elektita">alfabete</b><xsl:text> </xsl:text>
-              <a href="../tez/fxs_{@fak}.html">strukture</a><xsl:text> </xsl:text>
+<!--              <b class="elektita">alfabete</b><xsl:text> </xsl:text>
+              <a href="../tez/fxs_{@fak}.html">strukture</a><xsl:text> </xsl:text> -->
 
               <h1><xsl:value-of 
                   select="document($fakoj)/fakoj/fako[@kodo=current()/@fak]"/>
@@ -521,16 +536,22 @@
          <!-- enhavo -->
 
          <xsl:choose>
+     
+           <!-- mallongigoj -->
            <xsl:when test="self::mlg-oj">
              <dl compact="compact">
                <xsl:apply-templates/>
              </dl>
            </xsl:when>
+
+           <!-- bildoj -->
            <xsl:when test="self::bld-oj">
              <dl>
                <xsl:apply-templates/>
              </dl>
            </xsl:when>
+
+           <!-- statistiko -->
            <xsl:when test="self::stat">
 
               <h2>kapvortoj k.a.</h2>
@@ -580,6 +601,8 @@
               </table>
 
            </xsl:when>
+
+           <!-- aliaj indeksoj -->
            <xsl:otherwise>
              <xsl:apply-templates/>
            </xsl:otherwise>
@@ -673,7 +696,7 @@
 
     </xsl:when>
 
-    <!-- aliokaze montru kiel "t: k, k, ...; t1: k; t1: k; ... " aus simile --> 
+    <!-- aliokaze montru kiel "t: k, k, ...; t1: k; t1: k; ... " au simile --> 
     <xsl:when test="count(.|key('trd-oj',concat(../../@lng,'-',../@name,'-',t))[1])=1">
 
       <xsl:apply-templates select="t"/><xsl:text>: </xsl:text>
@@ -776,6 +799,12 @@
     <xsl:value-of select="k"/>
   </a>
   <br/>
+</xsl:template>
+
+
+<xsl:template match="fako/tez">
+  <h2>&#x0108;efaj nocioj</h2>
+  <p><xsl:call-template name="tezauro"/></p>
 </xsl:template>
 
 

@@ -22,17 +22,24 @@
 <xsl:output method="xhtml" encoding="utf-8"/>
 <xsl:strip-space elements="k"/>
 
-<xsl:param name="verbose" select="'true'"/>
+<xsl:param name="verbose" select="'false'"/>
 
-<xsl:variable name="fakoj">../cfg/fakoj.xml</xsl:variable>
+
+<!-- xsl:variable name="fakoj">../cfg/fakoj.xml</xsl:variable -->
 <xsl:variable name="enhavo">../cfg/enhavo.xml</xsl:variable>
   <xsl:variable name="inx_paghoj" select="count(document($enhavo)//pagho[not(@kashita='jes')])"/>
 
+<xsl:variable name="root" select="/"/>
+
+
 <xsl:template match="//tez">
   <xsl:apply-templates/>
+
+  <!-- xsl:call-template name="fakoj"/ -->
 </xsl:template>
 
-<xsl:template match="n">
+
+<xsl:template match="nod">
   <xsl:variable name="dosiero" select="concat('tz_',translate(@mrk,'.','_'),'.html')"/>
 
   <xsl:if test="$verbose='true'">
@@ -40,7 +47,7 @@
   </xsl:if>
 
   <!-- redirect:write select="$dosiero" -->
-  <xsl:result-document href="{$dosiero}" method="xhtml" encoding="utf-8" indent="no">
+  <xsl:result-document href="{$dosiero}" method="xhtml" encoding="utf-8" indent="yes">
   <html>
     <head>
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
@@ -53,8 +60,14 @@
         <xsl:call-template name="menuo-eo"/>
         <tr>
           <td colspan="{$inx_paghoj}" class="enhavo">
+            <xsl:for-each select="uzo">
+              <xsl:call-template name="fak-ref">
+                <xsl:with-param name="fak" select="."/>
+              </xsl:call-template>
+            </xsl:for-each>
+
             <h1><xsl:call-template name="art-ref"/></h1>
-            <xsl:apply-templates select="*[not(self::k)]"/>
+            <xsl:apply-templates select="*[not(self::k) and not(self::uzo)]"/>
           </td>
         </tr>
       </table>
@@ -62,6 +75,86 @@
   </html>
   <!-- /redirect:write -->
   </xsl:result-document>
+</xsl:template>
+
+
+<!-- xsl:template name="fakoj">
+  <xsl:for-each select="document($fakoj)/fakoj/fako">
+
+    <xsl:variable name="fak" select="@kodo"/>
+    <xsl:variable name="dosiero" select="concat('fxs_',$fak,'.html')"/>
+
+    <xsl:if test="$verbose='true'">
+      <xsl:message>skribas al <xsl:value-of select="$dosiero"/></xsl:message>
+    </xsl:if>
+
+    !- redirect:write select="$dosiero" -
+    <xsl:result-document href="{$dosiero}" method="xhtml" encoding="utf-8" indent="yes">
+    <html>
+      <head>
+         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
+         <title><xsl:value-of select="concat('teza&#x016d;ro - fako: ',$fak)"/></title>
+         <link title="indekso-stilo" type="text/css" 
+            rel="stylesheet" href="../stl/indeksoj.css"/>
+      </head>
+      <body>
+        <table cellspacing="0">
+          <xsl:call-template name="menuo-fak"/>
+          <tr>
+             <td colspan="{$inx_paghoj}" class="enhavo">
+
+               <a href="../inx/fx_{$fak}.html">alfabete</a><xsl:text> </xsl:text>
+               <b class="elektita">strukture</b><xsl:text> </xsl:text>
+
+               <h1><xsl:value-of 
+                   select="."/>
+               </h1>
+
+               <xsl:for-each select="$root">
+                 <xsl:call-template name="fak-radikoj">
+                    <xsl:with-param name="fako" select="$fak"/>
+                 </xsl:call-template>
+               </xsl:for-each>
+             </td>
+          </tr>
+        </table>
+      </body>
+    </html>
+    !- /redirect:write -
+    </xsl:result-document>
+  </xsl:for-each>
+</xsl:template -->
+
+
+<!-- xsl:template name="fak-radikoj">
+  <xsl:param name="fako"/>
+
+  <xsl:for-each select="tez/nod[tezrad[@fak=$fako] or
+     (uzo=$fako and not(super/r) and not(malprt/r) and (sub/r or prt/r))]">
+
+     <a href="{concat('tz_',translate(@mrk,'.','_'),'.html')}">
+      <img src="../smb/vid.gif" alt="&#x2192;" border="0"/>
+     </a>
+     <b><xsl:call-template name="art-ref"/></b><br/>
+  </xsl:for-each>
+</xsl:template -->
+
+
+<!-- xsl:template name="fak-ref">
+  <xsl:param name="fak"/>
+
+  <a href="{concat('fxs_',$fak,'.html')}">
+    <img src="{concat('../smb/',$fak,'.gif')}" alt="{$fak}" border="0"/>
+  </a>
+</xsl:template -->
+
+
+<xsl:template name="fak-ref">
+  <xsl:param name="fak"/>
+
+  <a href="{concat('../inx/fx_',$fak,'.html')}">
+    <img src="{concat('../smb/',$fak,'.gif')}" alt="{$fak}" border="0"/>
+  </a>
 </xsl:template>
 
 
@@ -87,12 +180,12 @@
     <xsl:when test="contains(@c,'.')">
       <a href="../art/{substring-before(@c,'.')}.html#{@c}" 
         target="precipa">
-        <xsl:apply-templates select="//tez/n[@mrk=current()/@c]/k"/>
+        <xsl:apply-templates select="//tez/nod[@mrk=current()/@c]/k"/>
       </a>
     </xsl:when>
     <xsl:otherwise>
       <a href="../art/{@c}.html" target="precipa">
-        <xsl:apply-templates select="//tez/n[@mrk=current()/@c]/k"/>
+        <xsl:apply-templates select="//tez/nod[@mrk=current()/@c]/k"/>
       </a>
     </xsl:otherwise>
   </xsl:choose>
@@ -131,12 +224,17 @@
 </xsl:template>
 
 
-<xsl:template name="menuo-fak">
+<!-- xsl:template name="menuo-fak">
   <xsl:for-each select="document($enhavo)//pagho[.//FAKOJ][1]"> 
     <xsl:call-template name="menuo"/>
   </xsl:for-each>
-</xsl:template>
+</xsl:template --> 
 
+
+<xsl:template match="k">
+  <xsl:apply-templates/>
+  <xsl:if test="@n"><sup><xsl:value-of select="@n"/></sup></xsl:if>
+</xsl:template>
 
 <xsl:template match="sin">
   <xsl:if test="r">
@@ -186,11 +284,13 @@
   <xsl:param name="smb"/>
   <xsl:param name="alt"/>
   <xsl:for-each select="r">
-    <a href="{concat('tz_',translate(@c,'.','_'),'.html')}">
-      <img src="{concat('../smb/',$smb)}" alt="{$alt}" border="0"/>
-    </a>
-    <xsl:call-template name="art-ref2"/>
-    <br/>
+    <xsl:if test="not(following-sibling::r[@c=current()/@c])"> <!-- evitu duoblajhojn -->
+      <a href="{concat('tz_',translate(@c,'.','_'),'.html')}">
+        <img src="{concat('../smb/',$smb)}" alt="{$alt}" border="0"/>
+      </a>
+      <xsl:call-template name="art-ref2"/>
+      <br/>
+    </xsl:if>
   </xsl:for-each>
 </xsl:template>
 
