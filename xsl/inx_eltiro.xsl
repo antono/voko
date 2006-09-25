@@ -7,7 +7,7 @@
 -->
 
 
-<xsl:output method="xml" encoding="utf-8"/>
+<xsl:output method="xml" encoding="utf-8" indent="no"/>
 <xsl:strip-space elements="kap"/>
 
 <xsl:template match="/">

@@ -95,6 +95,15 @@ file="${mi.bazo.xml}/test.xml"><![CDATA[<?xml version="1.0"?>
   </drv>
   <drv mrk="test.bona0o">
      <kap>bona <tld/>o</kap>
+     <snc>
+     </snc>
+     <snc> <!-- testu sencon sen mrk -->
+       <ref cel="test.0o.GEOL"/>
+       <subsnc>
+          <ref cel="test.0o.XXX"/>
+       </subsnc>
+       <subsnc></subsnc>
+     </snc>
   </drv>
 </art>
 </vortaro>
@@ -678,6 +687,16 @@ file="${mi.testoj}/tezauro-testo-ret.xml"><![CDATA[<?xml version="1.0"?>
        sub/r[@c='test.0o.GEOL']])=1">
    4) Chu nodo "test.0o.XXX" kun kapvorto testo(2) kaj referenco al test.0o.GEOL enestas</t>
 
+     <t test="count(//tez/nod[not(@mrk) or @mrk=''])=0">
+   5) Chu chiu nodo havas @mrk</t>
+
+
+     <t test="count(//tez/nod[@mrk='test.bona0o.2'])=1">
+   6) Chu ekzistas nodo de senco sen @mrk: test.bona0o.2</t>
+
+     <t test="count(//tez/nod[@mrk='test.bona0o.2.a'])=1">
+   7) Chu ekzistas nodo de subsenco sen @mrk: test.bona0o.2.a</t>
+
 </testoj>
 ]]>
     </echo>
@@ -704,8 +723,8 @@ ${rezulto_1}
 file="${mi.testoj}/tezauro-testo-testo_GEOL.xml"><![CDATA[<?xml version="1.0"?>
 <testoj>
 
-     <t test="count(//a[@href='fxs_GEOL.html'])=1">
-   1) Chu enestas ligo al struktura GEOL</t>
+     <t test="count(//a[@href='../inx/fx_GEOL.html'])=1">
+   1) Chu enestas ligo al fako GEOL</t>
      <t test="count(//img[@src='../smb/GEOL.gif' and @alt='GEOL'])=1">
    2) Chu enestas bildeto de GEOL</t>
      <t test="count(//h1[a[@href='../art/test.html#test.0o.GEOL' and @target='precipa' 
@@ -737,8 +756,8 @@ ${rezulto_2}
 file="${mi.testoj}/tezauro-testo-testo_XXX.xml"><![CDATA[<?xml version="1.0"?>
 <testoj>
 
-     <t test="count(//a[@href='fxs_SCI.html'])=1">
-   1) Chu enestas ligo al struktura SCI</t>
+     <t test="count(//a[@href='../inx/fx_SCI.html'])=1">
+   1) Chu enestas ligo al fako SCI</t>
      <t test="count(//img[@src='../smb/SCI.gif' and @alt='SCI'])=1">
    2) Chu enestas bildeto de SCI</t>
      <t test="count(//h1[a[@href='../art/test.html#test.0o.XXX' and @target='precipa' 
@@ -766,69 +785,6 @@ ${rezulto_3}
     </echo>
 
 
-
-   <echo 
-file="${mi.testoj}/tezauro-testo-fxs_GEOL.xml"><![CDATA[<?xml version="1.0"?>
-<testoj>
-
-     <t test="count(//b[@class='elektita' and .='strukture'])=1">
-   1) Chu enestas indiko "strukture"</t>
-     <t test="count(//a[@href='../inx/fx_GEOL.html' and .='alfabete'])=1">
-   2) Chu enestas referenco al alfabeta fakindekso</t>
-     <t test="count(//h1[.='geologio'])=1">
-   3) Chu titolo estas "geologio"</t>
-      <t test="count(//a[@href='tz_test_0o_GEOL.html' and img[@src='../smb/vid.gif']])=1">
-   4) Chu enestas referenco al tezauro-dosiero tz_test_0o_GEOL</t>
-      <t test="count(//a[@href='../art/test.html#test.0o.GEOL' and @target='precipa' 
-         and contains(.,'testo')])=1">
-   5) Chu enestas referenco al test.0o.GEOL en la artikolo test.html</t>
-
-
-</testoj>
-]]>
-    </echo>
-    <antcall target="faru-teston">
-       <param name="testnomo" value="tezauro-testo-fxs_GEOL"/>
-       <param name="testajho" value="${mi.bazo.tez}/fxs_GEOL.html"/>
-    </antcall>
-
-    <loadfile property="rezulto_4" srcFile="${mi.testoj}/tezauro-testo-fxs_GEOL.rez"/>
-    <echo>test-rezultoj pri dosiero fxs_GEOL.html:
-${rezulto_4}   
-    </echo>
-
-
-   <echo 
-file="${mi.testoj}/tezauro-testo-fxs_SCI.xml"><![CDATA[<?xml version="1.0"?>
-<testoj>
-
-     <t test="count(//b[@class='elektita' and .='strukture'])=1">
-   1) Chu enestas indiko "strukture"</t>
-     <t test="count(//a[@href='../inx/fx_SCI.html' and .='alfabete'])=1">
-   2) Chu enestas referenco al alfabeta fakindekso</t>
-     <t test="count(//h1[.='sciencoj'])=1">
-   3) Chu titolo estas "sciencoj"</t>
-      <t test="count(//a[@href='tz_test_0o_XXX.html' and img[@src='../smb/vid.gif']])=1">
-   4) Chu enestas referenco al tezauro-dosiero tz_test_0o_XXX</t>
-      <t test="count(//a[@href='../art/test.html#test.0o.XXX' and @target='precipa' 
-        and contains(.,'testo')])=1">
-   5) Chu enestas referenco al test.0o.XXX en la artikolo test.html</t>
-
-
-</testoj>
-]]>
-    </echo>
-    <antcall target="faru-teston">
-       <param name="testnomo" value="tezauro-testo-fxs_SCI"/>
-       <param name="testajho" value="${mi.bazo.tez}/fxs_SCI.html"/>
-    </antcall>
-
-    <loadfile property="rezulto_5" srcFile="${mi.testoj}/tezauro-testo-fxs_SCI.rez"/>
-    <echo>test-rezultoj pri dosiero fxs_SCI.html:
-${rezulto_5}   
-    </echo>
-
-
    <echo 
 file="${mi.testoj}/tezauro-testo-tz_testi.xml"><![CDATA[<?xml version="1.0"?>
 <testoj>
@@ -845,9 +801,9 @@ file="${mi.testoj}/tezauro-testo-tz_testi.xml"><![CDATA[<?xml version="1.0"?>
        <param name="testajho" value="${mi.bazo.tez}/tz_test_0i.html"/>
     </antcall>
 
-    <loadfile property="rezulto_6" srcFile="${mi.testoj}/tezauro-testo-tz_testi.rez"/>
+    <loadfile property="rezulto_4" srcFile="${mi.testoj}/tezauro-testo-tz_testi.rez"/>
     <echo>test-rezultoj pri dosiero fxs_SCI.html:
-${rezulto_6}   
+${rezulto_4}   
     </echo>
 
 
@@ -863,14 +819,8 @@ ${rezulto_2}
     <echo>dosiero tz_test_0o_XXX.xml:
 ${rezulto_3}   
     </echo>
-    <echo>dosiero fxs_GEOL.xml:
-${rezulto_4}   
-    </echo>
-    <echo>dosiero fxs_SCI.xml:
-${rezulto_5}   
-    </echo>   
     <echo>dosiero tz_test_0i.xml:
-${rezulto_6}   
+${rezulto_4}   
     </echo>
   </target>
 

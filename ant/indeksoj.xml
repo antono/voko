@@ -67,7 +67,7 @@
 
     <java classname="de.steloj.respiro.DirectoryTransformer"
      logError="true">
-         <!-- arg value="-v"/ -->
+         <!-- arg value="-v"/-->
          <arg path="${mi.bazo.xml}"/>
          <arg file="${mi.voko.xsl}/inx_eltiro.xsl"/>
          <arg file="${mi.tmp}/indekso.xml"/>

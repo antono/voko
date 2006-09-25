@@ -23,6 +23,7 @@
 <xsl:strip-space elements="k"/>
 
 <xsl:param name="verbose" select="'false'"/>
+<xsl:param name="warn-about-dead-refs" select="'true'"/>
 
 
 <!-- xsl:variable name="fakoj">../cfg/fakoj.xml</xsl:variable -->
@@ -175,22 +176,6 @@
 </xsl:template>
 
 
-<xsl:template name="art-ref2">
-  <xsl:choose>
-    <xsl:when test="contains(@c,'.')">
-      <a href="../art/{substring-before(@c,'.')}.html#{@c}" 
-        target="precipa">
-        <xsl:apply-templates select="//tez/nod[@mrk=current()/@c]/k"/>
-      </a>
-    </xsl:when>
-    <xsl:otherwise>
-      <a href="../art/{@c}.html" target="precipa">
-        <xsl:apply-templates select="//tez/nod[@mrk=current()/@c]/k"/>
-      </a>
-    </xsl:otherwise>
-  </xsl:choose>
-</xsl:template>
-
 
 <xsl:template name="menuo">
   <xsl:variable name="aktiva" select="@dosiero"/>
@@ -285,14 +270,53 @@
   <xsl:param name="alt"/>
   <xsl:for-each select="r">
     <xsl:if test="not(following-sibling::r[@c=current()/@c])"> <!-- evitu duoblajhojn -->
-      <a href="{concat('tz_',translate(@c,'.','_'),'.html')}">
-        <img src="{concat('../smb/',$smb)}" alt="{$alt}" border="0"/>
-      </a>
-      <xsl:call-template name="art-ref2"/>
-      <br/>
+
+      <xsl:variable name="nod" select="//tez/nod[@mrk=current()/@c or @mrk2=current()/@c]"/>
+      <xsl:choose>
+        <xsl:when test="$nod">
+
+          <a href="{concat('tz_',translate($nod/@mrk,'.','_'),'.html')}">
+            <img src="{concat('../smb/',$smb)}" alt="{$alt}" border="0"/>
+          </a>
+          <xsl:call-template name="art-ref2">
+            <xsl:with-param name="nod" select="$nod"/>
+          </xsl:call-template>
+          <br/>
+        </xsl:when>
+        <xsl:when test="$warn-about-dead-refs='true'">
+           <xsl:message> <!-- eble skribu tion en eraro-dosieron por prezenti al redaktantoj -->
+             <xsl:text>nesolvita referenco de </xsl:text>
+             <xsl:value-of select="../../@mrk"/>
+             <xsl:text> al </xsl:text>
+             <xsl:value-of select="@c"/>
+           </xsl:message>
+        </xsl:when>
+      </xsl:choose>
+
     </xsl:if>
   </xsl:for-each>
 </xsl:template>
+
+
+<xsl:template name="art-ref2">
+  <xsl:param name="nod"/>
+
+  <a target="precipa">
+    <xsl:attribute name="href">
+      <xsl:choose>
+        <xsl:when test="contains(@c,'.')">
+          <xsl:value-of select="concat('../art/',substring-before(@c,'.'),'.html#',@c)"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="concat('../art/',@c,'.html')"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:attribute>
+
+    <xsl:apply-templates select="$nod/k"/>
+  </a>
+</xsl:template>
+
 
 
 <!-- /xsl:stylesheet -->

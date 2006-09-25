@@ -141,7 +141,7 @@ class="net.sf.saxon.sort.CodepointCollator"/ -->
           <xsl:for-each 
              select="$kapoj/v[contains(current(),substring(k,1,1))]">
  
-            <xsl:sort lang="eo" select="k"/>
+            <xsl:sort collation="eo" lang="eo" select="k"/>
             <xsl:call-template name="v"/>
           </xsl:for-each>
         </litero>
@@ -155,7 +155,7 @@ class="net.sf.saxon.sort.CodepointCollator"/ -->
         <xsl:for-each 
            select="$kapoj/v[not(contains($chiuj_literoj,substring(k,1,1)))]">
  
-          <xsl:sort lang="eo"/>
+          <xsl:sort collation="eo" lang="eo" select="k"/>
           <xsl:call-template name="v"/>
         </xsl:for-each>
       </litero>
@@ -171,7 +171,7 @@ class="net.sf.saxon.sort.CodepointCollator"/ -->
           <xsl:for-each select="$kapoj/v[r and
              contains(current(),substring(r,1,1))]">
 
-            <xsl:sort lang="eo" select="r"/> 
+            <xsl:sort collation="eo" lang="eo" select="r"/> 
             <xsl:call-template name="v-inv"/>
           </xsl:for-each>
         </litero>
@@ -192,7 +192,7 @@ class="net.sf.saxon.sort.CodepointCollator"/ -->
   <fako fak="{@fak}" n="{@n}">
     <xsl:apply-templates select="tez[v]"/>
     <xsl:for-each select="v">
-      <xsl:sort lang="eo"/>
+      <xsl:sort collation="eo" lang="eo"/>
       <xsl:call-template name="v-fak"/>
     </xsl:for-each>
   </fako>
@@ -202,7 +202,7 @@ class="net.sf.saxon.sort.CodepointCollator"/ -->
 <xsl:template match="bld-oj">
   <bld-oj>
     <xsl:for-each select="v">
-      <xsl:sort lang="eo"/>
+      <xsl:sort collation="eo" lang="eo" select="k"/>
       <xsl:call-template name="v"/>
     </xsl:for-each>
   </bld-oj>
@@ -212,7 +212,7 @@ class="net.sf.saxon.sort.CodepointCollator"/ -->
 <xsl:template match="mlg-oj">
   <mlg-oj>
     <xsl:for-each select="v">
-      <xsl:sort lang="eo"/>
+      <xsl:sort collation="eo" lang="eo" select="t"/>
       <xsl:call-template name="v"/>
     </xsl:for-each>
   </mlg-oj>
@@ -222,7 +222,7 @@ class="net.sf.saxon.sort.CodepointCollator"/ -->
 <xsl:template match="tez">
   <tez>
     <xsl:for-each select="v">
-      <xsl:sort lang="eo"/>
+      <xsl:sort collation="eo" lang="eo"/>
       <xsl:call-template name="v"/>
     </xsl:for-each>
   </tez>

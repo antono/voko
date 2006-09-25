@@ -20,7 +20,7 @@
 </xsl:template>
 
 <xsl:template match="art">
-  <xsl:apply-templates select="subart|drv|snc|ref"/>
+  <xsl:apply-templates select="subart|drv|snc"/>
 </xsl:template>
 
 <xsl:template match="subart|drv|subdrv">
@@ -29,9 +29,14 @@
 
 
 <xsl:template match="drv[count(snc)=1]">
-  <!-- kreu ununuran nodon por derivajhojn kun nur unu senco -->
+  <!-- kreu ununuran nodon por derivajhoj kun nur unu senco -->
   <xsl:if test=".//tezrad or .//ref or key('retro',@mrk) or key('retro',snc/@mrk)">
-    <nod mrk="{@mrk}" mrk2="{snc/@mrk}">
+    <nod mrk="{@mrk}">
+      <xsl:if test="snc/@mrk">
+        <xsl:attribute name="mrk2">
+          <xsl:value-of select="snc/@mrk"/>
+        </xsl:attribute>
+      </xsl:if>
       <k>
         <xsl:apply-templates select="ancestor-or-self::node()[self::art or self::drv][kap][1]/kap"/>
       </k>
@@ -54,13 +59,38 @@
 </xsl:template>
 
 
-<xsl:template match="drv[count(snc)!=1]|snc[@mrk]|subsnc[@mrk]">
-  <!-- kreu novan nodon -->
+<xsl:template match="drv[count(snc)!=1]|snc|subsnc">
   <xsl:if test="tezrad or ref or key('retro',@mrk)">
-    <nod mrk="{@mrk}">
+
+    <!-- kreu novan nodon -->
+    <nod>
+      <xsl:attribute name="mrk">
+        <xsl:choose>
+          <xsl:when test="@mrk">
+            <xsl:value-of select="@mrk"/>
+          </xsl:when>
+
+<!--          <xsl:when test="self::subsnc">
+            <xsl:value-of select="ancestor::drv/@mrk"/><xsl:text>.</xsl:text>
+            <xsl:number from="drv|subart" level="multiple" count="snc|subsnc" format="1.a"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="ancestor::drv/@mrk"/><xsl:text>.</xsl:text>
+            <xsl:number from="drv|subart" level="any" count="snc"/> -->
+
+
+          <xsl:otherwise>
+            <xsl:value-of select="ancestor::node()[@mrk][1]/@mrk"/><xsl:text>.</xsl:text>
+            <xsl:number from="drv|subart" level="multiple" count="snc|subsnc" format="1.a"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:attribute>
       <k>
         <xsl:if test="count(../snc)+count(../subsnc) &gt; 1">
-          <xsl:attribute name="n"><xsl:number/></xsl:attribute>
+          <xsl:attribute name="n">
+            <xsl:number from="drv|subart" level="multiple" count="snc|subsnc" format="1.a"/>
+          </xsl:attribute>
+<!--          <xsl:attribute name="n"><xsl:number/></xsl:attribute> -->
         </xsl:if>
         <xsl:apply-templates select="ancestor-or-self::node()[self::art or self::drv][kap][1]/kap"/>
       </k>
@@ -80,9 +110,11 @@
       <xsl:call-template name="lst"/>
     </nod>
   </xsl:if>
-
   <xsl:apply-templates select="snc|subsnc"/>
 </xsl:template>
+
+
+<!-- xsl:template match="snc|subsnc"/ --> <!-- ignoru sen @mrk -->
 
 
 <xsl:template match="kap">
@@ -112,7 +144,7 @@
        <r c="{@cel}"/>
     </xsl:for-each>
     <xsl:for-each select="key('retro',@mrk)[@tip='sub']">
-       <r c="{ancestor-or-self::node()/@mrk[1]}"/>
+       <r c="{ancestor-or-self::node()[@mrk][1]/@mrk}"/>
     </xsl:for-each>
   </super>
 </xsl:template>
@@ -124,7 +156,7 @@
        <r c="{@cel}"/>
     </xsl:for-each>
     <xsl:for-each select="key('retro',@mrk)[@tip='sub']|key('retro',snc/@mrk)[@tip='sub']">
-       <r c="{ancestor-or-self::node()/@mrk[1]}"/>
+       <r c="{ancestor-or-self::node()[@mrk][1]/@mrk}"/>
     </xsl:for-each>
   </super>
 </xsl:template>
@@ -143,14 +175,14 @@
 
 
 <xsl:template name="sub2">
-  <super>
+  <sub>
     <xsl:for-each select=".//ref[@tip='sub']">
        <r c="{@cel}"/>
     </xsl:for-each>
     <xsl:for-each select="key('retro',@mrk)[@tip='super']|key('retro',snc/@mrk)[@tip='super']">
-       <r c="{ancestor-or-self::node()/@mrk[1]}"/>
+      <r c="{ancestor-or-self::node()[@mrk][1]/@mrk}"/>
     </xsl:for-each>
-  </super>
+  </sub>
 </xsl:template>
 
 
@@ -185,15 +217,15 @@
 
 
 <xsl:template name="sin2">
-  <super>
+  <sin>
     <xsl:for-each select=".//ref[@tip='sin']">
        <r c="{@cel}"/>
     </xsl:for-each>
     <xsl:for-each select="key('retro',@mrk)[@tip='sin' or @tip='dif']
           |key('retro',snc/@mrk)[@tip='sin' or @tip='dif']">
-       <r c="{ancestor-or-self::node()/@mrk[1]}"/>
+       <r c="{ancestor-or-self::node()[@mrk][1]/@mrk}"/>
     </xsl:for-each>
-  </super>
+  </sin>
 </xsl:template>
 
 
@@ -210,23 +242,23 @@
 
 
 <xsl:template name="ant2">
-  <super>
+  <ant>
     <xsl:for-each select=".//ref[@tip='ant']">
        <r c="{@cel}"/>
     </xsl:for-each>
     <xsl:for-each select="key('retro',@mrk)[@tip='ant']|key('retro',snc/@mrk)[@tip='ant']">
-       <r c="{ancestor-or-self::node()/@mrk[1]}"/>
+       <r c="{ancestor-or-self::node()[@mrk][1]/@mrk}"/>
     </xsl:for-each>
-  </super>
+  </ant>
 </xsl:template>
 
 
 <xsl:template name="vid">
   <vid>
-    <xsl:for-each select="ref[@tip='vid' or not(@tip)]">
+    <xsl:for-each select="ref[@tip='vid' or not(@tip) or @tip='']">
        <r c="{@cel}"/>
     </xsl:for-each>
-    <xsl:for-each select="key('retro',@mrk)[@tip='vid' or not(@tip)]">
+    <xsl:for-each select="key('retro',@mrk)[@tip='vid' or not(@tip) or @tip='']">
        <r c="{ancestor-or-self::node()[@mrk][1]/@mrk}"/>
     </xsl:for-each>
   </vid>
@@ -234,15 +266,15 @@
 
 
 <xsl:template name="vid2">
-  <super>
-    <xsl:for-each select=".//ref[@tip='vid' or not(@tip)]">
+  <vid>
+    <xsl:for-each select=".//ref[@tip='vid' or not(@tip) or @tip='']">
        <r c="{@cel}"/>
     </xsl:for-each>
-    <xsl:for-each select="key('retro',@mrk)[@tip='vid' or not(@tip)]
-        |key('retro',snc/@mrk)[@tip='vid' or not(@tip)]">
-       <r c="{ancestor-or-self::node()/@mrk[1]}"/>
+    <xsl:for-each select="key('retro',@mrk)[@tip='vid' or not(@tip) or @tip='']
+        |key('retro',snc/@mrk)[@tip='vid' or not(@tip) or @tip='']">
+       <r c="{ancestor-or-self::node()[@mrk][1]/@mrk}"/>
     </xsl:for-each>
-  </super>
+  </vid>
 </xsl:template>
 
 
@@ -252,21 +284,21 @@
        <r c="{@cel}"/>
     </xsl:for-each>
     <xsl:for-each select="key('retro',@mrk)[@tip='prt']">
-       <r c="{ancestor-or-self::node()/@mrk[1]}"/>
+       <r c="{ancestor-or-self::node()[@mrk][1]/@mrk}"/>
     </xsl:for-each>
   </malprt>
 </xsl:template>
 
 
 <xsl:template name="malprt2">
-  <super>
+  <malprt>
     <xsl:for-each select=".//ref[@tip='malprt']">
        <r c="{@cel}"/>
     </xsl:for-each>
     <xsl:for-each select="key('retro',@mrk)[@tip='prt']|key('retro',snc/@mrk)[@tip='prt']">
-       <r c="{ancestor-or-self::node()/@mrk[1]}"/>
+       <r c="{ancestor-or-self::node()[@mrk][1]/@mrk}"/>
     </xsl:for-each>
-  </super>
+  </malprt>
 </xsl:template>
 
 
@@ -283,14 +315,14 @@
 
 
 <xsl:template name="prt2">
-  <super>
+  <prt>
     <xsl:for-each select=".//ref[@tip='prt']">
        <r c="{@cel}"/>
     </xsl:for-each>
     <xsl:for-each select="key('retro',@mrk)[@tip='malprt']|key('retro',snc/@mrk)[@tip='malprt']">
-       <r c="{ancestor-or-self::node()/@mrk[1]}"/>
+       <r c="{ancestor-or-self::node()[@mrk][1]/@mrk}"/>
     </xsl:for-each>
-  </super>
+  </prt>
 </xsl:template>
 
 
@@ -300,21 +332,21 @@
        <r c="{@cel}"/>
     </xsl:for-each>
     <xsl:for-each select="key('retro',@mrk)[@tip='lst']">
-       <r c="{ancestor-or-self::node()/@mrk[1]}"/>
+       <r c="{ancestor-or-self::node()[@mrk][1]/@mrk}"/>
     </xsl:for-each>
   </ekz>
 </xsl:template>
 
 
 <xsl:template name="ekz2">
-  <super>
+  <ekz>
     <xsl:for-each select=".//ref[@tip='ekz']">
        <r c="{@cel}"/>
     </xsl:for-each>
     <xsl:for-each select="key('retro',@mrk)[@tip='lst']|key('retro',snc/@mrk)[@tip='lst']">
-       <r c="{ancestor-or-self::node()/@mrk[1]}"/>
+       <r c="{ancestor-or-self::node()[@mrk][1]/@mrk}"/>
     </xsl:for-each>
-  </super>
+  </ekz>
 </xsl:template>
 
 
@@ -331,14 +363,14 @@
 
 
 <xsl:template name="lst2">
-  <super>
+  <lst>
     <xsl:for-each select=".//ref[@tip='lst']">
        <r c="{@cel}"/>
     </xsl:for-each>
     <xsl:for-each select="key('retro',@mrk)[@tip='ekz']|key('retro',snc/@mrk)[@tip='ekz']">
-       <r c="{ancestor-or-self::node()/@mrk[1]}"/>
+       <r c="{ancestor-or-self::node()[@mrk][1]/@mrk}"/>
     </xsl:for-each>
-  </super>
+  </lst>
 </xsl:template>
 
 

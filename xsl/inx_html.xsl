@@ -473,8 +473,8 @@
           <xsl:choose>
             <xsl:when test="self::fako">
 
-<!--              <b class="elektita">alfabete</b><xsl:text> </xsl:text>
-              <a href="../tez/fxs_{@fak}.html">strukture</a><xsl:text> </xsl:text> -->
+              <b class="elektita">alfabete</b><xsl:text> </xsl:text>
+              <a href="../tez/fxs_{@fak}.html">strukture</a><xsl:text> </xsl:text>
 
               <h1><xsl:value-of 
                   select="document($fakoj)/fakoj/fako[@kodo=current()/@fak]"/>
@@ -600,6 +600,21 @@
                 </xsl:for-each>
               </table>
 
+           </xsl:when>
+
+
+           <!-- fakindekso -->
+           <xsl:when test="self::fako">
+
+             <xsl:for-each select="tez">
+               <h2>&#x0109;efaj nocioj</h2>
+               <p>
+                 <xsl:call-template name="tezauro"/>
+               </p>
+             </xsl:for-each>
+
+             <h2>nocioj alfabete</h2>
+             <xsl:apply-templates select="v"/>
            </xsl:when>
 
            <!-- aliaj indeksoj -->
@@ -799,12 +814,6 @@
     <xsl:value-of select="k"/>
   </a>
   <br/>
-</xsl:template>
-
-
-<xsl:template match="fako/tez">
-  <h2>&#x0108;efaj nocioj</h2>
-  <p><xsl:call-template name="tezauro"/></p>
 </xsl:template>
 
 

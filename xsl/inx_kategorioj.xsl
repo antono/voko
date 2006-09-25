@@ -172,7 +172,7 @@
                        (not (child::uzo[text()='EVI' or text()='ARK'])) 
                    and (not (../uzo[text()='EVI' or text()='ARK']))
                    and (child::trd[@lng=$lng] or ../trd[@lng=$lng])])
-             }"/ -->  <!-- = nombro de tradukitaj sencoj kaj derivajhoj -->
+             }" "/ -->  <!-- = nombro de tradukitaj sencoj kaj derivajhoj -->
 <!--          </xsl:if>
         </xsl:for-each>
       </xsl:for-each -->
@@ -385,7 +385,21 @@
 </xsl:template> 
 
 <xsl:template match="tezrad" mode="tez">
-  <v mrk="{ancestor-or-self::node()[@mrk][1]/@mrk}">
+  <v>
+    <xsl:attribute name="mrk">
+      <xsl:choose>
+         <xsl:when test="ancestor::drv[count(snc)=1]">
+           <xsl:value-of select="ancestor::drv/@mrk"/>
+         </xsl:when>
+         <xsl:when test="../@mrk">
+            <xsl:value-of select="../@mrk"/>
+         </xsl:when>
+         <xsl:otherwise>
+            <xsl:value-of select="ancestor::node()[@mrk][1]/@mrk"/><xsl:text>.</xsl:text>
+            <xsl:number from="drv|subart" level="multiple" count="snc|subsnc" format="1.a"/>
+         </xsl:otherwise>
+      </xsl:choose>
+    </xsl:attribute>
     <xsl:apply-templates
        select="ancestor-or-self::node()[self::art or self::drv][kap][1]/kap"/>
   </v>

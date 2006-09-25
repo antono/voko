@@ -34,6 +34,7 @@ transform-reguloj
 <xsl:variable name="revo">/home/revo/revo</xsl:variable>
 <xsl:variable name="lingvoj_cfg" select="'../cfg/lingvoj.xml'"/>
 <xsl:variable name="fakoj_cfg" select="'../cfg/fakoj.xml'"/>
+<xsl:variable name="arhhivo" select="'http://www.reta-vortaro.de/cgi-bin/historio.pl?art='"/>
 
 <!-- ilustrite por HTML kun grafikoj ktp.
      simple por HTML tauga por konverto al simpla teksto -->

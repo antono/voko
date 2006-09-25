@@ -1,0 +1,119 @@
+<project name="Revo-spegulo" default="" basedir=".">
+    <description>
+       Reta Vortaro, reguloj por speguli shanghitajn dosierojn al publikaj serviloj.
+    </description>
+
+ 
+   <!-- property file="etc -->
+   <property file="/home/revo/etc/spegulo-agordo-cvs" prefix="cvs."/>
+
+<!--   
+   Tiuj aperu en la agordo-dosiero
+   <property name="cvs.pado" location="/home/revo/cvsroot/revo"/>
+   <property name="cvs.cachefile" location="/home/revo/mirrordat/cvs.cache"/>
+   <property name="cvs.servilo.host" value="cyberwebserver-21.de"/>
+   <property name="cvs.servilo.user" value="web277f1"/>
+   <property name="cvs.servilo.password" value="XXXsekreto"/>
+   <property name="cvs.servilo.dir" value="."/>
+   <property name="cvs.upload.url" value="http://reta-vortaro.de/cgi-bin/admin/upload.pl?fname="/>
+   <property name="cvs.upload.user" value="steloj"/>
+   <property name="cvs.upload.password" value="XXXsekreto"/> -->
+
+   <!-- property file="/home/revo/etc/spegulo-agordo-vortaro" prefix="vo."/ -->
+
+   <property name="tmp" location="/home/revo/tmp"/>
+
+   <target name="init">
+     <tstamp/>
+     <property name="cvs.filename" value="revocvs-${DSTAMP}.tgz"/>
+     <available property="tar-file-exists" file="${tmp}/${cvs.filename}"/>
+   </target>
+
+   <target name="agordo" description="eligas la agordeblajn variablojn por kontrolo">
+     <echoproperties prefix="cvs."/>
+   </target>
+
+   <target name="cvs-tar" unless="tar-file-exists" depends="init" 
+       description="pakas shanghitajn cvs-dosieron en tar-dosieron">
+
+     <tar destfile="${tmp}/${cvs.filename}" 
+        compression="gzip">
+
+        <tarfileset dir="${cvs.pado}" includes="*,v" excludes="Attic/">
+            <modified>
+               <param name="cache.cachefile" value="${cvs.cachefile}"/>
+            </modified>
+        </tarfileset> 
+     </tar>
+
+     <available property="tar-file-exists" file="${tmp}/${cvs.filename}"/>
+   </target>
+       
+
+   <target name="cvs-upload" depends="cvs-tar" if="tar-file-exists" 
+     description="transportas la tar-dosieron al la cvs-servilo">
+     <ftp server="${cvs.servilo.host}"
+         remotedir="${cvs.servilo.dir}"
+         userid="${cvs.servilo.user}"
+         password="${cvs.servilo.password}"
+         passive="yes"
+         verbose="yes">
+
+       <fileset file="${tmp}/${cvs.filename}"/>
+     </ftp>
+
+     <get src="${cvs.upload.url}${cvs.filename}" 
+       dest="${tmp}/uploadlog.html" 
+       username="${cvs.upload.user}"
+       password="${cvs.upload.password}"/>
+  
+     <loadfile srcFile="${tmp}/uploadlog.html" property="log">
+       <filterchain>
+         <tokenfilter>
+           <replaceregex pattern="&lt;[^&gt;]+&gt;" replace="" flags="g"/>
+         </tokenfilter>
+       </filterchain>
+     </loadfile>
+  
+     <echo>
+       ${log}
+     </echo>
+  
+   </target>
+
+
+   <target name="vortaro" depends="init" 
+       description="shutas shanghitajn dosierojn al la TTT-ejo de la vortaro">
+
+    <!-- kio pri kreado de dosierujoj, forigado de dosieroj? -->
+
+     <ftp server="${vo.servilo.host}"
+         remotedir="${vo.servilo.dir}"
+         userid="${vo.servilo.user}"
+         password="${vo.servilo.password}"
+         passive="yes"
+         verbose="yes">
+
+         <fileset dir="${vo.pado}" includes="*">
+            <modified>
+               <param name="cache.cachefile" value="${vo.cachefile}"/>
+            </modified>
+         </fileset> 
+     </ftp>
+   </target>
+
+
+
+</project>
+   
+
+
+
+
+
+
+
+
+
+
+

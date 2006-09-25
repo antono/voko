@@ -31,7 +31,7 @@
 
   &lt;xsl:choose&gt;
 </xsl:text>
-  <xsl:apply-templates select="ordigo/lingvo[@kreu-regulojn='jes']" 
+  <xsl:apply-templates select="ordigo/lingvo[@kreu-regulojn='jes' and not(@lng='eo')]" 
      mode="template"/>
 <xsl:text>
     &lt;xsl:otherwise&gt;

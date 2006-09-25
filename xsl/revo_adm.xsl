@@ -72,18 +72,20 @@ reguloj por prezentado de la administraj notoj
 
 	  [^<a class="redakto" 
 	       href="../index.html" target="_top">Revo</a>] 
-          [<a class="redakto" 
+          [<a class="redakto" target="_new"
               href="{$xmldir}/{$xml}"><xsl:value-of select="$xml"/></a>]
           [<a class="redakto" 
               href="{$redcgi}{substring-before($xml,'.xml')}">redakti...</a>]
+          [<a class="redakto" target="_new"
+              href="{$arhhivo}{substring-before($xml,'.xml')}">artikolversio</a>:
       </xsl:when>
       <xsl:otherwise>
-        [<a href="../index.html">Revo</a>] 
+        [<a href="../index.html">Revo</a>] [artikolversio:
       </xsl:otherwise>
     </xsl:choose>
   
-    artikolversio: <xsl:value-of 
-      select="substring-before(substring-after(@mrk,',v'),'revo')"/>
+    <xsl:value-of 
+      select="substring-before(substring-after(@mrk,',v'),'revo')"/>]
   </span>
   <br />
 </xsl:template>
