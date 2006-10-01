@@ -65,6 +65,7 @@ my $logdatei = $config{"LogDir"}."/smirror.log";     # Übertragungs-Logdatei
 my $batchfile =  $config{"MirrorDat"}."/mirror.batch"; # Batchdatei für sftp
 my $max_tries = 1;
 my $logdir = $config{"LogDir"};
+my $include = $config{"include"};
 
 # ftp-Variablen:
 #my $ftp_port = 21;
@@ -197,9 +198,17 @@ sub ToDo_Liste
   my $dir_eintrag;
   my @dir_eintraege;  #das gesammte Verzeichnis
 
-  opendir (DIR, $dir) || die ("\nVerzeichnis $dir nicht gefunden");
-  @dir_eintraege = readdir(DIR);
-  closedir (DIR);
+  # ggf. nur bestimmte eingeschlossene Dateien beachten
+   if ($include) {
+	@dir_eintraege = map {s/^$dir\///, $_} glob("$dir/$include");
+        
+   } else {
+
+     opendir (DIR, $dir) || die ("\nVerzeichnis $dir nicht gefunden");
+     @dir_eintraege = readdir(DIR);
+     closedir (DIR);
+  }
+
 
  NAECHSTER_EINTRAG:
   foreach $dir_eintrag (@dir_eintraege)

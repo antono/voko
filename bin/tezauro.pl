@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/local/bin/perl -w
 #
 # voku 
 #   tezauro.pl [-v] [<config-file>]
@@ -632,7 +632,7 @@ sub html_tree {
 		if ($node->{'uzo'}) {
 		    for $fak (sort @{$node->{'uzo'}}) {
 			# eble testu antaue, chu la fako havas tezauran indekson
-			print "<a href=\"fxs_".lc($fak).".html\">";
+			print "<a href=\"fxs_".uc($fak).".html\">";
 			print "<img src=\"../smb/$fak.gif\" alt=\"$fak\" border=0>";
 			print "</a>\n";
 		    }
@@ -764,7 +764,7 @@ sub tez_link {
 sub create_fx {
     foreach $fako (sort keys %fakoj) {
 
-	my $target_file = "$fx_prefix".lc($fako).".html";
+	my $target_file = "$fx_prefix".uc($fako).".html";
 	#print "$target_file..." if ($verbose);
 
 	my @root = fakroot([values %wordlist],$fako);
@@ -783,7 +783,7 @@ sub create_fx {
 	index_header($fako);
 	index_buttons('fak');
 	print
-	    "<a href=\"../inx/fx_".lc($fako).".html\">alfabete</a> ",
+	    "<a href=\"../inx/fx_".uc($fako).".html\">alfabete</a> ",
 	    "<b>strukture</b>\n<h1>$fakoj{$fako} strukture...</h1>\n";
 
 	my $node;
@@ -815,7 +815,7 @@ sub create_fx {
     select OUT;
 
     foreach $fako (sort @uzataj_fakoj) { 
-	print "../tez/fxs_".lc($fako).".html;$fako\n"; 
+	print "../tez/fxs_".uc($fako).".html;$fako\n"; 
     }
     close OUT;
     select STDOUT;

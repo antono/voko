@@ -64,28 +64,36 @@ $art_pado="$vortaro_pado/art";
 
 # kreu indeksdosieron
 
-$command = "xml2inx.pl $verbose -c $agord_dosiero $xml_pado";
-print "$command\nTIME:",`date`,"\n" if ($verbose);
-`$command`;
+###$command = "xml2inx.pl $verbose -c $agord_dosiero $xml_pado";
+###print "$command\nTIME:",`date`,"\n" if ($verbose);
+####`$command`;
 
 # cd ..
 #print "cd $vortaro_pado\n" if ($verbose);
 #chdir("$vortaro_pado");
 
 # kreu HTML-indeksojn
-$command="rilatoj.pl $verbose $xml_pado > $rilato_dos";
+###$command="rilatoj.pl $verbose $xml_pado > $rilato_dos";
+###print "$command\nTIME:",`date`,"\n" if ($verbose);
+###open LOG, "$command|"; while (<LOG>) { print }; close LOG;
+
+###$command="tezauro.pl $verbose $agord_dosiero";
+###print "$command\nTIME:",`date`,"\n" if ($verbose);
+###open LOG, "$command|"; while (<LOG>) { print }; close LOG;
+
+$command="ant -file $VOKO/ant/tezauro.xml -Dmi.bazo=$vortaro_pado agordo mil";
 print "$command\nTIME:",`date`,"\n" if ($verbose);
 open LOG, "$command|"; while (<LOG>) { print }; close LOG;
 
-$command="tezauro.pl $verbose $agord_dosiero";
-print "$command\nTIME:",`date`,"\n" if ($verbose);
-open LOG, "$command|"; while (<LOG>) { print }; close LOG;
+###$command="tradukoj.pl $verbose -c $agord_dosiero";
+###print "$command\nTIME:",`date`,"\n" if ($verbose);
+###open LOG, "$command|"; while (<LOG>) { print }; close LOG;
 
-$command="tradukoj.pl $verbose -c $agord_dosiero";
-print "$command\nTIME:",`date`,"\n" if ($verbose);
-open LOG, "$command|"; while (<LOG>) { print }; close LOG;
+###$command="indeks.pl $verbose $agord_dosiero";
+###print "$command\nTIME:",`date`,"\n" if ($verbose);
+###open LOG, "$command|"; while (<LOG>) { print }; close LOG;
 
-$command="indeks.pl $verbose $agord_dosiero";
+$command="ant -file $VOKO/ant/indeksoj.xml -Dmi.bazo=$vortaro_pado agordo cvs-shanghoj tuto";
 print "$command\nTIME:",`date`,"\n" if ($verbose);
 open LOG, "$command|"; while (<LOG>) { print }; close LOG;
 

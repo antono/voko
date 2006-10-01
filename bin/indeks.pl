@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/local/bin/perl -w
 
 # kreas el dosiero indekso.sgml
 # unuopajn indeksojn en HTML-formato
@@ -119,13 +119,13 @@ if ($indeksoj=~/lng/) {
     foreach $lng (sort keys %tradukoj) { 
 	@literoj = sort { cmp_nls($a,$b,$lng) } keys %{$tradukoj{$lng}};
 	$unua_litero{$lng} = letter_asci_nls($literoj[0],$lng);
-if ($lng eq 'de' || $lng eq 'ru' || $lng eq 'hu' || $lng eq 'fr') { #####
+####if ($lng eq 'de' || $lng eq 'ru' || $lng eq 'hu' || $lng eq 'fr' || $lng eq 'ru' || $lng eq 'nl') { #####
 	foreach $lit (@literoj) {
 	    $refs = $tradukoj{$lng}->{$lit};
 	    @$refs = sort { cmp_nls($a->[2],$b->[2],$lng) } @$refs;
 	    LINGVINX($lng,$lit,\@literoj,$refs);
 	}
-} #####
+####} #####
     }
 }
 
@@ -566,9 +566,9 @@ sub KAPVORTINX {
     #print "$target_file..." if ($verbose);
     open OUT,">$tmp_file" or die "Ne povis krei $tmp_file: $!\n";
     select OUT;
-    index_header("kapvortindekso");
+    index_header("esperanta indekso");
     index_buttons('eo');
-    index_letters('kapvortoj ','kap_',$lit,$literoj,
+    index_letters('esperanta ','kap_',$lit,$literoj,
 		 [map {letter_asci_nls($_,'eo')} @$literoj]);
 #    print "<h1>kapvortoj $lit...</h1>\n";
 
@@ -896,7 +896,7 @@ sub INX_EO {
 
     #kapvortoj
     if ($config{"inx_eo"}=~/kapvortoj/) {
-	print "<h1>kapvortindekso</h1>\n<font size=\"+1\"><b>";
+	print "<h1>alfabeta indekso</h1>\n<font size=\"+1\"><b>";
 	for $lit (@literoj) {
 	    $lit1 = letter_asci_nls($lit,'eo');
 	    print "<a href=\"kap_$lit1.html\">$lit</a>\n";
@@ -906,7 +906,7 @@ sub INX_EO {
 
     #tezauroradikoj
     if ($config{"inx_eo"}=~/tezauro/) {
-	print "<h1>tezaŭroradikoj</h1>\n";
+	print "<h1>ĉefaj nocioj</h1>\n";
 	open TEZ, $config{"tezauro_radikoj"};
 	while (<TEZ>) {
 	    chomp;

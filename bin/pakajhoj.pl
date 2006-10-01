@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/local/bin/perl -w
 
 # preparas pakajhojn voko.tgz, revobld.tgz revoxml.tgz revohtml.tgz
 # komplete chiumonate
@@ -27,7 +27,7 @@ $inxfile = "$pakoj/index.html";
 $parta = 4*24*60*60; # post 4 tagoj faru novan parton
 $kompleta = 7*$parta; # post 28 tagoj faru novan kompleton
 
-$vokoajhoj = "bin dok div dtd stl cgi tst smb cfg xsl ana LEGUMIN PROGRAMOJ";
+$vokoajhoj = "bin dok div dtd stl cgi smb cfg xsl ana ant LEGUMIN PROGRAMOJ";
 $xmlajhoj = "xml dtd xsl stl cfg smb";
 $bldajhoj = "bld";
 $htmlajhoj= "art dok inx tez index.html sercxo.html titolo.html revo.ico ".

@@ -473,8 +473,8 @@
           <xsl:choose>
             <xsl:when test="self::fako">
 
-              <b class="elektita">alfabete</b><xsl:text> </xsl:text>
-              <a href="../tez/fxs_{@fak}.html">strukture</a><xsl:text> </xsl:text>
+<!--              <b class="elektita">alfabete</b><xsl:text> </xsl:text>
+              <a href="../tez/fxs_{@fak}.html">strukture</a><xsl:text> </xsl:text> -->
 
               <h1><xsl:value-of 
                   select="document($fakoj)/fakoj/fako[@kodo=current()/@fak]"/>

@@ -74,6 +74,30 @@
   </target>
 
 
+  <target name="mil" depends="init,html"
+     description="kopias fine maksimume mil shanghitajn dosierojn al la
+     tezaurodosierujo kaj tie forigas forfalintajn">
+
+    <copy todir="${mi.tez}">
+      <fileset dir="${mi.tmp}/tez" includes="*">
+        <!-- different targetdir="${mi.tez}" ignoreFileTimes="true"/ -->
+        <custom classname="de.steloj.respiro.DiffMaxFilesSelector" classpath="${mi.voko.ant}/respiro.jar">
+          <param name="targetDir" value="${mi.tez}"/>
+          <param name="ignoreFileTimes" value="true"/>
+          <param name="maxFiles" value="1000"/> <!-- aktualigu maksimume 1000 dosieroj de la tezauro -->
+        </custom>
+      </fileset>
+    </copy>
+
+    <delete>
+      <fileset dir="${mi.tez}" includes="*">
+         <present present="srconly" targetdir="${mi.tmp}/tez"/>
+      </fileset>
+    </delete>
+
+  </target>
+
+
   <target name="tuto" depends="init,html"
      description="kopias fine chiujn enhave shanghitajn dosierojn al la
      tezaurodosierujo kaj tie forigas forfalintajn">

@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/local/bin/perl -w
 
 # kreas indekson por Zauruso
 
@@ -13,7 +13,7 @@ use nls; read_nls_cfg("$ENV{'VOKO'}/cfg/nls.cfg");
 
 ################### agordejo ##############################
 
-$debug=1;
+$debug=1; 
 
 $chioenunu = 0; # 1 = unu sola indekso, 0 = pluraj indeksdosieroj
 
@@ -21,19 +21,19 @@ $VOKO=$ENV{'VOKO'};
 $HOME='/home/revo';
 $REVO="$HOME/revo";
 $TMP="$HOME/tmp";
-$OUTDIR = "$HOME/tests/zaurus";
+$OUTDIR = "$HOME/tests/reveto";
 
 $inxdir = "$OUTDIR/revo/zinx";
 $tmp_file = "$TMP/tmp.$$.xxx";
 $artdir = "$OUTDIR/revo/art";
 
-$inxfn = "$REVO/sgm/indekso.xml";
+$inxfn = "$HOME/tmp/indekso.xml";
 $xmldir = "$REVO/xml";    # relative al vortara radikdosierujo
 $refdir = '../art/'; # relative al inx
 
 $neliteroj = '0-9\/\s,;\(\)\.\-!:';
 #$xslbin = "/home/revo/voko/bin/xslt.sh";
-$xsl = "$VOKO/xsl/revotxt.xsl";
+$xsl = "$VOKO/xsl/reveto.xsl";
 
 %lingvoj = ('de'=>'germana','fr'=>'franca','nl'=>'nederlanda');
 

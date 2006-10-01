@@ -1,6 +1,6 @@
 package nls;
 
-use v5.6.1;
+use v5.6.2;
 
 require Exporter;
 @ISA = qw(Exporter);

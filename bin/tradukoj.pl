@@ -114,6 +114,15 @@ foreach $l (sort keys %lingvoj) {
 }
 close OUT;
 
+# skribu tiujn informojn ankau XML-e
+OUT, ">$trdfile.xml" or die "Ne povas skribi al \"$trdfile.xml\": $!\n";
+print OUT "<?xml version=\"1.0\"?>\n<trdstat>\n";
+print OUT "<sumo n=\"".scalar(keys %sencoj)."\"/>\n";
+foreach $l (sort keys %lingvoj) {
+    print OUT  "<t lng=\"$l\" n=\"".$lingvoj{$l}->[0]."\"/>\n";
+}
+print OUT "</trdstat>\n";
+close OUT;
 
 #exit if ($debug);
 

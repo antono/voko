@@ -1,7 +1,7 @@
-#!/usr/bin/perl -w
+#!/usr/local/bin/perl -w
 #
 # voku ekz.
-#   xml2inx.pl [-v] xml > sgm/indekso.xml
+#   xml2inx.pl [-v] xml 
 #
 ################# komenco de la programo ################
 
@@ -175,7 +175,7 @@ sub start_handler {
 	print "<bld>";
     }
 
-    # klarigojn transprenu nur, sed tip="ind"
+    # klarigojn transprenu nur, se tip="ind"
     elsif ( $el eq 'klr' and
 	    (get_attr('tip',@attrs) eq 'ind' or
 	     get_attr('tip',@attrs) eq 'amb'))
