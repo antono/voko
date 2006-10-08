@@ -84,7 +84,7 @@
         <custom classname="de.steloj.respiro.DiffMaxFilesSelector" classpath="${mi.voko.ant}/respiro.jar">
           <param name="targetDir" value="${mi.tez}"/>
           <param name="ignoreFileTimes" value="true"/>
-          <param name="maxFiles" value="1000"/> <!-- aktualigu maksimume 1000 dosieroj de la tezauro -->
+          <param name="maxFiles" value="1000"/> <!-- aktualigu maksimume 1000 dosierojn de la tezauro -->
         </custom>
       </fileset>
     </copy>

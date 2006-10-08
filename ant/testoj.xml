@@ -170,6 +170,29 @@ file="${mi.bazo.xml}/de.xml"><![CDATA[<?xml version="1.0"?>
 </vortaro>
 ]]>
     </echo>
+
+
+  <echo 
+file="${mi.bazo.xml}/eraroj.xml"><![CDATA[<?xml version="1.0"?>
+<vortaro>
+<art mrk="\$$Id: erar%oj.xml asdfosdf">
+  <kap><rad>erar</rad>/oj</kap>
+  <drv mrk="erarotesto">
+    <kap><tld/>o</kap>
+    <snc mrk="erarotest.o.YYY">
+      <uzo tip="fak">ABC</uzo>
+      <uzo tip="stl">DEF</uzo>
+      <ref tip="super">referenco sen celo</ref>
+      <ref tip="vid" cel="erarx.o">referenco kun malghusta celo</ref>
+      <ref tip="vid" cel="prov.0ico">referenco kun malghusta celo</ref>
+      <trd lng="nekonata">traduko sen valida lingvo-etikedo</trd>
+    </snc>
+  </drv>
+</art>
+</vortaro>
+]]>
+    </echo>
+
 </target>
 
 
@@ -823,6 +846,56 @@ ${rezulto_3}
 ${rezulto_4}   
     </echo>
   </target>
+
+
+<target name="eraro-testo" depends="init,test-init"
+    description="testas la eraro-raporton">
+
+
+    <ant antfile="${mi.voko.ant}/indeksoj.xml"
+       dir="${mi.bazo}" target="eraroj" inheritAll="false"/>   
+
+
+   <echo 
+file="${mi.testoj}/eraro-testo.xml"><![CDATA[<?xml version="1.0"?>
+<testoj>
+
+     <t test="count(//art[@dos='eraroj'])=1">
+   1) Chu enestas eraroj pri artikolo "eraroj"</t>
+     <t test="count(//ero[@mrk='erar%oj' and @tip='mrk-ne-dos'])=1">
+   2) Chu enestas eraro pri malghusta artikol-marko</t>
+     <t test="count(//ero[@mrk='erarotesto' and @tip='mrk-prt'])=1">
+   3) Chu enestas eraro pri nur unuparta marko "erarotesto"</t>
+     <t test="count(//ero[@mrk='erarotest.o.YYY' and @tip='mrk-nul'])=1">
+   4) Chu enestas eraro pri mankanta nulo en marko "erarotest.o.YYY"</t>
+     <t test="count(//ero[@mrk='erarotest.o.YYY' and @tip='uzo-fak' and @arg='ABC'])=1">
+   5) Chu enestas eraro pri malghusta fako "ABC"</t>
+     <t test="count(//ero[@mrk='erarotest.o.YYY' and @tip='uzo-stl' and @arg='DEF'])=1">
+   6) Chu enestas eraro pri malghusta stilo "DEF"</t>
+     <t test="count(//ero[@mrk='erarotest.o.YYY' and @tip='ref-sen-cel'])=1">
+   7) Chu enestas eraro pri referenco sen celo</t>
+     <t test="count(//ero[@mrk='erarotest.o.YYY' and @tip='ref-cel-dos'])=1">
+   8) Chu enestas eraro pri referenco kun malghusta dosiero-celo</t>
+     <t test="count(//ero[@mrk='erarotest.o.YYY' and @tip='ref-cel-mrk'])=1">
+   9) Chu enestas eraro pri referenco kun malghusta mrk en celo</t>
+     <t test="count(//ero[@mrk='erarotest.o.YYY' and @tip='trd-lng'])=1">
+   10) Chu enestas eraro pri malghusta lingvo en traduko</t>
+
+
+</testoj>
+]]>
+    </echo>
+    <antcall target="faru-teston">
+       <param name="testnomo" value="eraro-testo"/>
+       <param name="testajho" value="${mi.tmp}/eraroj.xml"/>
+    </antcall>
+
+    <loadfile property="rezulto_1" srcFile="${mi.testoj}/eraro-testo.rez"/>
+    <echo>test-rezultoj pri dosiero eraroj.xml:
+${rezulto_1}   
+    </echo>
+</target>
+
 
 </project>
 

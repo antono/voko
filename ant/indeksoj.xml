@@ -128,6 +128,27 @@
   </target>
 
 
+  <target name="eraroj" depends="init" unless="indekso.aktuala"
+     description="kreas raporton pri diversaj eraroj en la artikoloj">
+
+     <java classname="de.steloj.respiro.DirectoryTransformer"
+       logError="true">
+         <!-- arg value="-v"/ -->
+         <arg path="${mi.bazo.xml}"/>
+         <arg file="${mi.voko.xsl}/inx_eraroj.xsl"/>
+         <arg file="${mi.tmp}/eraroj.xml"/>
+         <classpath>
+           <pathelement location="${mi.voko.ant}/respiro.jar"/>
+           <pathelement path="${java.class.path}"/>
+         </classpath>
+    </java>
+
+
+     <xslt in="${mi.tmp}/eraroj.xml" out="${mi.tmp}/inx/eraroj.html"
+       style="${mi.voko.xsl}/inx_eraroj_html.xsl"/>
+  </target>
+
+
   <target name="tuto" depends="init,html"
      description="kopias fine chiujn enhave shanghitajn dosierojn al la
      indeksdosierujo kaj tie forigas forfalintajn">
