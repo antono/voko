@@ -65,32 +65,23 @@
     <!-- kreu novan nodon -->
     <nod>
       <xsl:attribute name="mrk">
-        <xsl:choose>
+        <!-- xsl:choose>
           <xsl:when test="@mrk">
             <xsl:value-of select="@mrk"/>
           </xsl:when>
-
-<!--          <xsl:when test="self::subsnc">
-            <xsl:value-of select="ancestor::drv/@mrk"/><xsl:text>.</xsl:text>
-            <xsl:number from="drv|subart" level="multiple" count="snc|subsnc" format="1.a"/>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:value-of select="ancestor::drv/@mrk"/><xsl:text>.</xsl:text>
-            <xsl:number from="drv|subart" level="any" count="snc"/> -->
-
 
           <xsl:otherwise>
             <xsl:value-of select="ancestor::node()[@mrk][1]/@mrk"/><xsl:text>.</xsl:text>
             <xsl:number from="drv|subart" level="multiple" count="snc|subsnc" format="1.a"/>
           </xsl:otherwise>
-        </xsl:choose>
+        </xsl:choose -->
+        <xsl:call-template name="tez-mrk-n"/>
       </xsl:attribute>
       <k>
         <xsl:if test="count(../snc)+count(../subsnc) &gt; 1">
           <xsl:attribute name="n">
             <xsl:number from="drv|subart" level="multiple" count="snc|subsnc" format="1.a"/>
           </xsl:attribute>
-<!--          <xsl:attribute name="n"><xsl:number/></xsl:attribute> -->
         </xsl:if>
         <xsl:apply-templates select="ancestor-or-self::node()[self::art or self::drv][kap][1]/kap"/>
       </k>
@@ -113,6 +104,19 @@
   <xsl:apply-templates select="snc|subsnc"/>
 </xsl:template>
 
+
+<xsl:template name="tez-mrk-n">
+   <xsl:choose>
+      <xsl:when test="@mrk">
+         <xsl:value-of select="@mrk"/>
+      </xsl:when>
+
+      <xsl:otherwise>
+         <xsl:value-of select="ancestor::node()[@mrk][1]/@mrk"/><xsl:text>.</xsl:text>
+         <xsl:number from="drv|subart" level="multiple" count="snc|subsnc" format="1.a"/>
+      </xsl:otherwise>
+   </xsl:choose>
+</xsl:template>
 
 <!-- xsl:template match="snc|subsnc"/ --> <!-- ignoru sen @mrk -->
 

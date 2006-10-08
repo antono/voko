@@ -139,9 +139,9 @@ class="net.sf.saxon.sort.CodepointCollator"/ -->
 
         <litero name="{@name}" min="{substring(.,1,1)}">
           <xsl:for-each 
-             select="$kapoj/v[contains(current(),substring(k,1,1))]">
+             select="$kapoj/v[contains(current(),substring(translate(k,'-(',''),1,1))]">
  
-            <xsl:sort collation="eo" lang="eo" select="k"/>
+            <xsl:sort collation="eo" lang="eo" select="translate(k,'-( )','')"/>
             <xsl:call-template name="v"/>
           </xsl:for-each>
         </litero>
@@ -153,7 +153,7 @@ class="net.sf.saxon.sort.CodepointCollator"/ -->
 
       <litero name="0" min="?">
         <xsl:for-each 
-           select="$kapoj/v[not(contains($chiuj_literoj,substring(k,1,1)))]">
+           select="$kapoj/v[not(contains($chiuj_literoj,substring(translate(k,'-(',''),1,1)))]">
  
           <xsl:sort collation="eo" lang="eo" select="k"/>
           <xsl:call-template name="v"/>
