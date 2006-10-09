@@ -25,6 +25,9 @@
   <target name="init">
     <!-- Create the time stamp -->
     <tstamp/>
+    <tstamp>
+      <format property="mi.antau_jaro" pattern="MM/dd/yyyy hh:mm aa" offset="-1" unit="year"/>
+    </tstamp>
     <!-- Create the build directory structure used by compile -->
     <mkdir dir="${mi.bazo.art}" />
     <mkdir dir="${mi.tmp}" />
@@ -36,44 +39,66 @@
       <mapper type="merge" to="${mi.tmp}/indekso.xml"/>
     </uptodate -->
 
+    <!-- evitu rekreadon de chiuj artikoloj pro shanghoj en la XSL-dosieroj -->
+    <touch file="${mi.voko.xsl}/revo_tez.xsl" datetime="01/01/2000 0:00 pm"/>
+    <touch file="${mi.voko.xsl}/revohtml2.xsl" datetime="01/01/2000 0:00 pm"/>
+    <touch file="${mi.voko.xsl}/revohtml.xsl" datetime="01/01/2000 0:00 pm"/>
+
   </target>
 
 
+  <target name="agordo" description="eligas la agordeblajn variablojn por kontrolo">
+    <echoproperties prefix="mi."/>
+  </target>
 
-  <target name="artikoloj" depends="init" 
+
+  <target name="html" depends="init" 
        description="kreas artikolojn el shanghitaj xml-dosieroj">
 
-    <xslt includes="${mi.bazo.xml}/*.xml" destdir="${mi.tmp}/art/" extension=".xml"
+    <echo message="### enemtu tezauro-ligojn en chiujn aktualigitajn artikolojn"/>
+    <xslt basedir="${mi.bazo.xml}" includes="*.xml" destdir="${mi.tmp}/art" extension=".xml"
        style="${mi.voko.xsl}/revo_tez.xsl"/>
 
-    <xslt includes="${mi.tmp}/art/*.xml" destdir="${mi.tmp}/art/" extension=".html"
+
+    <!-- aktualigu kelkajn malnovajn dosierojn por certigi, ke shanghoj
+         en la XSLT-dosieroj iom post iom trafos chiujn artikolojn -->
+    <echo message="### aktualigu 5(0) malnovajn artikolojn"/>
+    <xslt basedir="${mi.bazo.xml}" includes="*.xml" destdir="${mi.tmp}/art" extension=".xml"
+       style="${mi.voko.xsl}/revo_tez.xsl" force="true">
+        <custom classname="de.steloj.respiro.DateMaxFilesSelector" classpath="${mi.voko.ant}/respiro.jar">
+          <param name="datetime" value="${mi.antau_jaro}"/>
+          <param name="when" value="before"/>
+          <param name="maxFiles" value="5"/> <!-- aktualigu maksimume 50 malnovajn dosierojn -->
+        </custom>
+    </xslt>
+
+    <echo message="### kreu la HTML-dosierojn por la artikoloj"/>
+    <xslt basedir="${mi.tmp}/art" includes="*.xml" destdir="${mi.tmp}/art/" extension=".html"
        style="${mi.voko.xsl}/revohtml2.xsl"/>
+
+
   </target>
 
- 
-  <!-- target name="malnovaj" depends="init"
-       description="rekreas kelkajn malnovajn artikolojn por certigi, ke
-                stilshanghoj iom post iom atingu chiujn artikolojn">
-
-      <xslt include="${mi.bazo.xml}/*.xml" destdir="${mi.tmp}/art/" extension=".xml"
-       style="${mi.voko.xsl}/revo_tez.xsl">
-        <custom classname="de.steloj.respiro.DateMaxFilesSelector" classpath="${mi.voko.ant}/respiro.jar">
-          <xxx param name="targetDir" value="${mi.tez}"/>
-          <xxx param name="ignoreFileTimes" value="true"/>
-          <param name="maxFiles" value="50"/> <!-- aktualigu maksimume 50 dosierojn -->
-        </custom>
-      </xslt>
 
 
-  </target -->
-
-
-
-  <target name="tuto" depends="artikoloj"
+  <target name="tuto" depends="html"
        description="kopias shanghitajn artikolojn al la destin-dosierujo">
-    <copy todir="${mi.bazo.art}">
+    <!-- copy todir="${mi.bazo.art}">
       <fileset dir="${mi.tmp}/art" includes="*.html">
         <different targetdir="${mi.bazo.art}" ignoreFileTimes="true"/>
+      </fileset>
+    </copy -->
+
+   <!-- provizore kopiu nur kelkajn -->
+
+   <copy todir="${mi.bazo.art}">
+      <fileset dir="${mi.tmp}/art" includes="*.html">
+        <!-- different targetdir="${mi.tez}" ignoreFileTimes="true"/ -->
+        <custom classname="de.steloj.respiro.DiffMaxFilesSelector" classpath="${mi.voko.ant}/respiro.jar">
+          <param name="targetDir" value="${mi.bazo.art}"/>
+          <param name="ignoreFileTimes" value="true"/>
+          <param name="maxFiles" value="300"/> <!-- aktualigu maksimume 300 artikolojn -->
+        </custom>
       </fileset>
     </copy>
 
