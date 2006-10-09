@@ -22,7 +22,7 @@
   <property name="saxon" location="/usr/local/lib/saxon/saxon8.jar"/>
 
 
-  <target name="init">
+  <target name="art-preparo">
     <!-- Create the time stamp -->
     <tstamp/>
     <tstamp>
@@ -47,12 +47,12 @@
   </target>
 
 
-  <target name="agordo" description="eligas la agordeblajn variablojn por kontrolo">
+  <target name="art-agordo" description="eligas la agordeblajn variablojn por kontrolo">
     <echoproperties prefix="mi."/>
   </target>
 
 
-  <target name="html" depends="init" 
+  <target name="art-html" depends="art-preparo" 
        description="kreas artikolojn el shanghitaj xml-dosieroj">
 
     <echo message="### enemtu tezauro-ligojn en chiujn aktualigitajn artikolojn"/>
@@ -81,7 +81,7 @@
 
 
 
-  <target name="tuto" depends="html"
+  <target name="art-tuto" depends="art-html"
        description="kopias shanghitajn artikolojn al la destin-dosierujo">
     <!-- copy todir="${mi.bazo.art}">
       <fileset dir="${mi.tmp}/art" includes="*.html">

@@ -51,7 +51,7 @@ rezulto en:
   <property name="saxon" location="/usr/local/lib/saxon/saxon8.jar"/>
 
 
-  <target name="init">
+  <target name="preparo">
     <!-- Create the time stamp -->
     <tstamp/>
     <!-- Create the build directory structure used by compile -->
@@ -70,7 +70,7 @@ rezulto en:
   </target>
 
 
-  <target name="bib" depends="init"
+  <target name="bib" depends="preparo"
         description="bibliografio" >
 
     <xslt in="${mi.voko.cfg}/bibliogr.xml" out="${mi.bazo.dok}/bibliogr.html"
@@ -83,7 +83,7 @@ rezulto en:
       style="${mi.voko.xsl}/bibtithtml.xsl"/>
   </target>
 
-  <target name="dok" depends="init"
+  <target name="dok" depends="preparo"
        description="diversaj dokumentoj">
 
     <copy todir="${mi.bazo.cfg}">
@@ -130,7 +130,7 @@ rezulto en:
   </target>
 
 
- <target name="dtd" depends="init"
+ <target name="dtd" depends="preparo"
        description="dokumenttip-difinoj">
 
     <copy todir="${mi.bazo.dtd}">
@@ -141,7 +141,7 @@ rezulto en:
 
   </target>
 
-  <target name="stl" depends="init"
+  <target name="stl" depends="preparo"
        description="kopias CSS-stildifinojn el voko">
 
     <copy todir="${mi.bazo.stl}">
@@ -152,7 +152,7 @@ rezulto en:
 
   </target>
 
-  <target name="smb" depends="init"
+  <target name="smb" depends="preparo"
        description="kopias simbolojn el voko">
 
     <copy todir="${mi.bazo.smb}">
@@ -164,49 +164,57 @@ rezulto en:
   </target>
 
 
-  <target name="medio" depends="init,bib,dok,dtd,stl,smb"
+  <target name="medio" depends="preparo,bib,dok,dtd,stl,smb"
      description="(re)kreas la medion por la vortaro, dosierujoj cfg,dok,dtd,stl,smb kun enhavo"/>
 
 
-  <target name="html" depends="init" 
+  <target name="html" depends="preparo" 
        description="(re)kreas indeksojn, tezauron kaj shanghitajn artikolojn en provizora dosierujo">
   
     <ant antfile="${mi.voko.ant}/tezauro.xml" inheritAll="false">   
        <property name="mi.bazo" location="${mi.bazo}"/>
-       <target name="agordo"/>
-       <target name="html"/>
+       <target name="tez-agordo"/>
+       <target name="tez-html"/>
     </ant>
 
     <ant antfile="${mi.voko.ant}/indeksoj.xml" inheritAll="false">   
        <property name="mi.bazo" location="${mi.bazo}"/>
-       <target name="agordo"/>
-       <target name="cvs-shanghoj"/>
-       <target name="eraroj"/>
-       <target name="html"/>
+       <target name="inx-agordo"/>
+       <target name="inx-cvs"/>
+       <target name="inx-eraroj"/>
+       <target name="inx-html"/>
     </ant>
 
     <ant antfile="${mi.voko.ant}/artikoloj.xml" inheritAll="false">   
        <property name="mi.bazo" location="${mi.bazo}"/>
-       <target name="agordo"/>
-       <target name="html"/>
+       <target name="art-agordo"/>
+       <target name="art-html"/>
     </ant>
 
   </target>
 
 
-  <target name="tuto" depends="init" 
+  <target name="tuto" depends="preparo" 
        description="shovas (re)kreitajn indeksojn, tezauron kaj artikolojn el provizora dosierujo al la vortaro">
   
-    <ant antfile="${mi.voko.ant}/tezauro.xml" target="mil" inheritAll="false">   
+    <ant antfile="${mi.voko.ant}/tezauro.xml" inheritAll="false">   
        <property name="mi.bazo" location="${mi.bazo}"/>
+       <target name="tez-agordo"/>
+       <target name="tez-mil"/>
     </ant>
 
-    <ant antfile="${mi.voko.ant}/indeksoj.xml" target="tuto" inheritAll="false">   
+    <ant antfile="${mi.voko.ant}/indeksoj.xml" inheritAll="false">   
        <property name="mi.bazo" location="${mi.bazo}"/>
-    </ant>
+       <target name="inx-agordo"/>
+       <target name="inx-cvs"/>
+       <target name="inx-eraroj"/>
+       <target name="inx-tuto"/>
+      </ant>
 
-    <ant antfile="${mi.voko.ant}/artikoloj.xml" target="tuto" inheritAll="false">   
+    <ant antfile="${mi.voko.ant}/artikoloj.xml" inheritAll="false">   
        <property name="mi.bazo" location="${mi.bazo}"/>
+       <target name="art-agordo"/>
+       <target name="art-tuto"/>
     </ant>
 
   </target>

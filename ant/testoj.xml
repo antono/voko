@@ -37,13 +37,13 @@ outputformat=xhtml
 
     <!-- kontrolu agordon -->
     <ant antfile="${mi.voko.ant}/indeksoj.xml"
-       dir="${mi.bazo}" target="agordo" inheritAll="false"/>
+       dir="${mi.bazo}" target="inx-agordo" inheritAll="false"/>
 
     <!-- kreu vortareton por testo -->
     <ant antfile="${mi.voko.ant}/indeksoj.xml"
-       dir="${mi.bazo}" target="forigu" inheritAll="false"/>
+       dir="${mi.bazo}" target="inx-forigo" inheritAll="false"/>
     <ant antfile="${mi.voko.ant}/tezauro.xml"
-       dir="${mi.bazo}" target="forigu" inheritAll="false"/>
+       dir="${mi.bazo}" target="tez-forigo" inheritAll="false"/>
 
     <echo 
 file="${mi.bazo.xml}/test.xml"><![CDATA[<?xml version="1.0"?>
@@ -285,14 +285,14 @@ file="${mi.testoj}/preparu-teston.xsl"><![CDATA[<?xml version="1.0"?>
     <!-- testu eltiradon de la indeksinformoj -->
 
     <ant antfile="${mi.voko.ant}/indeksoj.xml"
-       dir="${mi.bazo}" target="eltiro" inheritAll="false"/>
+       dir="${mi.bazo}" target="inx-eltiro" inheritAll="false"/>
 
 
 
     <!-- testu kategoriadon de la indeksinformoj -->
 
     <ant antfile="${mi.voko.ant}/indeksoj.xml"
-       dir="${mi.bazo}" target="kategorioj" inheritAll="false"/>   
+       dir="${mi.bazo}" target="inx-kategorioj" inheritAll="false"/>   
 
     <echo 
 file="${mi.testoj}/indeks-testo-kat.xml"><![CDATA[<?xml version="1.0"?>
@@ -404,7 +404,7 @@ ${rezulto_1}
 
 
     <ant antfile="${mi.voko.ant}/indeksoj.xml"
-       dir="${mi.bazo}" target="ordigo" inheritAll="false"/>
+       dir="${mi.bazo}" target="inx-ordigo" inheritAll="false"/>
 
     <echo 
 file="${mi.testoj}/indeks-testo-ord.xml"><![CDATA[<?xml version="1.0"?>
@@ -506,7 +506,7 @@ ${rezulto_2}
     <!-- testu kreadon de la HTML-indeksdosieroj -->
 
     <ant antfile="${mi.voko.ant}/indeksoj.xml"
-       dir="${mi.bazo}" target="tuto" inheritAll="false"/>
+       dir="${mi.bazo}" target="inx-tuto" inheritAll="false"/>
 
     <echo 
 file="${mi.testoj}/indeks-testo-kap-t.xml"><![CDATA[<?xml version="1.0"?>
@@ -686,12 +686,12 @@ ${rezulto_6}
     <!-- testu eltiradon de la referencoj -->
 
     <ant antfile="${mi.voko.ant}/tezauro.xml"
-       dir="${mi.bazo}" target="eltiro" inheritAll="false"/>
+       dir="${mi.bazo}" target="tez-eltiro" inheritAll="false"/>
 
     <!-- testu ordigon/kompletigon de la referencoj -->
 
     <ant antfile="${mi.voko.ant}/tezauro.xml"
-       dir="${mi.bazo}" target="retigo" inheritAll="false"/>   
+       dir="${mi.bazo}" target="tez-retigo" inheritAll="false"/>   
 
     <echo 
 file="${mi.testoj}/tezauro-testo-ret.xml"><![CDATA[<?xml version="1.0"?>
@@ -739,7 +739,7 @@ ${rezulto_1}
     <!-- testu HTML-dosierojn de la tezauro -->
 
     <ant antfile="${mi.voko.ant}/tezauro.xml"
-       dir="${mi.bazo}" target="tuto" inheritAll="false"/>   
+       dir="${mi.bazo}" target="tez-tuto" inheritAll="false"/>   
 
 
    <echo 
@@ -853,7 +853,7 @@ ${rezulto_4}
 
 
     <ant antfile="${mi.voko.ant}/indeksoj.xml"
-       dir="${mi.bazo}" target="eraroj" inheritAll="false"/>   
+       dir="${mi.bazo}" target="inx-eraroj" inheritAll="false"/>   
 
 
    <echo 

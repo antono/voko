@@ -28,12 +28,12 @@
      <pathelement path="${java.class.path}"/>
   </path>
 
-  <target name="agordo" description="eligas la agordeblajn variablojn por kontrolo">
+  <target name="inx-agordo" description="eligas la agordeblajn variablojn por kontrolo">
     <echoproperties prefix="mi."/> 
   </target>
      
 
-  <target name="init">
+  <target name="inx-preparo">
     <!-- Create the time stamp -->
     <tstamp/>
     <!-- Create the build directory structure used by compile -->
@@ -52,18 +52,18 @@
     </uptodate>
   </target>
 
-  <target name="forigu" 
+  <target name="inx-forigo" 
       description="forigas chiujn dosierojn en ${mi.tmp}/inx"
-      depends="init">
+      depends="inx-preparo">
  
      <delete>
         <fileset dir="${mi.tmp}/inx" includes="*"/>
      </delete>
   </target>
 
-  <target name="eltiro" unless="indekso.aktuala"
+  <target name="inx-eltiro" unless="indekso.aktuala"
     description="faras la dosieron indekso.xml el chiuj artikoloj kiel bazo por chiuj indeksoj" 
-    depends="init">
+    depends="inx-preparo">
 
     <java classname="de.steloj.respiro.DirectoryTransformer"
      logError="true">
@@ -79,7 +79,7 @@
 
   </target>
 
-  <target name="kategorioj" depends="init,eltiro"
+  <target name="inx-kategorioj" depends="inx-preparo,inx-eltiro"
      description="eltiri la kapvortojn, tradukojn, fakindikojn ktp. el la indeks-dosiero">
      <xslt in="${mi.tmp}/indekso.xml" out="${mi.tmp}/inx_kat.xml"  style="${mi.voko.xsl}/inx_kategorioj.xsl"/>
 <!--       classpathref="saxon.classpath">
@@ -88,7 +88,7 @@
       
   </target>
 
-  <target name="ordigo" depends="init,kategorioj"
+  <target name="inx-ordigo" depends="inx-preparo,inx-kategorioj"
      description="ordigi la kapvortojn, tradukojn, fakojn ktp.">
      <xslt in="${mi.tmp}/inx_kat.xml" out="${mi.tmp}/inx_ord.xml"
        style="${mi.voko.xsl}/inx_ordigo2.xsl" classpathref="saxon.classpath">
@@ -103,7 +103,7 @@
   </target>
 
 
-  <target name="html" depends="init,ordigo"
+  <target name="inx-html" depends="inx-preparo,inx-ordigo"
      description="kreas la HTML-dosierojn de la indeksoj">
 
     <filter token="format" value="${mi.outputformat}"/>
@@ -115,7 +115,7 @@
   </target>
 
 
-  <target name="cvs-shanghoj"
+  <target name="inx-cvs"
      description="kreas raporton pri la lastaj shanghoj per CVS">
 
      <cvschangelog dir="${mi.bazo.xml}"
@@ -128,7 +128,7 @@
   </target>
 
 
-  <target name="eraroj" depends="init" unless="indekso.aktuala"
+  <target name="inx-eraroj" depends="inx-preparo" unless="indekso.aktuala"
      description="kreas raporton pri diversaj eraroj en la artikoloj">
 
      <java classname="de.steloj.respiro.DirectoryTransformer"
@@ -149,7 +149,7 @@
   </target>
 
 
-  <target name="tuto" depends="init,html"
+  <target name="inx-tuto" depends="inx-preparo,inx-html"
      description="kopias fine chiujn enhave shanghitajn dosierojn al la
      indeksdosierujo kaj tie forigas forfalintajn">
 
