@@ -736,6 +736,9 @@
  <l name="z">zZ&#x017e;</l>
 </lingvo>
 
+<!-- nederlanda -->
+<lingvo lng="nl" kiel="la"/>
+
 <!-- norvega -->
 <lingvo lng="no">
  <l name="a">aA</l>

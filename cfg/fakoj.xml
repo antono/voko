@@ -35,7 +35,7 @@
   <fako kodo="FIZ" vinjeto="../smb/FIZ.gif">fiziko</fako>
   <fako kodo="FON" vinjeto="../smb/FON.gif">fonetiko</fako>
   <fako kodo="FOT" vinjeto="../smb/FOT.gif">fotografio, optiko</fako>
-  <fako kodo="GEN">genealogio</fako>
+  <fako kodo="GEN" vinjeto="../smb/GEN.gif">genealogio</fako>
   <fako kodo="GEOD" vinjeto="../smb/GEOD.gif">geodezio, topografio</fako>
   <fako kodo="GEOG" vinjeto="../smb/GEOG.gif">geografio</fako>
   <!-- fako kodo="GEOM" vinjeto="../smb/GEOM.gif">geometrio</fako -->

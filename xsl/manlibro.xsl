@@ -73,7 +73,7 @@ kreita de Wolfram Diestel
   </div> 
 </xsl:template>
 
-<xsl:template match="code//node()">
+<xsl:template match="code//*|code//@*">
   <span class="element">
     <xsl:text>&lt;</xsl:text>
     <xsl:value-of select="local-name()"/>

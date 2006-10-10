@@ -2,35 +2,35 @@
 
 <ordigo>
 
-<lingvo lng="eo">
- <l name="a">aA</l>
- <l name="b">bB</l>
- <l name="c">cC</l>
- <l name="cx">&#x0109;&#x0108;</l>
- <l name="d">dD</l>
- <l name="e">eE</l>
- <l name="f">fF</l>
- <l name="g">gG</l>
- <l name="gx">&#x011d;&#x011c;</l>
- <l name="h">hH</l>
- <l name="hx">&#x0125;&#x0124;</l>
- <l name="i">iI</l>
- <l name="j">jJ</l>
- <l name="jx">&#x0135;&#x0134;</l>
- <l name="k">kK</l>
- <l name="l">lL</l>
- <l name="m">mM</l>
- <l name="n">nN</l>
- <l name="o">oO</l>
- <l name="p">pP</l>
- <l name="r">rR</l>
- <l name="s">sS</l>
- <l name="sx">&#x015d;&#x015c;</l>
- <l name="t">tT</l>
- <l name="u">uU</l>
- <l name="ux">&#x016d;&#x016c;</l>
- <l name="v">vV</l>
- <l name="z">zZ</l>
+<lingvo lng="eo" kreu-regulojn="jes">
+ <l name="a">a,A</l>
+ <l name="b">b,B</l>
+ <l name="c">c,C</l>
+ <l name="cx">&#x0109;,&#x0108;</l>
+ <l name="d">d,D</l>
+ <l name="e">e,E</l>
+ <l name="f">f,F</l>
+ <l name="g">g,G</l>
+ <l name="gx">&#x011d;,&#x011c;</l>
+ <l name="h">h,H</l>
+ <l name="hx">&#x0125;,&#x0124;</l>
+ <l name="i">i,I</l>
+ <l name="j">j,J</l>
+ <l name="jx">&#x0135;,&#x0134;</l>
+ <l name="k">k,K</l>
+ <l name="l">l,L</l>
+ <l name="m">m,M</l>
+ <l name="n">n,N</l>
+ <l name="o">o,O</l>
+ <l name="p">p,P</l>
+ <l name="r">r,R</l>
+ <l name="s">s,S</l>
+ <l name="sx">&#x015d;,&#x015c;</l>
+ <l name="t">t,T</l>
+ <l name="u">u,U</l>
+ <l name="ux">&#x016d;,&#x016c;</l>
+ <l name="v">v,V</l>
+ <l name="z">z,Z</l>
 </lingvo>
 
 <!-- araba -->

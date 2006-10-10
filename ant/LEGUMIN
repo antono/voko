@@ -16,6 +16,10 @@ por instali kaj funkciigi la vortaron necesas:
   La lasta estas por provizoraj dosieroj kreataj dum la kreado kaj
   kuŝu laŭeble ekster la vortaro-dosierujo.
 
+  Krome vi povas adapti la enhavon de la dosieroj voko/cfg/*.xml,
+  aparte enhavo.xml. Atentu, ke grandaj strukturaj adaptoj en enhavo.xml
+  necesigus ankaŭ ŝanĝojn en la stildosieroj voko/xsl/*.xsl.
+
   Poste preparu la medion por la vortaro per:
 
     ant -f /pado/al/voko/ant/vortaro.xml medio

@@ -83,17 +83,20 @@
 
   <target name="art-tuto" depends="art-html"
        description="kopias shanghitajn artikolojn al la destin-dosierujo">
-    <!-- copy todir="${mi.bazo.art}">
+    <copy todir="${mi.bazo.art}">
       <fileset dir="${mi.tmp}/art" includes="*.html">
         <different targetdir="${mi.bazo.art}" ignoreFileTimes="true"/>
       </fileset>
-    </copy -->
+    </copy>
+  </target>
 
-   <!-- provizore kopiu nur kelkajn -->
 
-   <copy todir="${mi.bazo.art}">
+   
+  <target name="art-tricent" depends="art-html"
+       description="kopias nur maksimume 300 shanghitajn artikolojn al la destin-dosierujo -->
+  
+    <copy todir="${mi.bazo.art}">
       <fileset dir="${mi.tmp}/art" includes="*.html">
-        <!-- different targetdir="${mi.tez}" ignoreFileTimes="true"/ -->
         <custom classname="de.steloj.respiro.DiffMaxFilesSelector" classpath="${mi.voko.ant}/respiro.jar">
           <param name="targetDir" value="${mi.bazo.art}"/>
           <param name="ignoreFileTimes" value="true"/>
