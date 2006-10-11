@@ -116,6 +116,13 @@
 
 <!ENTITY middot "&#x00b7;">
 
+
+<!-- rumanaj -->
+<!ENTITY Abreve "&#x0102;">
+<!ENTITY abreve "&#x0103;">
+<!ENTITY Tcedil "&#x0162;">
+<!ENTITY tcedil "&#x0163;">
+
 <!-- grekaj -->
 
 

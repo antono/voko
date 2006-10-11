@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- strukturo de agordo-dosiero enhavo.xml por Voko-vortaroj -->
+
+<!ELEMENT vortaro (bonveno?,pagho*)>
+<!ATTLIST vortaro nomo CDATA #REQUIRED
+                  nometo CDATA #REQUIRED
+                  piktogramo CDATA #IMPLIED>
+
+<!ELEMENT bonveno (alineo|bildo|sercho)*>
+<!ELEMENT alineo (#PCDATA|url)*>
+<!ATTLIST alineo style CDATA #IMPLIED>
+<!ELEMENT url (#PCDATA)>
+<!ATTLIST url ref CDATA #REQUIRED>
+<!ELEMENT bildo EMPTY>
+<!ATTLIST bildo loko CDATA #REQUIRED>
+<!ELEMENT sercho EMPTY>
+<!ATTLIST sercho tipo (google) #REQUIRED>
+
+<!ELEMENT elshuto (sekcio|alineo)*>
+<!ATTLIST elshuto titolo CDATA #REQUIRED>
+
+<!ELEMENT pagho (sekcio*)>
+<!ATTLIST pagho titolo CDATA #REQUIRED
+                dosiero CDATA #REQUIRED>
+
+<!ELEMENT sekcio (ero|KAP-OJ|TRD-OJ|FAKOJ|INV|BLD-OJ|MLG-OJ)*>
+<!ATTLIST sekcio titolo CDATA #REQUIRED
+                 kadro CDATA #IMPLIED>
+
+<!ELEMENT ero (alineo*)>
+<!ATTLIST ero titolo CDATA #REQUIRED
+              ref CDATA #REQUIRED
+              kadro CDATA #IMPLIED>
+
+<!ELEMENT KAP-OJ EMPTY>
+<!ATTLIST KAP-OJ titolo CDATA #IMPLIED>
+<!ELEMENT TRD-OJ EMPTY>
+<!ATTLIST TRD-OJ titolo CDATA #IMPLIED>
+<!ELEMENT MANKOJ EMPTY>
+<!ATTLIST MANKOJ titolo CDATA #IMPLIED>
+<!ELEMENT FAKOJ EMPTY>
+<!ATTLIST FAKOJ titolo CDATA #IMPLIED>
+<!ELEMENT INV EMPTY>
+<!ATTLIST INV titolo CDATA #REQUIRED>
+<!ELEMENT BLD-OJ EMPTY>
+<!ATTLIST BLD-OJ titolo CDATA #REQUIRED>
+<!ELEMENT MLG-OJ EMPTY>
+<!ATTLIST MLG-OJ titolo CDATA #REQUIRED>
+<!ELEMENT STAT EMPTY>
+<!ATTLIST STAT titolo CDATA #REQUIRED>
+
+
+<!ENTITY % signoj SYSTEM "../dtd/vokosgn.dtd">
+%signoj;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

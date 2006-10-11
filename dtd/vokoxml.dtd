@@ -297,7 +297,7 @@ sama lingvo.
 <!-- [trd] Traduko kosistas el traduka vorto aŭ frazo
 kaj klarigoj, poste povos sekvi aliaj elementoj.
 -->
-<!ELEMENT trd (#PCDATA|klr|ind|mll)*>
+<!ELEMENT trd (#PCDATA|klr|ind|mll|ofc)*>
 <!ATTLIST trd
 	lng CDATA #IMPLIED
 >
