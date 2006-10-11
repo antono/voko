@@ -30,21 +30,21 @@
 <xsl:variable name="root" select="/"/>
 
 <xsl:template match="/">
-  <xsl:apply-templates select="document($enhavo)/vortaro/pagho"/>
+  <xsl:apply-templates select="document($enhavo)/enhavo/pagho"/>
 
   <xsl:call-template name="indeksoj">
-    <xsl:with-param name="kap-oj" select="count(document($enhavo)/vortaro//KAP-OJ)"/>
-    <xsl:with-param name="trd-oj" select="count(document($enhavo)/vortaro//TRD-OJ)"/>
-    <xsl:with-param name="mankoj" select="count(document($enhavo)/vortaro//MANKOJ)"/>
-    <xsl:with-param name="fakoj" select="count(document($enhavo)/vortaro//FAKOJ)"/>
-    <xsl:with-param name="inv" select="count(document($enhavo)/vortaro//INV)"/>
-    <xsl:with-param name="bld-oj" select="count(document($enhavo)/vortaro//BLD-OJ)"/>
-    <xsl:with-param name="mlg-oj" select="count(document($enhavo)/vortaro//MLG-OJ)"/>
-    <xsl:with-param name="stat" select="count(document($enhavo)/vortaro//STAT)"/>
+    <xsl:with-param name="kap-oj" select="count(document($enhavo)/enhavo//KAP-OJ)"/>
+    <xsl:with-param name="trd-oj" select="count(document($enhavo)/enhavo//TRD-OJ)"/>
+    <xsl:with-param name="mankoj" select="count(document($enhavo)/enhavo//MANKOJ)"/>
+    <xsl:with-param name="fakoj" select="count(document($enhavo)/enhavo//FAKOJ)"/>
+    <xsl:with-param name="inv" select="count(document($enhavo)/enhavo//INV)"/>
+    <xsl:with-param name="bld-oj" select="count(document($enhavo)/enhavo//BLD-OJ)"/>
+    <xsl:with-param name="mlg-oj" select="count(document($enhavo)/enhavo//MLG-OJ)"/>
+    <xsl:with-param name="stat" select="count(document($enhavo)/enhavo//STAT)"/>
   </xsl:call-template>
 
-  <xsl:if test="count(document($enhavo)/vortaro//MANKOJ) &gt; 0">
-    <xsl:for-each select="(document($enhavo)/vortaro//MANKOJ)[1]">
+  <xsl:if test="count(document($enhavo)/enhavo//MANKOJ) &gt; 0">
+    <xsl:for-each select="(document($enhavo)/enhavo//MANKOJ)[1]">
       <xsl:call-template name="MANKO-LISTOJ"/>
     </xsl:for-each>
   </xsl:if>

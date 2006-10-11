@@ -24,7 +24,7 @@
 <xsl:output method="xhtml" encoding="utf-8"/>
 <xsl:variable name="inx" select="'inx/'"/>
 
-<xsl:template match="/vortaro">
+<xsl:template match="/enhavo">
 
   <html>
     <head>

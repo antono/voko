@@ -1,58 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE enhavo SYSTEM "../dtd/vokoenh.dtd">
 
-<!DOCTYPE vortaro [
+<enhavo nomo="Reta Vortaro" nometo="ReVo" pikotgramo="revo.ico">
 
-<!ELEMENT vortaro (bonveno?,pagho*)>
-<!ATTLIST vortaro nomo CDATA #REQUIRED
-                  nometo CDATA #REQUIRED
-                  piktogramo CDATA #IMPLIED>
-
-<!ELEMENT bonveno (alineo|bildo|sercho)*>
-<!ELEMENT alineo (#PCDATA|url)*>
-<!ELEMENT url (#PCDATA)>
-<!ATTLIST url ref CDATA #REQUIRED>
-<!ELEMENT bildo EMPTY>
-<!ATTLIST bildo loko CDATA #REQUIRED>
-<!ELEMENT sercho EMPTY>
-<!ATTLIST sercho tipo (google) #REQUIRED>
-
-<!ELEMENT pagho (sekcio*)>
-<!ATTLIST pagho titolo CDATA #REQUIRED
-                dosiero CDATA #REQUIRED>
-
-<!ELEMENT sekcio (ero|KAP-OJ|TRD-OJ|FAKOJ|INV|BLD-OJ|MLG-OJ)*>
-<!ATTLIST sekcio titolo CDATA #REQUIRED
-                 kadro CDATA #IMPLIED>
-
-<!ATTLIST ero titolo CDATA #REQUIRED
-              ref CDATA #REQUIRED
-              kadro CDATA #IMPLIED>
-
-<!ELEMENT KAP-OJ EMPTY>
-<!ATTLIST KAP-OJ titolo CDATA #IMPLIED>
-<!ELEMENT TRD-OJ EMPTY>
-<!ATTLIST TRD-OJ titolo CDATA #IMPLIED>
-<!ELEMENT MANKOJ EMPTY>
-<!ATTLIST MANKOJ titolo CDATA #IMPLIED>
-<!ELEMENT FAKOJ EMPTY>
-<!ATTLIST FAKOJ titolo CDATA #IMPLIED>
-<!ELEMENT INV EMPTY>
-<!ATTLIST INV titolo CDATA #REQUIRED>
-<!ELEMENT BLD-OJ EMPTY>
-<!ATTLIST BLD-OJ titolo CDATA #REQUIRED>
-<!ELEMENT MLG-OJ EMPTY>
-<!ATTLIST MLG-OJ titolo CDATA #REQUIRED>
-<!ELEMENT STAT EMPTY>
-<!ATTLIST STAT titolo CDATA #REQUIRED>
-
-
-<!ENTITY % signoj SYSTEM "../dtd/vokosgn.dtd">
-%signoj;
-
-]>
-
-
-<vortaro nomo="Reta Vortaro" nometo="ReVo" pikotgramo="revo.ico">
+  <!-- titolpagho -->
 
   <bonveno>
     <sercho tipo="google"/>
@@ -73,6 +24,57 @@
       <url ref="http://purl.org/net/voko/revo">http://purl.org/net/voko/revo/</url>.
     </alineo>
   </bonveno>
+
+  <!-- elshuto-pagho -->
+  <elshuto titolo="El&scirc;uti Revo-rilatan materialon">
+    <sekcio titolo="Reta Vortaro - kompleto">
+      <ero titolo="fontodosieroj (XML, DTD, XSL ktp.)" ref="revoxml"/>
+      <ero titolo="prezentodosieroj (artikoloj, indeksoj, k. a. HTML-dosieroj)" ref="revohtml"/>
+      <ero titolo="bildoj" ref="revobld"/>
+    </sekcio>
+    <sekcio titolo="Reta Vortaro - laste &scirc;an&gcirc;itaj dosieroj">
+      <ero titolo="&scirc;an&gcirc;itaj dosieroj" ref="revonov"/>
+    </sekcio>
+    <sekcio titolo="DICT-versio de Reta Vortaro">
+      <ero titolo="DICT-Revo" ref="revodict">
+        <alineo style="font-size: small; margin-top: 0.5em; margin-left: 2em; width: 70%">
+        Tio ebligas rapidan uzadon de la vortaro. Simple tajpante
+        ser&ccirc;atan vorton a&ubreve; parton de &gcirc;i en iu lingvo, vi ricevas
+        la koncernajn artikolojn.
+        Por utiligi &gcirc;in vi devas instali Dict-Servon "dictd"
+        (vd. <url ref="http://dict.org">dict.org</url>,
+        Tie haveblas anka&ubreve; Dict-klientoj. Vi povas uzi la
+        Dict-servon &ccirc;e Michiel (131.211.121.124) a&ubreve; &ccirc;e Radovan
+        (dict.dnp.fmph.uniba.sk) tra Interreto. Tiuokaze vi bezonas nur klienton.
+        </alineo>
+      </ero>
+    </sekcio>
+    <sekcio titolo="Voko-programaro">
+      <ero titolo="programoj por fari kaj administri vortaron" ref="voko">
+        <alineo style="font-size: small; margin-top: 0.5em; margin-left: 2em; width: 70%">
+        &Gcirc;i enhavas &ccirc;iujn rimedojn por konstrui elektronikajn
+        vortarojn la&ubreve; VoKo-teknologio. &Gcirc;i ne enhavas
+        ekzemplovortaron (vi povus preni kelkajn artikolojn el ReVo).
+        Aldone vi bezonas ilojn el la publika programaro (t.e. Java, ant, saxon k.a.).
+        </alineo>
+      </ero>
+      <ero titolo="Reveto - versio por po&scirc;komputiloj" ref="reveto">
+        <alineo style="font-size: small; margin-top: 0.5em; margin-left: 2em; width: 70%">
+        Tio estas aro da HTML-dosieroj, limigitaj al la esencaj informoj, kun
+        nur elektitaj lingvo-indeksoj kaj sen bildoj.
+        Cetere vi povas anka&ubreve; ricevi Revon en bedic-formato.
+        Skribu al la Revo-administranto, se vi bezonas.
+        </alineo>
+      </ero>
+    </sekcio>
+    <alineo>
+       &Ccirc;iuj iloj de VoKo estas publikigataj sub la
+       <url ref="../revo/dok/copying.txt">GNUa &Gcirc;enerala Publika Permesilo</url>.
+    </alineo>
+  </elshuto>
+
+
+  <!-- indeks-paghoj -->
 
   <pagho titolo="Esperanto" dosiero="_eo.html">
      <sekcio titolo="alfabeta indekso">
@@ -199,7 +201,7 @@
        <ero ref="../dok/sxablono.txt" titolo="&scirc;ablono"/>
     </sekcio>
   </pagho>
-</vortaro> 
+</enhavo> 
 
 
 
