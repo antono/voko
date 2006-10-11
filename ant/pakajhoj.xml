@@ -57,14 +57,14 @@
        <!-- komparu nun -->
        <condition property="FARU-kompleton">
           <uptodate targetfile="${v.tgz}/.kompleto">
-           <srcfiles dir= "${v.tgz}" includes="revoxml_*"/>
+           <srcfiles dir= "${v.tgz}" includes="revoxml_*.zip"/>
          </uptodate>
        </condition>
 
        <condition property="FARU-parton">
           <and>
             <uptodate targetfile="${v.tgz}/.parto">
-               <srcfiles dir= "${v.tgz}" includes="revoxml_*,revonov_*"/>
+               <srcfiles dir= "${v.tgz}" includes="revoxml_*.zip,revonov_*.zip"/>
             </uptodate>
             <isfalse value="${FARU-kompleton}"/>
           </and>
@@ -207,7 +207,7 @@
      <java classname="de.steloj.respiro.DirectoryLister" output="${v.tgz}/dosieroj.xml" 
      logError="true">
          <arg value="${v.tgz}"/>
-         <arg value="^.*\.zip$"/>
+         <arg value="^.*\.(tgz|zip)$"/>
          <classpath>
            <pathelement location="./respiro.jar"/>
            <pathelement path="${java.class.path}"/>

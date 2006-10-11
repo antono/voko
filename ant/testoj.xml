@@ -1,4 +1,4 @@
-<project name="Revo-testoj" basedir="/home/revo/voko/tst">
+<project name="Revo-testoj" basedir=".">
     <description>
        Reta Vortaro, testoj.
     </description>
@@ -40,8 +40,12 @@ outputformat=xhtml
        dir="${v.bazo}" target="inx-agordo" inheritAll="false"/>
 
     <!-- kreu vortareton por testo -->
+    <!-- ant antfile="${v.voko.ant}/indeksoj.xml"
+       dir="${v.bazo}" target="inx-preparo" inheritAll="false"/ -->
     <ant antfile="${v.voko.ant}/indeksoj.xml"
        dir="${v.bazo}" target="inx-forigo" inheritAll="false"/>
+    <!-- ant antfile="${v.voko.ant}/tezauro.xml"
+       dir="${v.bazo}" target="tez-preparo" inheritAll="false"/ -->
     <ant antfile="${v.voko.ant}/tezauro.xml"
        dir="${v.bazo}" target="tez-forigo" inheritAll="false"/>
 
