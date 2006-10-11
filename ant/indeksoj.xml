@@ -4,19 +4,19 @@
     </description>
 
   <!-- legu agorditajn variablojn el dosiero -->
-  <property file="${user.dir}/cfg/agordo" prefix="mi."/>
+  <property file="${user.dir}/cfg/agordo" prefix="v."/>
 
   <!-- donu valorojn al la variabloj, se ili ne jam aperis en la agordo-dosiero -->
-  <property name="mi.voko" location="/home/revo/voko"/>
-  <property name="mi.voko.ant" location="${mi.voko}/ant"/>
-  <property name="mi.bazo" location="${user.dir}"/>
-  <property name="mi.bazo.inx" location="${mi.bazo}/inx"/>
-  <property name="mi.bazo.xml" location="${mi.bazo}/xml"/>
-  <property name="mi.voko.bin" location="${mi.voko}/bin"/>
-  <property name="mi.voko.xsl" location="${mi.voko}/xsl"/>
+  <property name="v.voko" location="/home/revo/voko"/>
+  <property name="v.voko.ant" location="${v.voko}/ant"/>
+  <property name="v.bazo" location="${user.dir}"/>
+  <property name="v.bazo.inx" location="${v.bazo}/inx"/>
+  <property name="v.bazo.xml" location="${v.bazo}/xml"/>
+  <property name="v.voko.bin" location="${v.voko}/bin"/>
+  <property name="v.voko.xsl" location="${v.voko}/xsl"/>
   <!-- property name="tmp" location="/home/revo/tmp/inx_tmp"/ -->
-  <property name="mi.tmp" location="${mi.bazo}/.tmp"/>
-  <property name="mi.outputformat" value="html"/>
+  <property name="v.tmp" location="${v.bazo}/.tmp"/>
+  <property name="v.outputformat" value="html"/>
 
   <property name="saxon" location="/usr/local/lib/saxon/saxon8.jar"/>
   
@@ -29,7 +29,7 @@
   </path>
 
   <target name="inx-agordo" description="eligas la agordeblajn variablojn por kontrolo">
-    <echoproperties prefix="mi."/> 
+    <echoproperties prefix="v."/> 
   </target>
      
 
@@ -37,27 +37,34 @@
     <!-- Create the time stamp -->
     <tstamp/>
     <!-- Create the build directory structure used by compile -->
-    <mkdir dir="${mi.bazo.inx}" />
-    <mkdir dir="${mi.tmp}" />
-    <mkdir dir="${mi.tmp}/inx" />
+    <mkdir dir="${v.bazo.inx}" />
+    <mkdir dir="${v.tmp}" />
+    <mkdir dir="${v.tmp}/inx" />
 
     <!-- (re)kreu inx_ordigo2.inc laubezone -->
-    <xslt in="${mi.voko}/cfg/ordigo2.xml" out="${mi.voko.xsl}/inx_ordigo2.inc"
-       style="${mi.voko.xsl}/inc_ordigo2.xsl"/>
+    <xslt in="${v.voko}/cfg/ordigo2.xml" out="${v.voko.xsl}/inx_ordigo2.inc"
+       style="${v.voko.xsl}/inc_ordigo2.xsl"/>
 
     <!-- chu necesas refari la dosieron indekso.xml? -->
     <uptodate property="indekso.aktuala">
-      <srcfiles dir="${mi.bazo.xml}" includes="*.xml"/>
-      <mapper type="merge" to="${mi.tmp}/indekso.xml"/>
+      <srcfiles dir="${v.bazo.xml}" includes="*.xml"/>
+      <mapper type="merge" to="${v.tmp}/indekso.xml"/>
     </uptodate>
+
+    <!-- chu necesas refari la dosieron eraroj.xml? -->
+    <uptodate property="eraroj.aktuala">
+      <srcfiles dir="${v.bazo.xml}" includes="*.xml"/>
+      <mapper type="merge" to="${v.tmp}/eraroj.xml"/>
+    </uptodate>
+
   </target>
 
   <target name="inx-forigo" 
-      description="forigas chiujn dosierojn en ${mi.tmp}/inx"
+      description="forigas chiujn dosierojn en ${v.tmp}/inx"
       depends="inx-preparo">
  
      <delete>
-        <fileset dir="${mi.tmp}/inx" includes="*"/>
+        <fileset dir="${v.tmp}/inx" includes="*"/>
      </delete>
   </target>
 
@@ -68,11 +75,11 @@
     <java classname="de.steloj.respiro.DirectoryTransformer"
      logError="true">
          <!-- arg value="-v"/-->
-         <arg path="${mi.bazo.xml}"/>
-         <arg file="${mi.voko.xsl}/inx_eltiro.xsl"/>
-         <arg file="${mi.tmp}/indekso.xml"/>
+         <arg path="${v.bazo.xml}"/>
+         <arg file="${v.voko.xsl}/inx_eltiro.xsl"/>
+         <arg file="${v.tmp}/indekso.xml"/>
          <classpath>
-           <pathelement location="${mi.voko.ant}/respiro.jar"/>
+           <pathelement location="${v.voko.ant}/respiro.jar"/>
            <pathelement path="${java.class.path}"/>
          </classpath>
     </java>
@@ -81,7 +88,7 @@
 
   <target name="inx-kategorioj" depends="inx-preparo,inx-eltiro"
      description="eltiri la kapvortojn, tradukojn, fakindikojn ktp. el la indeks-dosiero">
-     <xslt in="${mi.tmp}/indekso.xml" out="${mi.tmp}/inx_kat.xml"  style="${mi.voko.xsl}/inx_kategorioj.xsl"/>
+     <xslt in="${v.tmp}/indekso.xml" out="${v.tmp}/inx_kat.xml"  style="${v.voko.xsl}/inx_kategorioj.xsl"/>
 <!--       classpathref="saxon.classpath">
         <factory name="net.sf.saxon.TransformerFactoryImpl"/>
       </xslt> -->
@@ -90,8 +97,8 @@
 
   <target name="inx-ordigo" depends="inx-preparo,inx-kategorioj"
      description="ordigi la kapvortojn, tradukojn, fakojn ktp.">
-     <xslt in="${mi.tmp}/inx_kat.xml" out="${mi.tmp}/inx_ord.xml"
-       style="${mi.voko.xsl}/inx_ordigo2.xsl" classpathref="saxon.classpath">
+     <xslt in="${v.tmp}/inx_kat.xml" out="${v.tmp}/inx_ord.xml"
+       style="${v.voko.xsl}/inx_ordigo2.xsl" classpathref="saxon.classpath">
         <!-- classpathref >
           <pathelement location="/usr/local/lib/saxon/saxon8.jar"/>
           <pathelement path="${java.class.path}"/>
@@ -106,46 +113,46 @@
   <target name="inx-html" depends="inx-preparo,inx-ordigo"
      description="kreas la HTML-dosierojn de la indeksoj">
 
-    <filter token="format" value="${mi.outputformat}"/>
-    <copy file="${mi.voko.xsl}/inx_html.xsl" tofile="${mi.voko.xsl}/inx_html_${mi.outputformat}.xsl~" 
+    <filter token="format" value="${v.outputformat}"/>
+    <copy file="${v.voko.xsl}/inx_html.xsl" tofile="${v.voko.xsl}/inx_html_${v.outputformat}.xsl~" 
        filtering="true"/>
 
-     <xslt in="${mi.tmp}/inx_ord.xml" out="${mi.tmp}/inx/.tempo"
-       style="${mi.voko.xsl}/inx_html_${mi.outputformat}.xsl~"/>
+     <xslt in="${v.tmp}/inx_ord.xml" out="${v.tmp}/inx/.tempo"
+       style="${v.voko.xsl}/inx_html_${v.outputformat}.xsl~"/>
   </target>
 
 
   <target name="inx-cvs"
      description="kreas raporton pri la lastaj shanghoj per CVS">
 
-     <cvschangelog dir="${mi.bazo.xml}"
-                destfile="${mi.tmp}/inx_shanghoj.xml"
+     <cvschangelog dir="${v.bazo.xml}"
+                destfile="${v.tmp}/inx_shanghoj.xml"
                 daysinpast="14"     
      />
  
-     <xslt in="${mi.tmp}/inx_shanghoj.xml" out="${mi.tmp}/inx/shanghoj.html"
-       style="${mi.voko.xsl}/inx_shanghoj.xsl"/>
+     <xslt in="${v.tmp}/inx_shanghoj.xml" out="${v.tmp}/inx/shanghoj.html"
+       style="${v.voko.xsl}/inx_shanghoj.xsl"/>
   </target>
 
 
-  <target name="inx-eraroj" depends="inx-preparo" unless="indekso.aktuala"
+  <target name="inx-eraroj" depends="inx-preparo" unless="eraroj.aktuala"
      description="kreas raporton pri diversaj eraroj en la artikoloj">
 
      <java classname="de.steloj.respiro.DirectoryTransformer"
        logError="true">
          <!-- arg value="-v"/ -->
-         <arg path="${mi.bazo.xml}"/>
-         <arg file="${mi.voko.xsl}/inx_eraroj.xsl"/>
-         <arg file="${mi.tmp}/eraroj.xml"/>
+         <arg path="${v.bazo.xml}"/>
+         <arg file="${v.voko.xsl}/inx_eraroj.xsl"/>
+         <arg file="${v.tmp}/eraroj.xml"/>
          <classpath>
-           <pathelement location="${mi.voko.ant}/respiro.jar"/>
+           <pathelement location="${v.voko.ant}/respiro.jar"/>
            <pathelement path="${java.class.path}"/>
          </classpath>
     </java>
 
 
-     <xslt in="${mi.tmp}/eraroj.xml" out="${mi.tmp}/inx/eraroj.html"
-       style="${mi.voko.xsl}/inx_eraroj_html.xsl"/>
+     <xslt in="${v.tmp}/eraroj.xml" out="${v.tmp}/inx/eraroj.html"
+       style="${v.voko.xsl}/inx_eraroj_html.xsl"/>
   </target>
 
 
@@ -153,16 +160,16 @@
      description="kopias fine chiujn enhave shanghitajn dosierojn al la
      indeksdosierujo kaj tie forigas forfalintajn">
 
-    <copy todir="${mi.bazo.inx}">
-      <fileset dir="${mi.tmp}/inx" includes="*">
-        <different targetdir="${mi.bazo.inx}" ignoreFileTimes="true"/>
+    <copy todir="${v.bazo.inx}">
+      <fileset dir="${v.tmp}/inx" includes="*">
+        <different targetdir="${v.bazo.inx}" ignoreFileTimes="true"/>
       </fileset>
     </copy>
 
     <delete>
-      <fileset dir="${mi.bazo.inx}" includes="lx_*.html fx_*.html kap_*.html
+      <fileset dir="${v.bazo.inx}" includes="lx_*.html fx_*.html kap_*.html
          inv_*.html _*.html bildoj.html mallong.html">
-         <present present="srconly" targetdir="${mi.tmp}/inx"/>
+         <present present="srconly" targetdir="${v.tmp}/inx"/>
       </fileset>
     </delete>
 

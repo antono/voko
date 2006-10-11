@@ -4,20 +4,20 @@
     </description>
 
   <!-- legu agorditajn variablojn el dosiero -->
-  <property file="${user.dir}/cfg/agordo" prefix="mi."/>
+  <property file="${user.dir}/cfg/agordo" prefix="v."/>
 
   <!-- donu valorojn al la variabloj, se ili ne jam aperis en la agordo-dosiero -->
-  <property name="mi.voko" location="/home/revo/voko"/>
-  <property name="mi.voko.ant" location="${mi.voko}/ant"/>
-  <property name="mi.bazo" location="${user.dir}"/>
-  <!-- property name="mi.bazo.inx" location="${mi.bazo}/inx"/ -->
-  <!-- property name="mi.bazo.xml" location="${mi.bazo}/xml"/ -->
-  <property name="mi.bazo.tez" location="${mi.bazo}/tez"/>
-  <property name="mi.voko.bin" location="${mi.voko}/bin"/>
-  <property name="mi.voko.xsl" location="${mi.voko}/xsl"/>
+  <property name="v.voko" location="/home/revo/voko"/>
+  <property name="v.voko.ant" location="${v.voko}/ant"/>
+  <property name="v.bazo" location="${user.dir}"/>
+  <!-- property name="v.bazo.inx" location="${v.bazo}/inx"/ -->
+  <!-- property name="v.bazo.xml" location="${v.bazo}/xml"/ -->
+  <property name="v.bazo.tez" location="${v.bazo}/tez"/>
+  <property name="v.voko.bin" location="${v.voko}/bin"/>
+  <property name="v.voko.xsl" location="${v.voko}/xsl"/>
   <!-- property name="tmp" location="/home/revo/tmp/inx_tmp"/ -->
-  <property name="mi.tmp" location="${mi.bazo}/.tmp"/>
-  <property name="mi.outputformat" value="html"/>
+  <property name="v.tmp" location="${v.bazo}/.tmp"/>
+  <property name="v.outputformat" value="html"/>
 
   <property name="saxon" location="/usr/local/lib/saxon/saxon8.jar"/>
 
@@ -31,37 +31,37 @@
 
   <target name="tez-preparo">
     <tstamp/>
-    <mkdir dir="${mi.bazo.tez}" />
+    <mkdir dir="${v.bazo.tez}" />
   </target>
 
 
   <target name="tez-agordo" description="eligas la agordeblajn variablojn por kontrolo">
-    <echoproperties prefix="mi."/>
+    <echoproperties prefix="v."/>
   </target>
 
 
   <target name="tez-eltiro" 
     description="faras la dosieron indekso.xml el chiuj artikoloj kiel bazo por la tezauro (vokas indekso.xml)" 
     depends="tez-preparo">
-    <ant antfile="${mi.voko.ant}/indeksoj.xml"
-       dir="${mi.bazo}" target="inx-eltiro" inheritAll="true"/>
+    <ant antfile="${v.voko.ant}/indeksoj.xml"
+       dir="${v.bazo}" target="inx-eltiro" inheritAll="true"/>
   </target>
 
 
   <target name="tez-forigo" 
-      description="forigas chiujn dosierojn en ${mi.tmp}/tez"
+      description="forigas chiujn dosierojn en ${v.tmp}/tez"
       depends="tez-preparo">
  
      <delete>
-        <fileset dir="${mi.tmp}/tez" includes="*"/>
+        <fileset dir="${v.tmp}/tez" includes="*"/>
      </delete>
   </target>
 
 
   <target name="tez-retigo" depends="tez-preparo,tez-eltiro"
      description="retigi la tezauronodojn">
-     <xslt in="${mi.tmp}/indekso.xml" out="${mi.tmp}/tez_ret.xml"
-       style="${mi.voko.xsl}/tez_retigo.xsl">
+     <xslt in="${v.tmp}/indekso.xml" out="${v.tmp}/tez_ret.xml"
+       style="${v.voko.xsl}/tez_retigo.xsl">
      </xslt>
   </target>
 
@@ -69,11 +69,12 @@
   <target name="tez-html" depends="tez-preparo,tez-retigo"
      description="kreas la HTML-dosierojn de la tezauro">
 
-    <filter token="format" value="${mi.outputformat}"/>
-    <copy file="${mi.voko.xsl}/tez_html.xsl" tofile="${mi.voko.xsl}/tez_html_${mi.outputformat}.xsl~" 
+    <filter token="format" value="${v.outputformat}"/>
+    <copy file="${v.voko.xsl}/tez_html.xsl" tofile="${v.voko.xsl}/tez_html_${v.outputformat}.xsl~" 
        filtering="true"/>
-     <xslt in="${mi.tmp}/tez_ret.xml" out="${mi.tmp}/tez/.tempo"
-       style="${mi.voko.xsl}/tez_html_${mi.outputformat}.xsl~"/>
+
+     <xslt in="${v.tmp}/tez_ret.xml" out="${v.tmp}/tez/.tempo"
+       style="${v.voko.xsl}/tez_html_${v.outputformat}.xsl~"/>
   </target>
 
 
@@ -81,11 +82,11 @@
      description="kopias fine maksimume mil shanghitajn dosierojn al la
      tezaurodosierujo kaj tie forigas forfalintajn">
 
-    <copy todir="${mi.bazo.tez}">
-      <fileset dir="${mi.tmp}/tez" includes="*">
-        <!-- different targetdir="${mi.tez}" ignoreFileTimes="true"/ -->
-        <custom classname="de.steloj.respiro.DiffMaxFilesSelector" classpath="${mi.voko.ant}/respiro.jar">
-          <param name="targetDir" value="${mi.bazo.tez}"/>
+    <copy todir="${v.bazo.tez}">
+      <fileset dir="${v.tmp}/tez" includes="*">
+        <!-- different targetdir="${v.tez}" ignoreFileTimes="true"/ -->
+        <custom classname="de.steloj.respiro.DiffMaxFilesSelector" classpath="${v.voko.ant}/respiro.jar">
+          <param name="targetDir" value="${v.bazo.tez}"/>
           <param name="ignoreFileTimes" value="true"/>
           <param name="maxFiles" value="1000"/> <!-- aktualigu maksimume 1000 dosierojn de la tezauro -->
         </custom>
@@ -93,8 +94,8 @@
     </copy>
 
     <delete>
-      <fileset dir="${mi.bazo.tez}" includes="*">
-         <present present="srconly" targetdir="${mi.tmp}/tez"/>
+      <fileset dir="${v.bazo.tez}" includes="*">
+         <present present="srconly" targetdir="${v.tmp}/tez"/>
       </fileset>
     </delete>
 
@@ -105,15 +106,15 @@
      description="kopias fine chiujn enhave shanghitajn dosierojn al la
      tezaurodosierujo kaj tie forigas forfalintajn">
 
-    <copy todir="${mi.bazo.tez}">
-      <fileset dir="${mi.tmp}/tez" includes="*">
-        <different targetdir="${mi.tez}" ignoreFileTimes="true"/>
+    <copy todir="${v.bazo.tez}">
+      <fileset dir="${v.tmp}/tez" includes="*">
+        <different targetdir="${v.tez}" ignoreFileTimes="true"/>
       </fileset>
     </copy>
 
     <delete>
-      <fileset dir="${mi.bazo.tez}" includes="*">
-         <present present="srconly" targetdir="${mi.tmp}/tez"/>
+      <fileset dir="${v.bazo.tez}" includes="*">
+         <present present="srconly" targetdir="${v.tmp}/tez"/>
       </fileset>
     </delete>
 

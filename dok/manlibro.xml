@@ -267,11 +267,20 @@ krom la citita aŭ ekzempla teksto klarigojn kaj
 
 <code>
 <ekz>
-  lasi <tld/>i la manojn
-  <fnt><aut>Zamenhof</aut>: <vrk>Proverbaro</vrk></fnt>
-  <klr>
-    (perdi la kura&amp;gcirc;on)
-  </klr>;
+  ili sin <tld/>is je kvar okuloj
+  <klr>(intervidi&amp;gcirc;is kaj parolis duope, sen atestantoj)</klr>
+  <fnt><bib>Ne&amp;gcirc;aBlovado</bib></fnt>
+</ekz>
+</code>
+
+<p>
+Ellason ene de citaĵo oni povas montri per klariga tripunkto:
+</p>
+
+<code>
+<ekz>
+  iun matenon <klr>[...]</klr> mi observis en la aero <tld/>forman objekton
+  <fnt><bib>M&amp;uuml;nchhausen</bib>, <lok>&amp;ccirc;apitro 9a</lok></fnt>
 </ekz>
 </code>
 
@@ -286,27 +295,78 @@ referenco al la bibliografio.
 </p>
 
 <code>
-<fnt><bib>MT</bib>, <lok>Josuo 6, 20</lok></fnt>
+<ekz>
+  ili <tld/>igas mian vivon en kavo
+  <fnt><bib>MT</bib>, <lok>&amp;Jer; 3:53</lok></fnt>
+</ekz>
 </code>
 
+<p>Jen kiel oni citas el artikolo de revuo:</p>
+
+<code>
+<ekz>
+  la fama <tld/>o de Hammurabi
+  <fnt>
+  <aut>Andrzej Grz&amp;eogonek;bowski</aut>,
+  <vrk>Irano: la 131a lando de MT</vrk>,
+  <bib>LOdE</bib>,
+  <lok>2001-07, numero 81a</lok>
+  </fnt>
+</ekz>
+</code>
+
+
 <p>
-Esceptokaze oni povus uzi ankaŭ iun el la sekvaj 
-formoj de fontindikoj, sed tio estas malrekomendinda 
-por novaj redaktoj.
+La bibliografio enhavas la mallongigojn de la referencverkoj, 
+ekzemple <b>MT</b> povas stari por la Malnova Testamento, <b>LOdE</b> por La Ondo de Esperanto, <b>Viki</b> por Vikipedio kaj tiel plu.
+</p>
+
+<p>
+Se la fonto estas vortaro aŭ leksikono tiel, ke oni trovas la citaĵon
+laŭ la alfabeta indekso, sufiĉas sole la mallongigo de referencverko
+kiel fontindiko. Ordinare tio aperas ĉe la fontindikoj de kapvortoj:
 </p>
 
 <code>
-<fnt>Z</fnt>
-
-<fnt>PIV</fnt>
-
-<fnt><aut>trad. Zamenhof</aut>:
-  <vrk>Malnova testamento</vrk>, 
-  <lok>Josuo 6, 20</lok></fnt>
-
-<fnt><lok><url ref="&amp;KompLeks;/KO.html#komputi">KompLeks</url></lok></fnt>
+  <kap><rad>levier</rad>/o <fnt><bib>PIV1</bib></fnt></kap>
 </code>
 
+<p>
+Se iom grava verko mankas en la bibliografio, vi povas peti, 
+ke la administranto aldonu ĝin.
+</p>
+
+<p>
+Verkoj ne tre ofte citataj, ekzemple mallongaj interretaj paĝoj, 
+restos ekster la bibliografio.  En tiaj okazoj, vi povas uzi ankaŭ 
+fontindikon similan al la sekva:
+
+</p>
+
+<code>
+  <fnt>
+  <aut>Pavel Stan&amp;ccirc;ev, trad. Vedi</aut>,
+  <vrk>
+    <url ref="http://donh.best.vwh.net/.../kolora_knabino.html">La
+    kolora knabino</url>
+  </vrk>,
+  <lok>Paco, 1989-2, p. 8a-9a</lok>
+  </fnt>
+</code>
+
+<p>
+  Rektaj krampoj ĉirkaŭas informon ne trovitan en la verko mem, 
+  kiel sube la daton:
+</p>
+
+<code>
+  <fnt>
+  <aut>Amri Wandel</aut>,
+  <vrk>La moderna astrofiziko</vrk>,
+  <lok><url ref="http://esperanto.org/AEK/biblioteko.html">Virtuala
+  Biblioteko de AEKo</url>, [vidita je 2006-01-24]</lok>
+  </fnt>
+</code>
 
 <h2 id="trd">tradukoj</h2>
 

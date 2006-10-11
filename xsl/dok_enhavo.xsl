@@ -28,7 +28,7 @@
 
   <html>
     <head>
-      <!-- meta http-equiv="content-type" content="text/html; charset=utf-8" -->
+      <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
       <title><xsl:value-of select="@nomo"/></title>
       <xsl:if test="@piktogramo">
          <link rel="SHORTCUT ICON" href="{@piktogramo}"/>

@@ -4,20 +4,20 @@
     </description>
 
   <!-- legu agorditajn variablojn el dosiero -->
-  <property file="${user.dir}/cfg/agordo" prefix="mi."/>
+  <property file="${user.dir}/cfg/agordo" prefix="v."/>
 
   <!-- donu valorojn al la variabloj, se ili ne jam aperis en la agordo-dosiero -->
-  <property name="mi.voko" location="/home/revo/voko"/>
-  <property name="mi.voko.ant" location="${mi.voko}/ant"/>
-  <property name="mi.bazo" location="${user.dir}"/>
-  <property name="mi.bazo.inx" location="${mi.bazo}/inx"/>
-  <property name="mi.bazo.xml" location="${mi.bazo}/xml"/>
-  <property name="mi.bazo.art" location="${mi.bazo}/art"/>
-  <property name="mi.voko.bin" location="${mi.voko}/bin"/>
-  <property name="mi.voko.xsl" location="${mi.voko}/xsl"/>
+  <property name="v.voko" location="/home/revo/voko"/>
+  <property name="v.voko.ant" location="${v.voko}/ant"/>
+  <property name="v.bazo" location="${user.dir}"/>
+  <property name="v.bazo.inx" location="${v.bazo}/inx"/>
+  <property name="v.bazo.xml" location="${v.bazo}/xml"/>
+  <property name="v.bazo.art" location="${v.bazo}/art"/>
+  <property name="v.voko.bin" location="${v.voko}/bin"/>
+  <property name="v.voko.xsl" location="${v.voko}/xsl"/>
   <!-- property name="tmp" location="/home/revo/tmp/inx_tmp"/ -->
-  <property name="mi.tmp" location="${mi.bazo}/.tmp"/>
-  <property name="mi.outputformat" value="html"/>
+  <property name="v.tmp" location="${v.bazo}/.tmp"/>
+  <property name="v.outputformat" value="html"/>
 
   <property name="saxon" location="/usr/local/lib/saxon/saxon8.jar"/>
 
@@ -26,29 +26,29 @@
     <!-- Create the time stamp -->
     <tstamp/>
     <tstamp>
-      <format property="mi.antau_jaro" pattern="MM/dd/yyyy hh:mm aa" offset="-1" unit="year"/>
+      <format property="v.antau_jaro" pattern="MM/dd/yyyy hh:mm aa" offset="-1" unit="year"/>
     </tstamp>
     <!-- Create the build directory structure used by compile -->
-    <mkdir dir="${mi.bazo.art}" />
-    <mkdir dir="${mi.tmp}" />
-    <mkdir dir="${mi.tmp}/art" />
+    <mkdir dir="${v.bazo.art}" />
+    <mkdir dir="${v.tmp}" />
+    <mkdir dir="${v.tmp}/art" />
 
     <!-- chu necesas refari la dosieron indekso.xml? -->
     <!-- uptodate property="indekso.aktuala">
-      <srcfiles dir="${mi.bazo.xml}" includes="*.xml"/>
-      <mapper type="merge" to="${mi.tmp}/indekso.xml"/>
+      <srcfiles dir="${v.bazo.xml}" includes="*.xml"/>
+      <mapper type="merge" to="${v.tmp}/indekso.xml"/>
     </uptodate -->
 
     <!-- evitu rekreadon de chiuj artikoloj pro shanghoj en la XSL-dosieroj -->
-    <touch file="${mi.voko.xsl}/revo_tez.xsl" datetime="01/01/2000 0:00 pm"/>
-    <touch file="${mi.voko.xsl}/revohtml2.xsl" datetime="01/01/2000 0:00 pm"/>
-    <touch file="${mi.voko.xsl}/revohtml.xsl" datetime="01/01/2000 0:00 pm"/>
+    <touch file="${v.voko.xsl}/revo_tez.xsl" datetime="01/01/2000 0:00 pm"/>
+    <touch file="${v.voko.xsl}/revohtml2.xsl" datetime="01/01/2000 0:00 pm"/>
+    <touch file="${v.voko.xsl}/revohtml.xsl" datetime="01/01/2000 0:00 pm"/>
 
   </target>
 
 
   <target name="art-agordo" description="eligas la agordeblajn variablojn por kontrolo">
-    <echoproperties prefix="mi."/>
+    <echoproperties prefix="v."/>
   </target>
 
 
@@ -56,25 +56,25 @@
        description="kreas artikolojn el shanghitaj xml-dosieroj">
 
     <echo message="### enemtu tezauro-ligojn en chiujn aktualigitajn artikolojn"/>
-    <xslt basedir="${mi.bazo.xml}" includes="*.xml" destdir="${mi.tmp}/art" extension=".xml"
-       style="${mi.voko.xsl}/revo_tez.xsl"/>
+    <xslt basedir="${v.bazo.xml}" includes="*.xml" destdir="${v.tmp}/art" extension=".xml"
+       style="${v.voko.xsl}/revo_tez.xsl"/>
 
 
     <!-- aktualigu kelkajn malnovajn dosierojn por certigi, ke shanghoj
          en la XSLT-dosieroj iom post iom trafos chiujn artikolojn -->
     <echo message="### aktualigu 5(0) malnovajn artikolojn"/>
-    <xslt basedir="${mi.bazo.xml}" includes="*.xml" destdir="${mi.tmp}/art" extension=".xml"
-       style="${mi.voko.xsl}/revo_tez.xsl" force="true">
-        <custom classname="de.steloj.respiro.DateMaxFilesSelector" classpath="${mi.voko.ant}/respiro.jar">
-          <param name="datetime" value="${mi.antau_jaro}"/>
+    <xslt basedir="${v.bazo.xml}" includes="*.xml" destdir="${v.tmp}/art" extension=".xml"
+       style="${v.voko.xsl}/revo_tez.xsl" force="true">
+        <custom classname="de.steloj.respiro.DateMaxFilesSelector" classpath="${v.voko.ant}/respiro.jar">
+          <param name="datetime" value="${v.antau_jaro}"/>
           <param name="when" value="before"/>
           <param name="maxFiles" value="5"/> <!-- aktualigu maksimume 50 malnovajn dosierojn -->
         </custom>
     </xslt>
 
     <echo message="### kreu la HTML-dosierojn por la artikoloj"/>
-    <xslt basedir="${mi.tmp}/art" includes="*.xml" destdir="${mi.tmp}/art/" extension=".html"
-       style="${mi.voko.xsl}/revohtml2.xsl"/>
+    <xslt basedir="${v.tmp}/art" includes="*.xml" destdir="${v.tmp}/art/" extension=".html"
+       style="${v.voko.xsl}/revohtml2.xsl"/>
 
 
   </target>
@@ -83,9 +83,9 @@
 
   <target name="art-tuto" depends="art-html"
        description="kopias shanghitajn artikolojn al la destin-dosierujo">
-    <copy todir="${mi.bazo.art}">
-      <fileset dir="${mi.tmp}/art" includes="*.html">
-        <different targetdir="${mi.bazo.art}" ignoreFileTimes="true"/>
+    <copy todir="${v.bazo.art}">
+      <fileset dir="${v.tmp}/art" includes="*.html">
+        <different targetdir="${v.bazo.art}" ignoreFileTimes="true"/>
       </fileset>
     </copy>
   </target>
@@ -93,12 +93,12 @@
 
    
   <target name="art-tricent" depends="art-html"
-       description="kopias nur maksimume 300 shanghitajn artikolojn al la destin-dosierujo -->
+       description="kopias nur maksimume 300 shanghitajn artikolojn al la destin-dosierujo">
   
-    <copy todir="${mi.bazo.art}">
-      <fileset dir="${mi.tmp}/art" includes="*.html">
-        <custom classname="de.steloj.respiro.DiffMaxFilesSelector" classpath="${mi.voko.ant}/respiro.jar">
-          <param name="targetDir" value="${mi.bazo.art}"/>
+    <copy todir="${v.bazo.art}">
+      <fileset dir="${v.tmp}/art" includes="*.html">
+        <custom classname="de.steloj.respiro.DiffMaxFilesSelector" classpath="${v.voko.ant}/respiro.jar">
+          <param name="targetDir" value="${v.bazo.art}"/>
           <param name="ignoreFileTimes" value="true"/>
           <param name="maxFiles" value="300"/> <!-- aktualigu maksimume 300 artikolojn -->
         </custom>

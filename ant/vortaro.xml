@@ -22,31 +22,31 @@ rezulto en:
 
 
   <!-- legu agorditajn variablojn el dosiero -->
-  <property file="${user.dir}/cfg/agordo" prefix="mi."/>
+  <property file="${user.dir}/cfg/agordo" prefix="v."/>
 
   <!-- donu valorojn al la variabloj, se ili ne jam aperis en la agordo-dosiero -->
-  <property name="mi.voko" location="/home/revo/voko"/>
-  <property name="mi.voko.ant" location="${mi.voko}/ant"/>
-  <property name="mi.bazo" location="${user.dir}"/>
-  <property name="mi.bazo.dok" location="${mi.bazo}/dok"/>
-  <property name="mi.bazo.cfg" location="${mi.bazo}/cfg"/>
-  <property name="mi.bazo.dtd" location="${mi.bazo}/dtd"/>
-  <property name="mi.bazo.stl" location="${mi.bazo}/stl"/>
-  <property name="mi.bazo.smb" location="${mi.bazo}/smb"/>
+  <property name="v.voko" location="/home/revo/voko"/>
+  <property name="v.voko.ant" location="${v.voko}/ant"/>
+  <property name="v.bazo" location="${user.dir}"/>
+  <property name="v.bazo.dok" location="${v.bazo}/dok"/>
+  <property name="v.bazo.cfg" location="${v.bazo}/cfg"/>
+  <property name="v.bazo.dtd" location="${v.bazo}/dtd"/>
+  <property name="v.bazo.stl" location="${v.bazo}/stl"/>
+  <property name="v.bazo.smb" location="${v.bazo}/smb"/>
 
-  <property name="mi.bazo.xml" location="${mi.bazo}/xml"/>
-  <property name="mi.bazo.art" location="${mi.bazo}/art"/>
+  <property name="v.bazo.xml" location="${v.bazo}/xml"/>
+  <property name="v.bazo.art" location="${v.bazo}/art"/>
 
-  <property name="mi.voko.bin" location="${mi.voko}/bin"/>
-  <property name="mi.voko.xsl" location="${mi.voko}/xsl"/>
-  <property name="mi.voko.cfg" location="${mi.voko}/cfg"/>
-  <property name="mi.voko.dok" location="${mi.voko}/dok"/>
-  <property name="mi.voko.dtd" location="${mi.voko}/dtd"/>
-  <property name="mi.voko.stl" location="${mi.voko}/stl"/>
-  <property name="mi.voko.smb" location="${mi.voko}/smb"/>
+  <property name="v.voko.bin" location="${v.voko}/bin"/>
+  <property name="v.voko.xsl" location="${v.voko}/xsl"/>
+  <property name="v.voko.cfg" location="${v.voko}/cfg"/>
+  <property name="v.voko.dok" location="${v.voko}/dok"/>
+  <property name="v.voko.dtd" location="${v.voko}/dtd"/>
+  <property name="v.voko.stl" location="${v.voko}/stl"/>
+  <property name="v.voko.smb" location="${v.voko}/smb"/>
   <!-- property name="tmp" location="/home/revo/tmp/inx_tmp"/ -->
-  <property name="mi.tmp" location="${mi.bazo}/.tmp"/>
-  <property name="mi.outputformat" value="html"/>
+  <property name="v.tmp" location="${v.bazo}/.tmp"/>
+  <property name="v.outputformat" value="html"/>
 
   <property name="saxon" location="/usr/local/lib/saxon/saxon8.jar"/>
 
@@ -55,60 +55,60 @@ rezulto en:
     <!-- Create the time stamp -->
     <tstamp/>
     <!-- Create the build directory structure used by compile -->
-    <mkdir dir="${mi.bazo.cfg}" />
-    <mkdir dir="${mi.bazo.dok}" />
-    <mkdir dir="${mi.bazo.dtd}" />
-    <mkdir dir="${mi.bazo.stl}" />
-    <mkdir dir="${mi.bazo.smb}" />
-    <mkdir dir="${mi.bazo.xml}" />
-    <mkdir dir="${mi.bazo.art}" />
+    <mkdir dir="${v.bazo.cfg}" />
+    <mkdir dir="${v.bazo.dok}" />
+    <mkdir dir="${v.bazo.dtd}" />
+    <mkdir dir="${v.bazo.stl}" />
+    <mkdir dir="${v.bazo.smb}" />
+    <mkdir dir="${v.bazo.xml}" />
+    <mkdir dir="${v.bazo.art}" />
   </target>
 
 
   <target name="agordo" description="eligas la agordeblajn variablojn por kontrolo">
-    <echoproperties prefix="mi."/>
+    <echoproperties prefix="v."/>
   </target>
 
 
   <target name="kadro" depends="preparo" description="kreas index.hml kaj titolo.html el enhavo.xml">
-    <xslt in="${mi.voko.cfg}/enhavo.xml" out="${mi.bazo}/index.html"
-      style="${mi.voko.xsl}/dok_enhavo.xsl"/>
+    <xslt in="${v.voko.cfg}/enhavo.xml" out="${v.bazo}/index.html"
+      style="${v.voko.xsl}/dok_enhavo.xsl"/>
   </target>
 
 
   <target name="bib" depends="preparo"
         description="bibliografio" >
 
-    <xslt in="${mi.voko.cfg}/bibliogr.xml" out="${mi.bazo.dok}/bibliogr.html"
-      style="${mi.voko.xsl}/bibhtml.xsl"/>
+    <xslt in="${v.voko.cfg}/bibliogr.xml" out="${v.bazo.dok}/bibliogr.html"
+      style="${v.voko.xsl}/bibhtml.xsl"/>
 
-    <xslt in="${mi.voko.cfg}/bibliogr.xml" out="${mi.bazo.dok}/biblaut.html"
-      style="${mi.voko.xsl}/bibauthtml.xsl"/>
+    <xslt in="${v.voko.cfg}/bibliogr.xml" out="${v.bazo.dok}/biblaut.html"
+      style="${v.voko.xsl}/bibauthtml.xsl"/>
 
-    <xslt in="${mi.voko.cfg}/bibliogr.xml" out="${mi.bazo.dok}/bibltit.html"
-      style="${mi.voko.xsl}/bibtithtml.xsl"/>
+    <xslt in="${v.voko.cfg}/bibliogr.xml" out="${v.bazo.dok}/bibltit.html"
+      style="${v.voko.xsl}/bibtithtml.xsl"/>
   </target>
 
   <target name="dok" depends="preparo"
        description="diversaj dokumentoj">
 
-    <copy todir="${mi.bazo.cfg}">
-      <fileset dir="${mi.voko.cfg}" casesensitive="yes">
+    <copy todir="${v.bazo.cfg}">
+      <fileset dir="${v.voko.cfg}" casesensitive="yes">
         <include name="*.xml"/>
       </fileset>
     </copy>
 
-    <copy todir="${mi.bazo.dok}">
-      <fileset dir="${mi.voko.dok}" casesensitive="yes">
+    <copy todir="${v.bazo.dok}">
+      <fileset dir="${v.voko.dok}" casesensitive="yes">
         <include name="*.xml"/>
       </fileset>
     </copy>
 
-    <xslt in="${mi.voko.dok}/manlibro.xml" out="${mi.bazo.dok}/manlibro.html"
-       style="${mi.voko.xsl}/manlibro.xsl"/>
+    <xslt in="${v.voko.dok}/manlibro.xml" out="${v.bazo.dok}/manlibro.html"
+       style="${v.voko.xsl}/manlibro.xsl"/>
 
-    <xslt in="${mi.voko.dok}/lingva_manlibro.xml" out="${mi.bazo.dok}/lingva_manlibro.html"
-       style="${mi.voko.xsl}/manlibro.xsl"/>
+    <xslt in="${v.voko.dok}/lingva_manlibro.xml" out="${v.bazo.dok}/lingva_manlibro.html"
+       style="${v.voko.xsl}/manlibro.xsl"/>
 
 <!--
     <exec dir="${revo}/dok" executable="perl">
@@ -121,17 +121,17 @@ rezulto en:
     </exec>
 -->
 
-    <xslt in="${mi.voko.cfg}/fakoj.xml" out="${mi.bazo.dok}/fakoj.html"
-       style="${mi.voko.xsl}/dok_fakoj.xsl"/>
+    <xslt in="${v.voko.cfg}/fakoj.xml" out="${v.bazo.dok}/fakoj.html"
+       style="${v.voko.xsl}/dok_fakoj.xsl"/>
 
-    <xslt in="${mi.voko.cfg}/lingvoj.xml" out="${mi.bazo.dok}/lingvoj.html"
-       style="${mi.voko.xsl}/dok_lingvoj.xsl"/>
+    <xslt in="${v.voko.cfg}/lingvoj.xml" out="${v.bazo.dok}/lingvoj.html"
+       style="${v.voko.xsl}/dok_lingvoj.xsl"/>
 
-    <xslt in="${mi.voko.cfg}/stiloj.xml" out="${mi.bazo.dok}/stiloj.html"
-       style="${mi.voko.xsl}/dok_stiloj.xsl"/>
+    <xslt in="${v.voko.cfg}/stiloj.xml" out="${v.bazo.dok}/stiloj.html"
+       style="${v.voko.xsl}/dok_stiloj.xsl"/>
 
-    <xslt in="${mi.voko.cfg}/mallongigoj.xml" out="${mi.bazo.dok}/mallongigoj.html"
-       style="${mi.voko.xsl}/dok_mallongigoj.xsl"/>
+    <xslt in="${v.voko.cfg}/mallongigoj.xml" out="${v.bazo.dok}/mallongigoj.html"
+       style="${v.voko.xsl}/dok_mallongigoj.xsl"/>
 
   </target>
 
@@ -139,8 +139,8 @@ rezulto en:
  <target name="dtd" depends="preparo"
        description="dokumenttip-difinoj">
 
-    <copy todir="${mi.bazo.dtd}">
-      <fileset dir="${mi.voko.dtd}" casesensitive="yes">
+    <copy todir="${v.bazo.dtd}">
+      <fileset dir="${v.voko.dtd}" casesensitive="yes">
         <include name="*.dtd"/>
       </fileset>
     </copy>
@@ -150,8 +150,8 @@ rezulto en:
   <target name="stl" depends="preparo"
        description="kopias CSS-stildifinojn el voko">
 
-    <copy todir="${mi.bazo.stl}">
-      <fileset dir="${mi.voko.stl}" casesensitive="yes">
+    <copy todir="${v.bazo.stl}">
+      <fileset dir="${v.voko.stl}" casesensitive="yes">
         <include name="*.*"/>
       </fileset>
     </copy>
@@ -161,8 +161,8 @@ rezulto en:
   <target name="smb" depends="preparo"
        description="kopias simbolojn el voko">
 
-    <copy todir="${mi.bazo.smb}">
-      <fileset dir="${mi.voko.smb}" casesensitive="yes">
+    <copy todir="${v.bazo.smb}">
+      <fileset dir="${v.voko.smb}" casesensitive="yes">
         <include name="*.*"/>
       </fileset>
     </copy>
@@ -177,22 +177,22 @@ rezulto en:
   <target name="html" depends="preparo" 
        description="(re)kreas indeksojn, tezauron kaj shanghitajn artikolojn en provizora dosierujo">
   
-    <ant antfile="${mi.voko.ant}/tezauro.xml" inheritAll="false">   
-       <property name="mi.bazo" location="${mi.bazo}"/>
+    <ant antfile="${v.voko.ant}/tezauro.xml" inheritAll="false">   
+       <property name="v.bazo" location="${v.bazo}"/>
        <target name="tez-agordo"/>
        <target name="tez-html"/>
     </ant>
 
-    <ant antfile="${mi.voko.ant}/indeksoj.xml" inheritAll="false">   
-       <property name="mi.bazo" location="${mi.bazo}"/>
+    <ant antfile="${v.voko.ant}/indeksoj.xml" inheritAll="false">   
+       <property name="v.bazo" location="${v.bazo}"/>
        <target name="inx-agordo"/>
        <target name="inx-cvs"/>
        <target name="inx-eraroj"/>
        <target name="inx-html"/>
     </ant>
 
-    <ant antfile="${mi.voko.ant}/artikoloj.xml" inheritAll="false">   
-       <property name="mi.bazo" location="${mi.bazo}"/>
+    <ant antfile="${v.voko.ant}/artikoloj.xml" inheritAll="false">   
+       <property name="v.bazo" location="${v.bazo}"/>
        <target name="art-agordo"/>
        <target name="art-html"/>
     </ant>
@@ -204,22 +204,22 @@ rezulto en:
        description="shovas (re)kreitajn indeksojn, tezauron kaj artikolojn el provizora dosierujo al la vortaro,
          sed limigas kelkajn dosiernombrojn, ekz. maks. 1000 tezauro-dosierojn">
   
-    <ant antfile="${mi.voko.ant}/tezauro.xml" inheritAll="false">   
-       <property name="mi.bazo" location="${mi.bazo}"/>
+    <ant antfile="${v.voko.ant}/tezauro.xml" inheritAll="false">   
+       <property name="v.bazo" location="${v.bazo}"/>
        <target name="tez-agordo"/>
        <target name="tez-mil"/>
     </ant>
 
-    <ant antfile="${mi.voko.ant}/indeksoj.xml" inheritAll="false">   
-       <property name="mi.bazo" location="${mi.bazo}"/>
+    <ant antfile="${v.voko.ant}/indeksoj.xml" inheritAll="false">   
+       <property name="v.bazo" location="${v.bazo}"/>
        <target name="inx-agordo"/>
        <target name="inx-cvs"/>
        <target name="inx-eraroj"/>
        <target name="inx-tuto"/>
       </ant>
 
-    <ant antfile="${mi.voko.ant}/artikoloj.xml" inheritAll="false">   
-       <property name="mi.bazo" location="${mi.bazo}"/>
+    <ant antfile="${v.voko.ant}/artikoloj.xml" inheritAll="false">   
+       <property name="v.bazo" location="${v.bazo}"/>
        <target name="art-agordo"/>
        <target name="art-tricent"/>
     </ant>
@@ -230,26 +230,37 @@ rezulto en:
   <target name="tuto" depends="preparo" 
        description="shovas (re)kreitajn indeksojn, tezauron kaj artikolojn el provizora dosierujo al la vortaro">
   
-    <ant antfile="${mi.voko.ant}/tezauro.xml" inheritAll="false">   
-       <property name="mi.bazo" location="${mi.bazo}"/>
+    <ant antfile="${v.voko.ant}/tezauro.xml" inheritAll="false">   
+       <property name="v.bazo" location="${v.bazo}"/>
        <target name="tez-agordo"/>
        <target name="tez-tuto"/>
     </ant>
 
-    <ant antfile="${mi.voko.ant}/indeksoj.xml" inheritAll="false">   
-       <property name="mi.bazo" location="${mi.bazo}"/>
+    <ant antfile="${v.voko.ant}/indeksoj.xml" inheritAll="false">   
+       <property name="v.bazo" location="${v.bazo}"/>
        <target name="inx-agordo"/>
        <target name="inx-cvs"/>
        <target name="inx-eraroj"/>
        <target name="inx-tuto"/>
       </ant>
 
-    <ant antfile="${mi.voko.ant}/artikoloj.xml" inheritAll="false">   
-       <property name="mi.bazo" location="${mi.bazo}"/>
+    <ant antfile="${v.voko.ant}/artikoloj.xml" inheritAll="false">   
+       <property name="v.bazo" location="${v.bazo}"/>
        <target name="art-agordo"/>
        <target name="art-tuto"/>
     </ant>
 
+  </target>
+
+
+  <target name="pakajhoj" depends="preparo"
+     description="faras pakajhojn de la vortaro post regulaj intervaloj">
+       
+     <ant antfile="${v.voko.ant}/pakajhoj.xml" inheritAll="false">   
+       <property name="v.bazo" location="${v.bazo}"/>
+       <target name="pak-agordo"/>
+       <target name="pak-regule"/>
+    </ant>
   </target>
 
 </project>

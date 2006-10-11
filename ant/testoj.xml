@@ -5,48 +5,48 @@
 
 
   <!-- legu agorditajn variablojn el dosiero -->
-  <!-- property file="${user.dir}/cfg/agordo" prefix="mi."/ -->
+  <!-- property file="${user.dir}/cfg/agordo" prefix="v."/ -->
 
   <!-- donu valorojn al la variabloj -->
-  <property name="mi.voko" location="/home/revo/voko"/>
-  <property name="mi.voko.ant" location="${mi.voko}/ant"/>
-  <property name="mi.bazo" location="${user.dir}/vokotesto"/>
-  <property name="mi.bazo.inx" location="${mi.bazo}/inx"/>
-  <property name="mi.bazo.tez" location="${mi.bazo}/tez"/>
-  <property name="mi.bazo.xml" location="${mi.bazo}/xml"/>
-  <property name="mi.voko.xsl" location="${mi.voko}/xsl"/>
-  <property name="mi.tmp" location="${mi.bazo}/.tmp"/>
+  <property name="v.voko" location="/home/revo/voko"/>
+  <property name="v.voko.ant" location="${v.voko}/ant"/>
+  <property name="v.bazo" location="${user.dir}/vokotesto"/>
+  <property name="v.bazo.inx" location="${v.bazo}/inx"/>
+  <property name="v.bazo.tez" location="${v.bazo}/tez"/>
+  <property name="v.bazo.xml" location="${v.bazo}/xml"/>
+  <property name="v.voko.xsl" location="${v.voko}/xsl"/>
+  <property name="v.tmp" location="${v.bazo}/.tmp"/>
 
-  <property name="mi.testoj" location="${mi.bazo}/testoj"/>
+  <property name="v.testoj" location="${v.bazo}/testoj"/>
 
   <target name="agordo" description="eligas la agordon pro kontrolo">
-    <echoproperties prefix="mi."/>
+    <echoproperties prefix="v."/>
   </target>
 
   <target name="init">
-    <mkdir dir="${mi.bazo}" />
-    <mkdir dir="${mi.bazo.xml}" />
-    <mkdir dir="${mi.bazo}/cfg" />
+    <mkdir dir="${v.bazo}" />
+    <mkdir dir="${v.bazo.xml}" />
+    <mkdir dir="${v.bazo}/cfg" />
 
     <!-- kreu agordo-dosieron por la testo-vortareto -->
-    <echo file="${user.dir}/cfg/agordo"><![CDATA[bazo=${mi.bazo}
-tmp=${mi.tmp}
+    <echo file="${user.dir}/cfg/agordo"><![CDATA[bazo=${v.bazo}
+tmp=${v.tmp}
 outputformat=xhtml
 ]]>
     </echo>
 
     <!-- kontrolu agordon -->
-    <ant antfile="${mi.voko.ant}/indeksoj.xml"
-       dir="${mi.bazo}" target="inx-agordo" inheritAll="false"/>
+    <ant antfile="${v.voko.ant}/indeksoj.xml"
+       dir="${v.bazo}" target="inx-agordo" inheritAll="false"/>
 
     <!-- kreu vortareton por testo -->
-    <ant antfile="${mi.voko.ant}/indeksoj.xml"
-       dir="${mi.bazo}" target="inx-forigo" inheritAll="false"/>
-    <ant antfile="${mi.voko.ant}/tezauro.xml"
-       dir="${mi.bazo}" target="tez-forigo" inheritAll="false"/>
+    <ant antfile="${v.voko.ant}/indeksoj.xml"
+       dir="${v.bazo}" target="inx-forigo" inheritAll="false"/>
+    <ant antfile="${v.voko.ant}/tezauro.xml"
+       dir="${v.bazo}" target="tez-forigo" inheritAll="false"/>
 
     <echo 
-file="${mi.bazo.xml}/test.xml"><![CDATA[<?xml version="1.0"?>
+file="${v.bazo.xml}/test.xml"><![CDATA[<?xml version="1.0"?>
 <vortaro>
 <art mrk="\$$Id: test.xml asdfosdf">
   <kap><rad>test</rad>/o <var><kap><tld/>oo</kap></var></kap>
@@ -111,7 +111,7 @@ file="${mi.bazo.xml}/test.xml"><![CDATA[<?xml version="1.0"?>
     </echo>
 
     <echo 
-file="${mi.bazo.xml}/prov.xml"><![CDATA[<?xml version="1.0"?>
+file="${v.bazo.xml}/prov.xml"><![CDATA[<?xml version="1.0"?>
 <vortaro>
 <art mrk="\$$Id: prov.xml asdfosdf">
   <kap><rad>prov</rad>/i</kap>
@@ -124,7 +124,7 @@ file="${mi.bazo.xml}/prov.xml"><![CDATA[<?xml version="1.0"?>
     </echo>
 
     <echo 
-file="${mi.bazo.xml}/de.xml"><![CDATA[<?xml version="1.0"?>
+file="${v.bazo.xml}/de.xml"><![CDATA[<?xml version="1.0"?>
 <vortaro>
 <art mrk="\$Id: de.xml asdfosdf">
   <kap><rad>de</rad></kap>
@@ -173,7 +173,7 @@ file="${mi.bazo.xml}/de.xml"><![CDATA[<?xml version="1.0"?>
 
 
   <echo 
-file="${mi.bazo.xml}/eraroj.xml"><![CDATA[<?xml version="1.0"?>
+file="${v.bazo.xml}/eraroj.xml"><![CDATA[<?xml version="1.0"?>
 <vortaro>
 <art mrk="\$$Id: erar%oj.xml asdfosdf">
   <kap><rad>erar</rad>/oj</kap>
@@ -199,10 +199,10 @@ file="${mi.bazo.xml}/eraroj.xml"><![CDATA[<?xml version="1.0"?>
 <target name="test-init" depends="init"
   description="preparas la testilojn">
 
-    <mkdir dir="${mi.testoj}" />
+    <mkdir dir="${v.testoj}" />
 
     <echo 
-file="${mi.testoj}/testshablono.tmp"><![CDATA[<?xml version="1.0"?>
+file="${v.testoj}/testshablono.tmp"><![CDATA[<?xml version="1.0"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                  version="1.0">
 
@@ -231,7 +231,7 @@ file="${mi.testoj}/testshablono.tmp"><![CDATA[<?xml version="1.0"?>
    </echo>
 
    <echo 
-file="${mi.testoj}/preparu-teston.xsl"><![CDATA[<?xml version="1.0"?>
+file="${v.testoj}/preparu-teston.xsl"><![CDATA[<?xml version="1.0"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                  version="1.0">
 
@@ -265,16 +265,16 @@ file="${mi.testoj}/preparu-teston.xsl"><![CDATA[<?xml version="1.0"?>
 </target>
 
   <target name="faru-teston">
-    <xslt style="${mi.testoj}/preparu-teston.xsl"
-        in="${mi.testoj}/${testnomo}.xml" out="${mi.testoj}/${testnomo}.tst"/>
+    <xslt style="${v.testoj}/preparu-teston.xsl"
+        in="${v.testoj}/${testnomo}.xml" out="${v.testoj}/${testnomo}.tst"/>
 
-    <loadfile srcFile="${mi.testoj}/${testnomo}.tst" property="tests"/>
+    <loadfile srcFile="${v.testoj}/${testnomo}.tst" property="tests"/>
     <filter token="tests" value="${tests}"/>
-    <copy file="${mi.testoj}/testshablono.tmp" tofile="${mi.testoj}/${testnomo}.xsl" 
+    <copy file="${v.testoj}/testshablono.tmp" tofile="${v.testoj}/${testnomo}.xsl" 
        filtering="true"/>
 
-    <xslt style="${mi.testoj}/${testnomo}.xsl"
-        in="${testajho}" out="${mi.testoj}/${testnomo}.rez"/>
+    <xslt style="${v.testoj}/${testnomo}.xsl"
+        in="${testajho}" out="${v.testoj}/${testnomo}.rez"/>
   </target>
 
 
@@ -284,18 +284,18 @@ file="${mi.testoj}/preparu-teston.xsl"><![CDATA[<?xml version="1.0"?>
 
     <!-- testu eltiradon de la indeksinformoj -->
 
-    <ant antfile="${mi.voko.ant}/indeksoj.xml"
-       dir="${mi.bazo}" target="inx-eltiro" inheritAll="false"/>
+    <ant antfile="${v.voko.ant}/indeksoj.xml"
+       dir="${v.bazo}" target="inx-eltiro" inheritAll="false"/>
 
 
 
     <!-- testu kategoriadon de la indeksinformoj -->
 
-    <ant antfile="${mi.voko.ant}/indeksoj.xml"
-       dir="${mi.bazo}" target="inx-kategorioj" inheritAll="false"/>   
+    <ant antfile="${v.voko.ant}/indeksoj.xml"
+       dir="${v.bazo}" target="inx-kategorioj" inheritAll="false"/>   
 
     <echo 
-file="${mi.testoj}/indeks-testo-kat.xml"><![CDATA[<?xml version="1.0"?>
+file="${v.testoj}/indeks-testo-kat.xml"><![CDATA[<?xml version="1.0"?>
 <testoj>
      <t test="count(//kap-oj/v[@mrk='test' and k='testo' and
      k1='test/o' and r='tset'])=1">
@@ -390,10 +390,10 @@ file="${mi.testoj}/indeks-testo-kat.xml"><![CDATA[<?xml version="1.0"?>
 
     <antcall target="faru-teston">
        <param name="testnomo" value="indeks-testo-kat"/>
-       <param name="testajho" value="${mi.tmp}/inx_kat.xml"/>
+       <param name="testajho" value="${v.tmp}/inx_kat.xml"/>
     </antcall>
 
-    <loadfile property="rezulto_1" srcFile="${mi.testoj}/indeks-testo-kat.rez"/>
+    <loadfile property="rezulto_1" srcFile="${v.testoj}/indeks-testo-kat.rez"/>
     <echo>test-rezultoj pri dosiero inx_kat.xml:
 ${rezulto_1}   
     </echo>
@@ -403,11 +403,11 @@ ${rezulto_1}
    <!-- testu ordigadon de la indeksinformoj -->
 
 
-    <ant antfile="${mi.voko.ant}/indeksoj.xml"
-       dir="${mi.bazo}" target="inx-ordigo" inheritAll="false"/>
+    <ant antfile="${v.voko.ant}/indeksoj.xml"
+       dir="${v.bazo}" target="inx-ordigo" inheritAll="false"/>
 
     <echo 
-file="${mi.testoj}/indeks-testo-ord.xml"><![CDATA[<?xml version="1.0"?>
+file="${v.testoj}/indeks-testo-ord.xml"><![CDATA[<?xml version="1.0"?>
 <testoj>
      <t test="count(//kap-oj/litero[@name='t']/v[@mrk='test' and k='testo'])=1">
    1) Chu kapvorto "testo" estas sub litero "t"</t>
@@ -495,21 +495,21 @@ file="${mi.testoj}/indeks-testo-ord.xml"><![CDATA[<?xml version="1.0"?>
 
     <antcall target="faru-teston">
        <param name="testnomo" value="indeks-testo-ord"/>
-       <param name="testajho" value="${mi.tmp}/inx_ord.xml"/>
+       <param name="testajho" value="${v.tmp}/inx_ord.xml"/>
     </antcall>
 
-    <loadfile property="rezulto_2" srcFile="${mi.testoj}/indeks-testo-ord.rez"/>
+    <loadfile property="rezulto_2" srcFile="${v.testoj}/indeks-testo-ord.rez"/>
     <echo>test-rezultoj pri dosiero inx_ord.xml:
 ${rezulto_2}   
     </echo>
 
     <!-- testu kreadon de la HTML-indeksdosieroj -->
 
-    <ant antfile="${mi.voko.ant}/indeksoj.xml"
-       dir="${mi.bazo}" target="inx-tuto" inheritAll="false"/>
+    <ant antfile="${v.voko.ant}/indeksoj.xml"
+       dir="${v.bazo}" target="inx-tuto" inheritAll="false"/>
 
     <echo 
-file="${mi.testoj}/indeks-testo-kap-t.xml"><![CDATA[<?xml version="1.0"?>
+file="${v.testoj}/indeks-testo-kap-t.xml"><![CDATA[<?xml version="1.0"?>
 <testoj>
      <t test="count(//head/title[.='esperanta indekso'])=1">
    1) Chu titolo en kapo estas "esperanta indekso"</t>
@@ -540,16 +540,16 @@ file="${mi.testoj}/indeks-testo-kap-t.xml"><![CDATA[<?xml version="1.0"?>
 
     <antcall target="faru-teston">
        <param name="testnomo" value="indeks-testo-kap-t"/>
-       <param name="testajho" value="${mi.bazo.inx}/kap_t.html"/>
+       <param name="testajho" value="${v.bazo.inx}/kap_t.html"/>
     </antcall>
 
-    <loadfile property="rezulto_3" srcFile="${mi.testoj}/indeks-testo-kap-t.rez"/>
+    <loadfile property="rezulto_3" srcFile="${v.testoj}/indeks-testo-kap-t.rez"/>
     <echo>test-rezultoj pri dosiero kap_t.html:
 ${rezulto_3}   
     </echo>
 
    <echo 
-file="${mi.testoj}/indeks-testo-trd-de.xml"><![CDATA[<?xml version="1.0"?>
+file="${v.testoj}/indeks-testo-trd-de.xml"><![CDATA[<?xml version="1.0"?>
 <testoj>
      <t test="count(//head/title[.='germana indekso'])=1">
    1) Chu titolo en kapo estas "germana indekso"</t>
@@ -586,16 +586,16 @@ file="${mi.testoj}/indeks-testo-trd-de.xml"><![CDATA[<?xml version="1.0"?>
 
     <antcall target="faru-teston">
        <param name="testnomo" value="indeks-testo-trd-de"/>
-       <param name="testajho" value="${mi.bazo.inx}/lx_de_t.html"/>
+       <param name="testajho" value="${v.bazo.inx}/lx_de_t.html"/>
     </antcall>
 
-    <loadfile property="rezulto_4" srcFile="${mi.testoj}/indeks-testo-trd-de.rez"/>
+    <loadfile property="rezulto_4" srcFile="${v.testoj}/indeks-testo-trd-de.rez"/>
     <echo>test-rezultoj pri dosiero lx_de_t.html:
 ${rezulto_4}   
     </echo>
 
    <echo 
-file="${mi.testoj}/indeks-testo-trd-de2.xml"><![CDATA[<?xml version="1.0"?>
+file="${v.testoj}/indeks-testo-trd-de2.xml"><![CDATA[<?xml version="1.0"?>
 <testoj>
 
      <t test="count(//b[@class='elektita' and .='k'])=1">
@@ -617,16 +617,16 @@ file="${mi.testoj}/indeks-testo-trd-de2.xml"><![CDATA[<?xml version="1.0"?>
     </echo>
     <antcall target="faru-teston">
        <param name="testnomo" value="indeks-testo-trd-de2"/>
-       <param name="testajho" value="${mi.bazo.inx}/lx_de_k.html"/>
+       <param name="testajho" value="${v.bazo.inx}/lx_de_k.html"/>
     </antcall>
 
-    <loadfile property="rezulto_5" srcFile="${mi.testoj}/indeks-testo-trd-de2.rez"/>
+    <loadfile property="rezulto_5" srcFile="${v.testoj}/indeks-testo-trd-de2.rez"/>
     <echo>test-rezultoj pri dosiero lx_de_k.html:
 ${rezulto_5}   
     </echo>
 
    <echo 
-file="${mi.testoj}/indeks-testo-trd-de3.xml"><![CDATA[<?xml version="1.0"?>
+file="${v.testoj}/indeks-testo-trd-de3.xml"><![CDATA[<?xml version="1.0"?>
 <testoj>
 
      <t test="count(//b[@class='elektita' and .='p'])=1">
@@ -645,10 +645,10 @@ file="${mi.testoj}/indeks-testo-trd-de3.xml"><![CDATA[<?xml version="1.0"?>
     </echo>
     <antcall target="faru-teston">
        <param name="testnomo" value="indeks-testo-trd-de3"/>
-       <param name="testajho" value="${mi.bazo.inx}/lx_de_p.html"/>
+       <param name="testajho" value="${v.bazo.inx}/lx_de_p.html"/>
     </antcall>
 
-    <loadfile property="rezulto_6" srcFile="${mi.testoj}/indeks-testo-trd-de3.rez"/>
+    <loadfile property="rezulto_6" srcFile="${v.testoj}/indeks-testo-trd-de3.rez"/>
     <echo>test-rezultoj pri dosiero lx_de_p.html:
 ${rezulto_6}   
     </echo>
@@ -685,16 +685,16 @@ ${rezulto_6}
 
     <!-- testu eltiradon de la referencoj -->
 
-    <ant antfile="${mi.voko.ant}/tezauro.xml"
-       dir="${mi.bazo}" target="tez-eltiro" inheritAll="false"/>
+    <ant antfile="${v.voko.ant}/tezauro.xml"
+       dir="${v.bazo}" target="tez-eltiro" inheritAll="false"/>
 
     <!-- testu ordigon/kompletigon de la referencoj -->
 
-    <ant antfile="${mi.voko.ant}/tezauro.xml"
-       dir="${mi.bazo}" target="tez-retigo" inheritAll="false"/>   
+    <ant antfile="${v.voko.ant}/tezauro.xml"
+       dir="${v.bazo}" target="tez-retigo" inheritAll="false"/>   
 
     <echo 
-file="${mi.testoj}/tezauro-testo-ret.xml"><![CDATA[<?xml version="1.0"?>
+file="${v.testoj}/tezauro-testo-ret.xml"><![CDATA[<?xml version="1.0"?>
 <testoj>
      <t test="count(//tez/nod[@mrk='test.0o.GEOL' and k[@n='1'] and k='testo' and
      super/r[@c='test.0o.XXX']])=1">
@@ -726,10 +726,10 @@ file="${mi.testoj}/tezauro-testo-ret.xml"><![CDATA[<?xml version="1.0"?>
 
     <antcall target="faru-teston">
        <param name="testnomo" value="tezauro-testo-ret"/>
-       <param name="testajho" value="${mi.tmp}/tez_ret.xml"/>
+       <param name="testajho" value="${v.tmp}/tez_ret.xml"/>
     </antcall>
 
-    <loadfile property="rezulto_1" srcFile="${mi.testoj}/tezauro-testo-ret.rez"/>
+    <loadfile property="rezulto_1" srcFile="${v.testoj}/tezauro-testo-ret.rez"/>
     <echo>test-rezultoj pri dosiero tez_ret.xml:
 ${rezulto_1}   
     </echo>
@@ -738,12 +738,12 @@ ${rezulto_1}
 
     <!-- testu HTML-dosierojn de la tezauro -->
 
-    <ant antfile="${mi.voko.ant}/tezauro.xml"
-       dir="${mi.bazo}" target="tez-tuto" inheritAll="false"/>   
+    <ant antfile="${v.voko.ant}/tezauro.xml"
+       dir="${v.bazo}" target="tez-tuto" inheritAll="false"/>   
 
 
    <echo 
-file="${mi.testoj}/tezauro-testo-testo_GEOL.xml"><![CDATA[<?xml version="1.0"?>
+file="${v.testoj}/tezauro-testo-testo_GEOL.xml"><![CDATA[<?xml version="1.0"?>
 <testoj>
 
      <t test="count(//a[@href='../inx/fx_GEOL.html'])=1">
@@ -766,17 +766,17 @@ file="${mi.testoj}/tezauro-testo-testo_GEOL.xml"><![CDATA[<?xml version="1.0"?>
     </echo>
     <antcall target="faru-teston">
        <param name="testnomo" value="tezauro-testo-testo_GEOL"/>
-       <param name="testajho" value="${mi.bazo.tez}/tz_test_0o_GEOL.html"/>
+       <param name="testajho" value="${v.bazo.tez}/tz_test_0o_GEOL.html"/>
     </antcall>
 
-    <loadfile property="rezulto_2" srcFile="${mi.testoj}/tezauro-testo-testo_GEOL.rez"/>
+    <loadfile property="rezulto_2" srcFile="${v.testoj}/tezauro-testo-testo_GEOL.rez"/>
     <echo>test-rezultoj pri dosiero tz_test_0o_GEOL.html:
 ${rezulto_2}   
     </echo>
 
 
    <echo 
-file="${mi.testoj}/tezauro-testo-testo_XXX.xml"><![CDATA[<?xml version="1.0"?>
+file="${v.testoj}/tezauro-testo-testo_XXX.xml"><![CDATA[<?xml version="1.0"?>
 <testoj>
 
      <t test="count(//a[@href='../inx/fx_SCI.html'])=1">
@@ -799,17 +799,17 @@ file="${mi.testoj}/tezauro-testo-testo_XXX.xml"><![CDATA[<?xml version="1.0"?>
     </echo>
     <antcall target="faru-teston">
        <param name="testnomo" value="tezauro-testo-testo_XXX"/>
-       <param name="testajho" value="${mi.bazo.tez}/tz_test_0o_XXX.html"/>
+       <param name="testajho" value="${v.bazo.tez}/tz_test_0o_XXX.html"/>
     </antcall>
 
-    <loadfile property="rezulto_3" srcFile="${mi.testoj}/tezauro-testo-testo_XXX.rez"/>
+    <loadfile property="rezulto_3" srcFile="${v.testoj}/tezauro-testo-testo_XXX.rez"/>
     <echo>test-rezultoj pri dosiero tz_test_0o_XXX.html:
 ${rezulto_3}   
     </echo>
 
 
    <echo 
-file="${mi.testoj}/tezauro-testo-tz_testi.xml"><![CDATA[<?xml version="1.0"?>
+file="${v.testoj}/tezauro-testo-tz_testi.xml"><![CDATA[<?xml version="1.0"?>
 <testoj>
 
      <t test="count(//a[@href='tz_prov_0i.html'])=1">
@@ -821,10 +821,10 @@ file="${mi.testoj}/tezauro-testo-tz_testi.xml"><![CDATA[<?xml version="1.0"?>
     </echo>
     <antcall target="faru-teston">
        <param name="testnomo" value="tezauro-testo-tz_testi"/>
-       <param name="testajho" value="${mi.bazo.tez}/tz_test_0i.html"/>
+       <param name="testajho" value="${v.bazo.tez}/tz_test_0i.html"/>
     </antcall>
 
-    <loadfile property="rezulto_4" srcFile="${mi.testoj}/tezauro-testo-tz_testi.rez"/>
+    <loadfile property="rezulto_4" srcFile="${v.testoj}/tezauro-testo-tz_testi.rez"/>
     <echo>test-rezultoj pri dosiero fxs_SCI.html:
 ${rezulto_4}   
     </echo>
@@ -852,12 +852,12 @@ ${rezulto_4}
     description="testas la eraro-raporton">
 
 
-    <ant antfile="${mi.voko.ant}/indeksoj.xml"
-       dir="${mi.bazo}" target="inx-eraroj" inheritAll="false"/>   
+    <ant antfile="${v.voko.ant}/indeksoj.xml"
+       dir="${v.bazo}" target="inx-eraroj" inheritAll="false"/>   
 
 
    <echo 
-file="${mi.testoj}/eraro-testo.xml"><![CDATA[<?xml version="1.0"?>
+file="${v.testoj}/eraro-testo.xml"><![CDATA[<?xml version="1.0"?>
 <testoj>
 
      <t test="count(//art[@dos='eraroj'])=1">
@@ -887,10 +887,10 @@ file="${mi.testoj}/eraro-testo.xml"><![CDATA[<?xml version="1.0"?>
     </echo>
     <antcall target="faru-teston">
        <param name="testnomo" value="eraro-testo"/>
-       <param name="testajho" value="${mi.tmp}/eraroj.xml"/>
+       <param name="testajho" value="${v.tmp}/eraroj.xml"/>
     </antcall>
 
-    <loadfile property="rezulto_1" srcFile="${mi.testoj}/eraro-testo.rez"/>
+    <loadfile property="rezulto_1" srcFile="${v.testoj}/eraro-testo.rez"/>
     <echo>test-rezultoj pri dosiero eraroj.xml:
 ${rezulto_1}   
     </echo>

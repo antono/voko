@@ -19,7 +19,7 @@
 -->
 
 
-<xsl:output method="xhtml" encoding="utf-8"/>
+<xsl:output method="@format@" encoding="utf-8"/>
 <xsl:strip-space elements="k"/>
 
 <xsl:param name="verbose" select="'false'"/>
@@ -48,7 +48,7 @@
   </xsl:if>
 
   <!-- redirect:write select="$dosiero" -->
-  <xsl:result-document href="{$dosiero}" method="xhtml" encoding="utf-8" indent="yes">
+  <xsl:result-document href="{$dosiero}" method="@format@" encoding="utf-8" indent="yes">
   <html>
     <head>
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
@@ -90,7 +90,7 @@
     </xsl:if>
 
     !- redirect:write select="$dosiero" -
-    <xsl:result-document href="{$dosiero}" method="xhtml" encoding="utf-8" indent="yes">
+    <xsl:result-document href="{$dosiero}" method="@format@" encoding="utf-8" indent="yes">
     <html>
       <head>
          <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
