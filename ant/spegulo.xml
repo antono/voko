@@ -19,22 +19,25 @@
    <property name="cvs.upload.user" value="steloj"/>
    <property name="cvs.upload.password" value="XXXsekreto"/> -->
 
-   <!-- property file="/home/revo/etc/spegulo-agordo-vortaro" prefix="vo."/ -->
+   <!-- property file="/home/revo/etc/spegulo-agordo-tgz" prefix="tgz."/ -->
 
    <property name="tmp" location="/home/revo/tmp"/>
    <property name="log" location="/home/revo/log"/>
 
-   <target name="init">
+
+   <target name="cvs-preparo">
      <tstamp/>
      <property name="cvs.filename" value="revocvs-${DSTAMP}.tgz"/>
      <available property="tar-file-exists" file="${tmp}/${cvs.filename}"/>
    </target>
 
-   <target name="agordo" description="eligas la agordeblajn variablojn por kontrolo">
+
+   <target name="cvs-agordo" description="eligas la agordeblajn variablojn por kontrolo">
      <echoproperties prefix="cvs."/>
    </target>
 
-   <target name="cvs-tar" unless="tar-file-exists" depends="init" 
+
+   <target name="cvs-tar" unless="tar-file-exists" depends="cvs-preparo" 
        description="pakas shanghitajn cvs-dosieron en tar-dosieron">
 
      <tar destfile="${tmp}/${cvs.filename}" 
@@ -83,21 +86,42 @@
    </target>
 
 
-   <target name="vortaro" depends="init" 
-       description="shutas shanghitajn dosierojn al la TTT-ejo de la vortaro">
+   <target name="tgz-preparo">
+     <tstamp/>
+   </target>
 
-    <!-- kio pri kreado de dosierujoj, forigado de dosieroj? -->
 
-     <ftp server="${vo.servilo.host}"
-         remotedir="${vo.servilo.dir}"
-         userid="${vo.servilo.user}"
-         password="${vo.servilo.password}"
+   <target name="tgz-agordo" description="eligas la agordeblajn variablojn por kontrolo">
+     <echoproperties prefix="tgz."/>
+   </target>
+
+
+   <target name="tgz-upload" depends="tgz-preparo" 
+       description="shutas shanghitajn pakajhojn kaj elshuto-paghon al la TTT-ejo de la vortaro">
+
+    <!-- kio pri kreado de dosierujoj, forigado de dosieroj:
+
+      ideo: - enlegi "cachefile" kun chiuj dosieroj
+            - kontroli por chiu tia dosiero, chu ankorau ekzistas
+            - se ne, ghi estas forigenda per ftp
+            - tiuokaze forigu ankau la eron en "cachefile"
+
+            sed: mi ne vidas eblecon trakuri la dosiero-liston el "cachefile"
+
+            anstataue: kreu propran Selector-Javo-klason, kiu preparas la liston 
+
+      -->
+
+     <ftp server="${tgz.servilo.host}"
+         remotedir="${tgz.servilo.dir}"
+         userid="${tgz.servilo.user}"
+         password="${tgz.servilo.password}"
          passive="yes"
          verbose="yes">
 
-         <fileset dir="${vo.pado}" includes="*">
+         <fileset dir="${tgz.pado}" includes="*">
             <modified>
-               <param name="cache.cachefile" value="${vo.cachefile}"/>
+               <param name="cache.cachefile" value="${tgz.cachefile}"/>
             </modified>
          </fileset> 
      </ftp>

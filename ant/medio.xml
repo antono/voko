@@ -133,11 +133,18 @@ rezulto en:
     <xslt in="${v.voko.cfg}/mallongigoj.xml" out="${v.bazo.dok}/mallongigoj.html"
        style="${v.voko.xsl}/dok_mallongigoj.xsl"/>
 
+
+    <xslt in="${v.voko.cfg}/ordigo.xml" out="${v.bazo.dok}/ordigo.html"
+       style="${v.voko.xsl}/dok_ordigo.xsl"/>
+
   </target>
 
 
  <target name="med-dtd" depends="med-preparo"
        description="dokumenttip-difinoj">
+
+    <xslt in="${v.voko.cfg}/literoj.xml" out="${v.bazo.dtd}/vokosgn.dtd"
+          style="${v.voko.xsl}/dtd_vokosgn.xsl"/>
 
     <copy todir="${v.bazo.dtd}">
       <fileset dir="${v.voko.dtd}" casesensitive="yes">

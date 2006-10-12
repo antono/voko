@@ -33,7 +33,13 @@
 <xsl:variable name="root" select="/"/>
 
 
-<xsl:template match="//tez">
+<xsl:template match="/">
+  <xsl:text>XXXX</xsl:text> <!-- dosiero .tempo ne estu malplena -->
+
+  <xsl:apply-templates select="//tez"/>
+</xsl:template>
+
+<xsl:template match="tez">
   <xsl:apply-templates/>
 
   <!-- xsl:call-template name="fakoj"/ -->

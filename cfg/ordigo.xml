@@ -146,7 +146,7 @@
  <l name="g">gG</l>
  <l name="h">hH</l>
  <l name="i">iI</l>
- <l name="j">jJ</l>
+ <!-- l name="j">jJ</l -->
  <l name="k">kK</l>
  <l name="l">lL</l>
  <l name="m">mM</l>
@@ -540,7 +540,7 @@
  <l name="a">aAáÁ</l>
  <l name="b">bB</l>
  <l name="c">cC</l>
- <l name="d">dD &#x00f0;&#x00d0;</l>
+ <l name="d">dD&#x00f0;&#x00d0;</l>
  <l name="e">eEéÉ</l>
  <l name="f">fF</l>
  <l name="g">gG</l>

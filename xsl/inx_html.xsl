@@ -30,6 +30,8 @@
 <xsl:variable name="root" select="/"/>
 
 <xsl:template match="/">
+  <xsl:text>XXXX</xsl:text> <!-- dosiero .tempo ne estu malplena -->
+
   <xsl:apply-templates select="document($enhavo)/enhavo/pagho"/>
 
   <xsl:call-template name="indeksoj">
