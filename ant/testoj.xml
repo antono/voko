@@ -122,6 +122,9 @@ file="${v.bazo.xml}/prov.xml"><![CDATA[<?xml version="1.0"?>
   <drv mrk="prov.0i">
     <ref tip="sin" cel="test.0i">testi</ref>
   </drv>
+  <drv mrk="prov.P0o">
+    <kap><tld lit="P"/>o</kap>
+  </drv>
 </art>
 </vortaro>
 ]]>
@@ -492,6 +495,11 @@ file="${v.testoj}/indeks-testo-ord.xml"><![CDATA[<?xml version="1.0"?>
 
 <!--     <v pado="//trd-oj[@lng='br']/litero[@name='b']" el1="v[t='br-ch']" el2="v[t='br-c&amp;#39;h']">
    23) Chu "br-ch" antau "br-c&amp;#39;h"</v> -->
+
+    <t test="count(//kap-oj/litero[@name='p']/v[@mrk='prov.P0o' and k='Provo'])=1">
+   23) Chu kapvorto "Provo" estas sub litero "p"</t>
+
+  
 
 </testoj>
 ]]>

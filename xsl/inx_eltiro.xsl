@@ -14,10 +14,6 @@
   <xsl:apply-templates/>
 </xsl:template>
 
-<!-- <xsl:template match="art|drv|snc|kap|rad|tld|@mrk">
-  <xsl:copy> <xsl:apply-templates/> </xsl:copy>
-</xsl:template> -->
-
 <xsl:template match="art">
   <art mrk="{substring-after(substring-before(@mrk,'.xml'),'Id: ')}">
   <xsl:apply-templates select="kap|subart|drv|snc|trdgrp|trd|uzo|bld|dif|ekz|tezrad"/>
@@ -79,9 +75,13 @@
   <xsl:copy><xsl:apply-templates select="mll"/></xsl:copy>
 </xsl:template>
 
-<xsl:template match="kap|rad|var|tld|@mrk|@lng|uzo[@tip='fak']|bld|mlg
+<xsl:template match="kap|rad|var|@mrk|@lng|uzo[@tip='fak']|bld|mlg
   |ind|klr[@tip='ind' or @tip='amb']">
   <xsl:copy><xsl:apply-templates/></xsl:copy>
+</xsl:template>
+
+<xsl:template match="tld">
+  <xsl:copy-of select="."/>
 </xsl:template>
 
 <xsl:template match="mll">
