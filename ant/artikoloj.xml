@@ -52,10 +52,26 @@
   </target>
 
 
+  <target name="art-unuopa" depends="art-preparo" 
+       description="rekreas unuopan artikolon, donu $dosiero (sen '.xml') sur komandlinio"
+       if="dosiero">
+
+    <xslt in="${v.bazo.xml}/${dosiero}.xml" out="${v.tmp}/art/${dosiero}.xml"
+       force="true" style="${v.voko.xsl}/revo_tez.xsl"/>
+
+    <xslt in="${v.tmp}/art/${dosiero}.xml" out="${v.tmp}/art/${dosiero}.html" 
+       style="${v.voko.xsl}/revohtml2.xsl"/>
+
+    <copy file="${v.tmp}/art/${dosiero}.html" tofile="${v.bazo.art}/${dosiero}.html"/>
+
+  </target>
+
+
+
   <target name="art-html" depends="art-preparo" 
        description="kreas artikolojn el shanghitaj xml-dosieroj">
 
-    <echo message="### enemtu tezauro-ligojn en chiujn aktualigitajn artikolojn"/>
+    <echo message="### enmetu tezauro-ligojn en chiujn aktualigitajn artikolojn"/>
     <xslt basedir="${v.bazo.xml}" includes="*.xml" destdir="${v.tmp}/art" extension=".xml"
        style="${v.voko.xsl}/revo_tez.xsl"/>
 
@@ -92,15 +108,15 @@
 
 
    
-  <target name="art-tricent" depends="art-html"
-       description="kopias nur maksimume 300 shanghitajn artikolojn al la destin-dosierujo">
+  <target name="art-kvincent" depends="art-html"
+       description="kopias nur maksimume 500 shanghitajn artikolojn al la destin-dosierujo">
   
     <copy todir="${v.bazo.art}">
       <fileset dir="${v.tmp}/art" includes="*.html">
         <custom classname="de.steloj.respiro.DiffMaxFilesSelector" classpath="${v.voko.ant}/respiro.jar">
           <param name="targetDir" value="${v.bazo.art}"/>
           <param name="ignoreFileTimes" value="true"/>
-          <param name="maxFiles" value="300"/> <!-- aktualigu maksimume 300 artikolojn -->
+          <param name="maxFiles" value="500"/> <!-- aktualigu maksimume 500 artikolojn -->
         </custom>
       </fileset>
     </copy>

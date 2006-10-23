@@ -70,6 +70,13 @@
           </and>
        </condition>
 
+       <condition property="FARU-indekson">
+           <or>
+             <istrue value="${FARU-kompleton}"/>
+             <istrue value="${FARU-parton}"/>
+           </or>
+      </condition>
+
        <echo>$${...} signifas "ne" resp. "ne difinita":</echo>
        <echo>lasta kompleto je: ${lasta_kompleta.dato}</echo>
        <echo>faru novan kompleton: ${FARU-kompleton}</echo>
@@ -203,6 +210,7 @@
 
 
   <target name="pak-dosier-listo" depends="pak-preparo"
+    if="FARU-indekson"
     description="faras liston de zip-dosieroj kiel XML-dosiero">
      <java classname="de.steloj.respiro.DirectoryLister" output="${v.tgz}/dosieroj.xml" 
      logError="true">

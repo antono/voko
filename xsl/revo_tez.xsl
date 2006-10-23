@@ -8,11 +8,20 @@
 >
 
 <xsl:variable name="verbose" select="'false'"/>
+<xsl:variable name="debug" select="'false'"/>
 
 <xsl:variable name="file" select="document-uri(/)"/>
 <xsl:variable name="base" select="string-join(tokenize($file,'/')[position() &lt; last()-1],'/')"/>
 <xsl:variable name="tez-pad" select="'../tez/'"/>
 
+<xsl:template match="/">
+  <xsl:if test="$debug='true'">
+    <xsl:message>tez-dir: <xsl:value-of select="concat($base,'/tez/')"/></xsl:message>
+  </xsl:if>
+
+  <xsl:apply-templates/>
+</xsl:template>
+ 
 
 <!-- se tezauro ankau eblu el subdrv, necesus aldoni when-parton
   en tez-mrk-n kun format="A" kaj same trakto de tio en tez_retigo.xsl -->
@@ -31,15 +40,16 @@
 
   <xsl:variable name="tez-doc" select="concat('tz_',translate($tez-mrk,'.','_'),'.html')"/>
 
-<!--        <xsl:message><xsl:value-of select="$tez-doc"/>
-</xsl:message> -->
+<xsl:if test="$debug='true'">
+   <xsl:message><xsl:value-of select="$tez-doc"/></xsl:message>
+</xsl:if>
  
 
   <xsl:copy>
     <xsl:attribute name="mrk"><xsl:value-of select="@mrk"/></xsl:attribute>
     <xsl:if test="doc-available(concat($base,'/tez/',$tez-doc))">
 
-<xsl:if test="$verbose='true'">
+<xsl:if test="$verbose='true' or $debug='true'">
        <xsl:message>tez: <xsl:value-of select="$tez-doc"/>
 </xsl:message>
 </xsl:if>

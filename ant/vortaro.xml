@@ -124,7 +124,7 @@ rezulto en:
     <ant antfile="${v.voko.ant}/artikoloj.xml" inheritAll="false">   
        <property name="v.bazo" location="${v.bazo}"/>
        <target name="art-agordo"/>
-       <target name="art-tricent"/>
+       <target name="art-kvincent"/>
     </ant>
 
   </target>

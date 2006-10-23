@@ -3,6 +3,9 @@
        Reta Vortaro, reguloj por (re)krei tezauron. 
     </description>
 
+  <!-- necesas xhtml por povi uzi doc-available en revo_tez.xsl -->
+  <property name="v.outputformat" value="xhtml"/>
+
   <!-- legu agorditajn variablojn el dosiero -->
   <property file="${user.dir}/cfg/agordo" prefix="v."/>
 

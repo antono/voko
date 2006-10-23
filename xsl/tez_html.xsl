@@ -281,13 +281,14 @@
       <xsl:choose>
         <xsl:when test="$nod">
 
+         <p class="tez"> 
           <a href="{concat('tz_',translate($nod/@mrk,'.','_'),'.html')}">
             <img src="{concat('../smb/',$smb)}" alt="{$alt}" border="0"/>
           </a>
           <xsl:call-template name="art-ref2">
             <xsl:with-param name="nod" select="$nod"/>
           </xsl:call-template>
-          <br/>
+         </p>
         </xsl:when>
         <xsl:when test="$warn-about-dead-refs='true'">
            <xsl:message> <!-- eble skribu tion en eraro-dosieron por prezenti al redaktantoj -->
