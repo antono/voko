@@ -141,11 +141,11 @@
 
    <target name="pak-shanghoj">
     <zip destfile="${v.tgz}/revonov_${lasta_parta.dato}_${nun.dato}.zip">
-       <fileset dir="${v.bazo}" includes="**/*">
+       <zipfileset dir="${v.bazo}" includes="**/*" prefix="revo">
          <date datetime="${lasta_parta.dato} ${lasta_parta.tempo}" 
 	 pattern="yyyy-MM-dd hh:mm:ss:SS"
 	 when="after"/>
-      </fileset>
+      </zipfileset>
     </zip>  
    </target>
 
