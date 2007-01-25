@@ -6,6 +6,11 @@
  
    <!-- property file="etc -->
    <property file="/home/revo/etc/spegulo-agordo-cvs" prefix="cvs."/>
+   <property file="/home/revo/etc/spegulo-agordo-revo" prefix="revo."/>
+   <property file="/home/revo/etc/spegulo-tempo-revo" prefix="revo."/>
+
+
+<!-- ################### alshuto al CVS-servilo ############################ -->
 
 <!--   
    Tiuj aperu en la agordo-dosiero
@@ -28,7 +33,7 @@
    <target name="cvs-preparo">
      <tstamp/>
      <property name="cvs.filename" value="revocvs-${DSTAMP}.tgz"/>
-     <available property="tar-file-exists" file="${tmp}/${cvs.filename}"/>
+     <available property="cvs-tar-file-exists" file="${tmp}/${cvs.filename}"/>
    </target>
 
 
@@ -37,7 +42,7 @@
    </target>
 
 
-   <target name="cvs-tar" unless="tar-file-exists" depends="cvs-preparo" 
+   <target name="cvs-tar" unless="cvs-tar-file-exists" depends="cvs-preparo" 
        description="pakas shanghitajn cvs-dosieron en tar-dosieron">
 
      <tar destfile="${tmp}/${cvs.filename}" 
@@ -50,11 +55,11 @@
         </tarfileset> 
      </tar>
 
-     <available property="tar-file-exists" file="${tmp}/${cvs.filename}"/>
+     <available property="cvs-tar-file-exists" file="${tmp}/${cvs.filename}"/>
    </target>
        
 
-   <target name="cvs-upload" depends="cvs-tar" if="tar-file-exists" 
+   <target name="cvs-upload" depends="cvs-tar" if="cvs-tar-file-exists" 
      description="transportas la tar-dosieron al la cvs-servilo">
      <ftp server="${cvs.servilo.host}"
          remotedir="${cvs.servilo.dir}"
@@ -67,11 +72,11 @@
      </ftp>
 
      <get src="${cvs.upload.url}${cvs.filename}" 
-       dest="${log}/uploadlog.html" 
+       dest="${log}/cvs_uploadlog.html" 
        username="${cvs.upload.user}"
        password="${cvs.upload.password}"/>
   
-     <loadfile srcFile="${log}/uploadlog.html" property="logfile">
+     <loadfile srcFile="${log}/cvs_uploadlog.html" property="logfile">
        <filterchain>
          <tokenfilter>
            <replaceregex pattern="&lt;[^&gt;]+&gt;" replace="" flags="g"/>
@@ -85,6 +90,140 @@
   
    </target>
 
+
+<!-- ################### alshuto al Revo-servilo ############################ -->
+
+
+   <target name="revo-preparo">
+     <tstamp/>
+     <property name="revo.filename" value="revo-${DSTAMP}.tgz"/>
+     <available property="revo-tar-file-exists" file="${tmp}/${revo.filename}"/>
+
+     <!-- se eco ne difinita per dosiero, iru 10 jarojn antaue -->
+     <tstamp><format property="revo.lasta.dato"
+          pattern="yyyy-MM-dd" offset="-10" unit="year"/></tstamp>
+     <tstamp><format property="revo.lasta.tempo" pattern="hh:mm:ss"/></tstamp>
+
+   </target>
+
+
+   <target name="revo-agordo" description="eligas la agordeblajn variablojn por kontrolo">
+     <echoproperties prefix="revo."/>
+   </target>
+
+
+   <target name="revo-tar" unless="revo-tar-file-exists" depends="revo-preparo" 
+       description="pakas shanghitajn Revo-dosieron en tar-dosieron">
+
+   <tstamp><format property="revo.nun.dato"
+          pattern="yyyy-MM-dd"/></tstamp>
+     <tstamp><format property="revo.nun.tempo" pattern="HH:mm:ss"/></tstamp>
+
+     <echo message="Pakas dosierojn shanghitajn"/>
+     <echo message="inter ${revo.lasta.dato} ${revo.lasta.tempo}"/>
+     <echo message="  kaj ${revo.nun.dato} ${revo.nun.tempo}"/>
+
+<!--     <tar destfile="${tmp}/${revo.filename}" 
+        compression="gzip">
+
+  <!- <tarfileset dir="${revo.pado}" prefix="revo" includes="**/*" excludes="revo/xml/CVS/">
+            <modified delayUpdate="true">
+               <param name="cache.cachefile" value="${revo.cachefile}"/>
+            </modified>
+        </tarfileset>  ->
+
+<!-	<tarfileset dir="${revo.pado}" prefix="revo">
+            <and>
+              <filename name="xml/*"/>
+              <modified update="true" delayUpdate="true">
+                 <param name="cache.cachefile" value="${revo.cachefile}"/>
+              </modified>
+            </and>
+        </tarfileset>  </tar> ->
+
+<!- ne funkcias fidinde!
+	<tarfileset dir="${revo.pado}" prefix="revo">
+           <and>
+             <or>
+               <filename name="*"/>
+               <!- filename name="./*"/ ->
+               <filename name="art/a*"/>
+               <filename name="xml/a*"/>
+               <filename name="stl/*.*"/>
+             </or>
+             <filename name="revo/xml/CVS" negate="true"/>
+             <filename name="bin" negate="true"/>
+             <filename name="cvs" negate="true"/>
+             <filename name="rtf" negate="true"/>
+             <filename name="sgm" negate="true"/>
+             <filename name="txt" negate="true"/>
+
+             <date datetime="${revo.lasta.dato} ${revo.lasta.tempo}" 
+	   	 pattern="yyyy-MM-dd HH:mm:ss:SS"
+		 when="after"/>
+           </and>
+        </tarfileset>
+->
+
+    </tar>  
+-->
+
+    <exec executable="spegulo_tar.pl" output="${tmp}/tar.log">
+       <arg path="${revo.pado}/.."/>
+       <arg file="${tmp}/${revo.filename}"/>
+       <arg value="${revo.lasta.dato} ${revo.lasta.tempo}"/>
+    </exec>
+
+
+    <propertyfile
+       file="/home/revo/etc/spegulo-tempo-revo"
+         comment="Dato kaj tempo, kiam farighis lasta arhhivo">
+
+      <entry  key="lasta.dato" type="date"
+         value="revo.nun.dato" pattern="yyyy-MM-dd"/>
+      <entry  key="lasta.tempo" type="date"
+         value="revo.nun.tempo" pattern="HH:mm:ss"/>
+
+     </propertyfile>
+
+
+     <available property="revo-tar-file-exists" file="${tmp}/${revo.filename}"/>
+   </target>
+       
+
+   <target name="revo-upload" depends="revo-tar" if="revo-tar-file-exists" 
+     description="transportas la tar-dosieron al la Revo-servilo">
+     <ftp server="${revo.servilo.host}"
+         remotedir="${revo.servilo.dir}"
+         userid="${revo.servilo.user}"
+         password="${revo.servilo.password}"
+         passive="yes"
+         verbose="yes">
+
+       <fileset file="${tmp}/${revo.filename}"/>
+     </ftp>
+
+     <get src="${revo.upload.url}${revo.filename}" 
+       dest="${log}/revo_uploadlog.html" 
+       username="${revo.upload.user}"
+       password="${revo.upload.password}"/>
+  
+     <loadfile srcFile="${log}/revo_uploadlog.html" property="logfile">
+       <filterchain>
+         <tokenfilter>
+           <replaceregex pattern="&lt;[^&gt;]+&gt;" replace="" flags="g"/>
+         </tokenfilter>
+       </filterchain>
+     </loadfile>
+  
+     <echo>
+       ${logfile}
+     </echo>
+
+   </target>
+
+
+<!-- ##################### ideo ne ankorau tute realigita ################## -->
 
    <target name="tgz-preparo">
      <tstamp/>

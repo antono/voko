@@ -111,6 +111,14 @@
   <target name="art-kvincent" depends="art-html"
        description="kopias nur maksimume 500 shanghitajn artikolojn al la destin-dosierujo">
   
+    <!-- chiuokaze kopiu novajn artikolojn -->
+   <copy todir="${v.bazo.art}">
+      <fileset dir="${v.tmp}/art" includes="*.html">
+         <present present="srconly" targetdir="${v.bazo.art}"/>
+      </fileset>
+    </copy>
+
+    <!-- kopiu plurajn el la shanghitaj -->
     <copy todir="${v.bazo.art}">
       <fileset dir="${v.tmp}/art" includes="*.html">
         <custom classname="de.steloj.respiro.DiffMaxFilesSelector" classpath="${v.voko.ant}/respiro.jar">

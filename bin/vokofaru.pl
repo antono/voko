@@ -93,7 +93,7 @@ open LOG, "$command|"; while (<LOG>) { print }; close LOG;
 ###print "$command\nTIME:",`date`,"\n" if ($verbose);
 ###open LOG, "$command|"; while (<LOG>) { print }; close LOG;
 
-$command="ant -file $VOKO/ant/indeksoj.xml -Dmi.bazo=$vortaro_pado agordo cvs-shanghoj tuto";
+$command="ant -file $VOKO/ant/indeksoj.xml -Dmi.bazo=$vortaro_pado agordo cvs-shanghoj eraroj tuto";
 print "$command\nTIME:",`date`,"\n" if ($verbose);
 open LOG, "$command|"; while (<LOG>) { print }; close LOG;
 
@@ -101,9 +101,9 @@ open LOG, "$command|"; while (<LOG>) { print }; close LOG;
 #print "$command\nTIME:",`date`,"\n" if ($verbose);
 #open LOG, "$command|"; while (<LOG>) { print }; close LOG;
 
-$command="tajperaroj.pl $verbose -H $xml_pado -c $agord_dosiero > $vortaro_pado/inx/eraroj.html";
-print "$command\nTIME:",`date`,"\n" if ($verbose);
-open LOG, "$command|"; while (<LOG>) { print }; close LOG;
+###$command="tajperaroj.pl $verbose -H $xml_pado -c $agord_dosiero > $vortaro_pado/inx/eraroj.html";
+###print "$command\nTIME:",`date`,"\n" if ($verbose);
+###open LOG, "$command|"; while (<LOG>) { print }; close LOG;
 
 $command = "xml2html_all.pl $verbose -m -c $agord_dosiero";
 print "$command\nTIME:",`date`,"\n" if ($verbose);
@@ -114,13 +114,13 @@ print "\nTIME:",`date`,"\n" if ($verbose);
 
 # se pasis manpleno da tagoj, shovu la indeks-dosieron, por
 # ke ghi atingu la TTT-servilon (sed ja ne tro ofte)
-if ($indekso ne $inxtmp_dos) {
-    $tempdif = (stat "$inxtmp_dos")[9] - (stat "$indekso")[9];
-    if ($tempdif > 7*24*60*60)  {  # 7 tagoj
-	print "pli ol 7 tagoj pasis: mv $inxtmp_dos $indekso\n";
-	`mv $inxtmp_dos $indekso`;
-    }
-}
+#if ($indekso ne $inxtmp_dos) {
+#    $tempdif = (stat "$inxtmp_dos")[9] - (stat "$indekso")[9];
+#    if ($tempdif > 7*24*60*60)  {  # 7 tagoj
+#	print "pli ol 7 tagoj pasis: mv $inxtmp_dos $indekso\n";
+#	`mv $inxtmp_dos $indekso`;
+#    }
+#}
 
 ######## fino ###########
 

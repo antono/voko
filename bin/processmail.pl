@@ -229,11 +229,18 @@ sub process_ent {
 	# TTT-formularo?
         if ((($entity->head->get('subject')
                  =~ /Microsoft.*Internet.*lorer/s) 
+
                 or ($entity->head->get('content-type')
 		 =~  /POSTDATA\.ATT/s)
+
 		or ($entity->head->get('subject')
-		 =~ /form\s+post/si))
+		 =~ /form\s+post/si)
+
+                or ($entity->head->get('x-mailer')
+                 =~ /Apple\sMail/)
+                )
                 and ($parttxt =~ /^\s*komando=redakto&/)
+
                 or ($entity->mime_type
                     =~ m|application/x-www-form-urlencoded|)) { 
 	    print "URL encoded form\n" if ($debug);

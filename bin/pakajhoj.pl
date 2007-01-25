@@ -27,10 +27,10 @@ $inxfile = "$pakoj/index.html";
 $parta = 4*24*60*60; # post 4 tagoj faru novan parton
 $kompleta = 7*$parta; # post 28 tagoj faru novan kompleton
 
-$vokoajhoj = "bin dok div dtd stl cgi smb cfg xsl ana ant LEGUMIN PROGRAMOJ";
+$vokoajhoj = "bin dok div dtd stl cgi smb cfg xsl ant LEGUMIN PROGRAMOJ";
 $xmlajhoj = "xml dtd xsl stl cfg smb";
 $bldajhoj = "bld";
-$htmlajhoj= "art dok inx tez index.html sercxo.html titolo.html revo.ico ".
+$htmlajhoj= "art dok inx tez index.html sercxo.html titolo.html revo.ico revo.jpg".
     "reto.gif revo.gif araneo.gif travidebla.gif";
 
 %config = read_cfg($datelog) if (-f $datelog);
@@ -114,13 +114,13 @@ sub make_tgz_inx {
     print <<EOS;
 <HTML>
 <HEAD>
-<TITLE>Elŝuti Revo-rilatan materialon</TITLE>
+<TITLE>El&#x015d;uti Revo-rilatan materialon</TITLE>
 <meta http-equiv="Content-Type" Content="text/html; charset=UTF-8">
 </HEAD>
 
 <BODY>
 
-<H1>Elŝuti ReVon kaj programaron</H1>
+<H1>El&#x015d;uti ReVon kaj programaron</H1>
 
 
 EOS
@@ -131,7 +131,7 @@ EOS
     print <<EOS;
 
 <hr>
-  Ĉiuj iloj de VoKo estas publikigataj sub la
+  &#x0108;iuj iloj de VoKo estas publikigataj sub la
   <a href="../revo/dok/copying.txt">GNUa Ĝenerala Publika Permesilo</a>. 
 </BODY>
 </HTML>
@@ -220,13 +220,13 @@ sub print_file_list {
             print "<dt>DICT-Revo</dt>\n";
 	    print "<dd><a href=\"$f\">$f</a> (".filesize($f).")<br>\n";
             print "Tio ebligas rapidan uzadon de la vortaro simple tajpante\n";
-            print "serĉatan vorton aŭ parton de ĝi en iu lingvo, vi ricevas\n";
+            print "ser&#x0109;atan vorton a&#x016d; parton de &#x011d;i en iu lingvo, vi ricevas\n";
             print "la koncernajn artikolojn. \n";
-            print "Por utiligi ĝin vi devas instali Dict-Servon\n";
+            print "Por utiligi &#x011d;in vi devas instali Dict-Servon\n";
             print "<code>dictd</code> \n";
             print "(vd. <a href=\"http://dict.org\">dict.org</a>, \n";
-            print "Tie haveblas ankaŭ Dict-klientoj. Vi povas uzi la \n";
-            print "Dict-servon ĉe Michiel (131.211.121.124) aŭ ĉe Radovan\n";
+            print "Tie haveblas anka&#x016d; Dict-klientoj. Vi povas uzi la \n";
+            print "Dict-servon &#x0109;e Michiel (131.211.121.124) a&#x016d; &#x0109;e Radovan\n";
             print "(dict.dnp.fmph.uniba.sk) tra Interreto, tiuokaze vi\n";
             print "bezonas nur klienton.\n";
 	}
@@ -239,8 +239,8 @@ sub print_file_list {
 	if ($f = grepfile ('^voko_.*\.tgz$')) {
             print "<dt>programoj por fari kaj administri vortaron</dt>\n";
 	    print "<dd><a href=\"$f\">$f</a> (".filesize($f).")<br>\n";
-            print "Ĝi enhavas ĉiujn rimedojn por konstrui elektronikajn\n";
-            print "vortarojn laŭ VoKo-teknologio. Ĝi ne enhavas \n";
+            print "&#x011c;i enhavas &#x0109;iujn rimedojn por konstrui elektronikajn\n";
+            print "vortarojn la&#x016d; VoKo-teknologio. &#x011c;i ne enhavas \n";
             print "ekzemplovortaron (vi povus preni kelkajn artikolojn el \n";
             print "ReVo) kaj la ilojn el la publika programaro\n";
             print "(t.e. xt, Perl, XML::Parser).\n</dd>\n"; 
@@ -249,17 +249,17 @@ sub print_file_list {
     }
 
     if (grep /^reveto_.*\.tgz$/, @files) {
-	print "<h2>Reveto - versio por poŝkomputiloj</h2>\n<ul>\n";
+	print "<h2>Reveto - versio por po&#x015d;komputiloj</h2>\n<ul>\n";
 	if ($f = grepfile ('^reveto_.*\.tgz$')) {
 	    print "<li><a href=\"$f\">$f</a> (".filesize($f).")\n";
         }
         print "</ul>\n";
-	print "Vi povas ankaŭ ricevi version en bedic-formato.\n";
+	print "Vi povas anka&#x016d; ricevi version en bedic-formato.\n";
 	print "Skribu al la Revo-administranto, se vi bezonas.\n";
     }
  
     # listigu ceterajn
-#    print "<h2>aliaj pakaĵoj</h2>\n";
+#    print "<h2>aliaj paka&#x0135;oj</h2>\n";
 #    foreach $f (@files) {
 #	if ($f =~ /\.tgz$/) {
 #	    print "<a href=\"$f\">$f</a><br>\n";

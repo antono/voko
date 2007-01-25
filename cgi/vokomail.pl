@@ -12,8 +12,8 @@ $CGI::DISABLE_UPLOADS=1; # ne permesu dosier-shargojn
 # agordiloj
 
 # indikoj por la redaktopaghoj
-$revo_dir = '/data/homewww/ejs/webdir/voko/revo';
-$revo_url = 'http://www.uni-leipzig.de/esperanto/voko/revo';
+$revo_dir = '/var/www/web277/html/revo';
+$revo_url = 'http://reta-vortaro.de/revo';
 $html_dir = "$revo_url/art";
 $xml_dir = "$revo_dir/xml";
 $dok_dir = "$revo_url/dok";
@@ -44,7 +44,7 @@ sub test_params {
 	    ."kaj substrekon.\n";
     }
 
-    # ĉio en ordo
+    # Chio en ordo
     return;
 }
 
@@ -59,10 +59,10 @@ sub skribu_paghon {
                         -meta=>{'http-equiv'=>'Content-Type',
                                 'content'=>'text/html; charset=UTF-8'}),  
 	h1("Sendformularo de Revo-servo"),
-	"Tiu ĉi formularo sendas retmesaĝon al ReVo-servo, respondon\n",
-	"vi same ricevos retpoŝte. ReVo-servo akceptas redaktojn nur\n",
-	"de aliĝintaj redaktoroj. Necesas, ke via TTT-legilo indikas\n",
-	"kiel sendinto tiun retadreson, per kiu vi aliĝis al ReVo-servo.\n";
+	"Tiu &#x0109;i formularo sendas retmesa&#x011d;on al ReVo-servo, respondon\n",
+	"vi same ricevos retpo&#x015d;te. ReVo-servo akceptas redaktojn nur\n",
+	"de registritaj redaktantoj. Necesas, ke via TTT-legilo indikas\n",
+	"kiel sendinto tiun retadreson, per kiu vi ali&#x011d;is al ReVo-servo.\n";
 #    print
 #	p({-align=>"right"}),
 #	a({-href=>"$dok_dir/helpo.txt"},"helpo pri ReVo-servo"), br,
@@ -89,7 +89,7 @@ sub skribu_paghon {
 		     -default=>param('teksto'),
 		     -rows=>25,
 		     -columns=>80),br,
-	    "Priskribo de la farita ŝanĝo (nepre necesa):", br,
+	    "Priskribo de la farita &#x015d;an&#x011d;o (nepre necesa):", br,
 	    textfield(-name=>'shangho',-size=>80,maxlength=>200), br,
 	    "Sendas la redaktitan artikolon al Revo-servo:", 
 	    submit('ago','Sendu'), p,
@@ -102,9 +102,4 @@ sub skribu_paghon {
     print
 	end_html;    
 }
-
-
-
-
-
 
