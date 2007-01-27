@@ -6,6 +6,7 @@
 # Autor: Erich Kramer, 1999
 
 # wd 3.6.2003: umgestellt von ftp auf sftp mit Batchdatei
+# wd 26.01.2007 umgestellt auf tar-Archiv als Ziel
 
 $| = 1;
 
@@ -51,7 +52,7 @@ my @error_unlink_ver = ();  # Fehlerliste zu löschende Verzeichnisse
 
 # Dateinamen:
 unless ($configdatei) {
-    $configdatei = $ENV{"VOKO"}."/cfg/mirror.cfg";   # Konfigurationsdatei
+    $configdatei = $ENV{"HOME"}."/etc/mirror.cfg";   # Konfigurationsdatei
 }
 
 readconfig($configdatei);
@@ -66,6 +67,21 @@ my $batchfile =  $config{"MirrorDat"}."/mirror.batch"; # Batchdatei für sftp
 my $max_tries = 1;
 my $logdir = $config{"LogDir"};
 my $include = $config{"include"};
+
+# Optionen für die Archivierung der geänderten Dateien mit tar
+my $tar_cmd = "tar -C ".$config{"LocalDir"}." -h -rf ";
+my $zip_cmd = 'gzip';
+my @now = gmtime(time());
+my $now_str = sprintf('%4d%02d%02d',$now[5]+1900,$now[4]+1,$now[3]);
+my $tar_file = $config{'TarFilePrefix'}.$now_str.".tar";
+my $tgz_file = $config{'TarFilePrefix'}.$now_str.".tgz";
+my $ren_tar_tgz = "mv $tar_file.gz $tgz_file";
+$tar_cmd .= "$tar_file ";
+my $del_file = $config{TarDelFile};
+my $del_path = $del_file; $del_path=~s/^(.*)\/[^\/]+$/$1/;
+my $tar_del_file = "tar ";
+$tar_del_file .= "-C ".$del_path if ($del_path);
+$tar_del_file .= " -rf ".$tar_file." ".$del_file;
 
 # ftp-Variablen:
 #my $ftp_port = 21;
@@ -465,6 +481,7 @@ sub mirror {
 		    length($config{'cgi-bin'})) eq $config{'cgi-bin'})
 	  {
 	    print "\nsetze Zugriffsrechte fuer $rem_file...";
+
 #	    if( ! &ftp::chmod( $rem_file, 457 ) ) {	# chmod 711
 #	      print " - Zugriffsrechte konnten nicht gesetzt werden";
 #	      print LOG " - konnte Zugriffsrechte nicht setzten";
@@ -489,11 +506,42 @@ sub mirror {
   print "\n";
 
   # Dateien per sftp übertragen
-  if (-s $batchfile) {	
-    open LOG1,"sftp -b $batchfile ".$config{'UserID'}."@".
-      $config{'RemoteServer'}."|";
-    while (<LOG1>) { print; };
-    close LOG1;
+#  if (-s $batchfile) {	
+#    open LOG1,"sftp -b $batchfile ".$config{'UserID'}."@".
+#      $config{'RemoteServer'}."|";
+#    while (<LOG1>) { print; };
+#    close LOG1;
+#  }
+
+  # Dateien in tar-Archiv speichern
+  if (-s $batchfile) {
+      print "Fuege neue/geaenderte Dateien in Tar-Archiv $tar_file ein...\n";
+      open BATCH, $batchfile or die "Konnte $batchfile nicht oeffnen: $!\n";
+      open DEL, ">$del_file" or die "Konnte $del_file nicht anlegen: $!\n"; 
+      my $line;
+      while ($line=<BATCH>) {
+#	  print "LINE: $line";
+	  if ($line =~ /^put\s+([^ ]+)\s+([^ ]+)\s*$/) {
+	      my $file = $2;
+	      $file =~ s/^\///;
+	      `$tar_cmd $file`;
+	  } elsif ($line =~ /^rm\s+(.*?)\s*$/) {
+	      my $file = $1;
+	      $file =~ s/^\///;
+#	      print "DELETE: $line";
+	      print DEL $file;
+	  }
+      }
+      # add delete file to tar archiv
+      close DEL;
+      print "$tar_del_file\n";
+      `$tar_del_file`;
+      print "Komprimiere Tar-Archiv...\n";
+      print "$zip_cmd $tar_file\n";
+      `$zip_cmd $tar_file`;
+      print "$ren_tar_tgz\n";
+      `$ren_tar_tgz`;
+      close BATCH;
   }
 
   print LOG "-" x 10, "Ende um ", `date`, "-" x 10;  
