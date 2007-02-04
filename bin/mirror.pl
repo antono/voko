@@ -69,7 +69,8 @@ my $logdir = $config{"LogDir"};
 my $include = $config{"include"};
 
 # Optionen für die Archivierung der geänderten Dateien mit tar
-my $tar_cmd = "tar -C ".$config{"LocalDir"}." -h -rf ";
+my $tar_dir = $config{"LocalDir"};
+my $tar_cmd = "tar -C $tar_dir -h -rf ";
 my $zip_cmd = 'gzip';
 my @now = gmtime(time());
 my $now_str = sprintf('%4d%02d%02d',$now[5]+1900,$now[4]+1,$now[3]);
@@ -78,10 +79,12 @@ my $tgz_file = $config{'TarFilePrefix'}.$now_str.".tgz";
 my $ren_tar_tgz = "mv $tar_file.gz $tgz_file";
 $tar_cmd .= "$tar_file ";
 my $del_file = $config{TarDelFile};
-my $del_path = $del_file; $del_path=~s/^(.*)\/[^\/]+$/$1/;
+$del_file =~ /^(.*)\/([^\/]+)$/;
+my $del_path = $1; my $del_filename = $2; # $del_path=~s/^(.*)\/[^\/]+$/$1/;
+
 my $tar_del_file = "tar ";
 $tar_del_file .= "-C ".$del_path if ($del_path);
-$tar_del_file .= " -rf ".$tar_file." ".$del_file;
+$tar_del_file .= " -rf ".$tar_file." ".$del_filename;
 
 # ftp-Variablen:
 #my $ftp_port = 21;
@@ -215,11 +218,14 @@ sub ToDo_Liste
   my @dir_eintraege;  #das gesammte Verzeichnis
 
   # ggf. nur bestimmte eingeschlossene Dateien beachten
-   if ($include) {
-	@dir_eintraege = map {s/^$dir\///, $_} glob("$dir/$include");
-        
-   } else {
+  if ($dir eq $config{"LocalDir"} and $config{"MirrorDirs"}) {
+      my $mirrordirs = $config{"MirrorDirs"};
+      @dir_eintraege = map {s/^$dir\///, $_} glob("$dir/$mirrordirs");
 
+  } elsif ($include) {
+      @dir_eintraege = map {s/^$dir\///, $_} glob("$dir/$include");
+        
+  } else {
      opendir (DIR, $dir) || die ("\nVerzeichnis $dir nicht gefunden");
      @dir_eintraege = readdir(DIR);
      closedir (DIR);
@@ -515,6 +521,7 @@ sub mirror {
 
   # Dateien in tar-Archiv speichern
   if (-s $batchfile) {
+      unlink($del_file);
       print "Fuege neue/geaenderte Dateien in Tar-Archiv $tar_file ein...\n";
       open BATCH, $batchfile or die "Konnte $batchfile nicht oeffnen: $!\n";
       open DEL, ">$del_file" or die "Konnte $del_file nicht anlegen: $!\n"; 
@@ -534,8 +541,10 @@ sub mirror {
       }
       # add delete file to tar archiv
       close DEL;
-      print "$tar_del_file\n";
-      `$tar_del_file`;
+      if (-s $del_file) {
+	  print "$tar_del_file\n";
+	  `$tar_del_file`;
+      }
       print "Komprimiere Tar-Archiv...\n";
       print "$zip_cmd $tar_file\n";
       `$zip_cmd $tar_file`;
