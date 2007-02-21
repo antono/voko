@@ -226,12 +226,24 @@ sub process_ent {
         # elprenu la tekston
         $parttxt = $entity->bodyhandle->as_string;   
 
+        # Opera uzas linirompojn anstatau "&", sed ankau havas aliloke linirompojn
+        if (($entity->head->get('user-agent') =~ /Opera/s ) and        
+           ($entity->head->get('content-type')
+                 =~  /format=flowed/s))      # Opera
+        {
+          $parttxt =~ s/&/%26/sg;
+	  $parttxt =~ s/\n(teksto|shangho|ago)=/\&\n$1=/sg;
+	}
+
 	# TTT-formularo?
         if ((($entity->head->get('subject')
                  =~ /Microsoft.*Internet.*lorer/s) 
 
                 or ($entity->head->get('content-type')
 		 =~  /POSTDATA\.ATT/s)
+
+                or ($entity->head->get('content-type')
+                 =~  /format=flowed/s)      # Opera
 
 		or ($entity->head->get('subject')
 		 =~ /form\s+post/si)
@@ -360,7 +372,7 @@ sub urlencoded_form {
 
     $text =~ s/!?\n//sg;
     foreach $pair (split ('&',$text)) {
-	if ($pair =~ /(.*)=(.*)/) {
+	if ($pair =~ /(.*?)=(.*)/) {
 	    ($key,$value) = ($1,$2);
 	    if ($key =~ /^(?:$possible_keys)$/) {
 		$value =~ s/\+/ /g; # anstatauigu '+' per ' '
