@@ -57,7 +57,11 @@
 
      <available property="cvs-tar-file-exists" file="${tmp}/${cvs.filename}"/>
    </target>
-       
+
+       <!-- por shargi pli malnovan tgz-dosieron, voku
+ant -f voko/ant/spegulo.xml -Dcvs.filename=revocvs-JJJJMMTT.tgz cvs-upload
+-->
+
 
    <target name="cvs-upload" depends="cvs-tar" if="cvs-tar-file-exists" 
      description="transportas la tar-dosieron al la cvs-servilo">
@@ -115,6 +119,7 @@
    <target name="revo-tar" unless="revo-tar-file-exists" depends="revo-preparo" 
        description="pakas shanghitajn Revo-dosieron en tar-dosieron">
 
+<!-- 
    <tstamp><format property="revo.nun.dato"
           pattern="yyyy-MM-dd"/></tstamp>
      <tstamp><format property="revo.nun.tempo" pattern="HH:mm:ss"/></tstamp>
@@ -122,51 +127,6 @@
      <echo message="Pakas dosierojn shanghitajn"/>
      <echo message="inter ${revo.lasta.dato} ${revo.lasta.tempo}"/>
      <echo message="  kaj ${revo.nun.dato} ${revo.nun.tempo}"/>
-
-<!--     <tar destfile="${tmp}/${revo.filename}" 
-        compression="gzip">
-
-  <!- <tarfileset dir="${revo.pado}" prefix="revo" includes="**/*" excludes="revo/xml/CVS/">
-            <modified delayUpdate="true">
-               <param name="cache.cachefile" value="${revo.cachefile}"/>
-            </modified>
-        </tarfileset>  ->
-
-<!-	<tarfileset dir="${revo.pado}" prefix="revo">
-            <and>
-              <filename name="xml/*"/>
-              <modified update="true" delayUpdate="true">
-                 <param name="cache.cachefile" value="${revo.cachefile}"/>
-              </modified>
-            </and>
-        </tarfileset>  </tar> ->
-
-<!- ne funkcias fidinde!
-	<tarfileset dir="${revo.pado}" prefix="revo">
-           <and>
-             <or>
-               <filename name="*"/>
-               <!- filename name="./*"/ ->
-               <filename name="art/a*"/>
-               <filename name="xml/a*"/>
-               <filename name="stl/*.*"/>
-             </or>
-             <filename name="revo/xml/CVS" negate="true"/>
-             <filename name="bin" negate="true"/>
-             <filename name="cvs" negate="true"/>
-             <filename name="rtf" negate="true"/>
-             <filename name="sgm" negate="true"/>
-             <filename name="txt" negate="true"/>
-
-             <date datetime="${revo.lasta.dato} ${revo.lasta.tempo}" 
-	   	 pattern="yyyy-MM-dd HH:mm:ss:SS"
-		 when="after"/>
-           </and>
-        </tarfileset>
-->
-
-    </tar>  
--->
 
     <exec executable="spegulo_tar.pl" output="${tmp}/tar.log">
        <arg path="${revo.pado}/.."/>
@@ -186,10 +146,14 @@
 
      </propertyfile>
 
+-->
 
      <available property="revo-tar-file-exists" file="${tmp}/${revo.filename}"/>
    </target>
        
+<!-- por shargi pli malnovan tgz-dosieron, voku
+ant -f voko/ant/spegulo.xml -Drevo.filename=revo-JJJJMMTT.tgz revo-upload
+-->
 
    <target name="revo-upload" depends="revo-tar" if="revo-tar-file-exists" 
      description="transportas la tar-dosieron al la Revo-servilo">
