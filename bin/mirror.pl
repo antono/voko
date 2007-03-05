@@ -536,7 +536,7 @@ sub mirror {
 	      my $file = $1;
 	      $file =~ s/^\///;
 #	      print "DELETE: $line";
-	      print DEL $file;
+	      print DEL "$file\n";
 	  }
       }
       # add delete file to tar archiv
