@@ -82,7 +82,7 @@
 <xsl:template name="script-literoj">
   <script type="text/javascript">
   <xsl:comment>
-    function xAlUtf8(t) {
+    function xAlUtf8(t,el) {
      if (document.getElementById("x").checked) {
         t = t.replace(/c[xX]/g, "\u0109");
         t = t.replace(/g[xX]/g, "\u011d");
@@ -96,8 +96,8 @@
         t = t.replace(/J[xX]/g, "\u0134");
         t = t.replace(/S[xX]/g, "\u015c");
         t = t.replace(/U[xX]/g, "\u016c");
-        if (t != document.getElementById("q").value) {
-           document.getElementById("q").value = t;
+        if (t != document.getElementById(el).value) {
+           document.getElementById(el).value = t;
         }
      }
    }
@@ -110,17 +110,38 @@
    <div align="center">
      <form method="get" action="http://www.google.be/search" style="text-align: center">
      <p>
-       <img src="http://www.google.com/logos/Logo_25wht.gif" border="0" alt="Google" align="absmiddle"/>
-       <input type="text" id="q" name="q" onKeyUp="xAlUtf8(this.value)" size="31" maxlength="255" value=""/>
+       Per <img src="http://www.google.com/logos/Logo_25wht.gif" border="0" alt="Google" align="absmiddle"/>
+       <input type="text" id="q" name="q" onKeyUp="xAlUtf8(this.value,'q')" size="31" maxlength="255" value=""/>
        <input type="submit" name="btnG" value="trovu"/>
-       <input type="checkbox" accesskey="x" id="x" checked="checked"/>
-       <xsl:text>anstata&#x016d;igu&#xa0;cx,&#xa0;gx,&#xa0;...,&#xa0;ux</xsl:text><br/>
-     </p>
+      </p>
      <input type="hidden" name="hl" value="eo"/>
      <input type="hidden" name="ie" value="utf-8"/>
      <input type="hidden" name="oe" value="utf-8"/>
-     <input type="hidden" name="sitesearch" value="www.uni-leipzig.de"/>
-     <input type="hidden" name="hq" value="inurl:esperanto/voko/revo/art"/>
+     <input type="hidden" name="sitesearch" value="reta-vortaro.de"/>
+     <input type="hidden" name="hq" value="inurl:revo/art"/>
+     </form>
+   </div>
+</xsl:template>
+
+<xsl:template match="sercho[@tipo='anst']">
+   <div align="center">
+   <p>
+       <input type="checkbox" accesskey="x" id="x" checked="checked"/>
+       <xsl:text>anstata&#x016d;igu&#xa0;cx,&#xa0;gx,&#xa0;...,&#xa0;ux</xsl:text>
+   </p>
+   </div>
+</xsl:template>
+
+<xsl:template match="sercho[@tipo='revo']">
+   <div align="center">
+
+     <form method="post" action='http://reta-vortaro.de/cgi-bin/sercxu.pl' target='indekso' name="f">
+        <p>
+	Ser&#265;o en ReVo:
+	<input type='text' id='sercxata' name='sercxata' size="31" maxlength="255" 
+	onKeyUp="xAlUtf8(this.value,'sercxata')"/>
+	<input type='submit' value='trovu'/>
+	</p>
      </form>
    </div>
 </xsl:template>
@@ -134,7 +155,9 @@
 
 
 <xsl:template match="bildo">
+  <div align="center">
   <img src="{@loko}" align="center" alt="titolbildo"/>
+  </div>
 </xsl:template>
 
 

@@ -6,7 +6,9 @@
   <!-- titolpagho -->
 
   <bonveno>
+    <sercho tipo="revo"/>
     <sercho tipo="google"/>
+    <sercho tipo="anst"/>
     <bildo loko="revo.jpg"/>
     <alineo>
       Jen Revo &#8213; la &gcirc;enerala esperanta vortaro en la reto.
@@ -83,12 +85,6 @@
      </sekcio>
      <sekcio titolo="&ccirc;efaj nocioj">
        <TEZAURO/>
-       <!-- provizore -->
-       <!-- ero ref="../tez/tz_art_0o.html" titolo="arto" style="font-weight: bold"/ -->
-       <!-- ero ref="../tez/tz_histor_0o_okazajxoj.html" titolo="historio"/ -->
-       <!-- ero ref="../tez/tz_scienc_0o_tuto.html" titolo="scienco" style="font-weight: bold"/>
-       <ero ref="../tez/tz_univer_0o.html" titolo="universo" style="font-weight: bold"/>
-       <ero ref="../tez/tz_viv_0ajxo.html" titolo="viva&jcirc;o" style="font-weight: bold"/ -->
      </sekcio>
   </pagho>
   <pagho titolo="Lingvoj" dosiero="_lng.html">
@@ -107,8 +103,8 @@
       <ero ref="../titolo.html" titolo="titolpa&gcirc;o"/>
       <ero ref="../sercxo.html" titolo="ser&ccirc;o"/>
       <ero ref="../dok/copying.txt" titolo="permesilo"/>
-      <ero ref="http://www.uni-leipzig.de/esperanto/voko/tgz/index.html" titolo="el&scirc;uti" kadro="_new"/>
-      <ero ref="http://www.uni-leipzig.de/esperanto/voko" titolo="VoKo" kadro="_new"/>
+      <ero ref="http://reta-vortaro.de/tgz/index.html" titolo="el&scirc;uti" kadro="_new"/>
+      <!-- ero ref="http://www.uni-leipzig.de/esperanto/voko" titolo="VoKo" kadro="_new"/ -->
     </sekcio>
     <sekcio titolo="diversaj indeksoj">
        <BLD-OJ titolo="listo de bildoj"/>
@@ -134,7 +130,7 @@
        <ero ref="../dok/manlibro.html" titolo="te&hcirc;nika manlibro"/>
        <ero ref="../dok/vindoza_manlibro.html" titolo="manlibro por Vindozo"/>
        <ero ref="../dok/dtd.html" titolo="dokumenttipdifino"/>
-       <ero ref="../dok/lng/lingvoj.html" titolo="alfabetoj"/>
+       <ero ref="../dok/ordigo.html" titolo="alfabetoj"/>
        <ero ref="../dok/fakoj.html" titolo="mll. de fakoj"/>
        <ero ref="../dok/lingvoj.html" titolo="mll. de lingvoj"/>
        <ero ref="../dok/stiloj.html" titolo="mll. de stiloj"/>
@@ -149,12 +145,6 @@
      </sekcio>
      <sekcio titolo="&ccirc;efaj nocioj">
        <TEZAURO/>
-       <!-- provizore -->
-       <!-- ero ref="../tez/tz_art_0o.html" titolo="arto" style="font-weight: bold"/ -->
-       <!-- ero ref="../tez/tz_histor_0o_okazajxoj.html" titolo="historio"/ -->
-       <!-- ero ref="../tez/tz_scienc_0o_tuto.html" titolo="scienco" style="font-weight: bold"/>
-       <ero ref="../tez/tz_univer_0o.html" titolo="universo" style="font-weight: bold"/>
-       <ero ref="../tez/tz_viv_0ajxo.html" titolo="viva&jcirc;o" style="font-weight: bold"/ -->
      </sekcio>
     <sekcio titolo="nacilingvaj indeksoj">
       <TRD-OJ lng="la"/>
@@ -167,8 +157,8 @@
       <ero ref="../titolo.html" titolo="titolpa&gcirc;o"/>
       <ero ref="../sercxo.html" titolo="ser&ccirc;o"/>
       <ero ref="../dok/copying.txt" titolo="permesilo"/>
-      <ero ref="http://www.uni-leipzig.de/esperanto/voko/tgz/index.html" titolo="el&scirc;uti" kadro="_new"/>
-      <ero ref="http://www.uni-leipzig.de/esperanto/voko" titolo="VoKo"  kadro="_new"/>
+      <ero ref="http://reta-vortaro.de/tgz/index.html" titolo="el&scirc;uti" kadro="_new"/>
+      <!-- ero ref="http://www.uni-leipzig.de/esperanto/voko" titolo="VoKo"  kadro="_new"/ -->
     </sekcio>
     <sekcio titolo="diversaj indeksoj">
        <BLD-OJ titolo="listo de bildoj"/>
@@ -194,7 +184,7 @@
        <ero ref="../dok/manlibro.html" titolo="te&hcirc;nika manlibro"/>
        <ero ref="../dok/vindoza_manlibro.html" titolo="manlibro por Vindozo"/>
        <ero ref="../dok/dtd.html" titolo="dokumenttipdifino"/>
-       <ero ref="../dok/lng/lingvoj.html" titolo="alfabetoj"/>
+       <ero ref="../dok/ordigo.html" titolo="alfabetoj"/>
        <ero ref="../dok/fakoj.html" titolo="mll. de fakoj"/>
        <ero ref="../dok/lingvoj.html" titolo="mll. de lingvoj"/>
        <ero ref="../dok/stiloj.html" titolo="mll. de stiloj"/>

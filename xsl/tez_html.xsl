@@ -23,7 +23,7 @@
 <xsl:strip-space elements="k"/>
 
 <xsl:param name="verbose" select="'false'"/>
-<xsl:param name="warn-about-dead-refs" select="'true'"/>
+<xsl:param name="warn-about-dead-refs" select="'false'"/>
 
 
 <!-- xsl:variable name="fakoj">../cfg/fakoj.xml</xsl:variable -->

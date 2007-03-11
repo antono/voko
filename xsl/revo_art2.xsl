@@ -19,6 +19,16 @@ reguloj por la prezentado de la artikolostrukturo
   <title>
     <xsl:apply-templates select="//art/kap[1]" mode="titolo"/>
   </title>
+
+  <script type="text/javascript">
+  <xsl:text>&lt;!--
+top.document.title = 'Reta Vortaro [</xsl:text>
+  <xsl:value-of select="//art/kap[1]"/>
+  <xsl:text>]';
+</xsl:text>
+<xsl:text>//--&gt;</xsl:text>
+  </script>
+
   </head>
   <body>
     <xsl:apply-templates/>
