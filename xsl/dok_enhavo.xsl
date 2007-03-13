@@ -21,7 +21,9 @@
 -->
 
 
-<xsl:output method="xhtml" encoding="utf-8"/>
+<!-- necesas indent=no, cxar aliokaze cxe la elektokesto
+aperas "c _x_" anstata "c_x_" -->
+<xsl:output method="xhtml" encoding="utf-8" indent="no"/>
 <xsl:variable name="inx" select="'inx/'"/>
 
 <xsl:template match="/enhavo">
@@ -67,6 +69,9 @@
       </xsl:if>
     </head>
     <body>
+      <xsl:attribute name="onLoad">
+	document.f.sercxata.focus();
+      </xsl:attribute>
 
       <h1 align="center" style="color:black; font-size: xx-large"><xsl:value-of select="@nomo"/></h1>
 
@@ -127,7 +132,8 @@
    <div align="center">
    <p>
        <input type="checkbox" accesskey="x" id="x" checked="checked"/>
-       <xsl:text>anstata&#x016d;igu&#xa0;cx,&#xa0;gx,&#xa0;...,&#xa0;ux</xsl:text>
+       <xsl:text>anstata&#x016d;igu&#xa0;</xsl:text> c<u>x</u>
+       <xsl:text>,&#xa0;gx,&#xa0;...,&#xa0;ux</xsl:text>
    </p>
    </div>
 </xsl:template>
