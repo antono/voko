@@ -23,7 +23,7 @@ reguloj por la prezentado de la artikolostrukturo
   <script type="text/javascript">
   <xsl:text>&lt;!--
 top.document.title = 'Reta Vortaro [</xsl:text>
-  <xsl:value-of select="//art/kap[1]"/>
+  <xsl:value-of select="normalize-space(//art/kap[1])"/>
   <xsl:text>]';
 </xsl:text>
 <xsl:text>//--&gt;</xsl:text>

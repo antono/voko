@@ -69,9 +69,11 @@ aperas "c _x_" anstata "c_x_" -->
       </xsl:if>
     </head>
     <body>
-      <xsl:attribute name="onLoad">
-	document.f.sercxata.focus();
-      </xsl:attribute>
+      <xsl:if test="bonveno/sercho">
+        <xsl:attribute name="onLoad">
+  	  <xsl:text>document.f.sercxata.focus();</xsl:text>
+        </xsl:attribute>
+      </xsl:if>
 
       <h1 align="center" style="color:black; font-size: xx-large"><xsl:value-of select="@nomo"/></h1>
 
@@ -131,7 +133,7 @@ aperas "c _x_" anstata "c_x_" -->
 <xsl:template match="sercho[@tipo='anst']">
    <div align="center">
    <p>
-       <input type="checkbox" accesskey="x" id="x" checked="checked"/>
+       <input type="checkbox" name="x" id="x" checked="checked"/>
        <xsl:text>anstata&#x016d;igu&#xa0;</xsl:text> c<u>x</u>
        <xsl:text>,&#xa0;gx,&#xa0;...,&#xa0;ux</xsl:text>
    </p>
@@ -148,6 +150,11 @@ aperas "c _x_" anstata "c_x_" -->
 	onKeyUp="xAlUtf8(this.value,'sercxata')"/>
 	<input type='submit' value='trovu'/>
 	</p>
+        <p>
+       <input type="checkbox" name="x" id="x" checked="checked"/>
+         <xsl:text>anstata&#x016d;igu&#xa0;</xsl:text> c<u>x</u>
+         <xsl:text>,&#xa0;gx,&#xa0;...,&#xa0;ux</xsl:text>
+        </p>
      </form>
    </div>
 </xsl:template>
