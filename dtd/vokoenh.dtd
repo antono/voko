@@ -2,8 +2,8 @@
 
 <!-- strukturo de agordo-dosiero enhavo.xml por Voko-vortaroj -->
 
-<!ELEMENT vortaro (bonveno?,pagho*)>
-<!ATTLIST vortaro nomo CDATA #REQUIRED
+<!ELEMENT enhavo (bonveno?,elshuto?,pagho*)>
+<!ATTLIST enhavo nomo CDATA #REQUIRED
                   nometo CDATA #REQUIRED
                   piktogramo CDATA #IMPLIED>
 
@@ -15,16 +15,18 @@
 <!ELEMENT bildo EMPTY>
 <!ATTLIST bildo loko CDATA #REQUIRED>
 <!ELEMENT sercho EMPTY>
-<!ATTLIST sercho tipo (google) #REQUIRED>
+<!ATTLIST sercho tipo (revo|google) #REQUIRED
+                 opensearch CDATA #IMPLIED>
 
 <!ELEMENT elshuto (sekcio|alineo)*>
 <!ATTLIST elshuto titolo CDATA #REQUIRED>
 
 <!ELEMENT pagho (sekcio*)>
 <!ATTLIST pagho titolo CDATA #REQUIRED
-                dosiero CDATA #REQUIRED>
+                dosiero CDATA #REQUIRED
+                kashita (ne|jes) #IMPLIED>
 
-<!ELEMENT sekcio (ero|KAP-OJ|TRD-OJ|FAKOJ|INV|BLD-OJ|MLG-OJ)*>
+<!ELEMENT sekcio (ero|KAP-OJ|TRD-OJ|FAKOJ|INV|BLD-OJ|MLG-OJ|MANKOJ|STAT|TEZAURO)*>
 <!ATTLIST sekcio titolo CDATA #REQUIRED
                  kadro CDATA #IMPLIED>
 
@@ -36,7 +38,9 @@
 <!ELEMENT KAP-OJ EMPTY>
 <!ATTLIST KAP-OJ titolo CDATA #IMPLIED>
 <!ELEMENT TRD-OJ EMPTY>
-<!ATTLIST TRD-OJ titolo CDATA #IMPLIED>
+<!ATTLIST TRD-OJ titolo CDATA #IMPLIED
+                 lng CDATA #IMPLIED
+                 krom CDATA #IMPLIED>
 <!ELEMENT MANKOJ EMPTY>
 <!ATTLIST MANKOJ titolo CDATA #IMPLIED>
 <!ELEMENT FAKOJ EMPTY>
@@ -46,9 +50,11 @@
 <!ELEMENT BLD-OJ EMPTY>
 <!ATTLIST BLD-OJ titolo CDATA #REQUIRED>
 <!ELEMENT MLG-OJ EMPTY>
-<!ATTLIST MLG-OJ titolo CDATA #REQUIRED>
+<!ATTLIST MLG-OJ titolo CDATA #REQUIRED
+                 style CDATA #IMPLIED>
 <!ELEMENT STAT EMPTY>
 <!ATTLIST STAT titolo CDATA #REQUIRED>
+<!ELEMENT TEZAURO EMPTY>
 
 
 <!ENTITY % signoj SYSTEM "../dtd/vokosgn.dtd">

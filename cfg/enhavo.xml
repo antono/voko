@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE enhavo SYSTEM "../dtd/vokoenh.dtd">
 
-<enhavo nomo="Reta Vortaro" nometo="ReVo" pikotgramo="revo.ico">
+<enhavo nomo="Reta Vortaro" nometo="ReVo" piktogramo="revo.ico">
 
   <!-- titolpagho -->
 
   <bonveno>
-    <sercho tipo="revo"/>
-    <sercho tipo="google"/>
-    <sercho tipo="anst"/>
+    <sercho tipo="revo" opensearch="cfg/sercxo2.xml"/>
+    <sercho tipo="google" opensearch="cfg/sercxo.xml"/>
     <bildo loko="revo.jpg"/>
     <alineo>
       Jen Revo &#8213; la &gcirc;enerala esperanta vortaro en la reto.

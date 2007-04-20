@@ -35,6 +35,10 @@ aperas "c _x_" anstata "c_x_" -->
       <xsl:if test="@piktogramo">
          <link rel="SHORTCUT ICON" href="{@piktogramo}"/>
       </xsl:if>
+      <xsl:for-each select="bonveno/sercho[@opensearch]">
+        <link rel="search" type="application/opensearchdescription+xml" 
+           title="{@tipo}" href="{@opensearch}"/>
+      </xsl:for-each>
     </head>
 
     <frameset cols="33%,*">
@@ -133,7 +137,7 @@ aperas "c _x_" anstata "c_x_" -->
 <xsl:template match="sercho[@tipo='anst']">
    <div align="center">
    <p>
-       <input type="checkbox" name="x" id="x" checked="checked"/>
+       <input type="checkbox" name="x" id="x" onClick="xAlUtf8(document.f.sercxata.value,'sercxata')" checked="checked"/>
        <xsl:text>anstata&#x016d;igu&#xa0;</xsl:text> c<u>x</u>
        <xsl:text>,&#xa0;gx,&#xa0;...,&#xa0;ux</xsl:text>
    </p>
@@ -151,7 +155,7 @@ aperas "c _x_" anstata "c_x_" -->
 	<input type='submit' value='trovu'/>
 	</p>
         <p>
-       <input type="checkbox" name="x" id="x" checked="checked"/>
+       <input type="checkbox" name="x" id="x" onClick="xAlUtf8(document.f.sercxata.value,'sercxata')" checked="checked"/>
          <xsl:text>anstata&#x016d;igu&#xa0;</xsl:text> c<u>x</u>
          <xsl:text>,&#xa0;gx,&#xa0;...,&#xa0;ux</xsl:text>
         </p>
