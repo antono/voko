@@ -6,8 +6,8 @@
   <!-- titolpagho -->
 
   <bonveno>
-    <sercho tipo="revo" opensearch="cfg/sercxo2.xml"/>
-    <sercho tipo="google" opensearch="cfg/sercxo.xml"/>
+    <sercho tipo="revo" opensearch="cfg/sercxo2.xml" titolo="Revoser&ccirc;o"/>
+    <sercho tipo="google" opensearch="cfg/sercxo.xml" titolo="Revoser&ccirc;o per Google"/>
     <bildo loko="revo.jpg"/>
     <alineo>
       Jen Revo &#8213; la &gcirc;enerala esperanta vortaro en la reto.
@@ -18,12 +18,25 @@
     </alineo>
     <alineo>
       Por trovi artikolon vi povas uzi la indeksojn en
-      la maldekstra kadro a&ubreve; uzi la ser&ccirc;ilon.
+      la maldekstra kadro a&ubreve; uzi unu el la du supraj ser&ccirc;iloj.
+    </alineo>
+    <alineo style="font-size: small">
+      Se vi uzas Fajrovulpon de la versio 2 a&ubreve; similan retumilon, 
+      vi povas aldoni la ser&ccirc;ilojn al la ser&ccirc;ilolisto de la retumilo,
+      elektante tie la menueron por aldono a&ubreve; klakante sur la sekvajn
+      ligilojn por 
+      <serchaldono tipo="revo">aldoni Revoser&ccirc;on</serchaldono> a&ubreve;
+      <serchaldono tipo="google">aldoni Revoser&ccirc;on per Guglo</serchaldono>
     </alineo>
     <alineo>
       Se vi volas referenci al la vortaro, bonvolu uzi nur la adreson
       <url ref="http://purl.org/net/voko/revo">http://purl.org/net/voko/revo/</url>.
     </alineo>
+
+    <javoskriptaverto>
+       Javoskripto en via retumilo ne estas &scirc;altita a&ubreve;
+       ne funkcias kiel supozite. La ligo, kiun vi alklakis ne funkcias sen Javoskripto.
+    </javoskriptaverto>
   </bonveno>
 
   <!-- elshuto-pagho -->
