@@ -7,8 +7,8 @@
                   nometo CDATA #REQUIRED
                   piktogramo CDATA #IMPLIED>
 
-<!ELEMENT bonveno (alineo|bildo|sercho)*>
-<!ELEMENT alineo (#PCDATA|url)*>
+<!ELEMENT bonveno (alineo|bildo|sercho|javoskriptaverto)*>
+<!ELEMENT alineo (#PCDATA|url|serchaldono)*>
 <!ATTLIST alineo style CDATA #IMPLIED>
 <!ELEMENT url (#PCDATA)>
 <!ATTLIST url ref CDATA #REQUIRED>
@@ -16,7 +16,11 @@
 <!ATTLIST bildo loko CDATA #REQUIRED>
 <!ELEMENT sercho EMPTY>
 <!ATTLIST sercho tipo (revo|google) #REQUIRED
-                 opensearch CDATA #IMPLIED>
+                 opensearch CDATA #IMPLIED
+                 titolo CDATA #IMPLIED>
+<!ELEMENT serchaldono (#PCDATA)>
+<!ATTLIST serchaldono tipo (revo|google) #REQUIRED>
+<!ELEMENT javoskriptaverto (#PCDATA)>
 
 <!ELEMENT elshuto (sekcio|alineo)*>
 <!ATTLIST elshuto titolo CDATA #REQUIRED>

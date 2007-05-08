@@ -26,6 +26,8 @@ aperas "c _x_" anstata "c_x_" -->
 <xsl:output method="xhtml" encoding="utf-8" indent="no"/>
 <xsl:variable name="inx" select="'inx/'"/>
 
+
+<!-- kadraro, t.e. index.html -->
 <xsl:template match="/enhavo">
 
   <html>
@@ -37,7 +39,7 @@ aperas "c _x_" anstata "c_x_" -->
       </xsl:if>
       <xsl:for-each select="bonveno/sercho[@opensearch]">
         <link rel="search" type="application/opensearchdescription+xml" 
-           title="{@tipo}" href="{@opensearch}"/>
+           title="{@titolo}" href="{@opensearch}"/>
       </xsl:for-each>
     </head>
 
@@ -58,6 +60,7 @@ aperas "c _x_" anstata "c_x_" -->
 </xsl:template>
 
 
+<!-- bonvenopagho, t.e. titolo.html -->
 <xsl:template name="titolo">
   <xsl:result-document href="titolo.html" method="xhtml" encoding="utf-8">
   <!-- redirect:write select="'titolo.html'" -->
@@ -81,7 +84,33 @@ aperas "c _x_" anstata "c_x_" -->
 
       <h1 align="center" style="color:black; font-size: xx-large"><xsl:value-of select="@nomo"/></h1>
 
-      <xsl:apply-templates/>
+      <xsl:apply-templates select="bonveno/(alineo|bildo|sercho)"/>
+
+    </body>
+  </html>
+  <!-- /redirect:write -->
+  </xsl:result-document>
+
+  <xsl:if test="bonveno//serchaldono">
+    <xsl:call-template name="javoskript-averto"/>
+  </xsl:if>
+</xsl:template>
+
+<!-- jsaverto.html -->
+<xsl:template name="javoskript-averto">
+  <xsl:result-document href="jsaverto.html" method="xhtml" encoding="utf-8">
+  <!-- redirect:write select="'jsaverto.html'" -->
+  <html>
+    <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
+      <title>Javoskript-Averto</title>
+      <link title="artikolo-stilo" type="text/css" 
+            rel="stylesheet" href="stl/artikolo.css"/>
+    </head>
+    <body>
+      <h1 align="center" style="color:black; font-size: xx-large">Javoskript-Averto</h1>
+
+      <xsl:apply-templates select="bonveno/javoskriptaverto"/>
 
     </body>
   </html>
@@ -163,9 +192,23 @@ aperas "c _x_" anstata "c_x_" -->
    </div>
 </xsl:template>
 
+<xsl:template match="serchaldono">
+   <a href="jsaverto.html">
+     <xsl:attribute name="onclick">
+        <xsl:text>window.external.AddSearchProvider('</xsl:text>
+        <xsl:value-of select="ancestor::bonveno/sercho[@tipo=current()/@tipo]/@opensearch"/>
+        <xsl:text>');return false;</xsl:text>
+     </xsl:attribute>
+     <xsl:apply-templates/>
+   </a>
+</xsl:template>
 
 <xsl:template match="alineo">
-  <p style="width: 80%; margin-left: 10%">
+  <p>
+    <xsl:attribute name="style">
+      <xsl:text>width: 80%; margin-left: 10%;</xsl:text>
+      <xsl:value-of select="@style"/>
+    </xsl:attribute>
     <xsl:apply-templates/>
   </p>
 </xsl:template>
