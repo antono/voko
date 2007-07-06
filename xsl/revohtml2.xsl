@@ -11,6 +11,7 @@ transform-reguloj
 
 -->
 
+
 <xsl:import href="revo_trd.xsl"/>
 <xsl:import href="revo_fnt.xsl"/>
 <xsl:import href="revo_adm.xsl"/>
@@ -18,6 +19,9 @@ transform-reguloj
 <xsl:import href="revo_art2.xsl"/>
 <xsl:import href="revo_ref.xsl"/>
 <xsl:import href="revo_dif.xsl"/>
+
+<xsl:param name="xml-ref-pado"/>
+
 
 <xsl:output method="html" version="4.0" encoding="utf-8"/>
 <xsl:strip-space elements="trdgrp refgrp kap"/>
@@ -45,7 +49,9 @@ transform-reguloj
   <!-- Se ne ekzistas la XML-dosiero, la tuta transformado fiaskas cxe
   xt -->
   <xsl:variable name="ref" select="(@ref|ancestor::ref/@cel)[last()]"/>
-  <xsl:variable name="doc" select="concat(substring-before($ref,'.'),'.xml')"/>
+  <xsl:variable name="doc" select="concat($xml-ref-pado,'/',substring-before($ref,'.'),'.xml')"/>
+
+<!-- <xsl:message>ref: <xsl:value-of select="$ref"/> doc: <xsl:value-of select="$doc"/></xsl:message> --> 
 
 <xsl:if test="doc-available($doc)">
   <sup><i>

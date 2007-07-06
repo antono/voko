@@ -32,6 +32,7 @@
 
    <target name="cvs-preparo">
      <tstamp/>
+     <echo message="tempo: ${DSTAMP} ${TSTAMP}"/>
      <property name="cvs.filename" value="revocvs-${DSTAMP}.tgz"/>
      <available property="cvs-tar-file-exists" file="${tmp}/${cvs.filename}"/>
    </target>
@@ -95,11 +96,14 @@ ant -f voko/ant/spegulo.xml -Dcvs.filename=revocvs-JJJJMMTT.tgz cvs-upload
    </target>
 
 
+
 <!-- ################### alshuto al Revo-servilo ############################ -->
 
 
    <target name="revo-preparo">
      <tstamp/>
+     <echo message="tempo: ${DSTAMP} ${TSTAMP}"/>
+ 
      <property name="revo.filename" value="revo-${DSTAMP}.tgz"/>
      <available property="revo-tar-file-exists" file="${tmp}/${revo.filename}"/>
 
@@ -155,7 +159,7 @@ ant -f voko/ant/spegulo.xml -Dcvs.filename=revocvs-JJJJMMTT.tgz cvs-upload
 ant -f voko/ant/spegulo.xml -Drevo.filename=revo-JJJJMMTT.tgz revo-upload
 -->
 
-   <target name="revo-upload" depends="revo-tar" if="revo-tar-file-exists" 
+   <target name="revo-upload" depends="revo-tar, revo-tempo" if="revo-tar-file-exists" 
      description="transportas la tar-dosieron al la Revo-servilo">
      <ftp server="${revo.servilo.host}"
          remotedir="${revo.servilo.dir}"
@@ -175,13 +179,35 @@ ant -f voko/ant/spegulo.xml -Drevo.filename=revo-JJJJMMTT.tgz revo-upload
      <loadfile srcFile="${log}/revo_uploadlog.html" property="logfile">
        <filterchain>
          <tokenfilter>
-           <replaceregex pattern="&lt;[^&gt;]+&gt;" replace="" flags="g"/>
+           <replaceregex pattern="&lt;[^&gt;]+&gt;" replace=" " flags="g"/>
          </tokenfilter>
        </filterchain>
      </loadfile>
   
      <echo>
        ${logfile}
+     </echo>
+
+   </target>
+
+   <target name="revo-tempo" 
+     description="demandas la tempon de la Revo-servilo">
+
+     <get src="${revo.tempo.url}" 
+       dest="${log}/revo_time.html" 
+       username="${revo.upload.user}"
+       password="${revo.upload.password}"/>
+  
+     <loadfile srcFile="${log}/revo_time.html" property="timefile">
+       <filterchain>
+         <tokenfilter>
+           <replaceregex pattern="&lt;[^&gt;]+&gt;" replace=" " flags="g"/>
+         </tokenfilter>
+       </filterchain>
+     </loadfile>
+  
+     <echo>
+       ${timefile}
      </echo>
 
    </target>

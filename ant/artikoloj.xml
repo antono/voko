@@ -60,7 +60,9 @@
        force="true" style="${v.voko.xsl}/revo_tez.xsl"/>
 
     <xslt in="${v.tmp}/art/${dosiero}.xml" out="${v.tmp}/art/${dosiero}.html" 
-       style="${v.voko.xsl}/revohtml2.xsl"/>
+       style="${v.voko.xsl}/revohtml2.xsl">
+         <param name="xml-ref-pado" expression="${v.bazo.xml}"/>
+    </xslt>
 
     <copy file="${v.tmp}/art/${dosiero}.html" tofile="${v.bazo.art}/${dosiero}.html"/>
 
@@ -90,8 +92,9 @@
 
     <echo message="### kreu la HTML-dosierojn por la artikoloj"/>
     <xslt basedir="${v.tmp}/art" includes="*.xml" destdir="${v.tmp}/art/" extension=".html"
-       style="${v.voko.xsl}/revohtml2.xsl"/>
-
+       style="${v.voko.xsl}/revohtml2.xsl">
+       <param name="xml-ref-pado" expression="${v.bazo.xml}"/>
+    </xslt>
 
   </target>
 

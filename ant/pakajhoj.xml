@@ -1,6 +1,9 @@
 <project name="Revo-pakajhoj" default="pak-regule" basedir=".">
     <description>
-       Reta Vortaro, reguloj por fari pakajhojn.
+       Reta Vortaro, reguloj por fari pakajhojn. Normale refarighas
+       nova kompleto post 28 tagoj nova parto (t.e. shanghitaj dosieroj)
+       post 4 tagoj. Vi povas devigi fari novan kompleton tuj, vokante
+       "ant -f ${VOKO}/ant/pakajhoj.xml -DFARU-kompleton=true pak-kompleto".
     </description>
 
 <!-- todo: 
@@ -44,8 +47,7 @@
    </target>
 
    <target name="pak-testo" depends="pak-preparo" 
-       description="kontrolas kiom da tagoj pasis post lasta pako kaj
-       kiuj novaj pakoj estas kreendaj">
+       description="kontrolas kiom da tagoj pasis post lasta pako kaj kiuj novaj pakoj estas kreendaj">
 
        <!-- kreu dosieron per kiu poste komparighas la ekzistantaj
        zip-dosieroj -->
@@ -91,8 +93,7 @@
 
 
    <target name="pak-regule" depends="pak-preparo,pak-testo,pak-kompleto,pak-parto" 
-       description="kontrolas, chu bezonighas novaj arhhivoj kaj kreas
-       laubezone">
+       description="kontrolas, chu bezonighas novaj arhhivoj kaj kreas laubezone">
 <!--     <antcall target="kompleto"/>
      <antcall target="parto"/> -->
 
@@ -131,8 +132,11 @@
   <target name="pak-html" depends="pak-preparo" description="Revo-HTML-pakajho">
      <zip destfile="${v.tgz}/revohtml_${nun.dato}.zip">
        <zipfileset dir="${v.bazo}/art" excludes="CVS/*" prefix="revo/art"/>
+       <zipfileset dir="${v.bazo}/inx" excludes="CVS/*" prefix="revo/inx"/>
        <zipfileset dir="${v.bazo}/dok" excludes="CVS/*" prefix="revo/dok"/>
+       <zipfileset dir="${v.bazo}/stl" excludes="CVS/*" prefix="revo/stl"/>
        <zipfileset dir="${v.bazo}/tez" excludes="CVS/*" prefix="revo/tez"/>
+       <zipfileset dir="${v.bazo}/smb" excludes="CVS/*" prefix="revo/smb"/>
        <zipfileset dir="${v.bazo}" includes="index.html sercxo.html titolo.html revo.ico " 
        prefix="revo"/>
      </zip>  
