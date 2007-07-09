@@ -6,6 +6,7 @@
  
    <!-- property file="etc -->
    <property file="/home/revo/etc/spegulo-agordo-cvs" prefix="cvs."/>
+   <property file="/home/revo/etc/spegulo-tempo-cvs" prefix="cvs."/>
    <property file="/home/revo/etc/spegulo-agordo-revo" prefix="revo."/>
    <property file="/home/revo/etc/spegulo-tempo-revo" prefix="revo."/>
 
@@ -26,8 +27,11 @@
 
    <!-- property file="/home/revo/etc/spegulo-agordo-tgz" prefix="tgz."/ -->
 
+   <property name="mirror" location="/home/revo/voko/bin/mirror.pl"/>
    <property name="tmp" location="/home/revo/tmp"/>
    <property name="log" location="/home/revo/log"/>
+   <property name="revo.tempoj" location="/home/revo/etc/spegulo-tempo-revo"/>
+   <property name="cvs.tempoj" location="/home/revo/etc/spegulo-tempo-cvs"/>
 
 
    <target name="cvs-preparo">
@@ -46,6 +50,11 @@
    <target name="cvs-tar" unless="cvs-tar-file-exists" depends="cvs-preparo" 
        description="pakas shanghitajn cvs-dosieron en tar-dosieron">
 
+     <exec executable="${mirror}" output="${log}/tar-revocvs-${DSTAMP}.log">
+       <arg value="cvs"/>
+     </exec>
+
+<!--
      <tar destfile="${tmp}/${cvs.filename}" 
         compression="gzip">
 
@@ -55,7 +64,7 @@
             </modified>
         </tarfileset> 
      </tar>
-
+-->
      <available property="cvs-tar-file-exists" file="${tmp}/${cvs.filename}"/>
    </target>
 
@@ -123,6 +132,10 @@ ant -f voko/ant/spegulo.xml -Dcvs.filename=revocvs-JJJJMMTT.tgz cvs-upload
    <target name="revo-tar" unless="revo-tar-file-exists" depends="revo-preparo" 
        description="pakas shanghitajn Revo-dosieron en tar-dosieron">
 
+   <exec executable="${mirror}" output="${log}/tar-revo-${DSTAMP}.log">
+      <arg value="revo"/>
+   </exec>
+
 <!-- 
    <tstamp><format property="revo.nun.dato"
           pattern="yyyy-MM-dd"/></tstamp>
@@ -140,7 +153,7 @@ ant -f voko/ant/spegulo.xml -Dcvs.filename=revocvs-JJJJMMTT.tgz cvs-upload
 
 
     <propertyfile
-       file="/home/revo/etc/spegulo-tempo-revo"
+       file="revo.tempoj"
          comment="Dato kaj tempo, kiam farighis lasta arhhivo">
 
       <entry  key="lasta.dato" type="date"

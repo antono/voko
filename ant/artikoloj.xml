@@ -86,7 +86,7 @@
         <custom classname="de.steloj.respiro.DateMaxFilesSelector" classpath="${v.voko.ant}/respiro.jar">
           <param name="datetime" value="${v.antau_jaro}"/>
           <param name="when" value="before"/>
-          <param name="maxFiles" value="50"/> <!-- aktualigu maksimume 50 malnovajn dosierojn -->
+          <param name="maxFiles" value="500"/> <!-- aktualigu maksimume 50 malnovajn dosierojn -->
         </custom>
     </xslt>
 
