@@ -449,6 +449,39 @@
  <l name="z">z,Z</l>
 </lingvo>
 
+<!-- fina -->
+<lingvo lng="fi">
+ <l name="a">aA</l>
+ <l name="b">bB</l>
+ <l name="c">cC</l>
+ <l name="d">dD</l>
+ <l name="e">eE�~I</l>
+ <l name="f">fF</l>
+ <l name="g">gG</l>
+ <l name="h">hH</l>
+ <l name="i">iI</l>
+ <l name="j">jJ</l>
+ <l name="k">kK</l>
+ <l name="l">lL</l>
+ <l name="m">mM</l>
+ <l name="n">nN</l>
+ <l name="o">oO</l>
+ <l name="p">pP</l>
+ <l name="q">qQ</l>
+ <l name="r">rR</l>
+ <l name="s">sS</l>
+ <l name="t">tT</l>
+ <l name="u">uU</l>
+ <l name="v">vVwW</l>
+ <l name="x">xX</l>
+ <l name="y">yY</l>
+ <l name="z">zZ</l>
+ <l name="aa">&#x00e5;&#x00c5;</l>
+ <l name="ae">ä~D</l>
+ <l name="oe">ö~V</l>
+</lingvo>
+
+
 <!-- franca -->
 <lingvo lng="fr">
  <l name="a">aAàÀâÂ&#x00c6;&#x00e6;</l>

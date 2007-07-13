@@ -769,7 +769,8 @@
   </vrk>
 
   <vrk mll="KompLeks">
-    <url>http://purl.oclc.org/NET/voko/URL/KompLeks/</url>
+    <url>http://bertilow.com/div/komputada_leksikono/</url>
+    <!--url>http://purl.oclc.org/NET/voko/URL/KompLeks/</url -->
     <aut><a>Sergio</a> <n>Pokrovskij</n></aut>
     <tit>Komputada Leksikono</tit>
   </vrk>
