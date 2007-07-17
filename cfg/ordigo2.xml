@@ -455,7 +455,7 @@
  <l name="b">bB</l>
  <l name="c">cC</l>
  <l name="d">dD</l>
- <l name="e">eE�~I</l>
+ <l name="e">eE</l>
  <l name="f">fF</l>
  <l name="g">gG</l>
  <l name="h">hH</l>
@@ -477,9 +477,9 @@
  <l name="y">yY</l>
  <l name="z">zZ</l>
  <l name="aa">&#x00e5;&#x00c5;</l>
- <l name="ae">ä~D</l>
- <l name="oe">ö~V</l>
-</lingvo>
+ <l name="ae">äÄ</l>
+ <l name="oe">öÖ</l>
+ </lingvo>
 
 
 <!-- franca -->
