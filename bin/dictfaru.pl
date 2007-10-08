@@ -1,17 +1,18 @@
-#!/usr/bin/perl
+#!/usr/local/bin/perl
 
 # uzo:
 #   dictfaru.pl <xml-dosierujo>
 #
 
-# farenda:
+# necesas "lynx" kaj xsl-transformilo
+# en Lynx vi devas shalti al UTF-8 sur la (O)pcio-pagxo
+# kaj ne fogesu met (X) che la opcio "daure konservu opciojn"
 #
-#   kreu lingvoindeksojn nur de certaj lingvoj
-#   ASCII-konverto por lingvoj ru, bg, ktp.
 
 use lib "$ENV{'VOKO'}/bin";
 use nls; read_minuskl_cfg("$ENV{'VOKO'}/cfg/minuskl.cfg");
 
+$debug=0;
 $verbose = 1;
 $nur_indeksoj = 0; # por pli facila testado
 
@@ -22,7 +23,7 @@ $xsl = "/home/revo/voko/xsl/revotxt.xsl";
 $tmp = "/home/revo/tmp";
 $datfile = "/home/revo/dict/revo.dat";
 $inxpref = "/home/revo/dict/revo";
-$indekso = "/home/revo/tmp/indekso.xml";
+$indekso = "/home/revo/tmp/inx_tmp/indekso.xml";
 
 $b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
@@ -220,9 +221,14 @@ sub artikolo {
         return;
     }
 
+    # elprenu radikon
+    if ($tekst =~ /<rad\s*>(.*?)<\/rad\s*>/s) {
+	    $rad = $1;
+    } else { warn "Ne trovis radikon en la artikolo $mrk.\n"; return; }
+
     # trovu chiujn kapvortojn (inkl. de derivajhoj)
     $tekst =~ s/<kap\s*>(.*?)<\/kap\s*>/
-	traduko($1,'eo',$mrk)/segx;
+	traduko(tld($1,$rad),'eo',$mrk)/segx;
 
     # trovu chiujn tradukojn
     $tekst =~ s/<trd\s+lng="([^\"]*)"\s*>(.*?)<\/trd\s*>/
@@ -231,11 +237,24 @@ sub artikolo {
     return '';
 }
 
+# anstatuigas tildon
+sub tld {
+  my ($kap,$rad) = @_;
+
+print "tld($kap)\n" if ($debug);
+
+  $kap =~ s/<\/?rad.*?>//g;
+  $kap =~ s/<tld.*?>/$rad/g;
+  return $kap;
+}
+
 # notas unuopan tradukon
 
 sub traduko {
     my ($trd,$lng,$mrk)=@_;
     my $ind;
+
+print "traduko($trd)\n" if ($debug and $lng eq "eo");
 
     # forigu eblajn klr-ojn 
     $trd =~ s/<klr[^>]*>.*?<\/klr>//sg;
@@ -256,6 +275,9 @@ sub traduko {
 #    $ind=~s/^\s*//s;
  
     $ind = normigu($ind);
+
+print "traduko rezulto: $ind \n" if ($debug and $lng eq "eo");
+
 
     # metu la vorton en la indekson
     push @{$tradukoj{$lng}}, [$ind,$mrk];

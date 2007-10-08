@@ -707,7 +707,7 @@ sub cmd_redakt {
 
     # pri kiu artikolo temas, trovighas en <art mrk="...">
     $teksto =~ /(<art[^>]*>)/s;
-    $1 =~ /mrk="([^\"]*)"/s; 
+    $1 =~ /mrk\s*=\s*"([^\"]*)"/s; 
     $id = $1;
     print "artikolo: $id\n" if ($verbose);
     $article_id = $id;
