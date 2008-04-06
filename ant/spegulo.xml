@@ -104,6 +104,14 @@ ant -f voko/ant/spegulo.xml -Dcvs.filename=revocvs-JJJJMMTT.tgz cvs-upload
   
    </target>
 
+<!-- ################### prenado de redaktanto-listo ####################### -->
+
+   <target name="revo-redaktantoj" description="prenas la liston de redaktantoj el la servilo">
+     <get src="${revo.redaktantoj.url}" 
+       dest="${revo.redaktantoj.listo}" 
+       username="${revo.redaktantoj.user}"
+       password="${revo.redaktantoj.password}"/>
+   </target>
 
 
 <!-- ################### alshuto al Revo-servilo ############################ -->

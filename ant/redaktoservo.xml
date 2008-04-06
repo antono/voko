@@ -1,0 +1,113 @@
+<project name="Revo-redaktoservo" default="" basedir=".">
+    <description>
+       Reta Vortaro, reguloj por redaktoservo, kiu kunigas chion de retposhttrakto tra refaro de la vortaro 
+       ghis shovo de la rezultoj al la servilo.
+    </description>
+
+ 
+   <!-- property file="etc -->
+   <!-- legu agorditajn variablojn el dosiero -->
+   <property file="${user.dir}/cfg/agordo" prefix="v."/>
+
+   <!-- donu valorojn al la variabloj, se ili ne jam aperis en la agordo-dosiero -->
+   <property name="v.voko" location="/home/revo/voko"/>
+   <property name="v.voko.ant" location="${v.voko}/ant"/>
+   <property name="v.voko.bin" location="${v.voko}/bin"/>
+   <property name="v.bazo" location="${user.dir}"/>
+
+   <!-- speciala agordo por la redaktoservo -->
+   <property file="/home/revo/etc/redaktoservo-agordo" prefix="srv."/>
+
+
+   <target name="srv-agordo" description="eligas la agordeblajn variablojn por kontrolo">
+      <echoproperties prefix="v."/>
+      <echoproperties prefix="srv."/>
+   </target>
+
+   <target name="srv-preni-poshton" description="Prenas la retposhton de la redaktantoj ">
+
+     <!-- prenu liston de redaktantoj -->
+     <ant antfile="${v.voko.ant}/spegulo.xml" inheritAll="false">
+       <property name="v.bazo" location="${v.bazo}"/>
+       <target name="revo-redaktantoj"/>
+     </ant>
+
+     <!-- tushu poshtservilon -->
+     <exec dir="${v.bazo}" executable="/bin/ping">
+       <arg value="-qc5"/>
+       <arg value="-i1"/>
+       <arg value="${srv.poshtoservilo}"/>
+     </exec>
+
+     <!-- prenu retposhton kaj shovu al loka poshtfako -->
+     <exec dir="${v.bazo}" executable="/usr/bin/fetchmail"/>
+     <exec dir="${v.bazo}" executable="/usr/sbin/sendmail">
+       <arg value="-q"/>
+     </exec>
+
+     <available property="user-mail-file-exists" file="${srv.loka-poshto-dosiero}"/>
+
+   </target>
+ 
+   <target name="srv-trakti-poshton" depends="srv-preni-poshton"
+        if="user-mail-file-exists"
+        description="Traktas retposhton de la redaktantoj post preno">
+      
+      <exec dir="${v.bazo}" executable="${v.voko.bin}/processmail.pl"
+         output="${srv.poshtprotokolo}"/>
+   </target>
+
+   <target name="srv-refari-vortaron" depends="srv-trakti-poshton"
+      if="user-mail-file-exists"
+      description = "refaras la vortaron post poshtotrakto">
+
+     <ant antfile="${v.voko.ant}/spegulo.xml" inheritAll="false">
+        <property name="v.bazo" location="${v.bazo}"/>
+        <target name="cvs-tar"/>
+     </ant>
+
+     <ant antfile="${v.voko.ant}/vortaro.xml" inheritAll="false">
+        <property name="v.bazo" location="${v.bazo}"/>
+        <target name="limigita"/>
+        <target name="pakajhoj"/>
+     </ant>
+
+     <ant antfile="${v.voko.ant}/spegulo.xml" inheritAll="false">
+        <property name="v.bazo" location="${v.bazo}"/>
+        <target name="revo-tar"/>
+     </ant>
+     
+   </target>
+
+   <target name="srv-servo" depends="srv-agordo,srv-refari-vortaron"
+      if="user-mail-file-exists"
+      description="Kuro de la tuta servo: preni kaj trakti poshton, refari vortaron, sendi dosierojn kaj respondojn">
+
+      <!-- forsendi respondojn al redaktantoj, necesas poshtkontrolo antau forsendo pro legitimigo! -->
+      <exec dir="${v.bazo}" executable="/usr/bin/fetchmail">
+        <arg value="-c"/>
+      </exec>
+      <exec dir="${v.bazo}" executable="/usr/sbin/sendmail">
+        <arg value="-q"/>
+      </exec>
+
+      <!-- sendi shanghojn de arhhivo al servilo -->
+      <ant antfile="${v.voko.ant}/spegulo.xml" inheritAll="false">
+        <property name="v.bazo" location="${v.bazo}"/>
+        <target name="cvs-upload"/>
+        <target name="revo-upload"/>
+      </ant>
+   </target>
+</project>
+   
+
+
+
+
+
+
+
+
+
+
+

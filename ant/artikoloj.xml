@@ -80,13 +80,13 @@
 
     <!-- aktualigu kelkajn malnovajn dosierojn por certigi, ke shanghoj
          en la XSLT-dosieroj iom post iom trafos chiujn artikolojn -->
-    <echo message="### aktualigu 5(0) malnovajn artikolojn"/>
+    <echo message="### aktualigu 50 malnovajn artikolojn"/>
     <xslt basedir="${v.bazo.xml}" includes="*.xml" destdir="${v.tmp}/art" extension=".xml"
        style="${v.voko.xsl}/revo_tez.xsl" force="true">
         <custom classname="de.steloj.respiro.DateMaxFilesSelector" classpath="${v.voko.ant}/respiro.jar">
           <param name="datetime" value="${v.antau_jaro}"/>
           <param name="when" value="before"/>
-          <param name="maxFiles" value="500"/> <!-- aktualigu maksimume 50 malnovajn dosierojn -->
+          <param name="maxFiles" value="50"/> <!-- aktualigu maksimume 50 malnovajn dosierojn -->
         </custom>
     </xslt>
 

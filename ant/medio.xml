@@ -134,7 +134,7 @@ rezulto en:
        style="${v.voko.xsl}/dok_mallongigoj.xsl"/>
 
 
-    <xslt in="${v.voko.cfg}/ordigo.xml" out="${v.bazo.dok}/ordigo.html"
+    <xslt in="${v.voko.cfg}/ordigo2.xml" out="${v.bazo.dok}/ordigo.html"
        style="${v.voko.xsl}/dok_ordigo.xsl"/>
 
   </target>
