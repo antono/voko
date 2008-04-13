@@ -1,65 +1,22 @@
 Instali vokon
 -------------
 
-Por konfiguri vokon en via sistemo vi devas difini
-la mediovariablon VOKO, ekz.:
+Por agordi vokon en via sistemo vi devas difini
+la mediovariablon VOKO celante al la dosierujo kun Voko-iloj, ekz.:
 
   export $VOKO = /pado/al/voko
 
-Se vi ne uzas Uniksan sistemon, bezonighas adapto
-de chiuj programoj, aparte tie, kei sistemkomandoj
+Se vi ne uzas Uniksan sistemon, eble bezonighas adapto
+de iuj programoj en bin/, aparte tie, kie sistemkomandoj
 estas vokataj, kaj padnomoj kun '/' estas uzataj.
 
 
 Konciza pasharo por krei vortaron
 ---------------------------------
 
-Vi kreas propran HTML-vortaron lau la sekva skemo:
+Vidu en ant/LEGUMIN
 
-- Preparu XML-artikolojn, kiuj estas validaj lau
-  dtd/vokoxml.dtd. Eble kontrolu per XML-analizilo.
-
-- Iru al dosierujo, kie instalighu la vortaro(j):
-
-    cd /pado/al/miaj/vortaroj
-
-- Preparu dosierstrukturon por la nova vortaro:
-  
-    vokoprep.pl mia_vort
- 
-- Shovu la XML-artikolojn sub dosierujon mia_vort/xml:
-
-    mv /malnova/loko/*.xml mia_vort/xml
-
-- Adaptu la agordo-dosierojn sub cfg, aparte la dosieron
-  vortaro.cfg
-
-- Kreu la HTML-artikoloj kaj indeks-dosierojn ktp.:
-
-    cd mia_vort
-    vokofaru.pl -v
-
-- Faru postlaborojn, ekz. kopiu bildojn al mia_vort/bld k.a.
-
-
-CVS, retposhta servo k.a.
--------------------------
-
-Se vi volas uzi CVS por stoki chiujn versiojn de viaj
-artikoloj, vi povas meti la laborkopion de viaj artikoloj
-ankau ie sub la dosierujo xml, sed eble vi bezonas simbolan
-ligon al dtd en tauga loko, se via dosierujo trovighas
-etagho(j)n pli malsupre.
-
-Pri la uzado de CVS legu ties dokumentaron.
-
-Por ekuzi la retposhtan servon mi konsilas sendi
-retposhton al mi pri helpo. Ghi trovighas en la
-programo processmail.pl, sed vi bezonas specifan
-dosierujo-strukturon por ghi, kaj devos adapti 
-kelkajn aferojn en la kapo de la programo.
-
-         18a de Marto 2000, Wolfram Diestel
+         13a de Marto 2008, Wolfram Diestel
          <wolfram@steloj.de>
 
 
