@@ -222,7 +222,13 @@ aperas "c _x_" anstata "c_x_" -->
 
 
 <xsl:template match="url">
-  <a href="{@ref}"><xsl:apply-templates/></a>
+  <a href="{@ref}">
+    <xsl:if test="@kadro">
+      <xsl:attribute name="target">
+        <xsl:value-of select="@kadro"/>
+      </xsl:attribute>
+    </xsl:if>
+    <xsl:apply-templates/></a>
 </xsl:template>
 
 

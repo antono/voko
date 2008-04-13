@@ -24,7 +24,7 @@ class="net.sf.saxon.sort.CodepointCollator"/ -->
 
 <xsl:include href="inx_ordigo2.inc"/>
 
-<xsl:variable name="ordigo">../cfg/ordigo.xml</xsl:variable>
+<xsl:variable name="ordigo">../cfg/ordigo2.xml</xsl:variable>
 
 <xsl:template match="/">
   <indekso>

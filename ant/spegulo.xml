@@ -90,7 +90,7 @@ ant -f voko/ant/spegulo.xml -Dcvs.filename=revocvs-JJJJMMTT.tgz cvs-upload
        username="${cvs.upload.user}"
        password="${cvs.upload.password}"/>
   
-     <loadfile srcFile="${log}/cvs_uploadlog.html" property="logfile">
+     <loadfile srcFile="${log}/cvs_uploadlog.html" property="cvslogfile">
        <filterchain>
          <tokenfilter>
            <replaceregex pattern="&lt;[^&gt;]+&gt;" replace="" flags="g"/>
@@ -99,7 +99,7 @@ ant -f voko/ant/spegulo.xml -Dcvs.filename=revocvs-JJJJMMTT.tgz cvs-upload
      </loadfile>
   
      <echo>
-       ${logfile}
+       ${cvslogfile}
      </echo>
   
    </target>
@@ -197,7 +197,7 @@ ant -f voko/ant/spegulo.xml -Drevo.filename=revo-JJJJMMTT.tgz revo-upload
        username="${revo.upload.user}"
        password="${revo.upload.password}"/>
   
-     <loadfile srcFile="${log}/revo_uploadlog.html" property="logfile">
+     <loadfile srcFile="${log}/revo_uploadlog.html" property="revologfile">
        <filterchain>
          <tokenfilter>
            <replaceregex pattern="&lt;[^&gt;]+&gt;" replace=" " flags="g"/>
@@ -206,7 +206,7 @@ ant -f voko/ant/spegulo.xml -Drevo.filename=revo-JJJJMMTT.tgz revo-upload
      </loadfile>
   
      <echo>
-       ${logfile}
+       ${revologfile}
      </echo>
 
    </target>
@@ -231,50 +231,6 @@ ant -f voko/ant/spegulo.xml -Drevo.filename=revo-JJJJMMTT.tgz revo-upload
        ${timefile}
      </echo>
 
-   </target>
-
-
-<!-- ##################### ideo ne ankorau tute realigita ################## -->
-
-   <target name="tgz-preparo">
-     <tstamp/>
-   </target>
-
-
-   <target name="tgz-agordo" description="eligas la agordeblajn variablojn por kontrolo">
-     <echoproperties prefix="tgz."/>
-   </target>
-
-
-   <target name="tgz-upload" depends="tgz-preparo" 
-       description="shutas shanghitajn pakajhojn kaj elshuto-paghon al la TTT-ejo de la vortaro">
-
-    <!-- kio pri kreado de dosierujoj, forigado de dosieroj:
-
-      ideo: - enlegi "cachefile" kun chiuj dosieroj
-            - kontroli por chiu tia dosiero, chu ankorau ekzistas
-            - se ne, ghi estas forigenda per ftp
-            - tiuokaze forigu ankau la eron en "cachefile"
-
-            sed: mi ne vidas eblecon trakuri la dosiero-liston el "cachefile"
-
-            anstataue: kreu propran Selector-Javo-klason, kiu preparas la liston 
-
-      -->
-
-     <ftp server="${tgz.servilo.host}"
-         remotedir="${tgz.servilo.dir}"
-         userid="${tgz.servilo.user}"
-         password="${tgz.servilo.password}"
-         passive="yes"
-         verbose="yes">
-
-         <fileset dir="${tgz.pado}" includes="*">
-            <modified>
-               <param name="cache.cachefile" value="${tgz.cachefile}"/>
-            </modified>
-         </fileset> 
-     </ftp>
    </target>
 
 

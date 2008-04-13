@@ -8,6 +8,7 @@
   <bonveno>
     <sercho tipo="revo" opensearch="http://reta-vortaro.de/revo/cfg/sercxo2.xml" titolo="Revoser&ccirc;o"/>
     <sercho tipo="google" opensearch="http://reta-vortaro.de/revo/cfg/sercxo.xml" titolo="Revoser&ccirc;o per Google"/>
+    <alineo style="text-align: center">a&ubreve; iru al <url ref="/cgi-bin/hazarda_art.pl?senkadroj=1" kadro="indekso">iu ajn artikolo</url>.</alineo>
     <bildo loko="revo.jpg"/>
     <alineo>
       Jen Revo &#8213; la &gcirc;enerala esperanta vortaro en la reto.
@@ -117,7 +118,8 @@
   <pagho titolo="ktp." dosiero="_ktp.html">
     <sekcio titolo="gravaj pa&gcirc;oj" kadro="precipa">
       <ero ref="../titolo.html" titolo="titolpa&gcirc;o"/>
-      <ero ref="../sercxo.html" titolo="ser&ccirc;o"/>
+      <ero ref="/cgi-bin/hazarda_art.pl?senkadroj=2" titolo="iu ajn artikolo"/>
+      <!-- ero ref="../sercxo.html" titolo="ser&ccirc;o"/ -->
       <ero ref="../dok/copying.txt" titolo="permesilo"/>
       <ero ref="http://reta-vortaro.de/tgz/index.html" titolo="el&scirc;uti" kadro="_new"/>
       <!-- ero ref="http://www.uni-leipzig.de/esperanto/voko" titolo="VoKo" kadro="_new"/ -->
@@ -171,7 +173,8 @@
     </sekcio>
     <sekcio titolo="gravaj pa&gcirc;oj" kadro="precipa">
       <ero ref="../titolo.html" titolo="titolpa&gcirc;o"/>
-      <ero ref="../sercxo.html" titolo="ser&ccirc;o"/>
+      <ero ref="/cgi-bin/hazarda_art.pl?senkadroj=2" titolo="iu ajn artikolo"/>
+      <!-- ero ref="../sercxo.html" titolo="ser&ccirc;o"/ -->
       <ero ref="../dok/copying.txt" titolo="permesilo"/>
       <ero ref="http://reta-vortaro.de/tgz/index.html" titolo="el&scirc;uti" kadro="_new"/>
       <!-- ero ref="http://www.uni-leipzig.de/esperanto/voko" titolo="VoKo"  kadro="_new"/ -->

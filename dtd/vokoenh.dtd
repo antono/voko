@@ -11,7 +11,8 @@
 <!ELEMENT alineo (#PCDATA|url|serchaldono)*>
 <!ATTLIST alineo style CDATA #IMPLIED>
 <!ELEMENT url (#PCDATA)>
-<!ATTLIST url ref CDATA #REQUIRED>
+<!ATTLIST url ref CDATA #REQUIRED
+              kadro CDATA #IMPLIED>
 <!ELEMENT bildo EMPTY>
 <!ATTLIST bildo loko CDATA #REQUIRED>
 <!ELEMENT sercho EMPTY>

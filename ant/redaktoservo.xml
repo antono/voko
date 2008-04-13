@@ -54,7 +54,13 @@
         description="Traktas retposhton de la redaktantoj post preno">
       
       <exec dir="${v.bazo}" executable="${v.voko.bin}/processmail.pl"
-         output="${srv.poshtprotokolo}"/>
+         output="${srv.poshtprotokolo}" append="true"/>
+<!-- 
+      <loadfile srcFile="${srv.poshtprotokolo}" property="poshtprotokolo"/>
+      <echo>
+         ${poshtprotokolo}
+      </echo>
+-->
    </target>
 
    <target name="srv-refari-vortaron" depends="srv-trakti-poshton"
@@ -97,7 +103,8 @@
         <target name="cvs-upload"/>
         <target name="revo-upload"/>
       </ant>
-   </target>
+
+   </target> 
 </project>
    
 
