@@ -23,7 +23,7 @@
 <xsl:template match="subart|drv|subdrv|snc|subsnc">
   <xsl:copy>
   <xsl:apply-templates select="@mrk|kap|drv|subdrv|snc|subsnc|trdgrp|trd
-          |uzo|bld|dif|ekz|mlg|refgrp|ref|tezrad"/>
+          |uzo|bld|dif|ekz|mlg|refgrp|ref|tezrad|rim"/>
   </xsl:copy>
 </xsl:template>
 
@@ -38,6 +38,10 @@
 </xsl:template>
 
 <xsl:template match="ekz"/>
+
+<xsl:template match="rim">
+  <xsl:apply-templates select="ref"/>
+</xsl:template>
 
 <xsl:template match="trdgrp">
   <xsl:variable name="lng" select="@lng"/>
