@@ -94,7 +94,7 @@ class="net.sf.saxon.sort.CodepointCollator"/ -->
              and not(contains($minus,substring(t,1,$nminus)))]"/>
            <xsl:with-param name="ordlng" select="$ordlng"/>
            <xsl:with-param name="lit-name" select="@name"/>
-           <xsl:with-param name="lit-min" select="substring(.,1,1)"/>
+           <xsl:with-param name="lit-min" select="substring(.,1,$n)"/>
         </xsl:call-template>
 
       </xsl:for-each>

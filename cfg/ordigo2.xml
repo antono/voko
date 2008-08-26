@@ -444,6 +444,7 @@
  <l name="t">t,T</l>
  <l name="u">u,U,ú,Ú,ü,Ü</l>
  <l name="v">v,V</l>
+ <l name="w">w,W</l>
  <l name="x">x,X</l>
  <l name="y">y,Y</l>
  <l name="z">z,Z</l>
@@ -586,7 +587,7 @@
  <l name="n" minus="ny">nN</l>
  <l name="ny" n="2">nyNy</l>
  <l name="o">oOóÓ</l>
- <l name="oe">öÖ%#x0151;&#x0150;</l>
+ <l name="oe">öÖ&#x0151;&#x0150;</l>
  <l name="p">pP</l>
  <l name="q">qQ</l>
  <l name="r">rR</l>

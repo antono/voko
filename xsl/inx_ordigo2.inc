@@ -10,7 +10,7 @@
 
 <!ENTITY sort-cy " &lt; a,A &lt; b,B &lt; c,C &lt; ch,cH,Ch,CH &lt; d,D &lt; e,E &lt; f,F &lt; ff,fF,Ff,FF &lt; g,G &lt; h,H &lt; i,I &lt; j,J &lt; l,L &lt; ll,lL,Ll,LL &lt; m,M &lt; n,N &lt; o,O &lt; p,P &lt; ph,pH,Ph,PH &lt; r,R &lt; rh,rH,Rh,RH &lt; s,S &lt; t,T &lt; th,tH,Th,TH &lt; u,U &lt; w,W,ẃ,Ẃ,ẁ,Ẁ,ŵ,Ŵ,ẅ,Ẅ &lt; y,Y,ỳ,Ỳ,ŷ,Ŷ,Ÿ">
 
-<!ENTITY sort-es " &lt; a,A,á,Á &lt; b,B &lt; c,C &lt; ch,cH,Ch,CH &lt; d,D &lt; e,E,é,É &lt; f,F &lt; g,G &lt; h,H &lt; i,I,í,Í &lt; j,J &lt; k,K &lt; l,L &lt; ll,lL,Ll,LL &lt; m,M &lt; n,N &lt; ñ,Ñ &lt; o,O,ó,Ó &lt; p,P &lt; q,Q &lt; r,R &lt; s,S &lt; t,T &lt; u,U,ú,Ú,ü,Ü &lt; v,V &lt; x,X &lt; y,Y &lt; z,Z">
+<!ENTITY sort-es " &lt; a,A,á,Á &lt; b,B &lt; c,C &lt; ch,cH,Ch,CH &lt; d,D &lt; e,E,é,É &lt; f,F &lt; g,G &lt; h,H &lt; i,I,í,Í &lt; j,J &lt; k,K &lt; l,L &lt; ll,lL,Ll,LL &lt; m,M &lt; n,N &lt; ñ,Ñ &lt; o,O,ó,Ó &lt; p,P &lt; q,Q &lt; r,R &lt; s,S &lt; t,T &lt; u,U,ú,Ú,ü,Ü &lt; v,V &lt; w,W &lt; x,X &lt; y,Y &lt; z,Z">
 ]>
 <xsl:transform
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
