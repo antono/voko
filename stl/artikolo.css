@@ -90,6 +90,7 @@ A.trdeo:active {text-decoration: underline; font-weight: bold; color: gray}
 A.fnt:link {text-decoration: underline; color: #303030}
 A.fnt:visited {text-decoration: underline; color: #303030}
 A.fnt:active {text-decoration: underline; color: green}
+sup.ofc { margin-right: 0.7ex; }
 
 /* fontindikaj piednotoj */
 .fontoj {color: 303030; font-size: small}

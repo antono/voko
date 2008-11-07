@@ -37,9 +37,13 @@ aperas "c _x_" anstata "c_x_" -->
       <xsl:if test="@piktogramo">
          <link rel="SHORTCUT ICON" href="{@piktogramo}"/>
       </xsl:if>
-      <xsl:for-each select="bonveno/sercho[@opensearch]">
+      <xsl:for-each select="bonveno/sercho[@ref]">
         <link rel="search" type="application/opensearchdescription+xml" 
-           title="{@titolo}" href="{@opensearch}"/>
+           title="{@titolo}" href="{@ref}"/>
+      </xsl:for-each>
+      <xsl:for-each select="bonveno/resumo[@ref]">
+        <link rel="alternate" type="application/rss+xml" 
+           title="{@titolo}" href="{@ref}"/>
       </xsl:for-each>
     </head>
 
@@ -176,7 +180,7 @@ aperas "c _x_" anstata "c_x_" -->
 <xsl:template match="sercho[@tipo='revo']">
    <div align="center">
 
-     <form method="post" action='http://reta-vortaro.de/cgi-bin/sercxu.pl' target='indekso' name="f">
+     <form method="post" action='/cgi-bin/sercxu.pl' target='indekso' name="f">
         <p>
 	Ser&#265;o en ReVo:
 	<input type='text' id='sercxata' name='sercxata' size="31" maxlength="255" 

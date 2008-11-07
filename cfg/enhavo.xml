@@ -6,8 +6,9 @@
   <!-- titolpagho -->
 
   <bonveno>
-    <sercho tipo="revo" opensearch="http://reta-vortaro.de/revo/cfg/sercxo2.xml" titolo="Revoser&ccirc;o"/>
-    <sercho tipo="google" opensearch="http://reta-vortaro.de/revo/cfg/sercxo.xml" titolo="Revoser&ccirc;o per Google"/>
+    <sercho tipo="revo" ref="http://reta-vortaro.de/revo/cfg/sercxo2.xml" titolo="Revoser&ccirc;o"/>
+    <sercho tipo="google" ref="http://reta-vortaro.de/revo/cfg/sercxo.xml" titolo="Revoser&ccirc;o per Google"/>
+    <resumo ref="http://www.reta-vortaro.de/sxangxoj.rdf" titolo="resumo de lastaj &scirc;an&gcirc;oj (por RSS-legilo)"/>
     <alineo style="text-align: center">a&ubreve; iru al <url ref="/cgi-bin/hazarda_art.pl?senkadroj=1" kadro="indekso">iu ajn artikolo</url>.</alineo>
     <bildo loko="revo.jpg"/>
     <alineo>

@@ -22,12 +22,19 @@
 <!ENTITY % signoj SYSTEM "../dtd/vokosgn.dtd">
 %signoj;
 
-<!ENTITY url_mjb "http://perso.club-internet.fr/kursoj/revo">
+<!ENTITY url_mjb "http://pagesperso-orange.fr/kursoj1/revo">
+<!ENTITY url_wd "http://www.steloj.de/esperanto">
 
 ]>
  
 <bibliografio>
-
+  
+  <vrk mll="9OA">
+    <url>http://www.akademio-de-esperanto.org/decidoj/9oa.html</url>
+    <aut>Akademio de Esperanto</aut>
+    <tit>Na&ubreve;a Oficiala Aldono al la Universala Vortaro</tit>
+  </vrk>
+ 
   <vrk mll="Aventuroj">
     <aut><a>Privat</a> <n>Edmond</n></aut>
     <tit>Aventuroj de pioniro</tit>
@@ -313,11 +320,6 @@
     </eld>
   </vrk>
 
-  <vrk mll="Ekolud">
-    <url>http://www.uni-leipzig.de/esperanto/texte/bibl/ludoj/ekoludo.html</url>
-    <tit>Ekoludo</tit>
-  </vrk>
-
   <vrk mll="EKV">
     <aut><a>R.</a> <n>Hilgers</n></aut>
     <aut><n>Yashovardhan</n></aut>
@@ -334,7 +336,7 @@
   </vrk>
 
   <vrk mll="ElektFab">
-     <url>http://www.uni-leipzig.de/esperanto/texte/bibl/gfabeloj/index.html</url>
+     <url>&url_wd;/gfabeloj/index.html</url>
      <aut><a>Jakob</a> <n>Grimm</n></aut>
      <aut><a>Wilhelm</a> <n>Grimm</n></aut>
      <trd><a>Kazimierz</a> <n>Bein</n></trd>
@@ -392,7 +394,7 @@
   </vrk>
 
   <vrk mll="F">
-    <url>http://www.uni-leipzig.de/esperanto/texte/bibl/fundamento/index.html</url>
+    <url>http://www.steloj.de/esperanto/fundamento/index.html</url>
     <aut><a>L. L.</a> <n>Zamenhof</n></aut>
     <tit>Fundamento de Esperanto</tit>
     <eld>
@@ -402,7 +404,7 @@
   </vrk>
 
   <vrk mll="Fab1">
-    <url>http://www.uni-leipzig.de/esperanto/texte/bibl/fabeloj1/</url>
+    <url>http://www.steloj.de/esperanto/fabeloj1/</url>
     <aut><a>H. C.</a> <n>Andersen</n></aut>
     <trd><a>L. L.</a> <n>Zamenhof</n></trd>
     <tit>Fabeloj, vol. 1</tit>
@@ -414,7 +416,7 @@
   </vrk>
 
   <vrk mll="Fab2">
-    <url>http://www.uni-leipzig.de/esperanto/texte/bibl/fabeloj2/</url>
+    <url>&url_wd;/fabeloj2/</url>
     <aut><a>H. C.</a> <n>Andersen</n></aut>
     <trd><a>L. L.</a> <n>Zamenhof</n></trd>
     <tit>Fabeloj, vol. 2</tit>
@@ -426,7 +428,7 @@
   </vrk>
 
   <vrk mll="Fab3">
-    <url>http://www.uni-leipzig.de/esperanto/texte/bibl/fabeloj3/</url>
+    <url>&url_wd;/fabeloj3/</url>
     <aut><a>H. C.</a> <n>Andersen</n></aut>
     <trd><a>L. L.</a> <n>Zamenhof</n></trd>
     <tit>Fabeloj, vol. 3</tit>
@@ -438,7 +440,7 @@
   </vrk>
 
   <vrk mll="Fab4">
-    <url>http://www.uni-leipzig.de/esperanto/texte/bibl/fabeloj4/</url>
+    <url>&url_wd;/fabeloj4/</url>
     <aut><a>H. C.</a> <n>Andersen</n></aut>
     <trd><a>L. L.</a> <n>Zamenhof</n></trd>
     <tit>Fabeloj, vol. 4</tit>
@@ -449,7 +451,7 @@
   </vrk>
   
   <vrk mll="Far1">
-    <url>http://www.uni-leipzig.de/esperanto/texte/bibl/faraono1/</url>
+    <url>&url_wd;/faraono1/</url>
     <aut><a>B.</a> <n>Prus</n></aut>
     <trd><a>Kazimierz</a> <n>Bein</n></trd>
     <tit>La Faraono, vol. 1</tit>
@@ -461,7 +463,7 @@
   </vrk>
 
   <vrk mll="Far2">
-    <url>http://www.uni-leipzig.de/esperanto/texte/bibl/faraono2/</url>
+    <url>&url_wd;/faraono2/</url>
     <aut><a>B.</a> <n>Prus</n></aut>
     <trd><a>Kazimierz</a> <n>Bein</n></trd>
     <tit>La Faraono, vol. 2</tit>
@@ -473,7 +475,7 @@
   </vrk>
 
   <vrk mll="Far3">
-    <url>http://www.uni-leipzig.de/esperanto/texte/bibl/faraono3/</url>
+    <url>&url_wd;/faraono3/</url>
     <aut><a>B.</a> <n>Prus</n></aut>
     <trd><a>Kazimierz</a> <n>Bein</n></trd>
     <tit>La Faraono, vol. 3</tit>
@@ -807,7 +809,7 @@
   </vrk>
 
   <vrk mll="Kukobak">
-    <url>http://www.uni-leipzig.de/esperanto/texte/bakado.html</url>
+    <!-- url>http://www.uni-leipzig.de/esperanto/texte/bakado.html</url -->
     <aut><a>Cornelia</a> <n>Rau</n></aut>
     <aut>k.a.</aut>
     <tit>Kukobakado</tit>
@@ -913,6 +915,12 @@
     </eld>
   </vrk>
 
+  <vrk mll="LSV">
+    <aut><a>E.</a> <n>Lanti</n></aut>
+    <tit>&leftquot;Liberiga Stelo&rightquot; al la
+    Verdru&gcirc;uloj</tit>
+  </vrk>
+
   <vrk mll="LtE">
     <aut><a>Henrik</a> <n>Seppik</n></aut>
     <tit>La tuta Esperanto</tit>
@@ -970,7 +978,7 @@
   </vrk>
 
   <vrk mll="Marta">
-    <url>http://www.uni-leipzig.de/esperanto/texte/bibl/marta/</url>
+    <url>&url_wd;/marta/</url>
     <aut><a>Eliza</a> <n>Orzeszkowa</n></aut>
     <trd><a>L. L.</a> <n>Zamenhof</n></trd>
     <tit>Marta</tit>
@@ -1087,7 +1095,7 @@
   </vrk>
 
   <vrk mll="MT">
-    <url>http://www.uni-leipzig.de/esperanto/texte/bibl/biblio/</url>
+    <url>&url_wd;/biblio/</url>
     <trd><a>L. L.</a> <n>Zamenhof</n></trd>
     <tit>La Malnova Testamento</tit>
     <eld>
@@ -1169,7 +1177,7 @@ M&uuml;nchhausen</tit>
   </vrk>
  
   <vrk mll="NT">
-    <url>http://www.uni-leipzig.de/esperanto/texte/bibl/biblio</url>
+    <url>&url_wd;/biblio</url>
     <tit>La Nova Testamento</tit>
     <ald>de nia Sinjoro kaj Savanto Jesuo Kristo</ald>
     <eld>
@@ -1225,7 +1233,7 @@ M&uuml;nchhausen</tit>
   </vrk>
 
   <vrk mll="Paroloj">
-    <url>http://www.uni-leipzig.de/esperanto/texte/bibl/paroloj/</url>
+    <url>&url_wd;/paroloj/</url>
     <aut><a>L. L.</a> <n>Zamenhof</n></aut>
     <tit>Paroloj</tit>
   </vrk>
@@ -1318,7 +1326,7 @@ M&uuml;nchhausen</tit>
   </vrk>
 
   <vrk mll="Revizoro">
-    <url>http://www.uni-leipzig.de/esperanto/texte/bibl/revizoro/index.html</url>
+    <url>&url_wd;/revizoro/index.html</url>
     <aut><a>N. V.</a> <n>Gogol</n></aut>
     <trd><a>L. L.</a> <n>Zamenhof</n></trd>
     <tit>La Revizoro</tit>
