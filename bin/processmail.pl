@@ -37,7 +37,7 @@ $mail_local   = "$tmp/mail";
 #$editor_file  = "$revo_home/etc/redaktoroj";
 $editor_file  = "$revo_home/etc/redaktantoj";
 $attachments  = "$tmp/atchm".$$."_";
-$vokomail_url = "http://www.uni-leipzig.de/cgi-bin/vokomail.pl";
+$vokomail_url = "http://www.reta-vortaro.de/cgi-bin/vokomail.pl";
 $revo_url     = "http://purl.oclc.org/NET/voko/revo";
 
 # programoj
