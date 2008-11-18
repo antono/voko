@@ -813,6 +813,7 @@ klavo kontrolo-Z malfaras la lastan &#349;an&#285;on<br>
 klavo kontrolo-Y refaras la lastan &#349;an&#285;on<br>
 klavo kontrolo-F ebligas ser&#265;i<br>
 EOD
+print p('svn versio: $Id$');
 print p('hg versio: $HgId: vokomail.pl 19:9ac0f7911726 2008/11/18 14:43:38 Wieland $');
 
 print end_html();
