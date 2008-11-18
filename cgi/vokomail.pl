@@ -13,7 +13,6 @@ use CGI::Carp qw(fatalsToBrowser);
 use DBI();
 use IPC::Open3;
 use Encode;
-#use Text::Wrap;
 use Text::Tabs;
 
 # propraj perl moduloj estas en:
@@ -130,10 +129,6 @@ function klavo(event) {
 
 		range.text = "\n" + str_indent();
 		//mark sample text as selected
-//		alert("start="+range.moveStart);
-//			range.moveStart('character', - 3); 
-//			range.moveEnd('character', - 1); 
-//		}
 		range.select();   
 		//restore window scroll position
 		if (document.documentElement && document.documentElement.scrollTop)
@@ -304,7 +299,6 @@ function insertTags(tagOpen, tagClose, sampleText) {
 			tagClose += ' '
 		} 
 	}
-
 }
 
 function sf(pos, line, lastline) {
@@ -346,9 +340,6 @@ my $art = param('art');
 #$debugmsg .= "art = $art\n";
 my $xml;
 my $xmlTxt = param('xmlTxt');
-#$Text::Wrap::columns = 80;
-#$Text::Wrap::huge = 'overflow';
-#$xmlTxt = wrap('', '', $xmlTxt);
 if ($xmlTxt) {
   $xmlTxt =~ s/\r\n/\n/g;
   $xmlTxt = revo::wrap::wrap($xmlTxt);
@@ -814,7 +805,7 @@ klavo kontrolo-Y refaras la lastan &#349;an&#285;on<br>
 klavo kontrolo-F ebligas ser&#265;i<br>
 EOD
 print p('svn versio: $Id$');
-print p('hg versio: $HgId: vokomail.pl 19:9ac0f7911726 2008/11/18 14:43:38 Wieland $');
+print p('hg versio: $HgId: vokomail.pl 1:2f4eec996848 2008/11/18 16:26:17 Wieland $');
 
 print end_html();
 
