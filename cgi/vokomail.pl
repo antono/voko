@@ -804,8 +804,8 @@ klavo kontrolo-Z malfaras la lastan &#349;an&#285;on<br>
 klavo kontrolo-Y refaras la lastan &#349;an&#285;on<br>
 klavo kontrolo-F ebligas ser&#265;i<br>
 EOD
-print p('svn versio: $Id$');
-print p('hg versio: $HgId: vokomail.pl 1:2f4eec996848 2008/11/18 16:26:17 Wieland $');
+print p('svn versio: $Id$'.br.
+	'hg versio: $HgId: vokomail.pl 2:9460c8d2bf37 2008/11/18 16:32:52 Wieland $');
 
 print end_html();
 
