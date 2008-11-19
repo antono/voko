@@ -805,7 +805,7 @@ klavo kontrolo-Y refaras la lastan &#349;an&#285;on<br>
 klavo kontrolo-F ebligas ser&#265;i<br>
 EOD
 print p('svn versio: $Id$'.br.
-	'hg versio: $HgId: vokomail.pl 2:9460c8d2bf37 2008/11/18 16:32:52 Wieland $');
+	'hg versio: $HgId: vokomail.pl 3:9194b1e94db6 2008/11/18 16:48:52 Wieland $');
 
 print end_html();
 
