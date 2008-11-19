@@ -643,9 +643,9 @@ EOD
       my $from    = $redaktanto;
       my $name    = "Revo redaktu.pl";
       my @to;
-      push @to, $redaktanto if param('sendu_al_tio');
+      push @to, $redaktanto; # if param('sendu_al_tio');
       push @to, 'revo@retavortaro.de' if param('sendu_al_revo');
-      push @to, 'wieland@wielandpusch.de' if param('sendu_al_admin');  # revodb::mail_to
+      push @to, 'wieland@wielandpusch.de'; # if param('sendu_al_admin');  # revodb::mail_to
       if (my $to = join(', ', @to)) {
         my $subject = "Revo redaktu.pl $art";
 
@@ -783,18 +783,19 @@ print "\n&nbsp;aldoni:\n".
       br."\n",
       submit(-name => 'button', -value => 'preview', -label => 'anta&#365;rigardu'),
       submit(-name => 'button', -value => 'save', -label => 'savu');
-      print checkbox(-name    => 'sendu_al_tio',
-                     -checked => 1,
-                     -value   => '1',
-                     -label   => 'sendu al supra adreso');
+#      print checkbox(-name    => 'sendu_al_tio',
+#                     -checked => 1,
+#                     -value   => '1',
+#                     -label   => 'sendu al supra adreso');
       print checkbox(-name    => 'sendu_al_revo',
                      -checked => 1,
                      -value   => '1',
                      -label   => 'sendu al ReVo');
-      print checkbox(-name    => 'sendu_al_admin',
-                     -checked => 1,
-                     -value   => '1',
-                     -label   => 'sendu por analizo');
+#      print checkbox(-name    => 'sendu_al_admin',
+#                     -checked => 1,
+#                     -value   => '1',
+#                     -label   => 'sendu por analizo');
+      print "&nbsp; &nbsp; &#264;iam sendas al supra adreso kaj por analizo.";
 
 print endform;
 
@@ -807,7 +808,7 @@ klavo kontrolo-F ebligas ser&#265;i<br>
 via retadreso estas $ENV{REMOTE_ADDR}<br>
 EOD
 print p('svn versio: $Id$'.br.
-	'hg versio: $HgId: vokomail.pl 5:28f6201b3825 2008/11/19 17:41:15 Wieland $');
+	'hg versio: $HgId: vokomail.pl 6:2f8e02dccc82 2008/11/19 20:28:29 Wieland $');
 
 print end_html();
 
