@@ -656,6 +656,7 @@ From: $name <$from>
 To: $to
 Reply-To: $from
 Subject: $subject
+X-retadreso: $ENV{REMOTE_ADDR}
 
 redakto: $sxangxo
 
@@ -803,9 +804,10 @@ Se vi permesas kuketojn, vi ne da&#365;re devas entajpi vian retadreson kaj ling
 klavo kontrolo-Z malfaras la lastan &#349;an&#285;on<br>
 klavo kontrolo-Y refaras la lastan &#349;an&#285;on<br>
 klavo kontrolo-F ebligas ser&#265;i<br>
+via retadreso estas $ENV{REMOTE_ADDR}<br>
 EOD
 print p('svn versio: $Id$'.br.
-	'hg versio: $HgId: vokomail.pl 3:9194b1e94db6 2008/11/18 16:48:52 Wieland $');
+	'hg versio: $HgId: vokomail.pl 5:28f6201b3825 2008/11/19 17:41:15 Wieland $');
 
 print end_html();
 
