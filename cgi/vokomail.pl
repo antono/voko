@@ -632,7 +632,7 @@ if ($redaktanto) {
 <p>Vi ($redaktanto) ne estas registrita kiel redaktanto !</p>
 <p>Legu <a href="http://www.reta-vortaro.de/revo/dok/redinfo.html">&#265;i tie</a> kaj 
   <a href="http://www.reta-vortaro.de/revo/dok/revoserv.html">&#265;i tie</a> kiel registri.</p>
-<p><i>Viaj &#349;an&#285;oj ne estos savitaj !</i></p>
+<p><i>Viaj &#349;an&#285;oj ne estos konservitaj !</i></p>
 </div><br>
 EOD
   }
@@ -642,10 +642,10 @@ EOD
 <div class="borderc8 backgroundc1" style="border-style: solid; border-width: medium; padding: 0.3em 0.5em;">
 <p><span style="color: rgb(207, 118, 6); font-size: 140%;"><b>
 EOD
-    print "Savo</b></span></p>\n";
+    print "Konservo</b></span></p>\n";
     # $xml2
     if ($ne_konservu) {
-      print "ne savita";
+      print "ne konservita";
     } else {
       my $from    = $redaktanto;
       my $name    = "Revo redaktu.pl";
@@ -815,7 +815,7 @@ klavo kontrolo-F ebligas ser&#265;i<br>
 via retadreso estas $ENV{REMOTE_ADDR}<br>
 EOD
 print p('svn versio: $Id$'.br.
-	'hg versio: $HgId: vokomail.pl 7:55b39689dde5 2008/11/20 08:07:05 Wieland $');
+	'hg versio: $HgId: vokomail.pl 8:18c3304a61e6 2008/11/20 17:31:08 Wieland $');
 
 print end_html();
 
@@ -862,7 +862,7 @@ sub checkxml {
       $err =~ s/^ at line (\d+) char (\d+)$/ cxe linio $1 pozicio $2/smg;
       $err =~ s/Document contains multiple elements/Artikolo enhavas pli ol unu elemento (kaj tio devas esti <vortaro>)/smg;
       $err =~ s/Root element is ([^ ,\n]*), should be ([^ \n]*)/Radika elemento estas $1, devus esti $2/smg;
-      $err =~ s/Content model for ([^ \n]*) does not allow PCDATA/Enhave de elemento $1 estas malpermesita/smg;
+      $err =~ s/Content model for ([^ \n]*) does not allow PCDATA/Enhavo de elemento $1 estas malpermesita/smg;
       $err =~ s/The attribute ([^ \n]*) of element ([^ \n]*) is declared as ENUMERATION but is empty/La atributo $1 de la kodero $2 mankas/smg;
       $err =~ s/In the attribute ([^ \n]*) of element ([^ \n]*), ([^ \n]*) is not one of the allowed values/Cxe la atributo $1 de la kodero $2, $3 ne estas permesata./smg;
       $err =~ s/Document ends too soon/Dokumento finis, sed mankis finkodero/smg;
