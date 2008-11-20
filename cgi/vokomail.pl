@@ -343,7 +343,7 @@ my $xmlTxt = param('xmlTxt');
 if ($xmlTxt) {
   $xmlTxt =~ s/\r\n/\n/g;
   $xmlTxt = revo::wrap::wrap($xmlTxt);
-  $debugmsg .= "wrap -> $xmlTxt\n <- end wrap";
+#  $debugmsg .= "wrap -> $xmlTxt\n <- end wrap";
 }
 my $xml2 = revo::encode::encode2($xmlTxt, 20) if $xmlTxt;
 
@@ -365,7 +365,7 @@ my $redaktanto = param('redaktanto') || cookie(-name=>'redaktanto') || 'via regi
 my $mrk = param('mrk');
 my ($pos, $line, $lastline) = (0, 0, 1);
 my ($prelines, $postlines);
-my $debug = $redaktanto eq 'wielandp@yahoo.de';
+my $debug = $redaktanto eq 'wieland@wielandpusch.de';
 
 my ($checklng, $checkxml, $errline, $errchar);
 ($checkxml, $errline, $errchar) = checkxml($xml2) if $xml2;
@@ -445,7 +445,7 @@ print header(-charset=>'utf-8', -cookie=>\@cookies),
                  -onLoad=>"sf($pos, $line, $lastline)"
 );
 
-print h1("Redakti $art");
+print h1("Redakti ".a({href=>"/revo/art/$art.html"}, $art));
 #my $referer =$ENV{HTTP_REFERER};
 #print pre("pos=$pos, referer=$referer\n") if $debug;
 #print pre("pre=".escapeHTML($prelines)."  post=".escapeHTML($postlines)."  lines=".($prelines + $postlines));
@@ -457,7 +457,7 @@ if ($debug and $debugmsg) {
   autoEscape(0);
 }
 
-my $ne_savu;
+my $ne_konservu;
 
 print <<'EOD' if 0;
 <div class="borderc8 backgroundc1" style="border-style: solid; border-width: medium; padding: 0.3em 0.5em;">
@@ -484,7 +484,8 @@ my $dbh = revodb::connect();
 
 #print pre('dbconnect'." size=".length($xml2)) if $debug;
 
-if (param('button') eq 'antaŭrigardu' or param('button') eq 'savu') {
+#print pre('button='.param('button')) if $debug;
+if (param('button') eq "antaŭrigardu" or param('button') eq 'konservu') {
 
 print <<'EOD';
 <div class="borderc8 backgroundc1" style="border-style: solid; border-width: medium; padding: 0.3em 0.5em;">
@@ -492,7 +493,7 @@ print <<'EOD';
 EOD
 #  print pre('open xalan') if $debug;
   if (length($xml2) > 28000) {
-    print h2("artikolo estas tro granda por antauxrigardo");
+    print h2("artikolo estas tro granda por anta&#365;rigardo");
   } else {
     my $pid = IPC::Open3::open3(\*CHLD_IN, \*CHLD_OUT, \*CHLD_ERR,
                       "xalan -XSL $homedir/html/revo/xsl/revohtml.xsl");
@@ -537,7 +538,7 @@ EOD
       print escapeHTML("Referenco <ref$ref>")." ne havas cel a&#365; la celo estas malplena.<br>\n";
       autoEscape(0);
 #      print "ref = $ref<br>\n";
-#      $ne_savu = 9;
+#      $ne_konservu = 9;
     }
   }
 
@@ -550,14 +551,20 @@ EOD
     if (!$art_ekzistas) {
 #      print "ref = $1-$2 $art-$mrk<br>\n" if $debug;
       print "Referenco celas al dosiero \"$art.xml\", kiu ne ekzistas.<br>\n";
-#      $ne_savu = 7;
+#      $ne_konservu = 7;
     } elsif ($2) {
       $sth2->execute($mrk, $mrk);
       my ($mrk_ekzistas) = $sth2->fetchrow_array();
       if (!$mrk_ekzistas) {
-        print "ref: art=$art mrk=$mrk<br>\n" if $debug;
-        print "Referenco celas al \"$mrk\", kiu ne ekzistas en dosiero \"$art.xml\".<br>\n";
-#        $ne_savu = 8;
+#        print "ref: art=$art mrk=$mrk<br>\n" if $debug;
+        # eble temas pri marko de subsenco?
+        open IN, "<", "$homedir/html/revo/xml/$art.xml" or die "open";
+        my $celxml = join '', <IN>;
+        close IN;
+        if ($celxml !~ /<subsnc\s+mrk="$mrk">/) {
+          print "Referenco celas al \"$mrk\", kiu ne ekzistas en dosiero \"".a({href=>"?art=$art"}, "$art.xml")."\".<br>\n";
+#          $ne_konservu = 8;
+        }
       }
     }
   }
@@ -567,7 +574,7 @@ EOD
     my $fako = $1;
     if (! exists($fak{$fako})) {
       print "Fako $fako estas nekonata.<br>\n";
-      $ne_savu = 6;
+      $ne_konservu = 6;
     }
   }
 
@@ -575,7 +582,7 @@ EOD
     my $mrk = $2;
     if ($mrk !~ /^$art\.[^.0]*0/) {
       print "La marko \"$mrk\" ne komencas per \"$art.\" a&#365; poste ne havas 0.<br>\n";
-      $ne_savu = 5;
+      $ne_konservu = 5;
     }
   }
 
@@ -597,13 +604,13 @@ EOD
   }
   if ($sxangxo =~ s/([\x{80}-\x{10FFFF}]+)/<span style="color:red">$1<\/span>/g) { # kororigu ne-askiajn signojn
     print "Eraro: teksto havas ne-askiaj signoj: $sxangxo".br."\n";
-    $ne_savu = 3;
+    $ne_konservu = 3;
   } else {
     if ($sxangxo) {
       print "teksto en ordo: $sxangxo".br."\n";
     } else {
       print "Eraro: teksto mankas $sxangxo".br."\n";
-      $ne_savu = 4;
+      $ne_konservu = 4;
     }
   }
 print <<'EOD';
@@ -618,7 +625,7 @@ if ($redaktanto) {
   $sth->finish;
 
   if (!$permeso) {
-    $ne_savu = 2;
+    $ne_konservu = 2;
 
     print <<"EOD";
 <div class="borderc8 backgroundc1" style="border-style: solid; border-width: medium; padding: 0.3em 0.5em;">
@@ -630,14 +637,14 @@ if ($redaktanto) {
 EOD
   }
 
-  if (param('button') eq 'savu') {
+  if (param('button') eq 'konservu') {
     print <<'EOD';
 <div class="borderc8 backgroundc1" style="border-style: solid; border-width: medium; padding: 0.3em 0.5em;">
 <p><span style="color: rgb(207, 118, 6); font-size: 140%;"><b>
 EOD
     print "Savo</b></span></p>\n";
     # $xml2
-    if ($ne_savu) {
+    if ($ne_konservu) {
       print "ne savita";
     } else {
       my $from    = $redaktanto;
@@ -781,8 +788,8 @@ print "\n&nbsp;aldoni:\n".
                     -value     => (cookie(-name=>'redaktanto') || 'via retpo&#349;ta adreso')
       ),
       br."\n",
-      submit(-name => 'button', -value => 'preview', -label => 'anta&#365;rigardu'),
-      submit(-name => 'button', -value => 'save', -label => 'savu');
+      submit(-name => 'button', -label => 'anta&#365;rigardu'),
+      submit(-name => 'button', -label => 'konservu');
 #      print checkbox(-name    => 'sendu_al_tio',
 #                     -checked => 1,
 #                     -value   => '1',
@@ -808,7 +815,7 @@ klavo kontrolo-F ebligas ser&#265;i<br>
 via retadreso estas $ENV{REMOTE_ADDR}<br>
 EOD
 print p('svn versio: $Id$'.br.
-	'hg versio: $HgId: vokomail.pl 6:2f8e02dccc82 2008/11/19 20:28:29 Wieland $');
+	'hg versio: $HgId: vokomail.pl 7:55b39689dde5 2008/11/20 08:07:05 Wieland $');
 
 print end_html();
 
@@ -842,33 +849,33 @@ sub checkxml {
 #    unlink("$tmp/xml.err");
 
     if ($err) {
-        $ne_savu = 1;
-        my $ret = "XML check malsukcesis - Eraro";
+      $ne_konservu = 1;
+      my $ret = "XML check malsukcesis - Eraro";
 
-        $err =~ s/^Warning: /Atentu: /smg;
-        $err =~ s/^Error: /Eraro: /smg;
-        $err =~ s/ of <stdin>$//smg;
-        $err =~ s/^ in unnamed entity//smg;
-        $err =~ s/Start tag for undeclared element ([^\n]*)/Ne konata komencokodero $1/smg;
-        $err =~ s/Content model for ([^ \n]*) does not allow element ([^ \n]*) here$/Reguloj por $1 malpermesas $2 cxi tie/smg;
-        $err =~ s/Mismatched end tag: expected ([^,\n]*), got ([^ \n]*)$/Malkongrua finokodero: atendis $1, trovis $2/smg;
-        $err =~ s/^ at line (\d+) char (\d+)$/ cxe linio $1 pozicio $2/smg;
-        $err =~ s/Document contains multiple elements/Artikolo enhavas pli ol unu elemento (kaj tio devas esti <vortaro>)/smg;
-        $err =~ s/Root element is ([^ ,\n]*), should be ([^ \n]*)/Radika elemento estas $1, devus esti $2/smg;
-        $err =~ s/Content model for ([^ \n]*) does not allow PCDATA/Enhave de elemento $1 estas malpermesita/smg;
-        $err =~ s/The attribute ([^ \n]*) of element ([^ \n]*) is declared as ENUMERATION but is empty/La atributo $1 de la kodero $2 mankas/smg;
-        $err =~ s/In the attribute ([^ \n]*) of element ([^ \n]*), ([^ \n]*) is not one of the allowed values/Cxe la atributo $1 de la kodero $2, $3 ne estas permesata./smg;
-        $err =~ s/Document ends too soon/Dokumento finis, sed mankis finkodero/smg;
+      $err =~ s/^Warning: /Atentu: /smg;
+      $err =~ s/^Error: /Eraro: /smg;
+      $err =~ s/ of <stdin>$//smg;
+      $err =~ s/^ in unnamed entity//smg;
+      $err =~ s/Start tag for undeclared element ([^\n]*)/Ne konata komencokodero $1/smg;
+      $err =~ s/Content model for ([^ \n]*) does not allow element ([^ \n]*) here$/Reguloj por $1 malpermesas $2 cxi tie/smg;
+      $err =~ s/Mismatched end tag: expected ([^,\n]*), got ([^ \n]*)$/Malkongrua finokodero: atendis $1, trovis $2/smg;
+      $err =~ s/^ at line (\d+) char (\d+)$/ cxe linio $1 pozicio $2/smg;
+      $err =~ s/Document contains multiple elements/Artikolo enhavas pli ol unu elemento (kaj tio devas esti <vortaro>)/smg;
+      $err =~ s/Root element is ([^ ,\n]*), should be ([^ \n]*)/Radika elemento estas $1, devus esti $2/smg;
+      $err =~ s/Content model for ([^ \n]*) does not allow PCDATA/Enhave de elemento $1 estas malpermesita/smg;
+      $err =~ s/The attribute ([^ \n]*) of element ([^ \n]*) is declared as ENUMERATION but is empty/La atributo $1 de la kodero $2 mankas/smg;
+      $err =~ s/In the attribute ([^ \n]*) of element ([^ \n]*), ([^ \n]*) is not one of the allowed values/Cxe la atributo $1 de la kodero $2, $3 ne estas permesata./smg;
+      $err =~ s/Document ends too soon/Dokumento finis, sed mankis finkodero/smg;
 
-        autoEscape(1);
-        ($konteksto, $line, $char) = xml_context($err, $teksto);
-	$err .= "kunteksto de unua eraro:\n$konteksto";
-	$ret .= pre(escapeHTML("XML-eraroj:\n$err\n")); # if ($verbose);
-        autoEscape(0);
-	$ret .= "&nbsp;&nbsp;&nbsp;&nbsp; * se vi trovas anglan mesagxon aux malbonan erarmesagxon, skribu al wieland(cxe)wielandpusch.de";
-	$err = $ret;
+      autoEscape(1);
+      ($konteksto, $line, $char) = xml_context($err, $teksto);
+      $err .= "kunteksto de unua eraro:\n$konteksto";
+      $ret .= pre(escapeHTML("XML-eraroj:\n$err\n")); # if ($verbose);
+      autoEscape(0);
+      $ret .= "&nbsp;&nbsp;&nbsp;&nbsp; * se vi trovas anglan mesagxon aux malbonan erarmesagxon, skribu al wieland(cxe)wielandpusch.de";
+      $err = $ret;
     } else {
-	$err = "XML en ordo</b></span></p>\n";
+      $err = "XML en ordo</b></span></p>\n";
     }
     return ("Kontrolo</b></span></p>\n$err", $line, $char);
 }
@@ -879,24 +886,24 @@ sub xml_context {
     my ($line, $char, $result, $n, $txt);
 
     if ($err =~ /linio\s+([0-9]+)\s+pozicio\s+([0-9]+)\s+/s) {
-	$line = $1;
-	$char = $2;
-#        $debugmsg .= "context: line = $line, char = $char, err = $err\n";
+      $line = $1;
+      $char = $2;
+#      $debugmsg .= "context: line = $line, char = $char, err = $err\n";
 
-        my @a = split "\n", $teksto;
+      my @a = split "\n", $teksto;
 
-	# la linio antau la eraro
-	if ($line > 1) {
-	    $result .= ($line-1).": $a[$line - 2]\n";
-	}
-	$result .= "$line: $a[$line - 1]\n";
-	$result .= "-" x ($char + length($line) + 1) . "^\n";
+      # la linio antaux la eraro
+      if ($line > 1) {
+          $result .= ($line-1).": $a[$line - 2]\n";
+      }
+      $result .= "$line: $a[$line - 1]\n";
+      $result .= "-" x ($char + length($line) + 1) . "^\n";
 
-	if (exists($a[$line])) {
-	    $result .= ($line+1).": $a[$line]";
-	}
+      if (exists($a[$line])) {
+          $result .= ($line+1).": $a[$line]";
+      }
 
-	return ($result, $line, $char);
+      return ($result, $line, $char);
     }
 
     return ('', 0, 0);
