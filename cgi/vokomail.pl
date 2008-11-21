@@ -32,15 +32,13 @@ $ENV{'PATH'} = "$ENV{'PATH'}:/var/www/web277/files/bin";
 autoEscape(0);
 
 my $JSCRIPT=<<'END';
-function str_repeat(repeatString, repeatNum) {
-    var newString = "";
-    for (var x=1; x<=repeatNum; x++) {
-        newString = newString + repeatString;
-    }
-    return (newString);
+function str_repeat(rStr, rNum) {
+ var nStr="";
+ for (var x=1;x<=rNum;x++) {nStr+=rStr;}
+ return nStr;
 } 
 
-function str_indent() {
+function get_ta() {
   var txtarea;
   if (document.f) {
     txtarea = document.f.xmlTxt;
@@ -49,171 +47,156 @@ function str_indent() {
 	var areas = document.getElementsByTagName('textarea');
 	txtarea = areas[0];
   }
+  return txtarea;
+}
+
+function str_indent() {
+  var txtarea = get_ta();
   var indent = 0;
   if (document.selection  && document.selection.createRange) { // IE/Opera
-		var range = document.selection.createRange();
-                range.moveStart('character', - 200); 
-		var selText = range.text;
-	        var linestart = selText.lastIndexOf("\n");
-	        while (selText.charCodeAt(linestart+1+indent) == 32) {
-                  indent++;
-	        }
+	var range = document.selection.createRange();
+	range.moveStart('character', - 200); 
+	var selText = range.text;
+	var linestart = selText.lastIndexOf("\n");
+	while (selText.charCodeAt(linestart+1+indent) == 32) {indent++;}
   } else if (txtarea.selectionStart || txtarea.selectionStart == '0') { // Mozilla
-		var startPos = txtarea.selectionStart;
-                var linestart = txtarea.value.substring(0, startPos).lastIndexOf("\n");
-	        while (txtarea.value.substring(0, startPos).charCodeAt(linestart+1+indent) == 32) {
-                  indent++;
-	        }
+	var startPos = txtarea.selectionStart;
+	var linestart = txtarea.value.substring(0, startPos).lastIndexOf("\n");
+	while (txtarea.value.substring(0, startPos).charCodeAt(linestart+1+indent) == 32) {indent++;}
   }
   return (str_repeat(" ", indent));
 }
 
-function cxigi(before, key) {
-  var nova = ""
-  if (before == 's') nova = '\u015D';
-  else if (before == '\u015D') nova = 's'+String.fromCharCode(key);
-  else if (before == 'S'     ) nova = '\u015C';
-  else if (before == '\u015C') nova = 'S'+String.fromCharCode(key);
+function cxigi(b, key) {
+  var n="";
+  var k=String.fromCharCode(key);
 
-  else if (before == 'c'     ) nova = '\u0109';
-  else if (before == '\u0109') nova = 'c'+String.fromCharCode(key);
-  else if (before == 'C'     ) nova = '\u0108';
-  else if (before == '\u0108') nova = 'C'+String.fromCharCode(key);
+       if (b=='s'     ) n='\u015D';
+  else if (b=='\u015D') n='s'+k;
+  else if (b=='S'     ) n='\u015C';
+  else if (b=='\u015C') n='S'+k;
 
-  else if (before == 'h'     ) nova = '\u0125';
-  else if (before == '\u0125') nova = 'h'+String.fromCharCode(key);
-  else if (before == 'H'     ) nova = '\u0124';
-  else if (before == '\u0124') nova = 'H'+String.fromCharCode(key);
+  else if (b=='c'     ) n='\u0109';
+  else if (b=='\u0109') n='c'+k;
+  else if (b=='C'     ) n='\u0108';
+  else if (b=='\u0108') n='C'+k;
 
-  else if (before == 'g'     ) nova = '\u011D';
-  else if (before == '\u011D') nova = 'g'+String.fromCharCode(key);
-  else if (before == 'G'     ) nova = '\u011C';
-  else if (before == '\u011C') nova = 'G'+String.fromCharCode(key);
+  else if (b=='h'     ) n='\u0125';
+  else if (b=='\u0125') n='h'+k;
+  else if (b=='H'     ) n='\u0124';
+  else if (b=='\u0124') n='H'+k;
 
-  else if (before == 'u'     ) nova = '\u016D';
-  else if (before == '\u016D') nova = 'u'+String.fromCharCode(key);
-  else if (before == 'U'     ) nova = '\u016C';
-  else if (before == '\u016C') nova = 'U'+String.fromCharCode(key);
+  else if (b=='g'     ) n='\u011D';
+  else if (b=='\u011D') n='g'+k;
+  else if (b=='G'     ) n='\u011C';
+  else if (b=='\u011C') n='G'+k;
 
-  else if (before == 'j'     ) nova = '\u0135';
-  else if (before == '\u0135') nova = 'j'+String.fromCharCode(key);
-  else if (before == 'J'     ) nova = '\u0134';
-  else if (before == '\u0134') nova = 'J'+String.fromCharCode(key);
+  else if (b=='u'     ) n='\u016D';
+  else if (b=='\u016D') n='u'+k;
+  else if (b=='U'     ) n='\u016C';
+  else if (b=='\u016C') n='U'+k;
 
-  return nova;
+  else if (b=='j'     ) n='\u0135';
+  else if (b=='\u0135') n='j'+k;
+  else if (b=='J'     ) n='\u0134';
+  else if (b=='\u0134') n='J'+k;
+
+  return n;
 }
 
 function klavo(event) {
-    var key = event.keyCode ? event.keyCode : event.which ? event.which : event.charCode;
-    if (key == 13) {
-	var txtarea;
-	if (document.f) {
-		txtarea = document.f.xmlTxt;
-	} else {
-		// some alternate form? take the first one we can find
-		var areas = document.getElementsByTagName('textarea');
-		txtarea = areas[0];
-	}
-	var selText, isSample = false;
+  var key = event.keyCode ? event.keyCode : event.which ? event.which : event.charCode;
+  if (key == 13) {
+    var txtarea = get_ta();
+    var selText, isSample = false;
 
-	if (document.selection  && document.selection.createRange) { // IE/Opera
-		//save window scroll position
-		if (document.documentElement && document.documentElement.scrollTop)
-			var winScroll = document.documentElement.scrollTop
-		else if (document.body)
-			var winScroll = document.body.scrollTop;
-		//get current selection  
-		txtarea.focus();
-		var range = document.selection.createRange();
-		selText = range.text;
+    if (document.selection  && document.selection.createRange) { // IE/Opera
+      //save window scroll position
+      if (document.documentElement && document.documentElement.scrollTop)
+	var winScroll = document.documentElement.scrollTop
+      else if (document.body)
+	var winScroll = document.body.scrollTop;
+      //get current selection  
+      txtarea.focus();
+      var range = document.selection.createRange();
+      selText = range.text;
 
-		range.text = "\n" + str_indent();
-		//mark sample text as selected
-		range.select();   
-		//restore window scroll position
-		if (document.documentElement && document.documentElement.scrollTop)
-			document.documentElement.scrollTop = winScroll
-		else if (document.body)
-			document.body.scrollTop = winScroll;
-                return false;
- 	} else if (txtarea.selectionStart || txtarea.selectionStart == '0') { // Mozilla
-		//save textarea scroll position
-		var textScroll = txtarea.scrollTop;
-		//get current selection
-		txtarea.focus();
-		var startPos = txtarea.selectionStart;
-		var endPos = txtarea.selectionEnd;
-                var tmpstr = "\n" + str_indent();
-		txtarea.value = txtarea.value.substring(0, startPos)
+      range.text = "\n" + str_indent();
+      //mark sample text as selected
+      range.select();   
+      //restore window scroll position
+      if (document.documentElement && document.documentElement.scrollTop)
+	document.documentElement.scrollTop = winScroll
+      else if (document.body)
+	document.body.scrollTop = winScroll;
+      return false;
+    } else if (txtarea.selectionStart || txtarea.selectionStart == '0') { // Mozilla
+      //save textarea scroll position
+      var textScroll = txtarea.scrollTop;
+      //get current selection
+      txtarea.focus();
+      var startPos = txtarea.selectionStart;
+      var endPos = txtarea.selectionEnd;
+      var tmpstr = "\n" + str_indent();
+      txtarea.value = txtarea.value.substring(0, startPos)
 			+ tmpstr
 			+ txtarea.value.substring(endPos, txtarea.value.length);
-		txtarea.selectionStart = startPos + tmpstr.length;
-		txtarea.selectionEnd = txtarea.selectionStart;
-		//restore textarea scroll position
-		txtarea.scrollTop = textScroll;
-                return false;
-       }
-    } else if (key == 88 || key == 120) {   // X or x
-      if (event.altKey) {	// shortcut alt-x  --> toggle cx
-        document.f.cx.checked = !document.f.cx.checked;
+      txtarea.selectionStart = startPos + tmpstr.length;
+      txtarea.selectionEnd = txtarea.selectionStart;
+      //restore textarea scroll position
+      txtarea.scrollTop = textScroll;
+      return false;
+    }
+  } else if (key == 88 || key == 120) {   // X or x
+    if (event.altKey) {	// shortcut alt-x  --> toggle cx
+      document.f.cx.checked = !document.f.cx.checked;
+      return false;
+    }
+
+    if (!document.f.cx.checked) return true;
+    var txtarea = get_ta();
+    if (document.selection  && document.selection.createRange) { // IE/Opera
+      //save window scroll position
+      if (document.documentElement && document.documentElement.scrollTop)
+	var winScroll = document.documentElement.scrollTop
+      else if (document.body)
+	var winScroll = document.body.scrollTop;
+      //get current selection  
+      txtarea.focus();
+      var range = document.selection.createRange();
+      var selText = range.text;
+      if (selText != "") return true;
+      range.moveStart('character', - 1); 
+      var before = range.text;
+      var nova = cxigi(before, key);
+      if (nova != "") {
+        range.text = nova;
         return false;
       }
-
-      if (!document.f.cx.checked) {
-        return true;
-      }
-      var txtarea;
-      if (document.f) {
-      	txtarea = document.f.xmlTxt;
-      } else {
-      	// some alternate form? take the first one we can find
-      	var areas = document.getElementsByTagName('textarea');
-      	txtarea = areas[0];
-      }
-      if (document.selection  && document.selection.createRange) { // IE/Opera
-	//save window scroll position
-	if (document.documentElement && document.documentElement.scrollTop)
-		var winScroll = document.documentElement.scrollTop
-	else if (document.body)
-		var winScroll = document.body.scrollTop;
-	//get current selection  
-	txtarea.focus();
-	var range = document.selection.createRange();
-	var selText = range.text;
-        if (selText != "") {
-          return true;
-        }
-        range.moveStart('character', - 1); 
-	var before = range.text;
-        var nova = cxigi(before, key);
-        if (nova != "") {
-          range.text = nova;
-          return false;
-        }
-      } else if (txtarea.selectionStart || txtarea.selectionStart == '0') { // Mozilla
-	var startPos = txtarea.selectionStart;
-	var endPos = txtarea.selectionEnd;
-        if (startPos != endPos || startPos == 0) { return true; }
-        var before = txtarea.value.substring(startPos - 1, startPos);
-        var nova = cxigi(before, key);
-        if (nova != "") {
-	  //save textarea scroll position
-	  var textScroll = txtarea.scrollTop;
-	  txtarea.value = txtarea.value.substring(0, startPos - 1)
+    } else if (txtarea.selectionStart || txtarea.selectionStart == '0') { // Mozilla
+      var startPos = txtarea.selectionStart;
+      var endPos = txtarea.selectionEnd;
+      if (startPos != endPos || startPos == 0) { return true; }
+      var before = txtarea.value.substring(startPos - 1, startPos);
+      var nova = cxigi(before, key);
+      if (nova != "") {
+	//save textarea scroll position
+	var textScroll = txtarea.scrollTop;
+	txtarea.value = txtarea.value.substring(0, startPos - 1)
 		+ nova
 		+ txtarea.value.substring(endPos, txtarea.value.length);
-	  txtarea.selectionStart = startPos + nova.length - 1;
-	  txtarea.selectionEnd = txtarea.selectionStart;
-	  //restore textarea scroll position
-	  txtarea.scrollTop = textScroll;
-          return false;
-        }
-      }
-    } else if (key == 84 || key == 116) {   // T or t
-      if (event.altKey) {	// shortcut alt-t  --> trd
-        insertTags2('<trd lng="',document.getElementById('trdlng').value,'">','</trd>','');
+	txtarea.selectionStart = startPos + nova.length - 1;
+	txtarea.selectionEnd = txtarea.selectionStart;
+	//restore textarea scroll position
+	txtarea.scrollTop = textScroll;
+        return false;
       }
     }
+  } else if (key == 84 || key == 116) {   // T or t
+    if (event.altKey) {	// shortcut alt-t  --> trd
+      insertTags2('<trd lng="',document.getElementById('trdlng').value,'">','</trd>','');
+    }
+  }
 }
 
 function insertTags2(tagOpen, tagAttr, tagEndOpen, tagClose, sampleText) {
@@ -224,93 +207,114 @@ function insertTags2(tagOpen, tagAttr, tagEndOpen, tagClose, sampleText) {
   }
 }
 
+function indent(offset) {
+  var txtarea = get_ta();
+  var selText, isSample=false;
+
+  if (document.selection  && document.selection.createRange) { // IE/Opera
+    alert("tio ankoraux ne funkcias.");
+  } else if (txtarea.selectionStart || txtarea.selectionStart==0) { // Mozilla
+
+    //save textarea scroll position
+    var textScroll = txtarea.scrollTop;
+    //get current selection
+    txtarea.focus();
+    var startPos = txtarea.selectionStart;
+    var endPos = txtarea.selectionEnd;
+    selText = txtarea.value.substring(startPos, endPos);
+    if (selText=="") {
+      alert("Marku kion vi volas en-/elsxovi.");
+    } else {
+      var nt;
+      if (offset == 2)
+        nt = selText.replace(/\n/g, "\n  ");
+      else 
+        nt = selText.replace(/\n  /g, "\n");
+      txtarea.value = txtarea.value.substring(0, startPos)
+			+ nt
+			+ txtarea.value.substring(endPos, txtarea.value.length);
+      txtarea.selectionStart = startPos;
+      txtarea.selectionEnd = startPos + nt.length;
+
+      //restore textarea scroll position
+      txtarea.scrollTop = textScroll;
+    }
+  } 
+}
+
 // apply tagOpen/tagClose to selection in textarea,
 // use sampleText instead of selection if there is none
 function insertTags(tagOpen, tagClose, sampleText) {
-	var txtarea;
-	if (document.f) {
-		txtarea = document.f.xmlTxt;
-	} else {
-		// some alternate form? take the first one we can find
-		var areas = document.getElementsByTagName('textarea');
-		txtarea = areas[0];
-	}
-	var selText, isSample = false;
+  var txtarea = get_ta();
+  var selText, isSample=false;
 
-	if (document.selection  && document.selection.createRange) { // IE/Opera
-		//save window scroll position
-		if (document.documentElement && document.documentElement.scrollTop)
-			var winScroll = document.documentElement.scrollTop
-		else if (document.body)
-			var winScroll = document.body.scrollTop;
-		//get current selection  
-		txtarea.focus();
-		var range = document.selection.createRange();
-		selText = range.text;
-		//insert tags
-		checkSelectedText();
-		range.text = tagOpen + selText + tagClose;
-		//mark sample text as selected
-		if (isSample && range.moveStart) {
-			if (window.opera)
-				tagClose = tagClose.replace(/\n/g,'');
-			range.moveStart('character', - tagClose.length - selText.length); 
-			range.moveEnd('character', - tagClose.length); 
-		}
-		range.select();   
-		//restore window scroll position
-		if (document.documentElement && document.documentElement.scrollTop)
-			document.documentElement.scrollTop = winScroll
-		else if (document.body)
-			document.body.scrollTop = winScroll;
+  if (document.selection  && document.selection.createRange) { // IE/Opera
+    //save window scroll position
+    if (document.documentElement && document.documentElement.scrollTop)
+      var winScroll = document.documentElement.scrollTop
+    else if (document.body)
+      var winScroll = document.body.scrollTop;
+    //get current selection  
+    txtarea.focus();
+    var range = document.selection.createRange();
+    selText = range.text;
+    //insert tags
+    checkSelectedText();
+    range.text = tagOpen + selText + tagClose;
+    //mark sample text as selected
+    if (isSample && range.moveStart) {
+      if (window.opera)
+	tagClose = tagClose.replace(/\n/g,'');
+	range.moveStart('character', - tagClose.length - selText.length); 
+	range.moveEnd('character', - tagClose.length); 
+      }
+      range.select();   
+      //restore window scroll position
+      if (document.documentElement && document.documentElement.scrollTop)
+	document.documentElement.scrollTop = winScroll
+      else if (document.body)
+	document.body.scrollTop = winScroll;
 
-	} else if (txtarea.selectionStart || txtarea.selectionStart == '0') { // Mozilla
+  } else if (txtarea.selectionStart || txtarea.selectionStart == '0') { // Mozilla
 
-		//save textarea scroll position
-		var textScroll = txtarea.scrollTop;
-		//get current selection
-		txtarea.focus();
-		var startPos = txtarea.selectionStart;
-		var endPos = txtarea.selectionEnd;
-		selText = txtarea.value.substring(startPos, endPos);
-		//insert tags
-		checkSelectedText();
-		txtarea.value = txtarea.value.substring(0, startPos)
+    //save textarea scroll position
+    var textScroll = txtarea.scrollTop;
+    //get current selection
+    txtarea.focus();
+    var startPos = txtarea.selectionStart;
+    var endPos = txtarea.selectionEnd;
+    selText = txtarea.value.substring(startPos, endPos);
+    //insert tags
+    checkSelectedText();
+    txtarea.value = txtarea.value.substring(0, startPos)
 			+ tagOpen + selText + tagClose
 			+ txtarea.value.substring(endPos, txtarea.value.length);
-		//set new selection
-		if (isSample) {
-			txtarea.selectionStart = startPos + tagOpen.length;
-			txtarea.selectionEnd = startPos + tagOpen.length + selText.length;
-		} else {
-			txtarea.selectionStart = startPos + tagOpen.length + selText.length + tagClose.length;
-			txtarea.selectionEnd = txtarea.selectionStart;
-		}
-		//restore textarea scroll position
-		txtarea.scrollTop = textScroll;
-	} 
+    //set new selection
+    if (isSample) {
+      txtarea.selectionStart = startPos + tagOpen.length;
+      txtarea.selectionEnd = startPos + tagOpen.length + selText.length;
+    } else {
+      txtarea.selectionStart = startPos + tagOpen.length + selText.length + tagClose.length;
+      txtarea.selectionEnd = txtarea.selectionStart;
+    }
+    //restore textarea scroll position
+    txtarea.scrollTop = textScroll;
+  } 
 
-	function checkSelectedText(){
-		if (!selText) {
-			selText = sampleText;
-			isSample = true;
-		} else if (selText.charAt(selText.length - 1) == ' ') { //exclude ending space char
-			selText = selText.substring(0, selText.length - 1);
-			tagClose += ' '
-		} 
-	}
+  function checkSelectedText(){
+    if (!selText) {
+      selText = sampleText;
+      isSample = true;
+    } else if (selText.charAt(selText.length - 1) == ' ') { //exclude ending space char
+      selText = selText.substring(0, selText.length - 1);
+      tagClose += ' '
+    } 
+  }
 }
 
 function sf(pos, line, lastline) {
   document.f.xmlTxt.focus();
-  var txtarea;
-  if (document.f) {
-    txtarea = document.f.xmlTxt;
-  } else {
-    // some alternate form? take the first one we can find
-    var areas = document.getElementsByTagName('textarea');
-    txtarea = areas[0];
-  }
+  var txtarea = get_ta();
   if (document.selection  && document.selection.createRange) { // IE/Opera
     var range = document.selection.createRange();
     range.moveEnd('character', pos); 
@@ -690,7 +694,11 @@ print start_form(-id => "f", -name => "f"  #, -method => 'post',
 );
 
 my @fakoj = sort keys %fak;
-print "\n&nbsp;aldoni:\n".
+print "\n&nbsp;prilabori:\n".
+      " <a onclick=\"indent(2);return false\" href=\"#\">[&gt;&gt;]</a>\n".
+      " <a onclick=\"indent(-2);return false\" href=\"#\">[&lt;&lt;]</a>\n".
+      br."\n".
+      "\n&nbsp;aldoni:\n".
       " <a onclick=\"var i=str_indent();insertTags(&#39;<drv mrk=\\&#34;$art.&#39;,&#39;\\&#34;>\\n&#39;+i+&#39;  <kap><tld/>...</kap>\\n&#39;+i+&#39;  <snc mrk=\\&#34;$art.\\&#34;>\\n&#39;+i+&#39;    <dif>\\n&#39;+i+&#39;      \\n&#39;+i+&#39;    </dif>\\n&#39;+i+&#39;    \\n&#39;+i+&#39;  </snc>\\n&#39;+i+&#39;</drv>&#39;,&#39;&#39;);return false\" href=\"#\">[drv]</a>\n",
       " <a onclick=\"var i=str_indent();insertTags(&#39;<dif>\\n&#39;+i+&#39;  &#39;,&#39;\\n&#39;+i+&#39;</dif>&#39;,&#39;&#39;);return false\" href=\"#\">[dif]</a>\n",
       " <a onclick=\"var i=str_indent();insertTags(&#39;<snc mrk=\\&#34;$art.&#39;,&#39;\\&#34;>\\n&#39;+i+&#39;  <dif>\\n&#39;+i+&#39;    \\n&#39;+i+&#39;  </dif>\\n&#39;+i+&#39;</snc>&#39;,&#39;&#39;);return false\" href=\"#\">[snc]</a>\n",
@@ -815,7 +823,7 @@ klavo kontrolo-F ebligas ser&#265;i<br>
 via retadreso estas $ENV{REMOTE_ADDR}<br>
 EOD
 print p('svn versio: $Id$'.br.
-	'hg versio: $HgId: vokomail.pl 8:18c3304a61e6 2008/11/20 17:31:08 Wieland $');
+	'hg versio: $HgId: vokomail.pl 9:a364e52da5ae 2008/11/21 08:52:43 Wieland $');
 
 print end_html();
 
