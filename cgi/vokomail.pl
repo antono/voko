@@ -528,31 +528,31 @@ print <<'EOD';
 <p><span style="color: rgb(207, 118, 6); font-size: 140%;"><b>Anta&#365;rigardo</b></span></p>
 EOD
 #  print pre('open xalan') if $debug;
-  if (length($xml2) > 28000) {
-    print h2("artikolo estas tro granda por anta&#365;rigardo");
-  } else {
-    my $pid = IPC::Open3::open3(\*CHLD_IN, \*CHLD_OUT, \*CHLD_ERR,
-                      "xalan -XSL $homedir/html/revo/xsl/revohtml.xsl");
-    print CHLD_IN $xml2;
-    close CHLD_IN;
-    my $err = join('', <CHLD_ERR>);
-#    print pre("err=$err");
-    close CHLD_ERR;
-    my $html = join('', <CHLD_OUT>);
-    close CHLD_OUT;
+  chdir($revo_base."/xml") or die "chdir";
 
-#    open IN, "<", "$homedir/html/revo/art/$art.html" or die "open";
-#    my $html = join '', <IN>;
-#    close IN;
+  my $pid = IPC::Open3::open3(\*CHLD_IN, \*CHLD_OUT, \*CHLD_ERR,
+#                      "xalan -XSL ../xsl/revohtml.xsl");
+                      "xsltproc ../xsl/revohtml.xsl -");
+  print CHLD_IN $xml2;
+  close CHLD_IN;
+  my $html = join('', <CHLD_OUT>);
+  close CHLD_OUT;
+  my $err = join('', <CHLD_ERR>);
+  print pre("err=$err") if $err and $debug;
+  close CHLD_ERR;
 
-    $html =~ s#href="../stl/#href="/revo/stl/#smg;
-    $html =~ s#src="../smb/#src="/revo/smb/#smg;
-    $html =~ s#src="../bld/#src="/revo/bld/#smg;
-    $html =~ s#<span class="redakto">.*$##sm;
+#  open IN, "<", "$homedir/html/revo/art/$art.html" or die "open";
+#  my $html = join '', <IN>;
+#  close IN;
 
-    print $html;
-#    print pre('close xalan') if $debug;
-  }
+  $html =~ s#href="../stl/#href="/revo/stl/#smg;
+  $html =~ s#src="../smb/#src="/revo/smb/#smg;
+  $html =~ s#src="../bld/#src="/revo/bld/#smg;
+  $html =~ s#<span class="redakto">.*$##sm;
+
+  print $html;
+#  print pre('close xalan') if $debug;
+
 print <<'EOD';
 </div><br>
 EOD
@@ -859,7 +859,7 @@ klavo kontrolo-F ebligas ser&#265;i<br>
 via retadreso estas $ENV{REMOTE_ADDR}<br>
 EOD
 print p('svn versio: $Id$'.br.
-	'hg versio: $HgId: vokomail.pl 10:191ae5d31fc5 2008/11/24 14:49:24 Wieland $');
+	'hg versio: $HgId: vokomail.pl 11:909bb0c9621b 2008/11/24 23:00:20 Wieland $');
 
 print end_html();
 
