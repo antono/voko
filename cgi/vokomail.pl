@@ -312,6 +312,38 @@ function insertTags(tagOpen, tagClose, sampleText) {
   }
 }
 
+function lines(str){try {return((str.match(/[^\n]*\n[^\n]*/gi).length));} catch(e) {return 0;}}
+
+function nextTag(tag, dir) {
+  var txtarea = get_ta();
+  if (document.selection  && document.selection.createRange) { // IE/Opera
+    alert("tio ankoraux ne funkcias.");
+  } else if (txtarea.selectionStart || txtarea.selectionStart == '0') { // Mozilla
+    var startPos = txtarea.selectionStart;
+    var t;
+    var pos;
+    if (dir > 0) {
+      t = txtarea.value.substring(startPos+1);
+      pos = startPos + 1 + t.indexOf(tag);
+    }
+    if (dir < 0) {
+      t = txtarea.value.substring(0, startPos);
+      pos = t.lastIndexOf(tag);    
+    }
+    txtarea.selectionStart = pos;
+    txtarea.selectionEnd = pos;
+    txtarea.focus();
+    var line = lines(txtarea.value.substring(0,pos))-10;
+    var lastline = lines(txtarea.value.substring(pos))+line+10;
+    if (line < 0) line = 0;
+    if (line > lastline) line = lastline;
+    txtarea.scrollTop = txtarea.scrollHeight * line / lastline;   
+
+//    alert("tio baldaux funkcias. tag="+tag+" pos="+pos+" line="+line+ " lastline="+lastline);
+//    alert("scrollTop="+txtarea.scrollTop+" scrollHeight="+txtarea.scrollHeight);
+  }
+}
+
 function sf(pos, line, lastline) {
   document.f.xmlTxt.focus();
   var txtarea = get_ta();
@@ -698,6 +730,10 @@ print "\n&nbsp;prilabori:\n".
       " <a onclick=\"indent(2);return false\" href=\"#\">[&gt;&gt;]</a>\n".
       " <a onclick=\"indent(-2);return false\" href=\"#\">[&lt;&lt;]</a>\n".
       br."\n".
+      "\n&nbsp;navigadi:\n".
+      " <a onclick=\"nextTag(&#39;<drv&#39,-1);return false\" href=\"#\">drv</a>",
+      "-<a onclick=\"nextTag(&#39;<drv&#39,1);return false\" href=\"#\">drv</a>\n",
+      br."\n".
       "\n&nbsp;aldoni:\n".
       " <a onclick=\"var i=str_indent();insertTags(&#39;<drv mrk=\\&#34;$art.&#39;,&#39;\\&#34;>\\n&#39;+i+&#39;  <kap><tld/>...</kap>\\n&#39;+i+&#39;  <snc mrk=\\&#34;$art.\\&#34;>\\n&#39;+i+&#39;    <dif>\\n&#39;+i+&#39;      \\n&#39;+i+&#39;    </dif>\\n&#39;+i+&#39;    \\n&#39;+i+&#39;  </snc>\\n&#39;+i+&#39;</drv>&#39;,&#39;&#39;);return false\" href=\"#\">[drv]</a>\n",
       " <a onclick=\"var i=str_indent();insertTags(&#39;<dif>\\n&#39;+i+&#39;  &#39;,&#39;\\n&#39;+i+&#39;</dif>&#39;,&#39;&#39;);return false\" href=\"#\">[dif]</a>\n",
@@ -823,7 +859,7 @@ klavo kontrolo-F ebligas ser&#265;i<br>
 via retadreso estas $ENV{REMOTE_ADDR}<br>
 EOD
 print p('svn versio: $Id$'.br.
-	'hg versio: $HgId: vokomail.pl 9:a364e52da5ae 2008/11/21 08:52:43 Wieland $');
+	'hg versio: $HgId: vokomail.pl 10:191ae5d31fc5 2008/11/24 14:49:24 Wieland $');
 
 print end_html();
 
