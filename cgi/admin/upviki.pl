@@ -24,11 +24,11 @@ if (param("download")) {	# 0 por testi - 1 por vere esxuti aktualan liston
 
 sub mylc {	# lower case pro esperantaj signoj
   my $a = shift @_;
-  $a =~ s/Äˆ/Ä‰/g;
-  $a =~ s/Åœ/Å/g;
-  $a =~ s/Ä´/Äµ/g;
-  $a =~ s/Ä¤/Ä¥/g;
-  $a =~ s/Äœ/Ä/g;
+  $a =~ s/Ĉ/ĉ/g;
+  $a =~ s/Ĵ/ĵ/g;
+  $a =~ s/Ĥ/ĥ/g;
+  $a =~ s/Ŭ/ŭ/g;
+  $a =~ s/Ŝ/ŝ/g;
   return lc $a;
 }
 
@@ -37,23 +37,25 @@ my $dbh = revodb::connect();
 
 my %revo;				# unue mi kolektas cxiujn vortojn kun ligoj kiel hash -> array
 my %vikihelpo;
+#my %viki2revo;
 
 my $sth = $dbh->prepare("SELECT ind_teksto, ind_celref FROM r2_indekso WHERE ind_kat='LNG' and ind_subkat='eo'") or die;
 $sth->execute();
 while (my ($t, $celref) = $sth->fetchrow_array) {
-#  print pre("test1: $t -> $celref")."\n";# if $t =~ m/^tekto/;
+  print pre("test1: $t -> $celref")."\n" if $t =~ m/^nav/i;
   next if $celref =~ m#^art/tez/#;	# mi ne certas, kial cxi tie povas esti tezauxro ligoj.
   $_ = mylc $t;				# minuskligi
-#  print pre("test: $t -> $_  $celref")."\n" if m/^tekto/;
-  $revo{$_} = [] unless $revo{$_};	# malplena tablo por komenci tion vorton
+  print pre("test2: $t -> $_  $celref")."\n" if $t =~ m/^nav/;
+#  $revo{$_} = [] unless $revo{$_};	# malplena tablo por komenci tion vorton
   push @{$revo{$_}}, $celref;		# aldoni la la ligon por tio vorto
 }
 
-my $sth = $dbh->prepare("SELECT vik_celref, vik_artikolo FROM r2_vikicelo") or die;
+my $sth = $dbh->prepare("SELECT vik_celref, vik_artikolo, vik_revo FROM r2_vikicelo") or die;
 $sth->execute();
-while (my ($celref, $vikart) = $sth->fetchrow_array) {
+while (my ($celref, $vikart, $revo) = $sth->fetchrow_array) {
   print pre("helpo: $celref => $vikart")."\n";
   $vikihelpo{$celref} = $vikart;
+  push @{$revo{mylc $vikart}}, $celref;		# aldoni la la ligon por tio vorto
 }
 
 $dbh->disconnect() or die "DB disconnect ne funkcias";
@@ -65,22 +67,24 @@ while (<IN>) {
   chomp;
 
   my $orgviki = $_;
-#  print pre("test: $_")."\n" if m/^tekto/;
+  print pre("test: $_")."\n" if m/^nav/i;
   next if $orgviki =~ m/["<>]/;		# por sekureco "<> estas malpermesita
   next unless $orgviki =~ m/[a-z]/;		# ne prenu sen unu minuskla litro, cxar estas mallongigo
   $_ = mylc $_;				# minuskligi
-#  print pre("test: $_")."\n" if m/^tekto/;
+  print pre("test: $_")."\n" if m/^nav/i;
   s/_/ /g;				# _ -> spaco
   if (my $celrefar = $revo{$_}) {	# cxu tio vorto eksistas en revo?
+    print pre("test: trovis en revo $_")."\n" if m/^nav/i;
     foreach my $celref (@$celrefar) {	# cxiuj ligoj de tio vorto
       my $fname = $celref;		# prenu la artikolon kaj la markon el la ligo
       my $mrk;
+      print pre("test: fname = $fname $_")."\n" if m/^nav/i;
       $fname =~ s/^art\///;
       if ($fname =~ s/#(.*)$//) {
         $mrk = $1;
       }
       $fname =~ s/\.html$//;
-#      print pre("html: $_  -  $fname  #  $mrk") if $mrk;
+      print pre("html: $_  -  $fname  #  $mrk") if $mrk and $fname =~ /^nav/;
 
       my %h = (celref => $celref, orgviki => $orgviki);
       $viki{$fname} = [] unless $viki{$fname};
@@ -130,7 +134,9 @@ foreach my $fname (<../../revo/art/*.html>) {			# prilaboru cxiujn artikolojn an
       my $h2 = $1;							# la vortoj kun eble tezauxroligo
       $h2 =~ s/[ \n\t]+$//sm;						# forigu spacoj cxe la fino
       $t .= "\n\ttrovis: $mrk h2=".escapeHTML($h2);
+      print pre("vikihelpo1: $$h{celref}");
       if (exists $vikihelpo{$$h{celref}}) {
+        print pre("vikihelpo: $$h{celref} $vikihelpo{$$h{celref}}");
         my $vikihelpo = $vikihelpo{$$h{celref}};
         $$h{orgviki} = $vikihelpo;
       }
