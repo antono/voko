@@ -302,9 +302,13 @@ sub parse {
       }
     
       my $snccnt = 1;
-      while ($drv =~ s/<snc(\s+mrk="([^"]+)"\s*)?>(.*?)<\/snc\s*>\n*//si) {
-        print pre(escapeHTML("snc $snccnt:\n$3")) if $verbose;
-        do_snc($dbh, $sorter, $did, $2, $snccnt++, $3, $verbose);
+      while ($drv =~ s/<snc(?:\s+mrk="([^"]+)"\s*)?>(.*?)<\/snc\s*>\n*//si) {
+        print pre(escapeHTML("snc $snccnt:\n$2")) if $verbose;
+        do_snc($dbh, $sorter, $did, $1, $snccnt++, $2, $verbose);
+      };
+      while ($drv =~ s/<snc(?:\s+mrk="([^"]+)"\s*)?\/>\n*//si) {
+        print pre(escapeHTML("snc $snccnt :\n$2")) if $verbose;
+        do_snc($dbh, $sorter, $did, $1, $snccnt++, "", $verbose);
       };
       print pre(escapeHTML("snc:\n$drv")) if $verbose;
       do_snc($dbh, $sorter, $did, "", undef, $drv, $verbose);
@@ -327,7 +331,7 @@ sub do_snc {
 
   $dbh->do("INSERT INTO snc (snc_drv_id, snc_mrk, snc_numero) VALUES (?,?,?)", undef, $did, $smrk, $snccnt) or die "insert ne funkciis";
   my $sid = $dbh->{'mysql_insertid'};
-  print "sid = $sid\n" if $verbose;
+  print "sid = $sid, smrk = $smrk\n" if $verbose;
 
   while ($snc =~ /<trd\s+lng="([^"]+)"\s*>(.*?)<\/trd\s*>/sig) {
     my ($lng, $trd) = ($1, $2);
