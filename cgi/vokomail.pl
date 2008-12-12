@@ -387,6 +387,34 @@ my $xml2 = revo::encode::encode2($xmlTxt, 20) if $xmlTxt;
 
 if ($xml2) {
   $xml = $xmlTxt;
+} elsif (param('button') eq 'aldonu') {
+  $xml = <<"EOD";
+<?xml version="1.0"?>
+<!DOCTYPE vortaro SYSTEM "../dtd/vokoxml.dtd">
+
+<vortaro>
+<art mrk="\$Id\$">
+<kap>
+    <rad>$art</rad>/o <fnt><bib>PIV1</bib></fnt>
+</kap>
+<drv mrk="$art.0o">
+  <kap><tld/>o</kap>
+  <snc mrk="$art.0o.SNC">
+    <uzo tip="fak"></uzo>
+    <dif>
+      <tld/>o estas:
+      <ekz>
+        ...
+        <fnt><bib></bib>, <lok></lok></fnt>
+      </ekz>
+    </dif>
+  </snc>
+  <trd lng=""></trd>
+</drv>
+</art>
+</vortaro>
+EOD
+  $xml2 = revo::encode::encode2($xml, 20);
 } else {
 #  $debugmsg .= "open\n";
   open IN, "<", "$homedir/html/revo/xml/$art.xml" or die "open";
@@ -406,6 +434,8 @@ my $debug = $redaktanto eq 'wieland@wielandpusch.de';
 my ($checklng, $checkxml, $errline, $errchar);
 ($checkxml, $errline, $errchar) = checkxml($xml2) if $xml2;
 #$debugmsg .= "errline = $errline\n";
+
+my $ne_konservu;
 
 if ($errline) {
   $errline--;
@@ -438,9 +468,10 @@ if ($errline) {
   }
   close IN;
 
-  while ($xml =~ m/(<(?:trd|dxxxrv) lng=")(.*?)">/smg) {
+  while ($xml =~ m/(<(?:trd|trdgrp) lng=")(.*?)">/smg) {
     if (!exists($lng{$2})) {
       $checklng = "Nekonata lingvo $2.";
+      $ne_konservu = 10;
 #      $debugmsg .= "lng = $2\n";
       my @prelines = split "\n", "$`$1$2";
       $postlines = split "\n", $';
@@ -493,8 +524,6 @@ if ($debug and $debugmsg) {
   autoEscape(0);
 }
 
-my $ne_konservu;
-
 print <<'EOD' if 0;
 <div class="borderc8 backgroundc1" style="border-style: solid; border-width: medium; padding: 0.3em 0.5em;">
 <p><span style="color: rgb(207, 118, 6); font-size: 140%;"><b>Provversio</b></span></p>
@@ -527,7 +556,12 @@ print <<'EOD';
 <div class="borderc8 backgroundc1" style="border-style: solid; border-width: medium; padding: 0.3em 0.5em;">
 <p><span style="color: rgb(207, 118, 6); font-size: 140%;"><b>Anta&#365;rigardo</b></span></p>
 EOD
-#  print pre('open xalan') if $debug;
+  if ($debug) {
+#    print pre('open xalan');
+#    autoEscape(1);
+#    print pre(escapeHTML("xml2=\n$xml2"));
+#    autoEscape(0);
+  }
   chdir($revo_base."/xml") or die "chdir";
 
   my $pid = IPC::Open3::open3(\*CHLD_IN, \*CHLD_OUT, \*CHLD_ERR,
@@ -641,7 +675,7 @@ EOD
   if ($sxangxo =~ s/([\x{80}-\x{10FFFF}]+)/<span style="color:red">$1<\/span>/g) { # kororigu ne-askiajn signojn
     print "Eraro: teksto havas ne-askiaj signoj: $sxangxo".br."\n";
     $ne_konservu = 3;
-  } else {
+  } elsif (!param('nova')) {
     if ($sxangxo) {
       print "teksto en ordo: $sxangxo".br."\n";
     } else {
@@ -685,10 +719,15 @@ EOD
     } else {
       my $from    = $redaktanto;
       my $name    = "Revo redaktu.pl";
-      my @to;
+      my (@to, $sxangxo2);
       push @to, $redaktanto; # if param('sendu_al_tio');
       push @to, 'revo@retavortaro.de' if param('sendu_al_revo');
       push @to, 'wieland@wielandpusch.de'; # if param('sendu_al_admin');  # revodb::mail_to
+      if (param('nova')) {
+        $sxangxo2 = "aldono: $art";
+      } else {
+        $sxangxo2 = "redakto: $sxangxo";
+      }
       if (my $to = join(', ', @to)) {
         my $subject = "Revo redaktu.pl $art";
 
@@ -701,7 +740,7 @@ Reply-To: $from
 Subject: $subject
 X-retadreso: $ENV{REMOTE_ADDR}
 
-redakto: $sxangxo
+$sxangxo2
 
 $xml2
 End_of_Mail
@@ -820,13 +859,16 @@ print "\n&nbsp;prilabori:\n".
                -columns => 80,
 	       -default => $xml,
                -onkeypress => "return klavo(event)",
-      ),
-      br."\n",
-      "&nbsp;&#348;an&#285;o: ".textfield(-name=>'sxangxo',
+      );
+if (param('nova') or param('button') eq 'aldonu') {
+  print hidden(-name=>'nova', -default=>1);
+} else {
+  print br."\n&nbsp;&#348;an&#285;o: ".textfield(-name=>'sxangxo',
                     -value=>cookie(-name=>'sxangxo') || 'klarigo de la &#349;an&#285;o',
                     -size=>70,
-                    -maxlength=>80),
-      br."\n&nbsp;Retpo&#349;ta adreso:".textfield(-name=>'redaktanto',
+                    -maxlength=>80);
+}
+print br."\n&nbsp;Retpo&#349;ta adreso:".textfield(-name=>'redaktanto',
                     -size      => 70,
                     -maxlength => 80,
                     -value     => (cookie(-name=>'redaktanto') || 'via retpo&#349;ta adreso')
@@ -850,6 +892,14 @@ print "\n&nbsp;prilabori:\n".
 
 print endform;
 
+print start_form(-id => "n", -name => "n"  #, -method => 'post'
+);
+print "&nbsp;Nova artikolo: ".textfield(-name=>'art',
+                    -size=>20,
+                    -maxlength=>20)."&nbsp;";
+print submit(-name => 'button', -label => 'aldonu');
+print endform;
+
 print <<"EOD";
 <h1>Klarigoj:</h1>
 Se vi permesas kuketojn, vi ne da&#365;re devas entajpi vian retadreson kaj lingvon.<br>
@@ -859,7 +909,7 @@ klavo kontrolo-F ebligas ser&#265;i<br>
 via retadreso estas $ENV{REMOTE_ADDR}<br>
 EOD
 print p('svn versio: $Id$'.br.
-	'hg versio: $HgId: vokomail.pl 11:909bb0c9621b 2008/11/24 23:00:20 Wieland $');
+	'hg versio: $HgId: vokomail.pl 21:5ae91d88ce21 2008/12/12 21:48:36 Wieland $');
 
 print end_html();
 
