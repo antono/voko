@@ -534,12 +534,23 @@ EOD
 
 
 my %fak = ('' => '');
-open IN, "<../revo/cfg/fakoj.xml" or die "ne povas malfermi lingvoj.xml";
+open IN, "<../revo/cfg/fakoj.xml" or die "ne povas malfermi fakoj.xml";
 while (<IN>) {
   if (/<fako kodo="([^"]+)"[^>]*>([^<]+)<\/fako>/i) {
-#    $debugmsg .= "lng $1 -> $2\n";
+#    $debugmsg .= "fak $1 -> $2\n";
 #    print "fak $1 $2<br>\n";
-    $fak{$1} = $2;
+    $fak{$1} = "$1-$2";
+  }
+}
+close IN;
+
+my %stl = ('' => '');
+open IN, "<../revo/cfg/stiloj.xml" or die "ne povas malfermi stiloj.xml";
+while (<IN>) {
+  if (/<stilo kodo="([^"]+)"[^>]*>([^<]+)<\/stilo>/i) {
+#    $debugmsg .= "stl $1 -> $2\n";
+#    print "stl $1 $2<br>\n";
+    $stl{$1} = "$1-$2";
   }
 }
 close IN;
@@ -765,9 +776,17 @@ print start_form(-id => "f", -name => "f"  #, -method => 'post',
 );
 
 my @fakoj = sort keys %fak;
+my @stiloj = sort keys %stl;
 print "\n&nbsp;prilabori:\n".
       " <a onclick=\"indent(2);return false\" href=\"#\">[&gt;&gt;]</a>\n".
       " <a onclick=\"indent(-2);return false\" href=\"#\">[&lt;&lt;]</a>\n".
+      "&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ".
+      checkbox(-name      => 'cx',
+               -checked   => defined(cookie(-name=>'cx')) ? cookie(-name=>'cx') : 1,
+               -value     => '1',
+               -accesskey => "x",
+               -onClick   => "document.f.xmlTxt.focus()",
+               -label     => 'anstata&#365;igu&nbsp; c<u>x</u>,&nbsp;gx,&nbsp;...,&nbsp;ux').
       br."\n".
       "\n&nbsp;navigadi:\n".
       " <a onclick=\"nextTag(&#39;<drv&#39,-1);return false\" href=\"#\">drv</a>",
@@ -777,12 +796,18 @@ print "\n&nbsp;prilabori:\n".
       " <a onclick=\"var i=str_indent();insertTags(&#39;<drv mrk=\\&#34;$art.&#39;,&#39;\\&#34;>\\n&#39;+i+&#39;  <kap><tld/>...</kap>\\n&#39;+i+&#39;  <snc mrk=\\&#34;$art.\\&#34;>\\n&#39;+i+&#39;    <dif>\\n&#39;+i+&#39;      \\n&#39;+i+&#39;    </dif>\\n&#39;+i+&#39;    \\n&#39;+i+&#39;  </snc>\\n&#39;+i+&#39;</drv>&#39;,&#39;&#39;);return false\" href=\"#\">[drv]</a>\n",
       " <a onclick=\"var i=str_indent();insertTags(&#39;<dif>\\n&#39;+i+&#39;  &#39;,&#39;\\n&#39;+i+&#39;</dif>&#39;,&#39;&#39;);return false\" href=\"#\">[dif]</a>\n",
       " <a onclick=\"var i=str_indent();insertTags(&#39;<snc mrk=\\&#34;$art.&#39;,&#39;\\&#34;>\\n&#39;+i+&#39;  <dif>\\n&#39;+i+&#39;    \\n&#39;+i+&#39;  </dif>\\n&#39;+i+&#39;</snc>&#39;,&#39;&#39;);return false\" href=\"#\">[snc]</a>\n",
-      " <a onclick=\"insertTags2(&#39;<uzo tip=\\&#34;fak\\&#34;>&#39;,document.getElementById(&#34;uzofak&#34;).value,&#39;</uzo>&#39;,&#39;&#39;,&#39;&#39;);return false\" href=\"#\">[fak]</a> ",
-      "\n fak=".popup_menu(-id=>'uzofak',
-		    -name    => 'uzofak',
-                    -values  => \@fakoj,
+      " <a onclick=\"insertTags2(&#39;<ofc>&#39;,document.getElementById(&#34;ofc&#34;).value,&#39;</ofc>&#39;,&#39;&#39;,&#39;&#39;);return false\" href=\"#\">[ofc]</a>",
+      "=".popup_menu(-id=>'ofc',
+		    -name    => 'ofc',
+                    -values  => ['', '*', 1 .. 9],
 		    -default => '',
-		    -labels  => %fak,
+      )."\n ",
+      " <a onclick=\"insertTags2(&#39;<gra>&#39;,document.getElementById(&#34;gra&#34;).value,&#39;</gra>&#39;,&#39;&#39;,&#39;&#39;);return false\" href=\"#\">[gra]</a>",
+      "=".popup_menu(-id=>'gra',
+		    -name    => 'gra',
+                    -values  => ['<vspec>tr</vspec>', '<vspec>ntr</vspec>'],
+		    -default => '',
+		    -labels  => {'<vspec>tr</vspec>' => 'v tr', '<vspec>ntr</vspec>' => 'v ntr'},
       )."\n ",
       " <a onclick=\"insertTags2(&#39;<ref tip=\\&#34;&#39;,document.getElementById(&#34;reftip&#34;).value,&#39;\\&#34; cel=\\&#34;&#39;,&#39;\\&#34;></ref>&#39;,&#39;&#39;);return false\" href=\"#\">[ref tip]</a> ",
       "\n tip=".popup_menu(-id=>'reftip',
@@ -808,22 +833,30 @@ print "\n&nbsp;prilabori:\n".
       "&nbsp; &nbsp; ".a({target=>"_new", href=>'/revo/dok/manlibro.html#drv'}, "[helpo]")."\n ".
       a({target=>"_new", href=>'/revo/dok/dtd.html#drv'}, "[dtd]")."\n".
       br.
+      "\n&nbsp;uzo:\n".
+      " <a onclick=\"insertTags2(&#39;<uzo tip=\\&#34;fak\\&#34;>&#39;,document.getElementById(&#34;uzofak&#34;).value,&#39;</uzo>&#39;,&#39;&#39;,&#39;&#39;);return false\" href=\"#\">[fak]</a>",
+      "=".popup_menu(-id=>'uzofak',
+		    -name    => 'uzofak',
+                    -values  => \@fakoj,
+		    -default => '',
+		    -labels  => \%fak,
+      )."\n ",
+      " <a onclick=\"insertTags2(&#39;<uzo tip=\\&#34;stl\\&#34;>&#39;,document.getElementById(&#34;uzostl&#34;).value,&#39;</uzo>&#39;,&#39;&#39;,&#39;&#39;);return false\" href=\"#\">[stl]</a>",
+      "=".popup_menu(-id=>'uzostl',
+		    -name    => 'uzostl',
+                    -values  => \@stiloj,
+		    -default => '',
+		    -labels  => \%stl,
+      )."\n ",
+      "&nbsp; &nbsp; ".a({target=>"_new", href=>'/revo/dok/manlibro.html#uzo'}, "[helpo]")."\n ".
+      a({target=>"_new", href=>'/revo/dok/dtd.html#uzo'}, "[dtd]")."\n".
+      br.
       "\n&nbsp;ekzemplo:\n".
       " <a onclick=\"var i=str_indent();insertTags(&#39;<ekz>\\n&#39;+i+&#39;  &#39;,&#39;\\n&#39;+i+&#39;</ekz>&#39;,&#39;&#39;);return false\" href=\"#\">[ekz]</a>\n",
       " <a onclick=\"insertTags(&#39;<tld/>&#39;,&#39;&#39;,&#39;&#39;);return false\" href=\"#\">[tld]</a>\n",
       " <a onclick=\"var i=str_indent();insertTags(&#39;<fnt>\\n&#39;+i+&#39;  <aut>&#39;,&#39;</aut>,\\n&#39;+i+&#39;  <vrk><url ref=\\&#34;\\&#34;></url></vrk>,\\n&#39;+i+&#39;  <bib></bib>,\\n&#39;+i+&#39;  <lok></lok>\\n&#39;+i+&#39;</fnt>&#39;,&#39;&#39;);return false\" href=\"#\">[fnt]</a>\n ",
       "&nbsp; &nbsp; ".a({target=>"_new", href=>'/revo/dok/manlibro.html#ekz'}, "[helpo]")."\n ".
       a({target=>"_new", href=>'/revo/dok/dtd.html#ekz'}, "[dtd]")."\n".
-      "&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ".
-      checkbox(-name      => 'cx',
-               -checked   => defined(cookie(-name=>'cx')) ? cookie(-name=>'cx') : 1,
-               -value     => '1',
-               -accesskey => "x",
-               -onClick   => "document.f.xmlTxt.focus()",
-               -label     => 'anstata&#365;igu&nbsp; c<u>x</u>,&nbsp;gx,&nbsp;...,&nbsp;ux').
-
-#      "<input name="x" id="x" checked="checked" type="checkbox">".
-#  onclick=""
       br.
       "\n&nbsp;traduki: <a accesskey=\"t\" onclick=\"insertTags2(&#39;<trd lng=\\&#34;&#39;,document.getElementById(&#34;trdlng&#34;).value,&#39;\\&#34;>&#39;,&#39;</trd>&#39;,&#39;&#39;);return false\" href=\"#\">[<u>t</u>rd lng]</a> ",
 #      "\n&nbsp;<a onclick=\"var i=str_indent();insertTags(&#39;<trdgrp>\\n&#39;+i+&#39;  <trd>&#39;,&#39;</trd>\\n&#39;+i+&#39;</trdgrp>&#39;,&#39;&#39;);return false\" href=\"#\">[trdgrp]</a> ",
@@ -892,12 +925,9 @@ print br."\n&nbsp;Retpo&#349;ta adreso:".textfield(-name=>'redaktanto',
 
 print endform;
 
-print start_form(-id => "n", -name => "n"  #, -method => 'post'
-);
-print "&nbsp;Nova artikolo: ".textfield(-name=>'art',
-                    -size=>20,
-                    -maxlength=>20)."&nbsp;";
-print submit(-name => 'button', -label => 'aldonu');
+print start_form(-id => "n", -name => "n");
+print "&nbsp;Nova artikolo: ".textfield(-name=>'art', -size=>20, -maxlength=>20)."&nbsp;";
+print submit(-name => 'button', -label => 'aldonu')."&nbsp; &nbsp; ".a({target=>"_new", href=>'/revo/dok/revoserv.html'}, "[helpo]")."\n";
 print endform;
 
 print <<"EOD";
@@ -909,7 +939,7 @@ klavo kontrolo-F ebligas ser&#265;i<br>
 via retadreso estas $ENV{REMOTE_ADDR}<br>
 EOD
 print p('svn versio: $Id$'.br.
-	'hg versio: $HgId: vokomail.pl 21:5ae91d88ce21 2008/12/12 21:48:36 Wieland $');
+	'hg versio: $HgId: vokomail.pl 22:b328e7f75b74 2008/12/14 23:16:58 Wieland $');
 
 print end_html();
 
