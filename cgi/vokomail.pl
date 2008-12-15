@@ -415,7 +415,7 @@ if ($xml2) {
 </vortaro>
 EOD
   $xml2 = revo::encode::encode2($xml, 20);
-} else {
+} elsif ($art) {
 #  $debugmsg .= "open\n";
   open IN, "<", "$homedir/html/revo/xml/$art.xml" or die "open";
   $xml = join '', <IN>;
@@ -512,7 +512,9 @@ print header(-charset=>'utf-8', -cookie=>\@cookies),
                  -onLoad=>"sf($pos, $line, $lastline)"
 );
 
-print h1("Redakti ".a({href=>"/revo/art/$art.html"}, $art));
+if ($art) {
+  print h1("Redakti ".a({href=>"/revo/art/$art.html"}, $art));
+}
 #my $referer =$ENV{HTTP_REFERER};
 #print pre("pos=$pos, referer=$referer\n") if $debug;
 #print pre("pre=".escapeHTML($prelines)."  post=".escapeHTML($postlines)."  lines=".($prelines + $postlines));
@@ -532,28 +534,30 @@ print <<'EOD' if 0;
 </div><br>
 EOD
 
-
-my %fak = ('' => '');
-open IN, "<../revo/cfg/fakoj.xml" or die "ne povas malfermi fakoj.xml";
-while (<IN>) {
-  if (/<fako kodo="([^"]+)"[^>]*>([^<]+)<\/fako>/i) {
-#    $debugmsg .= "fak $1 -> $2\n";
-#    print "fak $1 $2<br>\n";
-    $fak{$1} = "$1-$2";
+my (%fak, %stl);
+if ($art) {
+  %fak = ('' => '');
+  open IN, "<../revo/cfg/fakoj.xml" or die "ne povas malfermi fakoj.xml";
+  while (<IN>) {
+    if (/<fako kodo="([^"]+)"[^>]*>([^<]+)<\/fako>/i) {
+#      $debugmsg .= "fak $1 -> $2\n";
+#      print "fak $1 $2<br>\n";
+      $fak{$1} = "$1-$2";
+    }
   }
-}
-close IN;
+  close IN;
 
-my %stl = ('' => '');
-open IN, "<../revo/cfg/stiloj.xml" or die "ne povas malfermi stiloj.xml";
-while (<IN>) {
-  if (/<stilo kodo="([^"]+)"[^>]*>([^<]+)<\/stilo>/i) {
-#    $debugmsg .= "stl $1 -> $2\n";
-#    print "stl $1 $2<br>\n";
-    $stl{$1} = "$1-$2";
+  %stl = ('' => '');
+  open IN, "<../revo/cfg/stiloj.xml" or die "ne povas malfermi stiloj.xml";
+  while (<IN>) {
+    if (/<stilo kodo="([^"]+)"[^>]*>([^<]+)<\/stilo>/i) {
+#      $debugmsg .= "stl $1 -> $2\n";
+#      print "stl $1 $2<br>\n";
+      $stl{$1} = "$1-$2";
+    }
   }
+  close IN;
 }
-close IN;
 
 # Connect to the database.
 my $dbh = revodb::connect();
@@ -770,10 +774,7 @@ EOD
 
 $dbh->disconnect() if $dbh;
 
-#print form
-#<form id="f" name="f" method="post" action="/w/index.php?title=Sandbox&amp;action=submit" enctype="multipart/form-data"><div id="antispam-containter" style="display: none;">
-print start_form(-id => "f", -name => "f"  #, -method => 'post',
-);
+print start_form(-id => "f", -name => "f");
 
 my @fakoj = sort keys %fak;
 my @stiloj = sort keys %stl;
@@ -877,9 +878,6 @@ print "\n&nbsp;prilabori:\n".
 		    -labels=>{'ind'=>'ind-ekso',
                               'amb'=>'amb-aux',
 		    },
-#                    -size => 2,
-#                    -maxlength => 3,
-#                    -value=> cookie(-name=>'reftip') || '',
       )."\n ",
       "\n&nbsp;<a onclick=\"insertTags(&#39;<ind>&#39;,&#39;</ind>&#39;,&#39;&#39;);return false\" href=\"#\">[ind]</a> ",
       "&nbsp; &nbsp; ".a({target=>"_new", href=>'/revo/dok/manlibro.html#trd'}, "[helpo]").
@@ -892,7 +890,7 @@ print "\n&nbsp;prilabori:\n".
                -columns => 80,
 	       -default => $xml,
                -onkeypress => "return klavo(event)",
-      );
+      ) if $art;
 if (param('nova') or param('button') eq 'aldonu') {
   print hidden(-name=>'nova', -default=>1);
 } else {
@@ -908,29 +906,20 @@ print br."\n&nbsp;Retpo&#349;ta adreso:".textfield(-name=>'redaktanto',
       ),
       br."\n",
       submit(-name => 'button', -label => 'anta&#365;rigardu'),
-      submit(-name => 'button', -label => 'konservu');
-#      print checkbox(-name    => 'sendu_al_tio',
-#                     -checked => 1,
-#                     -value   => '1',
-#                     -label   => 'sendu al supra adreso');
-      print checkbox(-name    => 'sendu_al_revo',
-                     -checked => 1,
-                     -value   => '1',
-                     -label   => 'sendu al ReVo');
-#      print checkbox(-name    => 'sendu_al_admin',
-#                     -checked => 1,
-#                     -value   => '1',
-#                     -label   => 'sendu por analizo');
-      print "&nbsp; &nbsp; &#264;iam sendas al supra adreso kaj por analizo.";
-
-print endform;
+      submit(-name => 'button', -label => 'konservu').
+      checkbox(-name    => 'sendu_al_revo',
+               -checked => 1,
+               -value   => '1',
+               -label   => 'sendu al ReVo').
+      "&nbsp; &nbsp; &#264;iam sendas al supra adreso kaj por analizo.".
+      endform if $art;
 
 print start_form(-id => "n", -name => "n");
 print "&nbsp;Nova artikolo: ".textfield(-name=>'art', -size=>20, -maxlength=>20)."&nbsp;";
 print submit(-name => 'button', -label => 'aldonu')."&nbsp; &nbsp; ".a({target=>"_new", href=>'/revo/dok/revoserv.html'}, "[helpo]")."\n";
 print endform;
 
-print <<"EOD";
+print <<"EOD" if $art;
 <h1>Klarigoj:</h1>
 Se vi permesas kuketojn, vi ne da&#365;re devas entajpi vian retadreson kaj lingvon.<br>
 klavo kontrolo-Z malfaras la lastan &#349;an&#285;on<br>
@@ -938,8 +927,9 @@ klavo kontrolo-Y refaras la lastan &#349;an&#285;on<br>
 klavo kontrolo-F ebligas ser&#265;i<br>
 via retadreso estas $ENV{REMOTE_ADDR}<br>
 EOD
+
 print p('svn versio: $Id$'.br.
-	'hg versio: $HgId: vokomail.pl 22:b328e7f75b74 2008/12/14 23:16:58 Wieland $');
+	'hg versio: $HgId: vokomail.pl 23:73e4495fd0e8 2008/12/15 08:09:41 Wieland $');
 
 print end_html();
 
