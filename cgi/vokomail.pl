@@ -38,6 +38,20 @@ function str_repeat(rStr, rNum) {
  return nStr;
 } 
 
+function showhide(id){
+  if (document.getElementById){
+    obj = document.getElementById(id);
+    objb = document.getElementById(id+"b");
+    if (obj.style.display == "none"){
+      obj.style.display = "";
+      objb.style.display = "none";
+    } else {
+      obj.style.display = "none";
+      objb.style.display = "";
+    }
+  }
+} 
+
 function get_ta() {
   var txtarea;
   if (document.f) {
@@ -789,10 +803,16 @@ print "\n&nbsp;prilabori:\n".
                -onClick   => "document.f.xmlTxt.focus()",
                -label     => 'anstata&#365;igu&nbsp; c<u>x</u>,&nbsp;gx,&nbsp;...,&nbsp;ux').
       br."\n".
+      "<div id=\"ajxb\" style=\"display:\">".
       "\n&nbsp;navigadi:\n".
-      " <a onclick=\"nextTag(&#39;<drv&#39,-1);return false\" href=\"#\">drv</a>",
-      "-<a onclick=\"nextTag(&#39;<drv&#39,1);return false\" href=\"#\">drv</a>\n",
-      br."\n".
+      " <a onclick=\"nextTag(&#39;<drv&#39,-1);return false\" href=\"#\">drv</a>".
+      "-<a onclick=\"nextTag(&#39;<drv&#39,1);return false\" href=\"#\">drv</a>\n".
+      "&nbsp;&nbsp;<a onclick=\"showhide(&#39;ajx&#39;);return false\" href=\"#\">montru pli</a><br>\n</div>".
+      "<div id=\"ajx\" style=\"display: none;\">\n".
+      "\n&nbsp;navigadi:\n".
+      " <a onclick=\"nextTag(&#39;<drv&#39,-1);return false\" href=\"#\">drv</a>".
+      "-<a onclick=\"nextTag(&#39;<drv&#39,1);return false\" href=\"#\">drv</a>\n".
+      "&nbsp;&nbsp;<a onclick=\"showhide(&#39;ajx&#39;);return false\" href=\"#\">montru malpli</a><br>\n".
       "\n&nbsp;aldoni:\n".
       " <a onclick=\"var i=str_indent();insertTags(&#39;<drv mrk=\\&#34;$art.&#39;,&#39;\\&#34;>\\n&#39;+i+&#39;  <kap><tld/>...</kap>\\n&#39;+i+&#39;  <snc mrk=\\&#34;$art.\\&#34;>\\n&#39;+i+&#39;    <dif>\\n&#39;+i+&#39;      \\n&#39;+i+&#39;    </dif>\\n&#39;+i+&#39;    \\n&#39;+i+&#39;  </snc>\\n&#39;+i+&#39;</drv>&#39;,&#39;&#39;);return false\" href=\"#\">[drv]</a>\n",
       " <a onclick=\"var i=str_indent();insertTags(&#39;<dif>\\n&#39;+i+&#39;  &#39;,&#39;\\n&#39;+i+&#39;</dif>&#39;,&#39;&#39;);return false\" href=\"#\">[dif]</a>\n",
@@ -859,6 +879,7 @@ print "\n&nbsp;prilabori:\n".
       "&nbsp; &nbsp; ".a({target=>"_new", href=>'/revo/dok/manlibro.html#ekz'}, "[helpo]")."\n ".
       a({target=>"_new", href=>'/revo/dok/dtd.html#ekz'}, "[dtd]")."\n".
       br.
+      "</div>".
       "\n&nbsp;traduki: <a accesskey=\"t\" onclick=\"insertTags2(&#39;<trd lng=\\&#34;&#39;,document.getElementById(&#34;trdlng&#34;).value,&#39;\\&#34;>&#39;,&#39;</trd>&#39;,&#39;&#39;);return false\" href=\"#\">[<u>t</u>rd lng]</a> ",
 #      "\n&nbsp;<a onclick=\"var i=str_indent();insertTags(&#39;<trdgrp>\\n&#39;+i+&#39;  <trd>&#39;,&#39;</trd>\\n&#39;+i+&#39;</trdgrp>&#39;,&#39;&#39;);return false\" href=\"#\">[trdgrp]</a> ",
       "\n&nbsp;<a onclick=\"var i=str_indent();insertTags2(&#39;<trdgrp lng=\\&#34;&#39;,document.getElementById(&#34;trdlng&#34;).value,&#39;\\&#34;>\\n&#39;+i+&#39;  <trd>&#39;,&#39;</trd>,\\n&#39;+i+&#39;  <trd></trd>\\n&#39;+i+&#39;</trdgrp>&#39;,&#39;&#39;);return false\" href=\"#\">[trdgrp lng]</a> ",
@@ -929,7 +950,7 @@ via retadreso estas $ENV{REMOTE_ADDR}<br>
 EOD
 
 print p('svn versio: $Id$'.br.
-	'hg versio: $HgId: vokomail.pl 23:73e4495fd0e8 2008/12/15 08:09:41 Wieland $');
+	'hg versio: $HgId: vokomail.pl 24:565214d3c5a3 2008/12/22 19:44:59 Wieland $');
 
 print end_html();
 
