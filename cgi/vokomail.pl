@@ -630,6 +630,18 @@ EOD
 
   print $checklng.br.br."\n" if $checklng;
 
+  { my $x = $xml2;		# cxu cxio trd havas lng aux estas en trdgrp kun lng?
+    autoEscape(1);
+#    print pre(escapeHTML("x=$x\n"));
+    $x =~ s/<trdgrp\slng=.*?<\/trdgrp>\s*//smig;	# forigo de bonaj trdgrpoj
+    $x =~ s/<trd\slng=.*?<\/trd>\s*//smig;		    # forigo de bonaj trdoj
+#    print pre(escapeHTML("x=$x\n"));
+	if ($x =~ /(<trd.*?<\/trd>)/) {					# se restas trd, estas malbona
+	   print escapeHTML("Traduko $1")." ne havas lingvon.<br>\n";
+	}
+    autoEscape(0);
+  }
+  
   while ($xml2 =~ /<ref([^g>][^>]*)>/gi) {
     my $ref = $1;
 #    print "ref = $ref<br>\n" if $debug;
@@ -951,7 +963,7 @@ via retadreso estas $ENV{REMOTE_ADDR}<br>
 EOD
 
 print p('svn versio: $Id$'.br.
-	'hg versio: $HgId: vokomail.pl 25:f84c821050c8 2009/01/07 18:24:08 Wieland $');
+	'hg versio: $HgId: vokomail.pl 26:2c4b4a6136bb 2009/01/15 14:24:06 Wieland $');
 
 print end_html();
 
