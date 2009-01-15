@@ -35,7 +35,7 @@ sub encode2 {
   print pre(escapeHTML("encode ".Encode::encode($enc, $str)))."\n" if $verbose;
 #  print pre(escapeHTML("encode ".Encode::encode($enc, $str)))."\n" if $verbose;
 
-  $str =~ s/&(?![a-zA-Z0-9_]+;)/&amp;/g;
+  $str =~ s/&(?![#a-zA-Z0-9_]+;)/&amp;/g;
 
   # <!-- e-aj literoj -->
   $str =~ s/\x{0108}/&Ccirc;/g;
