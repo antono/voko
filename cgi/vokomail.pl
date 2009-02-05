@@ -964,7 +964,7 @@ via retadreso estas $ENV{REMOTE_ADDR}<br>
 EOD
 
 print p('svn versio: $Id$'.br.
-	'hg versio: $HgId: vokomail.pl 28:6f77d7d9ab4e 2009/02/05 22:31:20 Wieland $');
+	'hg versio: $HgId: vokomail.pl 29:ad27a9729bdd 2009/02/05 22:52:00 Wieland $');
 
 print end_html();
 
@@ -1016,6 +1016,9 @@ sub checkxml {
       $err =~ s/In the attribute ([^ \n]*) of element ([^ \n]*), ([^ \n]*) is not one of the allowed values/Cxe la atributo $1 de la kodero $2, $3 ne estas permesata./smg;
       $err =~ s/Document ends too soon/Dokumento finis, sed mankis finkodero/smg;
 	  $err =~ s/Value of attribute is unquoted/Mankas citiloj por la valoro de la atributo/smg;
+	  $err =~ s/Illegal character ([^ \n]*) in attribute value/Malpermesita signo $1 en atributa valoro/smg;
+	  $err =~ s/Expected whitespace or tag end in start tag/Atendas spacon aux koderfinon en komencokodero/smg;
+	  $err =~ s/Expected name, but got ([^ \n]*) for attribute/Atendas nomon, sed trovis $1 kiel atributo/smg;
 
 
       autoEscape(1);
