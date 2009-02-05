@@ -637,7 +637,8 @@ EOD
     $x =~ s/<trd\slng=.*?<\/trd>\s*//smig;		    # forigo de bonaj trdoj
 #    print pre(escapeHTML("x=$x\n"));
 	if ($x =~ /(<trd.*?<\/trd>)/) {					# se restas trd, estas malbona
-	   print escapeHTML("Traduko $1")." ne havas lingvon.<br>\n";
+	  print escapeHTML("Traduko $1")." ne havas lingvon.<br>\n";
+      $ne_konservu = 11;
 	}
     autoEscape(0);
   }
@@ -963,7 +964,7 @@ via retadreso estas $ENV{REMOTE_ADDR}<br>
 EOD
 
 print p('svn versio: $Id$'.br.
-	'hg versio: $HgId: vokomail.pl 26:2c4b4a6136bb 2009/01/15 14:24:06 Wieland $');
+	'hg versio: $HgId: vokomail.pl 28:6f77d7d9ab4e 2009/02/05 22:31:20 Wieland $');
 
 print end_html();
 
@@ -1014,6 +1015,8 @@ sub checkxml {
       $err =~ s/The attribute ([^ \n]*) of element ([^ \n]*) is declared as ENUMERATION but is empty/La atributo $1 de la kodero $2 mankas/smg;
       $err =~ s/In the attribute ([^ \n]*) of element ([^ \n]*), ([^ \n]*) is not one of the allowed values/Cxe la atributo $1 de la kodero $2, $3 ne estas permesata./smg;
       $err =~ s/Document ends too soon/Dokumento finis, sed mankis finkodero/smg;
+	  $err =~ s/Value of attribute is unquoted/Mankas citiloj por la valoro de la atributo/smg;
+
 
       autoEscape(1);
       ($konteksto, $line, $char) = xml_context($err, $teksto);
