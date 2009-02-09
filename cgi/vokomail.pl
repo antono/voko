@@ -633,8 +633,8 @@ EOD
   { my $x = $xml2;		# cxu cxio trd havas lng aux estas en trdgrp kun lng?
     autoEscape(1);
 #    print pre(escapeHTML("x=$x\n"));
-    $x =~ s/<trdgrp\slng=.*?<\/trdgrp>\s*//smig;	# forigo de bonaj trdgrpoj
-    $x =~ s/<trd\slng=.*?<\/trd>\s*//smig;		    # forigo de bonaj trdoj
+    $x =~ s/<trdgrp\s+lng\s*=.*?<\/trdgrp>\s*//smig;	# forigo de bonaj trdgrpoj
+    $x =~ s/<trd\s+lng\s*=.*?<\/trd>\s*//smig;		    # forigo de bonaj trdoj
 #    print pre(escapeHTML("x=$x\n"));
 	if ($x =~ /(<trd.*?<\/trd>)/) {					# se restas trd, estas malbona
 	  print escapeHTML("Traduko $1")." ne havas lingvon.<br>\n";
@@ -646,7 +646,7 @@ EOD
   while ($xml2 =~ /<ref([^g>][^>]*)>/gi) {
     my $ref = $1;
 #    print "ref = $ref<br>\n" if $debug;
-    if ($ref !~ /cel="([^"]+?)"/i) {
+    if ($ref !~ /cel\s*=\s*"([^"]+?)"/i) {
       autoEscape(1);
       print escapeHTML("Referenco <ref$ref>")." ne havas cel a&#365; la celo estas malplena.<br>\n";
       autoEscape(0);
@@ -964,7 +964,7 @@ via retadreso estas $ENV{REMOTE_ADDR}<br>
 EOD
 
 print p('svn versio: $Id$'.br.
-	'hg versio: $HgId: vokomail.pl 29:ad27a9729bdd 2009/02/05 22:52:00 Wieland $');
+	'hg versio: $HgId: vokomail.pl 30:b3945649bc4b 2009/02/09 23:05:48 Wieland $');
 
 print end_html();
 
@@ -999,7 +999,7 @@ sub checkxml {
 
     if ($err) {
       $ne_konservu = 1;
-      my $ret = "XML check malsukcesis - Eraro";
+      my $ret = "XML kontrolo malsukcesis - Eraro";
 
       $err =~ s/^Warning: /Atentu: /smg;
       $err =~ s/^Error: /Eraro: /smg;
