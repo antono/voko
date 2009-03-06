@@ -29,6 +29,7 @@ my $revo_base    = "$homedir/html/revo";
 
 $ENV{'LD_LIBRARY_PATH'} = '/var/www/web277/files/lib';
 $ENV{'PATH'} = "$ENV{'PATH'}:/var/www/web277/files/bin";
+$ENV{'LOCPATH'} = "$homedir/files/locale";
 autoEscape(0);
 
 my $JSCRIPT=<<'END';
@@ -396,6 +397,9 @@ if ($xmlTxt) {
 #  $debugmsg .= "wrap -> $xmlTxt\n <- end wrap";
 }
 my $xml2 = revo::encode::encode2($xmlTxt, 20) if $xmlTxt;
+my $redaktanto = param('redaktanto') || cookie(-name=>'redaktanto') || 'via registrita retpo&#349;ta adreso';
+my $debug = $redaktanto eq 'wieland@wielandpusch.de';
+my $enc = "utf-8";
 
 #$debugmsg .= "xmlTxt = $xmlTxt\n";
 
@@ -434,16 +438,18 @@ EOD
   open IN, "<", "$homedir/html/revo/xml/$art.xml" or die "open";
   $xml = join '', <IN>;
   close IN;
+
+#  $debugmsg .= "xml=\n$xml" if $debug;
+  $xml = Encode::decode($enc, $xml);
+#  $debugmsg .= "xml=\n$xml" if $debug;
+#  $debugmsg .= "xml=\n$xml" if $debug;
   $xml = revo::decode::rvdecode($xml);
+#  $debugmsg .= "xml=\n$xml" if $debug;
 }
-my $enc = "utf-8";
-$xml = Encode::decode($enc, $xml);
 my $sxangxo = Encode::decode($enc, param('sxangxo'));
-my $redaktanto = param('redaktanto') || cookie(-name=>'redaktanto') || 'via registrita retposxta adreso';
 my $mrk = param('mrk');
 my ($pos, $line, $lastline) = (0, 0, 1);
 my ($prelines, $postlines);
-my $debug = $redaktanto eq 'wieland@wielandpusch.de';
 
 my ($checklng, $checkxml, $errline, $errchar);
 ($checkxml, $errline, $errchar) = checkxml($xml2) if $xml2;
@@ -585,12 +591,12 @@ print <<'EOD';
 <div class="borderc8 backgroundc1" style="border-style: solid; border-width: medium; padding: 0.3em 0.5em;">
 <p><span style="color: rgb(207, 118, 6); font-size: 140%;"><b>Anta&#365;rigardo</b></span></p>
 EOD
-  if ($debug) {
+#  if ($debug) {
 #    print pre('open xalan');
 #    autoEscape(1);
 #    print pre(escapeHTML("xml2=\n$xml2"));
 #    autoEscape(0);
-  }
+#  }
   chdir($revo_base."/xml") or die "chdir";
 
   my $pid = IPC::Open3::open3(\*CHLD_IN, \*CHLD_OUT, \*CHLD_ERR,
@@ -607,6 +613,33 @@ EOD
 #  open IN, "<", "$homedir/html/revo/art/$art.html" or die "open";
 #  my $html = join '', <IN>;
 #  close IN;
+
+  $html =~ s#<!DOCTYPE .*?>##sm;
+  while ($html =~ m#<!--\[\[\s*ref="(.*?)"\s*\]\]-->\s*#smg) {
+    my $ref = $1;
+	$ref =~ tr/./_/;
+    $html =~ s##<a href="../tez/tz_$ref.html" target="indekso"><img src="../smb/tezauro.png" alt="TEZ" title="al la tezaŭro" border="0"></a>#;
+  }
+  
+  # nur por beligi
+  $html =~ s#</title>\n<script#</title><script#sm;
+  $html =~ s#</script>\n</head>#</script></head>#sm;
+  $html =~ s#<(h1|h2|dl|dd)>\n<#<$1><#smg;
+  $html =~ s#</(h1|h2|h3)>\s+#</$1>#smg;
+  $html =~ s#</(span)>\s+<#</$1><#smg;
+  $html =~ s#</(dd|dl)>\s+<a#</$1><a#smg;
+  $html =~ s#\n(       <a href="\#lng_)#\n   $1#sm;
+  $html =~ s#<br>\n</div>#<br></div>#sm;
+  $html =~ s#</pre>\n</div>#</pre></div>#sm;
+  $html =~ s#<hr>\n<span class="redakto">#<hr><span class="redakto">#sm;
+  $html =~ s#<br>\s+</body>#<br></body>#sm;
+  $html =~ s#</html>\n#</html>#sm;
+
+  if ($debug) {
+    open HTML, ">", "../art2/$art.html" or die "open write html";
+	print HTML $html;
+    close HTML;
+  }
 
   $html =~ s#href="../stl/#href="/revo/stl/#smg;
   $html =~ s#src="../smb/#src="/revo/smb/#smg;
@@ -964,7 +997,7 @@ via retadreso estas $ENV{REMOTE_ADDR}<br>
 EOD
 
 print p('svn versio: $Id$'.br.
-	'hg versio: $HgId: vokomail.pl 30:b3945649bc4b 2009/02/09 23:05:48 Wieland $');
+	'hg versio: $HgId: vokomail.pl 31:171f59db3712 2009/03/06 22:12:57 Wieland $');
 
 print end_html();
 
