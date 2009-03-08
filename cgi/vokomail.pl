@@ -121,6 +121,7 @@ function cxigi(b, key) {
 
 function klavo(event) {
   var key = event.keyCode ? event.keyCode : event.which ? event.which : event.charCode;
+//  alert(key);
   if (key == 13) {
     var txtarea = get_ta();
     var selText, isSample = false;
@@ -207,7 +208,7 @@ function klavo(event) {
         return false;
       }
     }
-  } else if (key == 84 || key == 116) {   // T or t
+  } else if (key == 84 || key == 116 || key == 1090 || key == 1058) {   // T or t or kir-t or kir-T
     if (event.altKey) {	// shortcut alt-t  --> trd
       insertTags2('<trd lng="',document.getElementById('trdlng').value,'">','</trd>','');
     }
@@ -997,7 +998,7 @@ via retadreso estas $ENV{REMOTE_ADDR}<br>
 EOD
 
 print p('svn versio: $Id$'.br.
-	'hg versio: $HgId: vokomail.pl 31:171f59db3712 2009/03/06 22:12:57 Wieland $');
+	'hg versio: $HgId: vokomail.pl 32:b4b0a6ed8205 2009/03/08 13:35:31 Wieland $');
 
 print end_html();
 
