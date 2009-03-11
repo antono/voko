@@ -72,7 +72,8 @@ top.document.title = "Reta Vortaro, serĉo de \\\"$sercxata\\\"";
 END
 
 if ($formato eq "txt") {
-  print header( -type    => 'text/plain'
+  print header( -type    => 'text/plain',
+				-charset => 'utf-8',
   );
 } elsif ($formato eq "idx") {
   print header(-charset=>'utf-8');
@@ -219,7 +220,7 @@ if ($regulira) {
 }
 
 # se vi trovis nur unu rezulton, tuj malfermi gxin
-if (scalar keys %trovitajPagxoj == 1) {
+if (scalar keys %trovitajPagxoj == 1 and $formato ne "txt") {
   print '<script type="text/javascript">' . "\n";
   print '<!--' . "\n";
 
@@ -240,7 +241,8 @@ if (scalar keys %trovitajPagxoj == 1) {
 $dbh->disconnect() or die "DB disconnect ne funkcias";
   
 #print h1("Fino.");
-  print "<br>Neniu trafo..." if $neniu_trafo;
+  print "<br>" if $neniu_trafo and $formato ne "txt";
+  print "Neniu trafo..." if $neniu_trafo;
 
   print <<EOD if $formato ne "txt" and $formato ne "idx";
 
@@ -377,14 +379,25 @@ sub MontruRezultojn
       $anchor = $$ref{'drv_mrk'};
       $lng_nomo = "esperante";
       $lng_nomo .= " ($preferata_lingvo)" if $preferata_lingvo;
-      { my $sep = " (<a target=\"precipa\" href=\"/revo/art/$$ref{'art_amrk'}.html#lng_$preferata_lingvo\">";
+      if ($formato eq "txt") {
+	    foreach (split ",", param("trd")) {
+          $klr .= "|";
+  	      my $sep;
+          $sth2->execute($$ref{'drv_id'}, $_);
+          while (my $ref2 = $sth2->fetchrow_hashref()) {
+            $klr .= $sep.$$ref2{'trd_teksto'};
+            $sep = ",";
+          }
+		}
+	  } else {
+  	    my $sep = " (<a target=\"precipa\" href=\"/revo/art/$$ref{'art_amrk'}.html#lng_$preferata_lingvo\">";
         $sth2->execute($$ref{'drv_id'}, $preferata_lingvo);
         while (my $ref2 = $sth2->fetchrow_hashref()) {
           $klr .= $sep.$$ref2{'trd_teksto'};
           $sep = ", ";
         }
+        $klr .= "</a>)" if $klr;
       }
-      $klr .= "</a>)" if $klr;
     } else {
       $trd = $$ref{'trd_teksto'};
       $anchor = $$ref{'drv_mrk'};
@@ -407,7 +420,7 @@ sub MontruRezultojn
 
     if ($formato eq "txt") {
       if ($lng eq 'eo') {
-        print "$trd, /revo/art/$$ref{'art_amrk'}.html#$anchor\n";
+        print "$trd, /revo/art/$$ref{'art_amrk'}.html#$anchor$klr\n";
       }
     } elsif ($formato eq "idx") {
       if ($lng eq 'eo') {
