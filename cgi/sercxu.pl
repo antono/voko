@@ -26,6 +26,8 @@ my $cx2cx = param('x');
 $cx2cx = "checked" if $cx2cx;
 my $neniu_trafo = 1;
 my $formato = param('formato');
+my $param_lng = param('lng');
+$param_lng = '' unless $param_lng;
 
 my $pado = "..";
 $pado = "/revo" if param('pado') eq 'revo';
@@ -36,6 +38,9 @@ if ($kadroj) {
 
   $sercxata = uri_escape($sercxata);
 
+  $sercxata .= "&lng=".uri_escape(param('lng')) if param('lng');
+  $sercxata .= "&trd=".uri_escape(param('trd')) if param('trd');
+  
   open IN, "<../revo/index.html" or die "sercxo kun kadroj ne eblas cxar mankas indekso";
   while (<IN>) {
     s/src="inx\/_eo.html"/src="sercxu.pl?cx=1&sercxata=$sercxata"/;
@@ -301,42 +306,67 @@ sub Sercxu
 
 #  print h2("qry = $addqry") if $verbose;
 
-  $sth2 = $dbh->prepare(
-    "SELECT t.trd_teksto
-     FROM trd t, snc s
-      WHERE s.snc_drv_id = ?
-        AND t.trd_snc_id = s.snc_id
-        AND t.trd_lng = ?
-      ORDER BY t.trd_teksto");
+  if ($param_lng eq 'eo' or $param_lng eq '') {
+    $sth2 = $dbh->prepare(
+      "SELECT t.trd_teksto
+       FROM trd t, snc s
+        WHERE s.snc_drv_id = ?
+          AND t.trd_snc_id = s.snc_id
+          AND t.trd_lng = ?
+        ORDER BY t.trd_teksto");
   
-  $sth = $dbh->prepare("SELECT d.*, a.*, v.*, d.drv_teksto_ci " . $komparo . " ? drv_match
-  FROM art a, drv d LEFT OUTER JOIN var v ON d.drv_id = v.var_drv_id
-  WHERE (d.drv_teksto_ci " . $komparo . " ? or v.var_teksto_ci " . $komparo . " ?)
-    AND a.art_id = d.drv_art_id$addqry GROUP BY d.drv_id ORDER BY d.drv_teksto_ci, d.drv_teksto desc, a.art_amrk");
-  eval {
-    $sth->execute($sercxata2_eo, $sercxata2_eo, $sercxata2_eo);
-  };
-  if ($@) {
-    # $sth->err and $DBI::err will be true if error was from DBI
-    if ($sth->err == 1139) {	# Got error 'brackets ([ ]) not balanced
-      print "Eraro: La rektaj krampoj ([ ]) ne kongruas.<br>\n";
+    $sth = $dbh->prepare("SELECT d.*, a.*, v.*, d.drv_teksto_ci " . $komparo . " ? drv_match
+    FROM art a, drv d LEFT OUTER JOIN var v ON d.drv_id = v.var_drv_id
+    WHERE (d.drv_teksto_ci " . $komparo . " ? or v.var_teksto_ci " . $komparo . " ?)
+      AND a.art_id = d.drv_art_id$addqry GROUP BY d.drv_id ORDER BY d.drv_teksto_ci, d.drv_teksto desc, a.art_amrk");
+    eval {
+      $sth->execute($sercxata2_eo, $sercxata2_eo, $sercxata2_eo);
+    };
+    if ($@) {
+      # $sth->err and $DBI::err will be true if error was from DBI
+      if ($sth->err == 1139) {	# Got error 'brackets ([ ]) not balanced
+        print "Eraro: La rektaj krampoj ([ ]) ne kongruas.<br>\n";
+      } else {
+        print "Err ".$sth->err." - $@";
+      }
     } else {
-      print "Err ".$sth->err." - $@";
+      MontruRezultojn($sth, 'eo', $preferata_lingvo, $sth2);
     }
-  } else {
-    MontruRezultojn($sth, 'eo', $preferata_lingvo, $sth2);
   }
+  $sth2 = undef;
 
-  if ($formato ne "txt" and $formato ne "idx") {
-    $sth = $dbh->prepare(
-      "SELECT t.*, s.*, d.*, a.*, l.lng_nomo
-       FROM trd t, snc s, drv d, art a, lng l
-        WHERE t.trd_teksto_ci " . $komparo . " ?
+  if (($formato ne "txt" or $param_lng ne 'eo') and $formato ne "idx") {
+    if ($formato ne "idx" and param("trd")) {
+      $sth2 = $dbh->prepare(
+        "SELECT t.*
+         FROM trd t
+         WHERE t.trd_lng = ?
+		  AND t.trd_snc_id = ?
+        ORDER BY t.trd_teksto_ci");
+	}
+    if ($param_lng) {	# nur unu lingvo
+	  $preferata_lingvo = $param_lng;
+      $sth = $dbh->prepare(
+        "SELECT t.*, s.*, d.*, a.*, l.lng_nomo
+         FROM trd t, snc s, drv d, art a, lng l
+         WHERE t.trd_teksto_ci " . $komparo . " ?
+          AND t.trd_lng = ?
+		  AND t.trd_snc_id = s.snc_id
+          AND t.trd_lng = l.lng_kodo
+          AND d.drv_id = s.snc_drv_id
+          AND a.art_id = d.drv_art_id
+        ORDER BY l.lng_nomo, t.trd_teksto_ci, d.drv_teksto_ci, s.snc_numero");
+	} else {			# cxiuj lingvojn
+      $sth = $dbh->prepare(
+        "SELECT t.*, s.*, d.*, a.*, l.lng_nomo
+         FROM trd t, snc s, drv d, art a, lng l
+         WHERE t.trd_teksto_ci " . $komparo . " ?
           AND t.trd_snc_id = s.snc_id
           AND t.trd_lng = l.lng_kodo
           AND d.drv_id = s.snc_drv_id
           AND a.art_id = d.drv_art_id
         ORDER BY abs(strcmp(t.trd_lng, ?)), l.lng_nomo, t.trd_teksto_ci, d.drv_teksto_ci, s.snc_numero");
+	}
 
     eval {
       $sth->execute($sercxata2, $preferata_lingvo);
@@ -350,7 +380,7 @@ sub Sercxu
     } else {
 #      print '<small>query: ' . tv_interval ($tempo) . ' sekundoj</small><p>';
 #      $tempo = [gettimeofday];
-      MontruRezultojn($sth, '', $preferata_lingvo);
+      MontruRezultojn($sth, $param_lng, $preferata_lingvo, $sth2);
 #      print '<small>montrado: ' . tv_interval ($tempo) . ' sekundoj</small><p>';
 #      print '<font size=1>&nbsp;<p /></font>' . "\n";
     }
@@ -390,7 +420,7 @@ sub MontruRezultojn
           }
 		}
 	  } else {
-  	    my $sep = " (<a target=\"precipa\" href=\"/revo/art/$$ref{'art_amrk'}.html#lng_$preferata_lingvo\">";
+ 	    my $sep = " (<a target=\"precipa\" href=\"/revo/art/$$ref{'art_amrk'}.html#lng_$preferata_lingvo\">";
         $sth2->execute($$ref{'drv_id'}, $preferata_lingvo);
         while (my $ref2 = $sth2->fetchrow_hashref()) {
           $klr .= $sep.$$ref2{'trd_teksto'};
@@ -402,14 +432,30 @@ sub MontruRezultojn
       $trd = $$ref{'trd_teksto'};
       $anchor = $$ref{'drv_mrk'};
       $anchor = $$ref{'snc_mrk'} if $$ref{'snc_numero'}; 
-      $klr = " (<a target=\"precipa\" href=\"/revo/art/$$ref{'art_amrk'}.html#$anchor\">$$ref{'drv_teksto'}";
-      $klr .= "  <sup><i>$$ref{'snc_numero'}</i></sup>" if $$ref{'snc_numero'};
-      $klr .= "</a>)";
+      if ($formato eq "txt") {
+	    foreach (split ",", param("trd")) {
+          $klr .= "|";
+  	      my $sep;
+		  if ($_ eq "eo") {
+		    $klr .= $$ref{'drv_teksto'};
+		  } else {
+            $sth2->execute($_, $$ref{'snc_id'});
+            while (my $ref2 = $sth2->fetchrow_hashref()) {
+              $klr .= $sep.$$ref2{'trd_teksto'};
+              $sep = ",";
+		    }
+	      }
+        }
+	  } else {
+        $klr = " (<a target=\"precipa\" href=\"/revo/art/$$ref{'art_amrk'}.html#$anchor\">$$ref{'drv_teksto'}";
+        $klr .= "  <sup><i>$$ref{'snc_numero'}</i></sup>" if $$ref{'snc_numero'};
+        $klr .= "</a>)";
+        $anchor = "lng_$lng";
+	  }
       $lng = $$ref{'trd_lng'};
       $lng_nomo = $$ref{'lng_nomo'};
       $lng_nomo =~ s/a$/e/;
       $lng_nomo .= " (preferata)" if $lng eq $preferata_lingvo;
-      $anchor = "lng_$lng";
     }
     $trovitajPagxoj{$$ref{'art_amrk'}} = $anchor if $lng eq 'eo' or $lng eq $preferata_lingvo;
     if ($formato ne "txt" and $formato ne "idx") {
@@ -419,9 +465,11 @@ sub MontruRezultojn
     $last_lng = $lng;
 
     if ($formato eq "txt") {
-      if ($lng eq 'eo') {
+#      if ($lng eq 'eo') {
         print "$trd, /revo/art/$$ref{'art_amrk'}.html#$anchor$klr\n";
-      }
+#      } else {
+#	    print "$trd, /revo/art/$$ref{'art_amrk'}.html#$anchor\n";
+#	  }
     } elsif ($formato eq "idx") {
       if ($lng eq 'eo') {
         next unless $$ref{'drv_match'};
