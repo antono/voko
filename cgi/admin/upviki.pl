@@ -28,6 +28,7 @@ sub mylc {	# lower case pro esperantaj signoj
   $a =~ s/Ĵ/ĵ/g;
   $a =~ s/Ĥ/ĥ/g;
   $a =~ s/Ŭ/ŭ/g;
+  $a =~ s/Ĝ/ĝ/g;
   $a =~ s/Ŝ/ŝ/g;
   return lc $a;
 }
