@@ -3,7 +3,7 @@ BODY {background: #F5F5D5;
 H1 {font-size: large; color: #404040}
 H2 {font-size: medium; color: #404040}
 
-HR { none; border-style: dotted; border-color: black; 
+HR {border-style: dotted; border-color: black; 
   border-top-width: 2px;
   border-bottom-width: 0px;
   margin-top: 4ex}
@@ -50,10 +50,3 @@ td.enhavo { padding-left: 1ex; padding-top: 0.5ex;
   border-style: solid; border-color: gray;
   border-top-width: 0px; border-left-width: 1px;
   border-right-width: 1px; border-bottom-width: 2px}
-
-
-
-
-
-
-

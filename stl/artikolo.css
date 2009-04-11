@@ -19,7 +19,7 @@ H2 {color: #000000;
     }
 H3 {font-size: 90%; border-top-width: 2px; border-top-style: solid; 
   border-top-color: #E0E0A0; padding-top: 0.5ex}
-HR { none; border-style: dotted; border-color: black; 
+HR {border-style: dotted; border-color: black; 
   border-top-width: 2px;
   border-bottom-width: 0px;
   margin-top: 4ex}
@@ -109,6 +109,3 @@ IMG.bld {  border-color: #cccccc; border-width: 2px; border-style: outset}
 
 /* formuloj */
 .frm { font-style: normal }
-
-
-
