@@ -709,4 +709,76 @@
 <!ENTITY ar_8       "&#x0668;"> 
 <!ENTITY ar_9       "&#x0669;"> 
 
+<!-- literoj uzataj en la persa. -->
+<!ENTITY fa_hamze      "&#x0621;">
+<!ENTITY fa_a          "&#x0622;">
+<!ENTITY fa_alef       "&#x0627;">
+<!ENTITY fa_hamze_a    "&#x0623;">
+<!ENTITY fa_hamze_u    "&#x0624;">
+<!ENTITY fa_hamze_e    "&#x0625;">
+<!ENTITY fa_hamze_i    "&#x0626;">
+<!ENTITY fa_be         "&#x0628;">
+<!ENTITY fa_pe         "&#x067E;">
+<!ENTITY fa_te         "&#x062A;">
+<!ENTITY fa_se         "&#x062B;">
+<!ENTITY fa_gxim       "&#x062C;">
+<!ENTITY fa_cxe        "&#x0686;">
+<!ENTITY fa_he         "&#x062D;">
+<!ENTITY fa_hxe        "&#x062E;">
+<!ENTITY fa_dal        "&#x062F;">
+<!ENTITY fa_zal        "&#x0630;">
+<!ENTITY fa_re         "&#x0631;">
+<!ENTITY fa_ze         "&#x0632;">
+<!ENTITY fa_jxe        "&#x0698;">
+<!ENTITY fa_sin        "&#x0633;">
+<!ENTITY fa_sxin       "&#x0634;">
+<!ENTITY fa_sat        "&#x0635;">
+<!ENTITY fa_zat        "&#x0636;">
+<!ENTITY fa_ta         "&#x0637;">
+<!ENTITY fa_za         "&#x0638;">
+<!ENTITY fa_ein        "&#x0639;">
+<!ENTITY fa_qein       "&#x063A;">
+<!ENTITY fa_fe         "&#x0641;">
+<!ENTITY fa_qaf        "&#x0642;">
+<!ENTITY fa_kaf        "&#x06A9;">
+<!ENTITY fa_gaf        "&#x06AF;">
+<!ENTITY fa_lam        "&#x0644;">
+<!ENTITY fa_mim        "&#x0645;">
+<!ENTITY fa_nun        "&#x0646;">
+<!ENTITY fa_vav        "&#x0648;">
+<!ENTITY fa_heh        "&#x0647;">
+<!ENTITY fa_te_marbute "&#x0629;">
+<!ENTITY fa_heh_ezafe  "&#x06C0;">
+<!ENTITY fa_ye         "&#x06CC;">
+
+
+<!ENTITY fa_0          "&#x06F0;">
+<!ENTITY fa_1          "&#x06F1;">
+<!ENTITY fa_2          "&#x06F2;">
+<!ENTITY fa_3          "&#x06F3;">
+<!ENTITY fa_4          "&#x06F4;">
+<!ENTITY fa_5          "&#x06F5;">
+<!ENTITY fa_6          "&#x06F6;">
+<!ENTITY fa_7          "&#x06F7;">
+<!ENTITY fa_8          "&#x06F8;">
+<!ENTITY fa_9          "&#x06F9;">
+
+<!ENTITY fa_fathatan   "&#x064B;">
+<!ENTITY fa_zammatan   "&#x064C;">
+<!ENTITY fa_kasratan   "&#x064D;">
+<!ENTITY fa_fathe      "&#x064E;">
+<!ENTITY fa_zamme      "&#x064F;">
+<!ENTITY fa_kasre      "&#x0650;">
+<!ENTITY fa_tasxdid    "&#x0651;">
+<!ENTITY fa_sokun      "&#x0652;">
+<!ENTITY fa_madde_sur  "&#x0653;">
+<!ENTITY fa_hamze_sur  "&#x0654;">
+<!ENTITY fa_hamze_sub  "&#x0655;">
+
+<!ENTITY fa_komo       "&#x060C;">
+<!ENTITY fa_punktokomo "&#x061B;">
+<!ENTITY fa_demando    "&#x061F;">
+
+<!ENTITY fa_zwnj       "&#x200C;">
+<!ENTITY fa_zwj        "&#x200D;">
 
