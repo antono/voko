@@ -615,11 +615,21 @@ EOD
 #  my $html = join '', <IN>;
 #  close IN;
 
-  $html =~ s#<!DOCTYPE .*?>##sm;
-  while ($html =~ m#<!--\[\[\s*ref="(.*?)"\s*\]\]-->\s*#smg) {
-    my $ref = $1;
-	$ref =~ tr/./_/;
-    $html =~ s##<a href="../tez/tz_$ref.html" target="indekso"><img src="../smb/tezauro.png" alt="TEZ" title="al la tezaŭro" border="0"></a>#;
+  {
+    $html =~ s#<!DOCTYPE .*?>##sm;
+    my $sth = $dbh->prepare("SELECT count(*) FROM r2_tezauro WHERE tez_fontref = ?");
+    while ($html =~ m#<!--\[\[\s*ref="(.*?)"\s*\]\]-->\s*#smg) {
+      my $ref = $1;
+      $sth->execute($1);
+      my ($tez_ekzistas) = $sth->fetchrow_array();
+	  print pre("tez=$1 $tez_ekzistas") if $debug;
+      if ($tez_ekzistas) {
+  	    $ref =~ tr/./_/;
+        $html =~ s##<a href="/revo/tez/tz_$ref.html" target="indekso"><img src="../smb/tezauro.png" alt="TEZ" title="al la tezaŭro" border="0"></a>#;
+	  } else {
+        $html =~ s###;
+	  }
+	}
   }
   
   # nur por beligi
@@ -749,8 +759,11 @@ EOD
   if ($flag) {
     print "Esperantaj signoj malunikodita.<br>\n";
   }
-  if ($sxangxo =~ s/([\x{80}-\x{10FFFF}]+)/<span style="color:red">$1<\/span>/g) { # kororigu ne-askiajn signojn
+  if ($sxangxo =~ s/([\x{80}-\x{10FFFF}]+)/<span style="color:red">$1<\/span>/g) { # forigu ne-askiajn signojn
     print "Eraro: teksto havas ne-askiaj signoj: $sxangxo".br."\n";
+    $ne_konservu = 3;
+  } elsif ($sxangxo =~ s/(--)/<span style="color:red">$1<\/span>/g) { # forigu '--'
+    print "Eraro: '--' estas malpermesita en komento: $sxangxo".br."\n";
     $ne_konservu = 3;
   } elsif (!param('nova')) {
     if ($sxangxo) {
@@ -998,7 +1011,7 @@ via retadreso estas $ENV{REMOTE_ADDR}<br>
 EOD
 
 print p('svn versio: $Id$'.br.
-	'hg versio: $HgId: vokomail.pl 32:b4b0a6ed8205 2009/03/08 13:35:31 Wieland $');
+	'hg versio: $HgId: vokomail.pl 34:0c08b57f6f24 2009/04/26 16:43:31 Wieland $');
 
 print end_html();
 
