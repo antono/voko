@@ -480,7 +480,7 @@ if ($errline) {
   }
 } else {
   my %lng;
-  open IN, "<../revo/cfg/lingvoj.xml" or die "ne povas malfermi lingvoj.xml";
+  open IN, "<$revo_base/cfg/lingvoj.xml" or die "ne povas malfermi lingvoj.xml";
   while (<IN>) {
     if (/<lingvo kodo="([^"]+)">([^<]+)<\/lingvo>/) {
 #      $debugmsg .= "lng $1 -> $2\n";
@@ -558,7 +558,7 @@ EOD
 my (%fak, %stl);
 if ($art) {
   %fak = ('' => '');
-  open IN, "<../revo/cfg/fakoj.xml" or die "ne povas malfermi fakoj.xml";
+  open IN, "<$revo_base/cfg/fakoj.xml" or die "ne povas malfermi fakoj.xml";
   while (<IN>) {
     if (/<fako kodo="([^"]+)"[^>]*>([^<]+)<\/fako>/i) {
 #      $debugmsg .= "fak $1 -> $2\n";
@@ -569,7 +569,7 @@ if ($art) {
   close IN;
 
   %stl = ('' => '');
-  open IN, "<../revo/cfg/stiloj.xml" or die "ne povas malfermi stiloj.xml";
+  open IN, "<$revo_base/cfg/stiloj.xml" or die "ne povas malfermi stiloj.xml";
   while (<IN>) {
     if (/<stilo kodo="([^"]+)"[^>]*>([^<]+)<\/stilo>/i) {
 #      $debugmsg .= "stl $1 -> $2\n";
@@ -1011,7 +1011,7 @@ via retadreso estas $ENV{REMOTE_ADDR}<br>
 EOD
 
 print p('svn versio: $Id$'.br.
-	'hg versio: $HgId: vokomail.pl 34:0c08b57f6f24 2009/04/26 16:43:31 Wieland $');
+	'hg versio: $HgId: vokomail.pl 36:4525ff2a7ee7 2009/04/30 09:20:25 Wieland $');
 
 print end_html();
 
@@ -1027,7 +1027,7 @@ sub checkxml {
 #    # mallongigu Log al 20 linioj
 #    $teksto =~ s/(<!--\s+\044Log(?:[^\n]*\n){20})(?:[^\n]*\n)*(-->)/$1$2/s;
 
-    chdir($revo_base) or die "chdir";
+    chdir($revo_base."/xml") or die "chdir";
 #    $debugmsg .= "checkxml: teksto = $teksto\n";
     my $pid = IPC::Open3::open3(\*CHLD_IN, \*CHLD_OUT, \*CHLD_ERR,
                     'rxp -Vs >/dev/null');
