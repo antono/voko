@@ -723,6 +723,79 @@ sub rvdecode {
   $str =~ s/&ar_8;/\x{0668}/g;
   $str =~ s/&ar_9;/\x{0669}/g;
   
+  # <!-- literoj uzataj en la persa. -->
+  $str =~ s/&fa_hamze;/\x{0621}/g;
+  $str =~ s/&fa_a;/\x{0622}/g;
+  $str =~ s/&fa_alef;/\x{0627}/g;
+  $str =~ s/&fa_hamze_a;/\x{0623}/g;
+  $str =~ s/&fa_hamze_u;/\x{0624}/g;
+  $str =~ s/&fa_hamze_e;/\x{0625}/g;
+  $str =~ s/&fa_hamze_i;/\x{0626}/g;
+  $str =~ s/&fa_be;/\x{0628}/g;
+  $str =~ s/&fa_pe;/\x{067E}/g;
+  $str =~ s/&fa_te;/\x{062A}/g;
+  $str =~ s/&fa_se;/\x{062B}/g;
+  $str =~ s/&fa_gxim;/\x{062C}/g;
+  $str =~ s/&fa_cxe;/\x{0686}/g;
+  $str =~ s/&fa_he;/\x{062D}/g;
+  $str =~ s/&fa_hxe;/\x{062E}/g;
+  $str =~ s/&fa_dal;/\x{062F}/g;
+  $str =~ s/&fa_zal;/\x{0630}/g;
+  $str =~ s/&fa_re;/\x{0631}/g;
+  $str =~ s/&fa_ze;/\x{0632}/g;
+  $str =~ s/&fa_jxe;/\x{0698}/g;
+  $str =~ s/&fa_sin;/\x{0633}/g;
+  $str =~ s/&fa_sxin;/\x{0634}/g;
+  $str =~ s/&fa_sat;/\x{0635}/g;
+  $str =~ s/&fa_zat;/\x{0636}/g;
+  $str =~ s/&fa_ta;/\x{0637}/g;
+  $str =~ s/&fa_za;/\x{0638}/g;
+  $str =~ s/&fa_ein;/\x{0639}/g;
+  $str =~ s/&fa_qein;/\x{063A}/g;
+  $str =~ s/&fa_fe;/\x{0641}/g;
+  $str =~ s/&fa_qaf;/\x{0642}/g;
+  $str =~ s/&fa_kaf;/\x{06A9}/g;
+  $str =~ s/&fa_gaf;/\x{06AF}/g;
+  $str =~ s/&fa_lam;/\x{0644}/g;
+  $str =~ s/&fa_mim;/\x{0645}/g;
+  $str =~ s/&fa_nun;/\x{0646}/g;
+  $str =~ s/&fa_vav;/\x{0648}/g;
+  $str =~ s/&fa_heh;/\x{0647}/g;
+  $str =~ s/&fa_te_marbute;/\x{0629}/g;
+  $str =~ s/&fa_heh_ezafe;/\x{06C0}/g;
+  $str =~ s/&fa_ye;/\x{06CC}/g;
+
+  $str =~ s/&fa_0;/\x{06F0}/g;
+  $str =~ s/&fa_1;/\x{06F1}/g;
+  $str =~ s/&fa_2;/\x{06F2}/g;
+  $str =~ s/&fa_3;/\x{06F3}/g;
+  $str =~ s/&fa_4;/\x{06F4}/g;
+  $str =~ s/&fa_5;/\x{06F5}/g;
+  $str =~ s/&fa_6;/\x{06F6}/g;
+  $str =~ s/&fa_7;/\x{06F7}/g;
+  $str =~ s/&fa_8;/\x{06F8}/g;
+  $str =~ s/&fa_9;/\x{06F9}/g;
+
+  $str =~ s/&fa_fathatan;/\x{064B}/g;
+  $str =~ s/&fa_zammatan;/\x{064C}/g;
+  $str =~ s/&fa_kasratan;/\x{064D}/g;
+  $str =~ s/&fa_fathe;/\x{064E}/g;
+  $str =~ s/&fa_zamme;/\x{064F}/g;
+  $str =~ s/&fa_kasre;/\x{0650}/g;
+  $str =~ s/&fa_tasxdid;/\x{0651}/g;
+  $str =~ s/&fa_sokun;/\x{0652}/g;
+  $str =~ s/&fa_madde_sur;/\x{0653}/g;
+  $str =~ s/&fa_hamze_sur;/\x{0654}/g;
+  $str =~ s/&fa_hamze_sub;/\x{0655}/g;
+
+  $str =~ s/&fa_komo;/\x{060C}/g;
+  $str =~ s/&fa_punktokomo;/\x{061B}/g;
+  $str =~ s/&fa_demando;/\x{061F}/g;
+
+  $str =~ s/&fa_zwnj;/\x{200C}/g;
+  $str =~ s/&fa_zwj;/\x{200D}/g;
+
+  
   $str =~ s/&amp;/&/g;
 
   delete $HTML::Entities::entity2char{quot};
