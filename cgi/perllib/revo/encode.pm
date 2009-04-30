@@ -561,8 +561,8 @@ sub encode2 {
   $str =~ s/\x{010f}/&dcaron;/g;
   $str =~ s/\x{0164}/&Tcaron;/g;
   $str =~ s/\x{0165}/&tcaron;/g;
-  $str =~ s/\x{016e}/&Uring ;/g;
-  $str =~ s/\x{016f}/&uring ;/g;
+  $str =~ s/\x{016e}/&Uring;/g;
+  $str =~ s/\x{016f}/&uring;/g;
 
   $str =~ s/\x{0139}/&Lacute;/g;
   $str =~ s/\x{013a}/&lacute;/g;
@@ -652,20 +652,20 @@ sub encode2 {
   $str =~ s/\x{#362}/&Umacr;/g;
 
   # <!-- kimraj -->
-  $str =~ s/\x{0176}/&Ycirc ;/g;
-  $str =~ s/\x{0177}/&ycirc ;/g;
+  $str =~ s/\x{0176}/&Ycirc;/g;
+  $str =~ s/\x{0177}/&ycirc;/g;
   $str =~ s/\x{1e80}/&Wgrave;/g;
   $str =~ s/\x{1e81}/&wgrave;/g;
   $str =~ s/\x{1e82}/&Wacute;/g;
   $str =~ s/\x{1e83}/&wacute;/g;
-  $str =~ s/\x{1e84}/&Wuml  ;/g;
-  $str =~ s/\x{1e85}/&wuml  ;/g;
+  $str =~ s/\x{1e84}/&Wuml;/g;
+  $str =~ s/\x{1e85}/&wuml;/g;
   $str =~ s/\x{1ef2}/&Ygrave;/g;
   $str =~ s/\x{1ef3}/&ygrave;/g;
-  $str =~ s/\x{0174}/&Wcirc ;/g;
-  $str =~ s/\x{0175}/&wcirc ;/g;
-  $str =~ s/\x{0178}/&Yuml  ;/g;
-  $str =~ s/\x{00ff}/&yuml  ;/g;
+  $str =~ s/\x{0174}/&Wcirc;/g;
+  $str =~ s/\x{0175}/&wcirc;/g;
+  $str =~ s/\x{0178}/&Yuml;/g;
+  $str =~ s/\x{00ff}/&yuml;/g;
 
   # <!-- arabaj -->
   $str =~ s/\x{0628}/&ba;/g;
@@ -734,6 +734,78 @@ sub encode2 {
   $str =~ s/\x{0668}/&ar_8;/g;
   $str =~ s/\x{0669}/&ar_9;/g;
   
+  # <!-- literoj uzataj en la persa. -->
+  $str =~ s/\x{0621}/&fa_hamze;/g;
+  $str =~ s/\x{0622}/&fa_a;/g;
+  $str =~ s/\x{0627}/&fa_alef;/g;
+  $str =~ s/\x{0623}/&fa_hamze_a;/g;
+  $str =~ s/\x{0624}/&fa_hamze_u;/g;
+  $str =~ s/\x{0625}/&fa_hamze_e;/g;
+  $str =~ s/\x{0626}/&fa_hamze_i;/g;
+  $str =~ s/\x{0628}/&fa_be;/g;
+  $str =~ s/\x{067E}/&fa_pe;/g;
+  $str =~ s/\x{062A}/&fa_te;/g;
+  $str =~ s/\x{062B}/&fa_se;/g;
+  $str =~ s/\x{062C}/&fa_gxim;/g;
+  $str =~ s/\x{0686}/&fa_cxe;/g;
+  $str =~ s/\x{062D}/&fa_he;/g;
+  $str =~ s/\x{062E}/&fa_hxe;/g;
+  $str =~ s/\x{062F}/&fa_dal;/g;
+  $str =~ s/\x{0630}/&fa_zal;/g;
+  $str =~ s/\x{0631}/&fa_re;/g;
+  $str =~ s/\x{0632}/&fa_ze;/g;
+  $str =~ s/\x{0698}/&fa_jxe;/g;
+  $str =~ s/\x{0633}/&fa_sin;/g;
+  $str =~ s/\x{0634}/&fa_sxin;/g;
+  $str =~ s/\x{0635}/&fa_sat;/g;
+  $str =~ s/\x{0636}/&fa_zat;/g;
+  $str =~ s/\x{0637}/&fa_ta;/g;
+  $str =~ s/\x{0638}/&fa_za;/g;
+  $str =~ s/\x{0639}/&fa_ein;/g;
+  $str =~ s/\x{063A}/&fa_qein;/g;
+  $str =~ s/\x{0641}/&fa_fe;/g;
+  $str =~ s/\x{0642}/&fa_qaf;/g;
+  $str =~ s/\x{06A9}/&fa_kaf;/g;
+  $str =~ s/\x{06AF}/&fa_gaf;/g;
+  $str =~ s/\x{0644}/&fa_lam;/g;
+  $str =~ s/\x{0645}/&fa_mim;/g;
+  $str =~ s/\x{0646}/&fa_nun;/g;
+  $str =~ s/\x{0648}/&fa_vav;/g;
+  $str =~ s/\x{0647}/&fa_heh;/g;
+  $str =~ s/\x{0629}/&fa_te_marbute;/g;
+  $str =~ s/\x{06C0}/&fa_heh_ezafe;/g;
+  $str =~ s/\x{06CC}/&fa_ye;/g;
+
+  $str =~ s/\x{06F0}/&fa_0;/g;
+  $str =~ s/\x{06F1}/&fa_1;/g;
+  $str =~ s/\x{06F2}/&fa_2;/g;
+  $str =~ s/\x{06F3}/&fa_3;/g;
+  $str =~ s/\x{06F4}/&fa_4;/g;
+  $str =~ s/\x{06F5}/&fa_5;/g;
+  $str =~ s/\x{06F6}/&fa_6;/g;
+  $str =~ s/\x{06F7}/&fa_7;/g;
+  $str =~ s/\x{06F8}/&fa_8;/g;
+  $str =~ s/\x{06F9}/&fa_9;/g;
+
+  $str =~ s/\x{064B}/&fa_fathatan;/g;
+  $str =~ s/\x{064C}/&fa_zammatan;/g;
+  $str =~ s/\x{064D}/&fa_kasratan;/g;
+  $str =~ s/\x{064E}/&fa_fathe;/g;
+  $str =~ s/\x{064F}/&fa_zamme;/g;
+  $str =~ s/\x{0650}/&fa_kasre;/g;
+  $str =~ s/\x{0651}/&fa_tasxdid;/g;
+  $str =~ s/\x{0652}/&fa_sokun;/g;
+  $str =~ s/\x{0653}/&fa_madde_sur;/g;
+  $str =~ s/\x{0654}/&fa_hamze_sur;/g;
+  $str =~ s/\x{0655}/&fa_hamze_sub;/g;
+
+  $str =~ s/\x{060C}/&fa_komo;/g;
+  $str =~ s/\x{061B}/&fa_punktokomo;/g;
+  $str =~ s/\x{061F}/&fa_demando;/g;
+
+  $str =~ s/\x{200C}/&fa_zwnj;/g;
+  $str =~ s/\x{200D}/&fa_zwj;/g;
+
 
 #  $str = HTML::Entities::encode_entities_numeric($str, "\x{01D0}\x{014D}\x{012B}\x{01DC}\x{1000}-\x{10FFFF}"); 
   $str = HTML::Entities::encode_entities_numeric($str, "\x{80}-\x{10FFFF}"); 
