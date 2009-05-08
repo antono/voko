@@ -617,10 +617,10 @@ EOD
 
   {
     $html =~ s#<!DOCTYPE .*?>##sm;
-    my $sth = $dbh->prepare("SELECT count(*) FROM r2_tezauro WHERE tez_fontref = ?");
+    my $sth = $dbh->prepare("SELECT count(*) FROM r2_tezauro WHERE tez_fontref = ? or (tez_celref = ? and tez_tipo in ('sin','vid'))");
     while ($html =~ m#<!--\[\[\s*ref="(.*?)"\s*\]\]-->\s*#smg) {
       my $ref = $1;
-      $sth->execute($1);
+      $sth->execute($1,$1);
       my ($tez_ekzistas) = $sth->fetchrow_array();
 	  print pre("tez=$1 $tez_ekzistas") if $debug;
       if ($tez_ekzistas) {
@@ -1011,7 +1011,7 @@ via retadreso estas $ENV{REMOTE_ADDR}<br>
 EOD
 
 print p('svn versio: $Id$'.br.
-	'hg versio: $HgId: vokomail.pl 36:4525ff2a7ee7 2009/04/30 09:20:25 Wieland $');
+	'hg versio: $HgId: vokomail.pl 37:9b2b87e424d5 2009/05/08 16:55:23 Wieland $');
 
 print end_html();
 
