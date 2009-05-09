@@ -19,6 +19,7 @@ use Text::Tabs;
 use lib("/var/www/web277/files/perllib");
 use revo::decode;
 use revo::encode;
+use revo::xml2html;
 use revo::wrap;
 use revodb;
 
@@ -599,52 +600,9 @@ EOD
 #    autoEscape(0);
 #  }
   chdir($revo_base."/xml") or die "chdir";
-
-  my $pid = IPC::Open3::open3(\*CHLD_IN, \*CHLD_OUT, \*CHLD_ERR,
-#                      "xalan -XSL ../xsl/revohtml.xsl");
-                      "xsltproc ../xsl/revohtml.xsl -");
-  print CHLD_IN $xml2;
-  close CHLD_IN;
-  my $html = join('', <CHLD_OUT>);
-  close CHLD_OUT;
-  my $err = join('', <CHLD_ERR>);
-  print pre("err=$err") if $err and $debug;
-  close CHLD_ERR;
-
-#  open IN, "<", "$homedir/html/revo/art/$art.html" or die "open";
-#  my $html = join '', <IN>;
-#  close IN;
-
-  {
-    $html =~ s#<!DOCTYPE .*?>##sm;
-    my $sth = $dbh->prepare("SELECT count(*) FROM r2_tezauro WHERE tez_fontref = ? or (tez_celref = ? and tez_tipo in ('sin','vid'))");
-    while ($html =~ m#<!--\[\[\s*ref="(.*?)"\s*\]\]-->\s*#smg) {
-      my $ref = $1;
-      $sth->execute($1,$1);
-      my ($tez_ekzistas) = $sth->fetchrow_array();
-	  print pre("tez=$1 $tez_ekzistas") if $debug;
-      if ($tez_ekzistas) {
-  	    $ref =~ tr/./_/;
-        $html =~ s##<a href="/revo/tez/tz_$ref.html" target="indekso"><img src="../smb/tezauro.png" alt="TEZ" title="al la tezaŭro" border="0"></a>#;
-	  } else {
-        $html =~ s###;
-	  }
-	}
-  }
   
-  # nur por beligi
-  $html =~ s#</title>\n<script#</title><script#sm;
-  $html =~ s#</script>\n</head>#</script></head>#sm;
-  $html =~ s#<(h1|h2|dl|dd)>\n<#<$1><#smg;
-  $html =~ s#</(h1|h2|h3)>\s+#</$1>#smg;
-  $html =~ s#</(span)>\s+<#</$1><#smg;
-  $html =~ s#</(dd|dl)>\s+<a#</$1><a#smg;
-  $html =~ s#\n(       <a href="\#lng_)#\n   $1#sm;
-  $html =~ s#<br>\n</div>#<br></div>#sm;
-  $html =~ s#</pre>\n</div>#</pre></div>#sm;
-  $html =~ s#<hr>\n<span class="redakto">#<hr><span class="redakto">#sm;
-  $html =~ s#<br>\s+</body>#<br></body>#sm;
-  $html =~ s#</html>\n#</html>#sm;
+  my ($html, $err);
+  revo::xml2html::konv($dbh, \$xml2, \$html, \$err, $debug);
 
   if ($debug) {
     open HTML, ">", "../art2/$art.html" or die "open write html";
@@ -1011,7 +969,7 @@ via retadreso estas $ENV{REMOTE_ADDR}<br>
 EOD
 
 print p('svn versio: $Id$'.br.
-	'hg versio: $HgId: vokomail.pl 37:9b2b87e424d5 2009/05/08 16:55:23 Wieland $');
+	'hg versio: $HgId: vokomail.pl 38:4c47bdb358c8 2009/05/09 14:34:01 Wieland $');
 
 print end_html();
 
