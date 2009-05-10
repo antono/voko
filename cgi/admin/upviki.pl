@@ -14,13 +14,8 @@ use revodb;
 my $exitcode;
 
 print header(-charset=>'utf-8'),
-      start_html('aktualigu viki-ligojn');
-
-if (param("download")) {	# 0 por testi - 1 por vere esxuti aktualan liston
-  my $ret = `wget -nv http://download.wikimedia.org/eowiki/latest/eowiki-latest-all-titles-in-ns0.gz -O ../../../files/eoviki.gz 2>&1`;
-  print h2("wget -> $exitcode");
-  print pre($ret);
-}
+      start_html('aktualigu viki-ligojn'),
+	  h2(scalar(localtime));
 
 sub mylc {	# lower case pro esperantaj signoj
   my $a = shift @_;
@@ -35,6 +30,16 @@ sub mylc {	# lower case pro esperantaj signoj
 
 # Connect to the database.
 my $dbh = revodb::connect();
+
+if (param("download")) {	# 0 por testi - 1 por vere esxuti aktualan liston
+  my $ret = `wget -nv http://download.wikimedia.org/eowiki/latest/eowiki-latest-all-titles-in-ns0.gz -O ../../../files/eoviki.gz 2>&1`;
+#  my $ret = `wget -nv http://download.wikimedia.org/eowiki/20090211/eowiki-20090211-all-titles-in-ns0.gz -O ../../../files/eoviki.gz 2>&1`;
+  print h2("wget -> $exitcode");
+  print pre($ret);
+  
+  my $sth = $dbh->prepare("TRUNCATE TABLE r2_vikititolo") or die;
+  $sth->execute();
+}
 
 my %revo;				# unue mi kolektas cxiujn vortojn kun ligoj kiel hash -> array
 my %vikihelpo;
@@ -59,11 +64,12 @@ while (my ($celref, $vikart, $revo) = $sth->fetchrow_array) {
   push @{$revo{mylc $vikart}}, $celref;		# aldoni la la ligon por tio vorto
 }
 
-$dbh->disconnect() or die "DB disconnect ne funkcias";
+my $sth_insert = $dbh->prepare("INSERT INTO r2_vikititolo (titolo) VALUES (?)") or die;
 
 my %viki;				# nun mi kolektas cxiujn vortojn de vikipedio
 					# hash kun artikolo -> hash kun ligo kaj vorto
 open IN, "gzip -d <../../../files/eoviki.gz 2>&1 |" or die "ne povas gzip";
+<IN>;  # forjxetu unuan linion, estas nur titolo
 while (<IN>) {
   chomp;
 
@@ -74,6 +80,7 @@ while (<IN>) {
   $_ = mylc $_;				# minuskligi
   print pre("test: $_")."\n" if m/^nav/i;
   s/_/ /g;				# _ -> spaco
+  $sth_insert->execute($_);
   if (my $celrefar = $revo{$_}) {	# cxu tio vorto eksistas en revo?
     print pre("test: trovis en revo $_")."\n" if m/^nav/i;
     foreach my $celref (@$celrefar) {	# cxiuj ligoj de tio vorto
@@ -94,6 +101,8 @@ while (<IN>) {
   }
 }
 close IN;
+$sth_insert->finish();
+$dbh->disconnect() or die "DB disconnect ne funkcias";
 
 my $num;
 foreach my $fname (<../../revo/art/*.html>) {			# prilaboru cxiujn artikolojn ankaux sen ligo, por forigi la ligojn
