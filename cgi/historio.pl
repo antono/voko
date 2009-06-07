@@ -107,8 +107,8 @@ else {
   # Kreu tabelo kun la unuopaj informoj. La unua estas pri la arkivo. 
   # La aliaj pri la versioj
   my @aret = split /\n----------------------------\n/, $ret;
-  print p("Numero ".@aret) if param('debug');
-  print pre("header: $aret[0]") if param('debug');
+#  print p("Numero ".@aret) if param('debug');
+#  print pre("header: $aret[0]") if param('debug');
 
   # Fojetu la informojn pri la arkivo
   shift @aret;
@@ -121,11 +121,15 @@ else {
   foreach (@aret) {
     my %h = ();
     $h{source} = $_;
-    if (s/^revision (.*)\ndate: (.*);  author: (.*);  state: (.*);//) {
+#    print pre("source=$_") if param('debug');
+
+    if (s/^revision (.*?)\ndate: (.*?);  author: (.*?);  state: (.*?);//) {
       $h{rev} = $1;
       $h{dato} = $2;
       $h{autoro} = $3;
       $h{stato} = $4;
+#      print pre("txt=$_") if param('debug');
+      s/^;\scommitid: [0-9a-f]+//;
       if (s/^ +lines: (.*)\n//) {
         $h{linioj} = $1;
       }
