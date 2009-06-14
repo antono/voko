@@ -137,8 +137,9 @@ rezulto en:
 
 
     <xslt in="${v.voko.cfg}/ordigo2.xml" out="${v.bazo.dok}/ordigo.html"
-       style="${v.voko.xsl}/dok_ordigo.xsl"/>
-
+       style="${v.voko.xsl}/dok_ordigo.xsl">
+      <factory name="net.sf.saxon.TransformerFactoryImpl"/>
+     </xslt>
   </target>
 
 
