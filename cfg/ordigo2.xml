@@ -450,6 +450,85 @@
  <l name="z">z,Z</l>
 </lingvo>
 
+<!-- persa -->
+<lingvo lng="fa" kreu-regulojn="jes">
+ <l name="spaceto" n="3">' '</l>
+ <l name="cif_0">&#x06F0;,&#x0660;</l>
+ <l name="cif_1">&#x06F1;,&#x0661;</l>
+ <l name="cif_2">&#x06F2;,&#x0662;</l>
+ <l name="cif_3">&#x06F3;,&#x0663;</l>
+ <l name="cif_4">&#x06F4;,&#x0664;</l>
+ <l name="cif_5">&#x06F5;,&#x0665;</l>
+ <l name="cif_6">&#x06F6;,&#x0666;</l>
+ <l name="cif_7">&#x06F7;,&#x0667;</l>
+ <l name="cif_8">&#x06F8;,&#x0668;</l>
+ <l name="cif_9">&#x06F9;,&#x0669;</l>
+ <l name="hamze">&#x0621;</l>
+ <l name="alef_madde">&#x0622;</l>
+ <l name="alef" minus="alef2">&#x0627;</l>
+ <l name="alef2" n="2">&#x0627;&#x0653;,&#x0627;&#x0654;,&#x0627;&#x0655;</l>
+ <l name="hamze2">&#x0623;,&#x0624;,&#x0625;,&#x0626;</l>
+ <l name="be">&#x0628;</l>
+ <l name="pe">&#x067e;</l>
+ <l name="te">&#x062a;,&#x0629;</l>
+ <l name="se">&#x062b;</l>
+ <l name="jim">&#x062c;</l>
+ <l name="che">&#x0686;</l>
+ <l name="ha">&#x062d;</l>
+ <l name="khe">&#x062e;</l>
+ <l name="dal">&#x062f;</l>
+ <l name="zal">&#x0630;</l>
+ <l name="re">&#x0631;</l>
+ <l name="ze">&#x0632;</l>
+ <l name="zhe">&#x0698;</l>
+ <l name="sin">&#x0633;</l>
+ <l name="shin">&#x0634;</l>
+ <l name="sad">&#x0635;</l>
+ <l name="zad">&#x0636;</l>
+ <l name="ta">&#x0637;</l>
+ <l name="za">&#x0638;</l>
+ <l name="ayn">&#x0639;</l>
+ <l name="gh">&#x063a;</l>
+ <l name="fe">&#x0641;</l>
+ <l name="qaf">&#x0642;</l>
+ <l name="kaf">&#x06a9;,&#x0643;</l>
+ <l name="ge">&#x06af;</l>
+ <l name="lam">&#x0644;</l>
+ <l name="mim">&#x0645;</l>
+ <l name="nun">&#x0646;</l>
+ <l name="ve">&#x0648;</l>
+ <l name="he">&#x0647;</l>
+ <l name="ye">&#x06cc;,&#x0649;,&#x064a;</l>
+
+ <r name="ezafe1">&#x0647;,&#x0647;&#x200C;&#x06CC;</r>
+ <r name="ezafe2">&#x0647;,&#x0647;&#x0654;</r>
+
+ <!-- ingorendaj literoj -->
+ <i>'!'</i>
+ <i>'.'</i>
+ <i>':'</i>
+ <i>'('</i>
+ <i>')'</i>
+ <i>'['</i>
+ <i>']'</i>
+ <i>&#x2026;</i> <!-- "ellipsis" -->
+ <i>&#x060C;</i> <!-- "a_komo" -->
+ <i>&#x061B;</i> <!-- "a_punktokomo" -->
+ <i>&#x061F;</i> <!-- "a_demando" -->
+ <i>&#x0640;</i> <!-- "a_tatwil"       -->
+ <i>&#x064B;</i> <!-- "a_fathatan"     -->
+ <i>&#x064C;</i> <!-- "a_dammatan"     -->
+ <i>&#x064D;</i> <!-- "a_kasratan"     -->
+ <i>&#x064E;</i> <!-- "a_fatha"        -->
+ <i>&#x064F;</i> <!-- "a_damma"        -->
+ <i>&#x0650;</i> <!-- "a_kasra"        -->
+ <i>&#x0651;</i> <!-- "a_shadda"       -->
+ <i>&#x0652;</i> <!-- "a_sukun"        -->
+ <i>&#x200C;</i> <!-- "zwnj"           -->
+ <i>&#x200D;</i> <!-- "zwj"            -->
+
+</lingvo>
+
 <!-- fina -->
 <lingvo lng="fi">
  <l name="a">aA</l>

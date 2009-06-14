@@ -89,7 +89,7 @@ ant -f voko/ant/spegulo.xml -Dcvs.filename=revocvs-JJJJMMTT.tgz cvs-upload
        dest="${log}/cvs_uploadlog.html" 
        username="${cvs.upload.user}"
        password="${cvs.upload.password}"/>
-  
+
      <loadfile srcFile="${log}/cvs_uploadlog.html" property="cvslogfile">
        <filterchain>
          <tokenfilter>
@@ -101,7 +101,7 @@ ant -f voko/ant/spegulo.xml -Dcvs.filename=revocvs-JJJJMMTT.tgz cvs-upload
      <echo>
        ${cvslogfile}
      </echo>
-  
+
    </target>
 
 <!-- ################### prenado de redaktanto-listo ####################### -->
@@ -196,7 +196,7 @@ ant -f voko/ant/spegulo.xml -Drevo.filename=revo-JJJJMMTT.tgz revo-upload
        dest="${log}/revo_uploadlog.html" 
        username="${revo.upload.user}"
        password="${revo.upload.password}"/>
-  
+<!-- tro grandighis tiu dosiero por la raporto....  
      <loadfile srcFile="${log}/revo_uploadlog.html" property="revologfile">
        <filterchain>
          <tokenfilter>
@@ -208,7 +208,7 @@ ant -f voko/ant/spegulo.xml -Drevo.filename=revo-JJJJMMTT.tgz revo-upload
      <echo>
        ${revologfile}
      </echo>
-
+-->
    </target>
 
    <target name="revo-tempo" 

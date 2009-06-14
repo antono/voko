@@ -57,11 +57,14 @@
        if="dosiero">
 
     <xslt in="${v.bazo.xml}/${dosiero}.xml" out="${v.tmp}/art/${dosiero}.xml"
-       force="true" style="${v.voko.xsl}/revo_tez.xsl"/>
+       force="true" style="${v.voko.xsl}/revo_tez.xsl">
+       <factory name="net.sf.saxon.TransformerFactoryImpl"/>
+    </xslt>
 
     <xslt in="${v.tmp}/art/${dosiero}.xml" out="${v.tmp}/art/${dosiero}.html" 
        style="${v.voko.xsl}/revohtml2.xsl">
          <param name="xml-ref-pado" expression="${v.bazo.xml}"/>
+       <factory name="net.sf.saxon.TransformerFactoryImpl"/>
     </xslt>
 
     <copy file="${v.tmp}/art/${dosiero}.html" tofile="${v.bazo.art}/${dosiero}.html"/>
@@ -75,7 +78,9 @@
 
     <echo message="### enmetu tezauro-ligojn en chiujn aktualigitajn artikolojn"/>
     <xslt basedir="${v.bazo.xml}" includes="*.xml" destdir="${v.tmp}/art" extension=".xml"
-       style="${v.voko.xsl}/revo_tez.xsl"/>
+       style="${v.voko.xsl}/revo_tez.xsl">
+        <factory name="net.sf.saxon.TransformerFactoryImpl"/>
+    </xslt>
 
 
     <!-- aktualigu kelkajn malnovajn dosierojn por certigi, ke shanghoj
@@ -88,12 +93,14 @@
           <param name="when" value="before"/>
           <param name="maxFiles" value="50"/> <!-- aktualigu maksimume 50 malnovajn dosierojn -->
         </custom>
+        <factory name="net.sf.saxon.TransformerFactoryImpl"/>
     </xslt>
 
     <echo message="### kreu la HTML-dosierojn por la artikoloj"/>
     <xslt basedir="${v.tmp}/art" includes="*.xml" destdir="${v.tmp}/art/" extension=".html"
        style="${v.voko.xsl}/revohtml2.xsl">
        <param name="xml-ref-pado" expression="${v.bazo.xml}"/>
+       <factory name="net.sf.saxon.TransformerFactoryImpl"/>
     </xslt>
 
   </target>

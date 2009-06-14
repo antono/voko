@@ -53,7 +53,8 @@
 <xsl:template match="lingvo" mode="entities">
   <xsl:text>
 &lt;!ENTITY sort-</xsl:text><xsl:value-of select="@lng"/>
-<xsl:text> "</xsl:text>
+<xsl:text> " = '|'</xsl:text>
+<xsl:apply-templates select="i"/>
 <xsl:apply-templates select="l"/>
 <xsl:apply-templates select="r"/>
 <xsl:text>"&gt;
@@ -92,6 +93,11 @@
 </xsl:text>
 </xsl:template>
 
+
+<xsl:template match="i">
+  <xsl:text> = </xsl:text>
+  <xsl:value-of select="."/>
+</xsl:template>
 
 <xsl:template match="l">
   <xsl:text> &amp;lt; </xsl:text>

@@ -92,6 +92,7 @@
       <!-- forsendi respondojn al redaktantoj, necesas poshtkontrolo antau forsendo pro legitimigo! -->
       <exec dir="${v.bazo}" executable="/usr/bin/fetchmail">
         <arg value="-c"/>
+        <arg value="post.strato.de"/>
       </exec>
       <exec dir="${v.bazo}" executable="/usr/sbin/sendmail">
         <arg value="-q"/>

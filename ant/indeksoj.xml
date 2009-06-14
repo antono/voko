@@ -8,6 +8,9 @@
 
   <!-- donu valorojn al la variabloj, se ili ne jam aperis en la agordo-dosiero -->
   <property name="v.voko" location="/home/revo/voko"/>
+  <property name="v.saxon" location="/home/revo/bezonoj/saxon/saxon8.jar"/>
+  <property name="v.xalan" location="/usr/share/java/xalan-j2.jar"/>
+  <property name="v.xalan-ser" location="/usr/share/java/xalan-j2-serializer.jar"/>
   <property name="v.voko.ant" location="${v.voko}/ant"/>
   <property name="v.bazo" location="${user.dir}"/>
   <property name="v.bazo.inx" location="${v.bazo}/inx"/>
@@ -81,7 +84,8 @@
          <classpath>
            <pathelement location="${v.voko.ant}/respiro.jar"/>
            <pathelement path="${java.class.path}"/>
-         </classpath>
+           <pathelement location="${v.xalan-ser}"/>
+       </classpath>
     </java>
 
   </target>
@@ -118,7 +122,9 @@
        filtering="true"/>
 
      <xslt in="${v.tmp}/inx_ord.xml" out="${v.tmp}/inx/.tempo"
-       style="${v.voko.xsl}/inx_html_${v.outputformat}.xsl~"/>
+       style="${v.voko.xsl}/inx_html_${v.outputformat}.xsl~">
+        <factory name="net.sf.saxon.TransformerFactoryImpl"/>
+     </xslt>
   </target>
 
 
@@ -131,7 +137,9 @@
      />
  
      <xslt in="${v.tmp}/inx_shanghoj.xml" out="${v.tmp}/inx/shanghoj.html"
-       style="${v.voko.xsl}/inx_shanghoj.xsl"/>
+       style="${v.voko.xsl}/inx_shanghoj.xsl">
+         <factory name="net.sf.saxon.TransformerFactoryImpl"/>
+     </xslt>
   </target>
 
 
@@ -146,13 +154,16 @@
          <arg file="${v.tmp}/eraroj.xml"/>
          <classpath>
            <pathelement location="${v.voko.ant}/respiro.jar"/>
+           <pathelement location="${v.saxon}"/>
            <pathelement path="${java.class.path}"/>
-         </classpath>
+       </classpath>
     </java>
 
 
      <xslt in="${v.tmp}/eraroj.xml" out="${v.tmp}/inx/eraroj.html"
-       style="${v.voko.xsl}/inx_eraroj_html.xsl"/>
+       style="${v.voko.xsl}/inx_eraroj_html.xsl">
+        <factory name="net.sf.saxon.TransformerFactoryImpl"/>
+     </xslt>
   </target>
 
 

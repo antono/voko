@@ -72,7 +72,9 @@ rezulto en:
 
   <target name="med-kadro" depends="med-preparo" description="kreas index.hml kaj titolo.html el enhavo.xml">
     <xslt in="${v.voko.cfg}/enhavo.xml" out="${v.bazo}/index.html"
-      style="${v.voko.xsl}/dok_enhavo.xsl"/>
+      style="${v.voko.xsl}/dok_enhavo.xsl">
+      <factory name="net.sf.saxon.TransformerFactoryImpl"/>
+    </xslt>
   </target>
 
 
