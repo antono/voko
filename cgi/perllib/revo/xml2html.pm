@@ -32,7 +32,7 @@ sub konv {
   $$html = join('', <CHLD_OUT>);
   close CHLD_OUT;
   $$err = join('', <CHLD_ERR>);
-  print pre("err=$$err") if $$err and $debug;
+  print "<pre>err=$$err</pre>\n" if $$err and $debug;
   close CHLD_ERR;
 
 #  open IN, "<", "$homedir/html/revo/art/$art.html" or die "open";
