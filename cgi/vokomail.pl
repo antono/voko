@@ -407,6 +407,7 @@ my $enc = "utf-8";
 
 if ($xml2) {
   $xml = $xmlTxt;
+#  $debugmsg .= "1 xml=\n$xml" if $debug;
 } elsif (param('button') eq 'aldonu') {
   $xml = <<"EOD";
 <?xml version="1.0"?>
@@ -443,7 +444,6 @@ EOD
 
 #  $debugmsg .= "xml=\n$xml" if $debug;
   $xml = Encode::decode($enc, $xml);
-#  $debugmsg .= "xml=\n$xml" if $debug;
 #  $debugmsg .= "xml=\n$xml" if $debug;
   $xml = revo::decode::rvdecode($xml);
 #  $debugmsg .= "xml=\n$xml" if $debug;
@@ -544,6 +544,7 @@ if ($art) {
 
 if ($debug and $debugmsg) {
   autoEscape(1);
+#  $debugmsg .= "4 xml=\n$xml";
   print pre(escapeHTML($debugmsg));
   autoEscape(0);
 }
@@ -807,6 +808,20 @@ EOD
 
 $dbh->disconnect() if $dbh;
 
+# por ke la formulara ne konvertas &lt; al < ktp.
+$xml =~ s/&lt;/&amp;lt;/g;
+$xml =~ s/&gt;/&amp;gt;/g;
+
+if (param('xmlTxt')) {
+  param(-name=>'xmlTxt', -value=>$xml);
+}
+
+#if ($debug) {
+#  autoEscape(1);
+#  print pre(escapeHTML("6 xml=\n$xml"));
+#  autoEscape(0);
+#}
+
 print start_form(-id => "f", -name => "f");
 
 my @fakoj = sort keys %fak;
@@ -928,7 +943,7 @@ print "\n&nbsp;prilabori:\n".
       "&nbsp;".textarea(-id    => 'xmlTxt', -name    => 'xmlTxt',
                -rows    => 25,
                -columns => 80,
-	       -default => $xml,
+	             -default => $xml,
                -onkeypress => "return klavo(event)",
       ) if $art;
 if (param('nova') or param('button') eq 'aldonu') {
@@ -969,7 +984,7 @@ via retadreso estas $ENV{REMOTE_ADDR}<br>
 EOD
 
 print p('svn versio: $Id$'.br.
-	'hg versio: $HgId: vokomail.pl 38:4c47bdb358c8 2009/05/09 14:34:01 Wieland $');
+	'hg versio: $HgId: vokomail.pl 42:18d15d9b0558 2009/06/14 20:46:54 Wieland $');
 
 print end_html();
 
