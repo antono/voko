@@ -179,6 +179,14 @@ montru tie, cxar ili estas esenca parto de tiuj -->
   <!-- skribu la tradukon mem --> 
   <xsl:text> </xsl:text>
   <span class="trdnac">
+    <xsl:if test="@lng = 'ar' or
+                  @lng = 'fa' or
+                  @lng = 'he'">
+      <xsl:attribute name="dir">
+        <xsl:text>rtl</xsl:text>
+      </xsl:attribute>
+    </xsl:if>
+
     <xsl:choose>
       <xsl:when test="trd">
         <xsl:apply-templates select="trd" mode="tradukoj"/>
@@ -201,8 +209,23 @@ montru tie, cxar ili estas esenca parto de tiuj -->
 
 <xsl:template match="trdgrp/trd" mode="tradukoj">
   <xsl:apply-templates mode="tradukoj"/>
+
+  <xsl:variable name="komo">
+    <xsl:choose>
+      <!-- Ne validas por la hebrea. -->
+      <xsl:when test="../@lng = 'fa' or
+                      ../@lng = 'ar'">
+        <xsl:text>&#x060C;</xsl:text>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:text>,</xsl:text>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
   <xsl:if test="following-sibling::trd">
-    <xsl:text>, </xsl:text>
+    <xsl:value-of select="$komo"/>
+    <xsl:text> </xsl:text>
   </xsl:if>
 </xsl:template>
 

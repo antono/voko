@@ -619,6 +619,22 @@
              <xsl:apply-templates select="v"/>
            </xsl:when>
 
+           <!-- litero ene de trd-oj -->
+           <xsl:when test="parent::trd-oj">
+             <xsl:choose>
+               <xsl:when test="../@lng = 'ar' or
+                               ../@lng = 'fa' or
+                               ../@lng = 'he'">
+                 <div dir="rtl">
+                   <xsl:apply-templates/>
+                 </div>
+               </xsl:when>
+               <xsl:otherwise>
+                 <xsl:apply-templates/>
+               </xsl:otherwise>
+             </xsl:choose>
+           </xsl:when>
+
            <!-- aliaj indeksoj -->
            <xsl:otherwise>
              <xsl:apply-templates/>
@@ -681,6 +697,13 @@
 </xsl:template -->
 
 <xsl:template match="trd-oj/litero/v">
+
+  <!-- Cxu temas pri araba, persa aux hebrea traduko? -->
+  <xsl:variable name="trd-rtl" 
+                select="../../@lng = 'ar' or
+                        ../../@lng = 'fa' or
+                        ../../@lng = 'he'"/>
+
   <xsl:choose>
 
     <!-- se key('trd-oj') enhavas nur unu tian eron montru kiel "t: k" -->
@@ -696,6 +719,9 @@
       </xsl:choose>
 
       <a target="precipa">
+        <xsl:if test="$trd-rtl">
+          <xsl:attribute name="dir">ltr</xsl:attribute>
+        </xsl:if>
         <xsl:attribute name="href">
           <xsl:choose>
             <xsl:when test="contains(@mrk,'.')">
@@ -723,6 +749,9 @@
      
         <xsl:if test="not(following-sibling::v[k=current()/k and t=current()/t and not(t1)])">
           <a target="precipa">
+            <xsl:if test="$trd-rtl">
+              <xsl:attribute name="dir">ltr</xsl:attribute>
+            </xsl:if>
             <xsl:attribute name="href">
               <xsl:choose>
                 <xsl:when test="contains(@mrk,'.')">
@@ -747,6 +776,9 @@
         <xsl:text>&#xa0;&#xa0;&#xa0;</xsl:text>
         <xsl:apply-templates select="t1"/><xsl:text>: </xsl:text>
         <a target="precipa">
+          <xsl:if test="$trd-rtl">
+            <xsl:attribute name="dir">ltr</xsl:attribute>
+          </xsl:if>
           <xsl:attribute name="href">
             <xsl:choose>
               <xsl:when test="contains(@mrk,'.')">

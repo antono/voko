@@ -45,7 +45,10 @@ td.fona { background-color: #D5D5B5;
   background-image: url(angulo.png);
   background-repeat: no-repeat;}
 
-td.enhavo { padding-left: 1ex; padding-top: 0.5ex;
+td.enhavo { 
+  padding-left: 1ex;
+  padding-right: 1ex;
+  padding-top: 0.5ex;
   background-color: #F5F5C5;
   border-style: solid; border-color: gray;
   border-top-width: 0px; border-left-width: 1px;
