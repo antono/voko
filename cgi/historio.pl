@@ -15,7 +15,10 @@ print header(-charset=>'utf-8'),
       h1('Historio de '.a({href=>"/revo/art/".param('art').".html"}, param('art')).".xml");
 
 my $homedir = "/var/www/web277";
-my $cvsdir = "$homedir/files/CVS";
+my $test = param('test');
+die unless $test =~ /^\d*$/;
+my $cvsdir = "$homedir/files/CVS$test";
+$test = "&test=$test" if $test;
 
 $ENV{'PATH'} = $ENV{'PATH'}.":$homedir/files/bin";
 
@@ -150,9 +153,9 @@ else {
       # Ligo al antauxa versio se ne estas la unua versio
       if ($i < @revs - 1) {
         my $href_ant = $revs[$i + 1];
-        $antauxa = a({href=>"?art=".param('art')."&r1=$$href_ant{rev}&r2=$$href{rev}"}, $antauxa);
+        $antauxa = a({href=>"?art=".param('art')."&r1=$$href_ant{rev}&r2=$$href{rev}$test"}, $antauxa);
       }
-      print li(a({href=>"?art=".param('art')."&r=$$href{rev}"}, $$href{rev})." $antauxa $$href{dato} $$href{sxangxo}")."\n";
+      print li(a({href=>"?art=".param('art')."&r=$$href{rev}$test"}, $$href{rev})." $antauxa $$href{dato} $$href{sxangxo}")."\n";
     } else {
       # Kaze de eraro montu ion
       print li("$i $$href{source}");
