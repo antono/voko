@@ -132,7 +132,7 @@ else {
       $h{autoro} = $3;
       $h{stato} = $4;
 #      print pre("txt=$_") if param('debug');
-      s/^;\scommitid: [0-9a-f]+//;
+      s/^\scommitid: [0-9a-f]+//;
       if (s/^ +lines: (.*)\n//) {
         $h{linioj} = $1;
       }
