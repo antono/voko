@@ -72,7 +72,7 @@ $ret = `rm bv_forigu_tiujn.lst 2>&1`;
 $exitcode = $?;
 print LOG "rm bv_forigu_tiujn.lst -> $exitcode\n";
 
-$ret = `tar -xvzf alveno/$fname revo/art tgz revo/xml revo/xsl revo/cfg revo/tez revo/bld revo/stl revo/smb revo/dok revo/inx revo/index.html revo/sercxo.html revo/titolo.html revo/revo.ico revo/araneo.gif revo/reto.gif revo/revo.jpg revo/revo.gif revo/travidebla.gif bv_forigu_tiujn.lst 2>&1`;
+$ret = `tar -xvzf alveno/$fname revo/dtd revo/art tgz revo/xml revo/xsl revo/cfg revo/tez revo/bld revo/stl revo/smb revo/dok revo/inx revo/index.html revo/sercxo.html revo/titolo.html revo/revo.ico revo/araneo.gif revo/reto.gif revo/revo.jpg revo/revo.gif revo/travidebla.gif bv_forigu_tiujn.lst 2>&1`;
 $exitcode = $?;
 print h2("tar -xv -> $exitcode");
 print LOG "tar -xv -> $exitcode\n$ret";
