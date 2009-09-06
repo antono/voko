@@ -443,7 +443,7 @@ EOD
   close IN;
 
 #  $debugmsg .= "xml=\n$xml" if $debug;
-  $xml = Encode::decode($enc, $xml);
+#  $xml = Encode::decode($enc, $xml);
 #  $debugmsg .= "xml=\n$xml" if $debug;
   $xml = revo::decode::rvdecode($xml);
 #  $debugmsg .= "xml=\n$xml" if $debug;
@@ -771,7 +771,7 @@ EOD
       my (@to, $sxangxo2);
       push @to, $redaktanto; # if param('sendu_al_tio');
       push @to, 'revo@retavortaro.de' if param('sendu_al_revo');
-      push @to, 'wieland@wielandpusch.de'; # if param('sendu_al_admin');  # revodb::mail_to
+#      push @to, 'wieland@wielandpusch.de'; # if param('sendu_al_admin');  # revodb::mail_to
       if (param('nova')) {
         $sxangxo2 = "aldono: $art";
       } else {
