@@ -395,8 +395,15 @@ my $xml;
 my $xmlTxt = param('xmlTxt');
 if ($xmlTxt) {
   $xmlTxt =~ s/\r\n/\n/g;
+  $debugmsg .= "vor wrap -> $xmlTxt\n <- end wrap\n";
+  my $id;
+  if ($xmlTxt =~ s/"\$(Id: .*?)\$"/"\$Id:\$"/) {
+    $debugmsg .= "ID: $1-\n";
+    $id = $1;
+  }
   $xmlTxt = revo::wrap::wrap($xmlTxt);
-#  $debugmsg .= "wrap -> $xmlTxt\n <- end wrap";
+  $xmlTxt =~ s/"\$Id:\$"/"\$$id\$"/ if $id;
+  $debugmsg .= "wrap -> $xmlTxt\n <- end wrap";
 }
 my $xml2 = revo::encode::encode2($xmlTxt, 20) if $xmlTxt;
 my $redaktanto = param('redaktanto') || cookie(-name=>'redaktanto') || 'via registrita retpo&#349;ta adreso';
@@ -984,7 +991,7 @@ via retadreso estas $ENV{REMOTE_ADDR}<br>
 EOD
 
 print p('svn versio: $Id$'.br.
-	'hg versio: $HgId: vokomail.pl 42:18d15d9b0558 2009/06/14 20:46:54 Wieland $');
+	'hg versio: $HgId: vokomail.pl 46:9e5d8dac4040 2009/09/14 20:17:14 Wieland $');
 
 print end_html();
 
