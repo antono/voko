@@ -622,7 +622,7 @@ EOD
   $html =~ s#src="../smb/#src="/revo/smb/#smg;
   $html =~ s#src="../bld/#src="/revo/bld/#smg;
   $html =~ s#<span class="redakto">.*$##sm;
-  $html =~ s#href="([a-z])#href="/revo/art/\1#smg;
+  $html =~ s#href="(?!http://)([a-z])#href="/revo/art/\1#smg;
 
   print $html;
 #  print pre('close xalan') if $debug;
@@ -991,7 +991,7 @@ via retadreso estas $ENV{REMOTE_ADDR}<br>
 EOD
 
 print p('svn versio: $Id$'.br.
-	'hg versio: $HgId: vokomail.pl 46:9e5d8dac4040 2009/09/14 20:17:14 Wieland $');
+	'hg versio: $HgId: vokomail.pl 47:46a65614a072 2009/09/26 12:24:59 Wieland $');
 
 print end_html();
 
