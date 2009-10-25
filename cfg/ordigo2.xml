@@ -1085,13 +1085,13 @@
  <l name="c" minus="ch">cC</l>
  <l name="cx">&#x010d;&#x010c;</l>
  <l name="d" minus="dz">dD&#x010f;&#x010e;</l>
- <l name="dz" minus="dj" n="2">dzDzd&#x017e;D&#x017e;</l>
- <l name="dj" n="2">d&#x017eD;&#x017e;</l>
+ <l name="dz" minus="dj" n="2">dz,Dz,d&#x017e;,D&#x017e;</l>
+ <l name="dj" n="2">d&#x017e;,D&#x017e;</l>
  <l name="e">eEéÉ</l>
  <l name="f">fF</l>
  <l name="g">gG</l>
  <l name="h">hH</l>
- <l name="ch" n="2">chCH</l>
+ <l name="ch" n="2">ch,CH</l>
  <l name="i">iIíÍ</l>
  <l name="j">jJ</l>
  <l name="k">kK</l>

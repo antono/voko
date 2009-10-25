@@ -932,9 +932,9 @@
  <l name="b">bB</l>
  <l name="c" minus="ch">cC</l>
  <l name="cx">&#x010d;&#x010c;</l>
- <l name="d" minus="dz">dD;&#x010f;&#x010e;</l>
- <l name="dz" minus="dj" n="2">dzDzd&#x017eD;&#x017e;</l>
- <l name="dj" n="2">d&#x017eD;&#x017e;</l>
+ <l name="d" minus="dz">dD&#x010f;&#x010e;</l>
+ <l name="dz" minus="dj" n="2">dzDzd&#x017ei;D&#x017e;</l>
+ <l name="dj" n="2">d&#x017e;D&#x017e;</l>
  <l name="e">eEéÉ</l>
  <l name="f">fF</l>
  <l name="g">gG</l>
@@ -943,17 +943,17 @@
  <l name="i">iIíÍ</l>
  <l name="j">jJ</l>
  <l name="k">kK</l>
- <l name="l">lL;&#x013a;&#x0139;&#x013e;&#x013d;</l>
+ <l name="l">lL&#x013a;&#x0139;&#x013e;&#x013d;</l>
  <l name="m">mM</l>
- <l name="n">nN;&#x0148;&#x0147;</l>
+ <l name="n">nN&#x0148;&#x0147;</l>
  <l name="o">oOóÓ</l>
  <l name="ox">ôÔ</l>
  <l name="p">pP</l>
  <l name="q">qQ</l>
- <l name="r">rR;&#x0155;&#x0154;</l>
+ <l name="r">rR&#x0155;&#x0154;</l>
  <l name="s">sS</l>
  <l name="sx">&#x0161;&#x0160;</l>
- <l name="t">tT;&#x0165;&#x0164;</l>
+ <l name="t">tT&#x0165;&#x0164;</l>
  <l name="u">uUúÚ</l>
  <l name="v">vV</l>
  <l name="w">wW</l>
