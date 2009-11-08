@@ -871,21 +871,22 @@ print "\n&nbsp;prilabori:\n".
 		    -default => '',
 		    -labels  => {'<vspec>tr</vspec>' => 'v tr', '<vspec>ntr</vspec>' => 'v ntr'},
       )."\n ",
-      " <a onclick=\"insertTags2(&#39;<ref tip=\\&#34;&#39;,document.getElementById(&#34;reftip&#34;).value,&#39;\\&#34; cel=\\&#34;&#39;,&#39;\\&#34;></ref>&#39;,&#39;&#39;);return false\" href=\"#\">[ref tip]</a> ",
+      " <a onclick=\"insertTags(&#39;<ref cel=\\&#34;\\&#34;>&#39;,&#39;</ref>&#39;,&#39;&#39;);return false\" href=\"#\">[ref]</a> ",
+      " <a onclick=\"insertTags2(&#39;<ref tip=\\&#34;&#39;,document.getElementById(&#34;reftip&#34;).value,&#39;\\&#34; cel=\\&#34;\\&#34;>&#39;,&#39;</ref>&#39;,&#39;&#39;);return false\" href=\"#\">[ref tip]</a> ",
       "\n tip=".popup_menu(-id=>'reftip',
 		    -name=>'reftip',
-                    -values=>['', qw/vid hom dif sin ant super sub prt malprt lst ekz/],
+            -values=>['', qw/vid hom dif sin ant super sub prt malprt ekz/],
 		    -default=>'',
 		    -labels=>{'vid'=>'vid-u',
-                              'hom'=>'hom-onima',
-                              'dif'=>'dif-ina',
-                              'sin'=>'sin-onimo',
-                              'ant'=>'ant-onimo',
-                              'super'=>'super-nocio',
-                              'sub'=>'sub-nocio',
-                              'prt'=>'part-o',
-                              'malprt'=>'malpart-o',
-                              'ekz'=>'ekz-emplo',
+                      'hom'=>'hom-onima',
+                      'dif'=>'dif-ina',
+                      'sin'=>'sin-onimo',
+                      'ant'=>'ant-onimo',
+                      'super'=>'super-nocio',
+                      'sub'=>'sub-nocio',
+                      'prt'=>'part-o',
+                      'malprt'=>'malpart-o',
+                      'ekz'=>'ekz-emplo',
 		    },
 #                    -size => 2,
 #                    -maxlength => 3,
@@ -991,7 +992,7 @@ via retadreso estas $ENV{REMOTE_ADDR}<br>
 EOD
 
 print p('svn versio: $Id$'.br.
-	'hg versio: $HgId: vokomail.pl 47:46a65614a072 2009/09/26 12:24:59 Wieland $');
+	'hg versio: $HgId: vokomail.pl 48:ed50b3c83193 2009/11/08 17:05:59 Wieland $');
 
 print end_html();
 
