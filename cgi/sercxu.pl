@@ -40,6 +40,7 @@ if ($kadroj) {
 
   $sercxata .= "&lng=".uri_escape(param('lng')) if param('lng');
   $sercxata .= "&trd=".uri_escape(param('trd')) if param('trd');
+  $sercxata .= "&ans=".uri_escape(param('ans')) if param('ans');
   
   open IN, "<../revo/index.html" or die "sercxo kun kadroj ne eblas cxar mankas indekso";
   while (<IN>) {
@@ -75,6 +76,16 @@ function xAlUtf8(t, nomo) {
 function sf(){document.f.sercxata.focus();}
 top.document.title = "Reta Vortaro, serĉo de \\\"$sercxata\\\"";
 END
+
+#$ENV{HTTP_ACCEPT_LANGUAGE} = ''; # por testi
+my $preferata_lingvo;
+{
+  my @a = split ",", $ENV{HTTP_ACCEPT_LANGUAGE};
+  $preferata_lingvo = shift @a;
+  $preferata_lingvo = shift @a if $preferata_lingvo =~ /^eo/;
+  $preferata_lingvo =~ s/^([^;-]+).*/$1/;
+#  $preferata_lingvo = 'nenio' if $preferata_lingvo eq '';
+}
 
 if ($formato eq "txt") {
   print header( -type    => 'text/plain',
@@ -118,8 +129,16 @@ EOD
 				    a({-href=>'/revo/inx/_ktp.html'}, 'ktp.')]),
            ]
            );
+
   print <<EOD;
 <td colspan="4" class="enhavo">
+EOD
+
+   if (param('ans')) {
+    print "Altnivela serĉo";
+  }
+
+  print <<EOD;
 <form method="post" action="" target="indekso" name="f">
 <input type="text" id="sercxata" name="sercxata"  size="31" maxlength="255" onKeyUp="xAlUtf8(this.value, 'sercxata')" value="$sercxata">
 <input type="submit" value="trovu">
@@ -137,6 +156,31 @@ EOD
 <input type="hidden" id="cx" name="cx" value="1">
 EOD
  }
+
+if (param('ans')) {
+  my %lng;
+  open IN, "<../revo/cfg/lingvoj.xml" or die "ne povas malfermi lingvoj.xml";
+  while (<IN>) {
+    if (/<lingvo kodo="([^"]+)">([^<]+)<\/lingvo>/) {
+#      print "lng $1 -> $2\n";
+      $lng{$1} = "$1 - $2";
+    }
+  }
+  close IN;
+  my @values = sort keys %lng;
+
+  print br."Lingvo: ",
+		hidden('ans', 1),
+		popup_menu(-name    => 'lng',
+                   -values  => \@values,
+				   -labels  => \%lng,
+                   -default => $preferata_lingvo);
+#		br."Traduko: ",
+#		popup_menu('trd',
+#                   ['eo', 'de','en','nl'],
+#                    'de');
+  exit if $sercxata eq "";
+}
 
   print <<EOD;
 </p>
@@ -195,16 +239,6 @@ my $dbh = revodb::connect();
 
 #$dbh->{'mysql_enable_utf8'}=1;
 $dbh->do("set names utf8");
-
-#$ENV{HTTP_ACCEPT_LANGUAGE} = ''; # por testi
-my $preferata_lingvo;
-{
-  my @a = split ",", $ENV{HTTP_ACCEPT_LANGUAGE};
-  $preferata_lingvo = shift @a;
-  $preferata_lingvo = shift @a if $preferata_lingvo =~ /^eo/;
-  $preferata_lingvo =~ s/^([^;-]+).*/$1/;
-#  $preferata_lingvo = 'nenio' if $preferata_lingvo eq '';
-}
 
 use Time::HiRes qw (gettimeofday tv_interval);
 my %trovitajPagxoj;
@@ -308,7 +342,7 @@ sub Sercxu
 
   if ($param_lng eq 'eo' or $param_lng eq '') {
     $sth2 = $dbh->prepare(
-      "SELECT t.trd_teksto
+      "SELECT distinct t.trd_teksto
        FROM trd t, snc s
         WHERE s.snc_drv_id = ?
           AND t.trd_snc_id = s.snc_id
@@ -413,6 +447,7 @@ sub MontruRezultojn
 	    foreach (split ",", param("trd")) {
           $klr .= "|";
   	      my $sep;
+#		  print "--drv_id=$$ref{'drv_id'}--";
           $sth2->execute($$ref{'drv_id'}, $_);
           while (my $ref2 = $sth2->fetchrow_hashref()) {
             $klr .= $sep.$$ref2{'trd_teksto'};
