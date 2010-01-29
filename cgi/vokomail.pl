@@ -7,6 +7,7 @@
 #
 
 use strict;
+use utf8;
 
 use CGI qw(:standard *table);
 use CGI::Carp qw(fatalsToBrowser);
@@ -594,7 +595,7 @@ my $dbh = revodb::connect();
 
 #print pre('dbconnect'." size=".length($xml2)) if $debug;
 
-#print pre('button='.param('button')) if $debug;
+print pre('button='.param('button')."   ".(Encode::is_utf8(param('button')))."-".(Encode::is_utf8("antaŭrigardu"))) if $debug;
 if (param('button') eq "antaŭrigardu" or param('button') eq 'konservu') {
 
 print <<'EOD';
@@ -968,7 +969,7 @@ print br."\n&nbsp;Retpo&#349;ta adreso:".textfield(-name=>'redaktanto',
                     -value     => (cookie(-name=>'redaktanto') || 'via retpo&#349;ta adreso')
       ),
       br."\n",
-      submit(-name => 'button', -label => 'anta&#365;rigardu'),
+      submit(-name => 'button', -label => 'antaŭrigardu'),
       submit(-name => 'button', -label => 'konservu').
       checkbox(-name    => 'sendu_al_revo',
                -checked => 1,
@@ -992,7 +993,7 @@ via retadreso estas $ENV{REMOTE_ADDR}<br>
 EOD
 
 print p('svn versio: $Id$'.br.
-	'hg versio: $HgId: vokomail.pl 48:ed50b3c83193 2009/11/08 17:05:59 Wieland $');
+	'hg versio: $HgId: vokomail.pl 50:8bbafcc26ad5 2010/01/29 08:02:20 Wieland $');
 
 print end_html();
 
