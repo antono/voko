@@ -841,7 +841,7 @@ End_of_Mail
 #			 updateBase       => "1901-01-01T00:00+00:00",
 #		   },
 #		);
-        pop(@{$rss->{'items'}}) while (@{$rss->{'items'}} > 0);#$maxnum);
+        pop(@{$rss->{'items'}}) while (@{$rss->{'items'}} > $maxnum);
 
         my $dato = strftime "%Y/%d/%m", gmtime;		
         my $tempo = strftime "%H:%M:%S", gmtime;		
@@ -1049,7 +1049,7 @@ via retadreso estas $ENV{REMOTE_ADDR}<br>
 EOD
 
 print p('svn versio: $Id$'.br.
-	'hg versio: $HgId: vokomail.pl 51:4e06af94f909 2010/02/25 00:01:31 Wieland $');
+	'hg versio: $HgId: vokomail.pl 52:788705ad2d80 2010/02/25 00:05:19 Wieland $');
 
 print end_html();
 
