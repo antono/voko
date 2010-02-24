@@ -15,6 +15,7 @@ use DBI();
 use IPC::Open3;
 use Encode;
 use Text::Tabs;
+use POSIX qw(strftime);
 
 # propraj perl moduloj estas en:
 use lib("/var/www/web277/files/perllib");
@@ -23,10 +24,12 @@ use revo::encode;
 use revo::xml2html;
 use revo::wrap;
 use revodb;
+use XML::RSS;
 
 $| = 1;
 
 my $homedir = "/var/www/web277";
+my $htmldir    = "$homedir/html";
 my $revo_base    = "$homedir/html/revo";
 
 $ENV{'LD_LIBRARY_PATH'} = '/var/www/web277/files/lib';
@@ -535,9 +538,15 @@ $line = $lastline if $line > $lastline;
 $lastline = 1 unless $lastline;
 #$debugmsg .= "line = $line\n";
 
-print header(-charset=>'utf-8', -cookie=>\@cookies),
+print header(-charset=>'utf-8',
+			 -pragma => 'no-cache',
+            '-cache-control' =>  'no-cache',
+			 -cookie=>\@cookies),
       start_html(-style=>{-src=>'/revo/stl/indeksoj.css'},
                  -title=>"redakti $art",
+				 -encoding => 'UTF-8',
+				 -head => [ '<meta http-equiv="Cache-Control" content="no-cache">',
+				          ],
                  -script=>$JSCRIPT,
                  -onLoad=>"sf($pos, $line, $lastline)"
 );
@@ -746,9 +755,14 @@ EOD
 }
 
 if ($redaktanto) {
-  my $sth = $dbh->prepare("SELECT count(*) FROM email WHERE ema_email = ?");
+  my $sth = $dbh->prepare("SELECT count(*), min(ema_red_id) FROM email WHERE ema_email = ?");
   $sth->execute($redaktanto);
-  my ($permeso) = $sth->fetchrow_array();
+  my ($permeso, $red_id) = $sth->fetchrow_array();
+  $sth->finish;
+  my $sth = $dbh->prepare("SELECT red_nomo FROM redaktanto WHERE red_id = ?");
+  $sth->execute($red_id);
+  my ($red_nomo) = $sth->fetchrow_array();
+#  print "red_nomo=$red_nomo\n";
   $sth->finish;
 
   if (!$permeso) {
@@ -801,14 +815,56 @@ $sxangxo2
 
 $xml2
 End_of_Mail
-      close SENDMAIL;
+        close SENDMAIL;
 
-      print "sendita al $to";
-    } else {
-      print "ne sendita, elektu adreson sube";
+        print "sendita al $to";
+		
+		my $maxnum = 200;
+	    my $rss = new XML::RSS;
+        $rss->parsefile("$htmldir/sendita.rdf");
+#		my $rss = XML::RSS->new(version => '1.0');
+#		$rss->channel(
+#		   title        => "retavortaro: sendita",
+#		   link         => "http://reta-vortaro.de",
+#		   description  => "Senditaj sxangxoj de la redaktilo por ReVo",
+#		   dc => {
+#			 date       => '2010-02-23T07:00+00:00',
+#			 subject    => "ReVo",
+#			 creator    => 'wieland@wielandpusch.de',
+#			 publisher  => 'wieland@wielandpusch.de',
+#			 rights     => 'Copyright 2010, GPL',
+#			 language   => 'eo',
+#		   },
+#		   syn => {
+#			 updatePeriod     => "hourly",
+#			 updateFrequency  => "1",
+#			 updateBase       => "1901-01-01T00:00+00:00",
+#		   },
+#		);
+        pop(@{$rss->{'items'}}) while (@{$rss->{'items'}} > 0);#$maxnum);
+
+        my $dato = strftime "%Y/%d/%m", gmtime;		
+        my $tempo = strftime "%H:%M:%S", gmtime;		
+#		my $dato = "2010/02/22";
+#		my $tempo = "17:30:22";
+        
+		$sxangxo2 = "ReVo: $sxangxo2" if param('sendu_al_revo');
+	    $rss->add_item(title => "$red_nomo $subject",
+			 link  => "http://www.reta-vortaro.de/revo/art/$art.html",
+			 description => $sxangxo2, 
+			 dc => { subject=>$subject,
+					 creator=>"ReVo", 
+					 rights=>"GPL",
+					 date=>"$dato\T$tempo+00:00",
+		     },
+	         mode  => 'insert',
+        );
+		$rss->save("$htmldir/sendita.rdf");
+      } else {
+        print "ne sendita, elektu adreson sube";
+      }
     }
-  }
-print <<'EOD';
+    print <<'EOD';
 </div><br>
 EOD
   }
@@ -993,7 +1049,7 @@ via retadreso estas $ENV{REMOTE_ADDR}<br>
 EOD
 
 print p('svn versio: $Id$'.br.
-	'hg versio: $HgId: vokomail.pl 50:8bbafcc26ad5 2010/01/29 08:02:20 Wieland $');
+	'hg versio: $HgId: vokomail.pl 51:4e06af94f909 2010/02/25 00:01:31 Wieland $');
 
 print end_html();
 
