@@ -801,9 +801,10 @@ EOD
       }
       if (my $to = join(', ', @to)) {
         my $subject = "Revo redaktu.pl $art";
+		my $smlog = "sendmail.log";
 
         # konektu al retposxtservilo
-        open SENDMAIL, "| /usr/sbin/sendmail -t 2>&1 >sendmail.log" or print LOG "ne povas sendmail\n";
+        open SENDMAIL, "| /usr/sbin/sendmail -t 2>&1 >$smlog" or print LOG "ne povas sendmail\n";
         print SENDMAIL <<End_of_Mail;
 From: $name <$from>
 To: $to
@@ -818,6 +819,13 @@ End_of_Mail
         close SENDMAIL;
 
         print "sendita al $to";
+		
+		if (-s $smlog) {
+		  open L, "<", $smlog;
+		  my $ltxt = join "", <L>;
+		  close L;
+		  print pre("sendmail.log: $ltxt");
+		}
 		
 		my $maxnum = 200;
 	    my $rss = new XML::RSS;
@@ -1049,7 +1057,7 @@ via retadreso estas $ENV{REMOTE_ADDR}<br>
 EOD
 
 print p('svn versio: $Id$'.br.
-	'hg versio: $HgId: vokomail.pl 52:788705ad2d80 2010/02/25 00:05:19 Wieland $');
+	'hg versio: $HgId: vokomail.pl 53:412d49bc7b82 2010/02/26 23:10:03 Wieland $');
 
 print end_html();
 
