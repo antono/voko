@@ -851,15 +851,21 @@ End_of_Mail
 #		);
         pop(@{$rss->{'items'}}) while (@{$rss->{'items'}} > $maxnum);
 
+        my $fname = "sendita/".(strftime "%Y%d%m%H%M%S", gmtime)."_$art.txt";
+
+        open F, ">", "$htmldir/$fname" or print pre("ne povas skribi sendita/$fname");
+		print F "$sxangxo2\n\n$xml2";
+		close F;
+        
         my $dato = strftime "%Y/%d/%m", gmtime;		
         my $tempo = strftime "%H:%M:%S", gmtime;		
 #		my $dato = "2010/02/22";
 #		my $tempo = "17:30:22";
-        
+
 		$sxangxo2 = "ReVo: $sxangxo2" if param('sendu_al_revo');
 	    $rss->add_item(title => "$red_nomo $subject",
 			 link  => "http://www.reta-vortaro.de/revo/art/$art.html",
-			 description => $sxangxo2, 
+			 description => a({href=>"/$fname"}, $sxangxo2),
 			 dc => { subject=>$subject,
 					 creator=>"ReVo", 
 					 rights=>"GPL",
@@ -1057,7 +1063,7 @@ via retadreso estas $ENV{REMOTE_ADDR}<br>
 EOD
 
 print p('svn versio: $Id$'.br.
-	'hg versio: $HgId: vokomail.pl 53:412d49bc7b82 2010/02/26 23:10:03 Wieland $');
+	'hg versio: $HgId: vokomail.pl 54:e2b5fc14a533 2010/02/27 10:51:48 Wieland $');
 
 print end_html();
 
