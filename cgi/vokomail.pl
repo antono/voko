@@ -419,7 +419,7 @@ my $enc = "utf-8";
 if ($xml2) {
   $xml = $xmlTxt;
 #  $debugmsg .= "1 xml=\n$xml" if $debug;
-} elsif (param('button') eq 'aldonu') {
+} elsif (param('button') eq 'kreu') {
   $xml = <<"EOD";
 <?xml version="1.0"?>
 <!DOCTYPE vortaro SYSTEM "../dtd/vokoxml.dtd">
@@ -736,7 +736,7 @@ EOD
     print "Esperantaj signoj malunikodita.<br>\n";
   }
   if ($sxangxo =~ s/([\x{80}-\x{10FFFF}]+)/<span style="color:red">$1<\/span>/g) { # forigu ne-askiajn signojn
-    print "Eraro: teksto havas ne-askiaj signoj: $sxangxo".br."\n";
+    print "Eraro: ŝanĝo havas ne-askiajn signojn: $sxangxo".br."\n";
     $ne_konservu = 3;
   } elsif ($sxangxo =~ s/(--)/<span style="color:red">$1<\/span>/g) { # forigu '--'
     print "Eraro: '--' estas malpermesita en komento: $sxangxo".br."\n";
@@ -755,10 +755,12 @@ EOD
 }
 
 if ($redaktanto) {
+  # cxu unu redaktanto havas tion retadreson? Kiu?
   my $sth = $dbh->prepare("SELECT count(*), min(ema_red_id) FROM email WHERE ema_email = ?");
   $sth->execute($redaktanto);
   my ($permeso, $red_id) = $sth->fetchrow_array();
   $sth->finish;
+  # Kiel nomigxas la redaktanto?
   my $sth = $dbh->prepare("SELECT red_nomo FROM redaktanto WHERE red_id = ?");
   $sth->execute($red_id);
   my ($red_nomo) = $sth->fetchrow_array();
@@ -1025,7 +1027,7 @@ print "\n&nbsp;prilabori:\n".
 	             -default => $xml,
                -onkeypress => "return klavo(event)",
       ) if $art;
-if (param('nova') or param('button') eq 'aldonu') {
+if (param('nova') or param('button') eq 'kreu') {
   print hidden(-name=>'nova', -default=>1);
 } else {
   print br."\n&nbsp;&#348;an&#285;o: ".textfield(-name=>'sxangxo',
@@ -1040,17 +1042,16 @@ print br."\n&nbsp;Retpo&#349;ta adreso:".textfield(-name=>'redaktanto',
       ),
       br."\n",
       submit(-name => 'button', -label => 'antaŭrigardu'),
-      submit(-name => 'button', -label => 'konservu').
-      checkbox(-name    => 'sendu_al_revo',
+      submit(-name => 'button', -label => 'konservu') if $art;
+print checkbox(-name    => 'sendu_al_revo',
                -checked => 1,
                -value   => '1',
-               -label   => 'sendu al ReVo').
-      "&nbsp; &nbsp; &#264;iam sendas al supra adreso kaj por analizo.".
-      endform if $art;
+               -label   => 'sendu al ReVo') if $art and $debug and 0;
+print endform if $art;
 
 print start_form(-id => "n", -name => "n");
-print "&nbsp;Nova artikolo: ".textfield(-name=>'art', -size=>20, -maxlength=>20)."&nbsp;";
-print submit(-name => 'button', -label => 'aldonu')."&nbsp; &nbsp; ".a({target=>"_new", href=>'/revo/dok/revoserv.html'}, "[helpo]")."\n";
+print "&nbsp;Preparu novan artikolon: ".textfield(-name=>'art', -size=>20, -maxlength=>20)."&nbsp;";
+print submit(-name => 'button', -label => 'kreu')."&nbsp; &nbsp; ".a({target=>"_new", href=>'/revo/dok/revoserv.html'}, "[helpo]")."\n";
 print endform;
 
 print <<"EOD" if $art;
@@ -1062,8 +1063,8 @@ klavo kontrolo-F ebligas ser&#265;i<br>
 via retadreso estas $ENV{REMOTE_ADDR}<br>
 EOD
 
-print p('svn versio: $Id$'.br.
-	'hg versio: $HgId: vokomail.pl 54:e2b5fc14a533 2010/02/27 10:51:48 Wieland $');
+print p('<!-- svn versio: $Id$'.br.
+	'hg versio: $HgId: vokomail.pl 55:68de251d8ea0 2010/04/11 20:18:17 Wieland $ -->');
 
 print end_html();
 
