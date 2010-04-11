@@ -241,7 +241,13 @@ function indent(offset) {
     //get current selection
     txtarea.focus();
     var startPos = txtarea.selectionStart;
+	if (startPos > 0) {
+	  startPos--;
+	}
     var endPos = txtarea.selectionEnd;
+	if (endPos > 0) {
+	  endPos--;
+	}
     selText = txtarea.value.substring(startPos, endPos);
     if (selText=="") {
       alert("Marku kion vi volas en-/elsxovi.");
@@ -254,8 +260,8 @@ function indent(offset) {
       txtarea.value = txtarea.value.substring(0, startPos)
 			+ nt
 			+ txtarea.value.substring(endPos, txtarea.value.length);
-      txtarea.selectionStart = startPos;
-      txtarea.selectionEnd = startPos + nt.length;
+      txtarea.selectionStart = startPos+1;
+      txtarea.selectionEnd = startPos + nt.length+1;
 
       //restore textarea scroll position
       txtarea.scrollTop = textScroll;
@@ -538,11 +544,29 @@ $line = $lastline if $line > $lastline;
 $lastline = 1 unless $lastline;
 #$debugmsg .= "line = $line\n";
 
+my $mycss = <<EOD;
+
+a.butono1:link, a.butono1:visited {
+  background-color: #9BE;
+  border: 1px solid black;
+  line-height:150%;
+  color: #000;
+  text-decoration: none;
+  text-align: center;
+}
+
+a.butono1:hover {
+ background-color: #369;
+ color: #fff;
+}
+EOD
+
 print header(-charset=>'utf-8',
 			 -pragma => 'no-cache',
             '-cache-control' =>  'no-cache',
 			 -cookie=>\@cookies),
-      start_html(-style=>{-src=>'/revo/stl/indeksoj.css'},
+      start_html(-style=>{-src=>'/revo/stl/indeksoj.css',
+                          -code=>$mycss},
                  -title=>"redakti $art",
 				 -encoding => 'UTF-8',
 				 -head => [ '<meta http-equiv="Cache-Control" content="no-cache">',
@@ -733,19 +757,19 @@ EOD
   $flag = $sxangxo =~ s/\x{011D}/gx/g || $flag;
   $flag = $sxangxo =~ s/\x{011C}/Gx/g || $flag;
   if ($flag) {
-    print "Esperantaj signoj malunikodita.<br>\n";
+    print "Esperantaj signoj en ŝanĝoteksto malunikoditaj.<br>\n";
   }
   if ($sxangxo =~ s/([\x{80}-\x{10FFFF}]+)/<span style="color:red">$1<\/span>/g) { # forigu ne-askiajn signojn
-    print "Eraro: ŝanĝo havas ne-askiajn signojn: $sxangxo".br."\n";
+    print "Eraro: La ŝanĝoteksto enhavas ne-askiajn signojn: $sxangxo".br."\n";
     $ne_konservu = 3;
   } elsif ($sxangxo =~ s/(--)/<span style="color:red">$1<\/span>/g) { # forigu '--'
     print "Eraro: '--' estas malpermesita en komento: $sxangxo".br."\n";
     $ne_konservu = 3;
   } elsif (!param('nova')) {
-    if ($sxangxo) {
+    if ($sxangxo and $sxangxo ne "klarigo de la sxangxo") {
       print "teksto en ordo: $sxangxo".br."\n";
     } else {
-      print "Eraro: teksto mankas $sxangxo".br."\n";
+      print "Eraro: ŝanĝoteksto mankas: $sxangxo".br."\n";
       $ne_konservu = 4;
     }
   }
@@ -794,7 +818,7 @@ EOD
       my $name    = "Revo redaktu.pl";
       my (@to, $sxangxo2);
       push @to, $redaktanto; # if param('sendu_al_tio');
-      push @to, 'revo@retavortaro.de' if param('sendu_al_revo');
+      push @to, 'revo@retavortaro.de'; # if not $debug or param('sendu_al_revo');
 #      push @to, 'wieland@wielandpusch.de'; # if param('sendu_al_admin');  # revodb::mail_to
       if (param('nova')) {
         $sxangxo2 = "aldono: $art";
@@ -907,8 +931,8 @@ print start_form(-id => "f", -name => "f");
 my @fakoj = sort keys %fak;
 my @stiloj = sort keys %stl;
 print "\n&nbsp;prilabori:\n".
-      " <a onclick=\"indent(2);return false\" href=\"#\">[&gt;&gt;]</a>\n".
-      " <a onclick=\"indent(-2);return false\" href=\"#\">[&lt;&lt;]</a>\n".
+      " <a class=\"butono1\" onclick=\"indent(2);return false\" href=\"#\" title=\"Ŝovu la markitan tekston dekstren.\">[&gt;&gt;]</a>\n".
+      " <a class=\"butono1\" onclick=\"indent(-2);return false\" href=\"#\" title=\"Ŝovu la markitan tekston maldekstren.\">[&lt;&lt;]</a>\n".
       "&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ".
       checkbox(-name      => 'cx',
                -checked   => defined(cookie(-name=>'cx')) ? cookie(-name=>'cx') : 1,
@@ -919,8 +943,8 @@ print "\n&nbsp;prilabori:\n".
       br."\n".
       "<div id=\"ajxb\" style=\"display:\">".
       "\n&nbsp;navigadi:\n".
-      " <a onclick=\"nextTag(&#39;<drv&#39,-1);return false\" href=\"#\">drv</a>".
-      "-<a onclick=\"nextTag(&#39;<drv&#39,1);return false\" href=\"#\">drv</a>\n".
+      " <a class=\"butono1\" onclick=\"nextTag(&#39;<drv&#39,-1);return false\" href=\"#\" title=\"Serĉu antaŭan derivaĵon.\">drv</a>".
+      "-<a class=\"butono1\" onclick=\"nextTag(&#39;<drv&#39,1);return false\" href=\"#\" href=\"#\" title=\"Serĉu sekvan derivaĵon.\">drv</a>\n".
       "&nbsp;&nbsp;<a onclick=\"showhide(&#39;ajx&#39;);return false\" href=\"#\">montru pli</a><br>\n</div>".
       "<div id=\"ajx\" style=\"display: none;\">\n".
       "\n&nbsp;navigadi:\n".
@@ -1024,7 +1048,7 @@ print "\n&nbsp;prilabori:\n".
       "&nbsp;".textarea(-id    => 'xmlTxt', -name    => 'xmlTxt',
                -rows    => 25,
                -columns => 80,
-	             -default => $xml,
+	           -default => $xml,
                -onkeypress => "return klavo(event)",
       ) if $art;
 if (param('nova') or param('button') eq 'kreu') {
@@ -1032,12 +1056,14 @@ if (param('nova') or param('button') eq 'kreu') {
 } else {
   print br."\n&nbsp;&#348;an&#285;o: ".textfield(-name=>'sxangxo',
                     -value=>cookie(-name=>'sxangxo') || 'klarigo de la &#349;an&#285;o',
+					-title     => "Klarigu la ŝanĝon ĉi tie.",
                     -size=>70,
                     -maxlength=>80);
 }
 print br."\n&nbsp;Retpo&#349;ta adreso:".textfield(-name=>'redaktanto',
                     -size      => 70,
                     -maxlength => 80,
+					-title     => "Skribu vian registritan retpoŝtan adreson ĉi tie.",
                     -value     => (cookie(-name=>'redaktanto') || 'via retpo&#349;ta adreso')
       ),
       br."\n",
@@ -1064,7 +1090,7 @@ via retadreso estas $ENV{REMOTE_ADDR}<br>
 EOD
 
 print p('<!-- svn versio: $Id$'.br.
-	'hg versio: $HgId: vokomail.pl 55:68de251d8ea0 2010/04/11 20:18:17 Wieland $ -->');
+	'hg versio: $HgId: vokomail.pl 56:daa9dfe3da4c 2010/04/11 22:32:46 Wieland $ -->');
 
 print end_html();
 
