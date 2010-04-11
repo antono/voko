@@ -118,7 +118,8 @@
   </pagho>
   <pagho titolo="ktp." dosiero="_ktp.html">
     <sekcio titolo="gravaj pa&gcirc;oj" kadro="precipa">
-      <ero ref="../titolo.html" titolo="titolpa&gcirc;o"/>
+      <ero ref="../titolo.html" titolo="titolpa&gcirc;o/ser&ccirc;o"/>
+      <ero ref="http://kono.be/vivo/" titolo="superser&ccirc;o per ViVo" kadro="_new"/>
       <ero ref="/cgi-bin/hazarda_art.pl?senkadroj=2" titolo="iu ajn artikolo"/>
       <!-- ero ref="../sercxo.html" titolo="ser&ccirc;o"/ -->
       <ero ref="../dok/copying.txt" titolo="permesilo"/>
@@ -135,7 +136,8 @@
        <!--ero ref="statistiko.html" titolo="statistiko"/ -->
        <STAT titolo="statistiko"/>
        <!-- ero ref="mankantaj.html" titolo="mankantaj tradukoj"/ -->
-       <MANKOJ titolo="mankantaj tradukoj"/>
+       <MANKOJ titolo="kelkaj mankantaj tradukoj"/>
+       <ero ref="/cgi-bin/mx_trd.pl" titolo="&ccirc;iuj mankantaj tradukoj" kadro="precipa"/>
        <ero ref="../dok/mallongigoj.html" titolo="vortaraj mallongigoj"/>
        <ero ref="../dok/bibliogr.html" titolo="bibliografio la&ubreve; mallongigoj"/>
        <ero ref="../dok/biblaut.html" titolo="bibliografio la&ubreve; a&ubreve;toroj"/>
