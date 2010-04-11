@@ -452,6 +452,7 @@
 
 <!-- persa -->
 <lingvo lng="fa" kreu-regulojn="jes">
+ <l name="spaceto" n="3">' '</l>
  <l name="cif_0">&#x06F0;,&#x0660;</l>
  <l name="cif_1">&#x06F1;,&#x0661;</l>
  <l name="cif_2">&#x06F2;,&#x0662;</l>
@@ -517,7 +518,6 @@
  <i>&#x061F;</i> <!-- "a_demando"      -->
  <i>&#x0640;</i> <!-- "a_tatwil"       -->
 
- <i>' '</i>      <!-- "spaceto"        -->
  <i>&#x200C;</i> <!-- "zwnj"           -->
  <i>&#x200D;</i> <!-- "zwj"            -->
  <i>&#x064E;</i> <!-- "a_fatha"        -->
