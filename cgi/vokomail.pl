@@ -948,28 +948,28 @@ print "\n&nbsp;prilabori:\n".
       "&nbsp;&nbsp;<a onclick=\"showhide(&#39;ajx&#39;);return false\" href=\"#\">montru pli</a><br>\n</div>".
       "<div id=\"ajx\" style=\"display: none;\">\n".
       "\n&nbsp;navigadi:\n".
-      " <a onclick=\"nextTag(&#39;<drv&#39,-1);return false\" href=\"#\">drv</a>".
-      "-<a onclick=\"nextTag(&#39;<drv&#39,1);return false\" href=\"#\">drv</a>\n".
+      " <a class=\"butono1\" onclick=\"nextTag(&#39;<drv&#39,-1);return false\" href=\"#\">drv</a>".
+      "-<a class=\"butono1\" onclick=\"nextTag(&#39;<drv&#39,1);return false\" href=\"#\">drv</a>\n".
       "&nbsp;&nbsp;<a onclick=\"showhide(&#39;ajx&#39;);return false\" href=\"#\">montru malpli</a><br>\n".
       "\n&nbsp;aldoni:\n".
-      " <a onclick=\"var i=str_indent();insertTags(&#39;<drv mrk=\\&#34;$art.&#39;,&#39;\\&#34;>\\n&#39;+i+&#39;  <kap><tld/>...</kap>\\n&#39;+i+&#39;  <snc mrk=\\&#34;$art.\\&#34;>\\n&#39;+i+&#39;    <dif>\\n&#39;+i+&#39;      \\n&#39;+i+&#39;    </dif>\\n&#39;+i+&#39;    \\n&#39;+i+&#39;  </snc>\\n&#39;+i+&#39;</drv>&#39;,&#39;&#39;);return false\" href=\"#\">[drv]</a>\n",
-      " <a onclick=\"var i=str_indent();insertTags(&#39;<dif>\\n&#39;+i+&#39;  &#39;,&#39;\\n&#39;+i+&#39;</dif>&#39;,&#39;&#39;);return false\" href=\"#\">[dif]</a>\n",
-      " <a onclick=\"var i=str_indent();insertTags(&#39;<snc mrk=\\&#34;$art.&#39;,&#39;\\&#34;>\\n&#39;+i+&#39;  <dif>\\n&#39;+i+&#39;    \\n&#39;+i+&#39;  </dif>\\n&#39;+i+&#39;</snc>&#39;,&#39;&#39;);return false\" href=\"#\">[snc]</a>\n",
-      " <a onclick=\"insertTags2(&#39;<ofc>&#39;,document.getElementById(&#34;ofc&#34;).value,&#39;</ofc>&#39;,&#39;&#39;,&#39;&#39;);return false\" href=\"#\">[ofc]</a>",
+      " <a class=\"butono1\" onclick=\"var i=str_indent();insertTags(&#39;<drv mrk=\\&#34;$art.&#39;,&#39;\\&#34;>\\n&#39;+i+&#39;  <kap><tld/>...</kap>\\n&#39;+i+&#39;  <snc mrk=\\&#34;$art.\\&#34;>\\n&#39;+i+&#39;    <dif>\\n&#39;+i+&#39;      \\n&#39;+i+&#39;    </dif>\\n&#39;+i+&#39;    \\n&#39;+i+&#39;  </snc>\\n&#39;+i+&#39;</drv>&#39;,&#39;&#39;);return false\" href=\"#\">[drv]</a>\n",
+      " <a class=\"butono1\" onclick=\"var i=str_indent();insertTags(&#39;<dif>\\n&#39;+i+&#39;  &#39;,&#39;\\n&#39;+i+&#39;</dif>&#39;,&#39;&#39;);return false\" href=\"#\">[dif]</a>\n",
+      " <a class=\"butono1\" onclick=\"var i=str_indent();insertTags(&#39;<snc mrk=\\&#34;$art.&#39;,&#39;\\&#34;>\\n&#39;+i+&#39;  <dif>\\n&#39;+i+&#39;    \\n&#39;+i+&#39;  </dif>\\n&#39;+i+&#39;</snc>&#39;,&#39;&#39;);return false\" href=\"#\">[snc]</a>\n",
+      " <a class=\"butono1\" onclick=\"insertTags2(&#39;<ofc>&#39;,document.getElementById(&#34;ofc&#34;).value,&#39;</ofc>&#39;,&#39;&#39;,&#39;&#39;);return false\" href=\"#\">[ofc]</a>",
       "=".popup_menu(-id=>'ofc',
 		    -name    => 'ofc',
                     -values  => ['', '*', 1 .. 9],
 		    -default => '',
       )."\n ",
-      " <a onclick=\"insertTags2(&#39;<gra>&#39;,document.getElementById(&#34;gra&#34;).value,&#39;</gra>&#39;,&#39;&#39;,&#39;&#39;);return false\" href=\"#\">[gra]</a>",
+      " <a class=\"butono1\" onclick=\"insertTags2(&#39;<gra>&#39;,document.getElementById(&#34;gra&#34;).value,&#39;</gra>&#39;,&#39;&#39;,&#39;&#39;);return false\" href=\"#\">[gra]</a>",
       "=".popup_menu(-id=>'gra',
 		    -name    => 'gra',
                     -values  => ['<vspec>tr</vspec>', '<vspec>ntr</vspec>'],
 		    -default => '',
 		    -labels  => {'<vspec>tr</vspec>' => 'v tr', '<vspec>ntr</vspec>' => 'v ntr'},
       )."\n ",
-      " <a onclick=\"insertTags(&#39;<ref cel=\\&#34;\\&#34;>&#39;,&#39;</ref>&#39;,&#39;&#39;);return false\" href=\"#\">[ref]</a> ",
-      " <a onclick=\"insertTags2(&#39;<ref tip=\\&#34;&#39;,document.getElementById(&#34;reftip&#34;).value,&#39;\\&#34; cel=\\&#34;\\&#34;>&#39;,&#39;</ref>&#39;,&#39;&#39;);return false\" href=\"#\">[ref tip]</a> ",
+      " <a class=\"butono1\" onclick=\"insertTags(&#39;<ref cel=\\&#34;\\&#34;>&#39;,&#39;</ref>&#39;,&#39;&#39;);return false\" href=\"#\">[ref]</a> ",
+      " <a class=\"butono1\" onclick=\"insertTags2(&#39;<ref tip=\\&#34;&#39;,document.getElementById(&#34;reftip&#34;).value,&#39;\\&#34; cel=\\&#34;\\&#34;>&#39;,&#39;</ref>&#39;,&#39;&#39;);return false\" href=\"#\">[ref tip]</a> ",
       "\n tip=".popup_menu(-id=>'reftip',
 		    -name=>'reftip',
             -values=>['', qw/vid hom dif sin ant super sub prt malprt ekz/],
@@ -989,19 +989,19 @@ print "\n&nbsp;prilabori:\n".
 #                    -maxlength => 3,
 #                    -value=> cookie(-name=>'reftip') || '',
       )."\n ",
-      " <a onclick=\"var i=str_indent();insertTags(&#39;<rim>\\n&#39;+i+&#39;  &#39;,&#39;\\n&#39;+i+&#39;</rim>&#39;,&#39;&#39;);return false\" href=\"#\">[rim]</a>\n",
+      " <a class=\"butono1\" onclick=\"var i=str_indent();insertTags(&#39;<rim>\\n&#39;+i+&#39;  &#39;,&#39;\\n&#39;+i+&#39;</rim>&#39;,&#39;&#39;);return false\" href=\"#\">[rim]</a>\n",
       "&nbsp; &nbsp; ".a({target=>"_new", href=>'/revo/dok/manlibro.html#drv'}, "[helpo]")."\n ".
       a({target=>"_new", href=>'/revo/dok/dtd.html#drv'}, "[dtd]")."\n".
       br.
       "\n&nbsp;uzo:\n".
-      " <a onclick=\"insertTags2(&#39;<uzo tip=\\&#34;fak\\&#34;>&#39;,document.getElementById(&#34;uzofak&#34;).value,&#39;</uzo>&#39;,&#39;&#39;,&#39;&#39;);return false\" href=\"#\">[fak]</a>",
+      " <a class=\"butono1\" onclick=\"insertTags2(&#39;<uzo tip=\\&#34;fak\\&#34;>&#39;,document.getElementById(&#34;uzofak&#34;).value,&#39;</uzo>&#39;,&#39;&#39;,&#39;&#39;);return false\" href=\"#\">[fak]</a>",
       "=".popup_menu(-id=>'uzofak',
 		    -name    => 'uzofak',
                     -values  => \@fakoj,
 		    -default => '',
 		    -labels  => \%fak,
       )."\n ",
-      " <a onclick=\"insertTags2(&#39;<uzo tip=\\&#34;stl\\&#34;>&#39;,document.getElementById(&#34;uzostl&#34;).value,&#39;</uzo>&#39;,&#39;&#39;,&#39;&#39;);return false\" href=\"#\">[stl]</a>",
+      " <a class=\"butono1\" onclick=\"insertTags2(&#39;<uzo tip=\\&#34;stl\\&#34;>&#39;,document.getElementById(&#34;uzostl&#34;).value,&#39;</uzo>&#39;,&#39;&#39;,&#39;&#39;);return false\" href=\"#\">[stl]</a>",
       "=".popup_menu(-id=>'uzostl',
 		    -name    => 'uzostl',
                     -values  => \@stiloj,
@@ -1012,25 +1012,25 @@ print "\n&nbsp;prilabori:\n".
       a({target=>"_new", href=>'/revo/dok/dtd.html#uzo'}, "[dtd]")."\n".
       br.
       "\n&nbsp;ekzemplo:\n".
-      " <a onclick=\"var i=str_indent();insertTags(&#39;<ekz>\\n&#39;+i+&#39;  &#39;,&#39;\\n&#39;+i+&#39;</ekz>&#39;,&#39;&#39;);return false\" href=\"#\">[ekz]</a>\n",
-      " <a onclick=\"insertTags(&#39;<tld/>&#39;,&#39;&#39;,&#39;&#39;);return false\" href=\"#\">[tld]</a>\n",
-      " <a onclick=\"var i=str_indent();insertTags(&#39;<fnt>\\n&#39;+i+&#39;  <aut>&#39;,&#39;</aut>,\\n&#39;+i+&#39;  <vrk><url ref=\\&#34;\\&#34;></url></vrk>,\\n&#39;+i+&#39;  <bib></bib>,\\n&#39;+i+&#39;  <lok></lok>\\n&#39;+i+&#39;</fnt>&#39;,&#39;&#39;);return false\" href=\"#\">[fnt]</a>\n ",
+      " <a class=\"butono1\" onclick=\"var i=str_indent();insertTags(&#39;<ekz>\\n&#39;+i+&#39;  &#39;,&#39;\\n&#39;+i+&#39;</ekz>&#39;,&#39;&#39;);return false\" href=\"#\">[ekz]</a>\n",
+      " <a class=\"butono1\" onclick=\"insertTags(&#39;<tld/>&#39;,&#39;&#39;,&#39;&#39;);return false\" href=\"#\">[tld]</a>\n",
+      " <a class=\"butono1\" onclick=\"var i=str_indent();insertTags(&#39;<fnt>\\n&#39;+i+&#39;  <aut>&#39;,&#39;</aut>,\\n&#39;+i+&#39;  <vrk><url ref=\\&#34;\\&#34;></url></vrk>,\\n&#39;+i+&#39;  <bib></bib>,\\n&#39;+i+&#39;  <lok></lok>\\n&#39;+i+&#39;</fnt>&#39;,&#39;&#39;);return false\" href=\"#\">[fnt]</a>\n ",
       "&nbsp; &nbsp; ".a({target=>"_new", href=>'/revo/dok/manlibro.html#ekz'}, "[helpo]")."\n ".
       a({target=>"_new", href=>'/revo/dok/dtd.html#ekz'}, "[dtd]")."\n".
       br.
       "</div>".
-      "\n&nbsp;traduki: <a accesskey=\"t\" onclick=\"insertTags2(&#39;<trd lng=\\&#34;&#39;,document.getElementById(&#34;trdlng&#34;).value,&#39;\\&#34;>&#39;,&#39;</trd>&#39;,&#39;&#39;);return false\" href=\"#\">[<u>t</u>rd lng]</a> ",
+      "\n&nbsp;traduki: <a class=\"butono1\" accesskey=\"t\" onclick=\"insertTags2(&#39;<trd lng=\\&#34;&#39;,document.getElementById(&#34;trdlng&#34;).value,&#39;\\&#34;>&#39;,&#39;</trd>&#39;,&#39;&#39;);return false\" href=\"#\">[<u>t</u>rd lng]</a> ",
 #      "\n&nbsp;<a onclick=\"var i=str_indent();insertTags(&#39;<trdgrp>\\n&#39;+i+&#39;  <trd>&#39;,&#39;</trd>\\n&#39;+i+&#39;</trdgrp>&#39;,&#39;&#39;);return false\" href=\"#\">[trdgrp]</a> ",
-      "\n&nbsp;<a onclick=\"var i=str_indent();insertTags2(&#39;<trdgrp lng=\\&#34;&#39;,document.getElementById(&#34;trdlng&#34;).value,&#39;\\&#34;>\\n&#39;+i+&#39;  <trd>&#39;,&#39;</trd>,\\n&#39;+i+&#39;  <trd></trd>\\n&#39;+i+&#39;</trdgrp>&#39;,&#39;&#39;);return false\" href=\"#\">[trdgrp lng]</a> ",
+      "\n&nbsp;<a class=\"butono1\" onclick=\"var i=str_indent();insertTags2(&#39;<trdgrp lng=\\&#34;&#39;,document.getElementById(&#34;trdlng&#34;).value,&#39;\\&#34;>\\n&#39;+i+&#39;  <trd>&#39;,&#39;</trd>,\\n&#39;+i+&#39;  <trd></trd>\\n&#39;+i+&#39;</trdgrp>&#39;,&#39;&#39;);return false\" href=\"#\">[trdgrp lng]</a> ",
       "\n lng=".textfield(-id=>'trdlng',
 		    -name=>'trdlng',
                     -size => 2,
                     -maxlength => 3,
                     -value=> cookie(-name=>'trdlng') || '',
       ),
-      "\n&nbsp;<a onclick=\"insertTags(&#39;<trd>&#39;,&#39;</trd>&#39;,&#39;&#39;);return false\" href=\"#\">[trd]</a> ",
-      "\n&nbsp;<a onclick=\"insertTags(&#39;<klr>&#39;,&#39;</klr>&#39;,&#39;&#39;);return false\" href=\"#\">[klr]</a> ",
-      "\n&nbsp;<a onclick=\"insertTags2(&#39;<klr tip=\\&#34;&#39;,document.getElementById(&#34;klrtip&#34;).value,&#39;\\&#34;>&#39;,&#39;</klr>&#39;,&#39;&#39;);return false\" href=\"#\">[klr tip]</a> ",
+      "\n&nbsp;<a class=\"butono1\" onclick=\"insertTags(&#39;<trd>&#39;,&#39;</trd>&#39;,&#39;&#39;);return false\" href=\"#\">[trd]</a> ",
+      "\n&nbsp;<a class=\"butono1\" onclick=\"insertTags(&#39;<klr>&#39;,&#39;</klr>&#39;,&#39;&#39;);return false\" href=\"#\">[klr]</a> ",
+      "\n&nbsp;<a class=\"butono1\" onclick=\"insertTags2(&#39;<klr tip=\\&#34;&#39;,document.getElementById(&#34;klrtip&#34;).value,&#39;\\&#34;>&#39;,&#39;</klr>&#39;,&#39;&#39;);return false\" href=\"#\">[klr tip]</a> ",
       "\n tip=".popup_menu(-id=>'klrtip',
 		    -name=>'klrtip',
                     -values=>['', qw/ind amb/],
@@ -1039,7 +1039,7 @@ print "\n&nbsp;prilabori:\n".
                               'amb'=>'amb-aux',
 		    },
       )."\n ",
-      "\n&nbsp;<a onclick=\"insertTags(&#39;<ind>&#39;,&#39;</ind>&#39;,&#39;&#39;);return false\" href=\"#\">[ind]</a> ",
+      "\n&nbsp;<a class=\"butono1\" onclick=\"insertTags(&#39;<ind>&#39;,&#39;</ind>&#39;,&#39;&#39;);return false\" href=\"#\">[ind]</a> ",
       "&nbsp; &nbsp; ".a({target=>"_new", href=>'/revo/dok/manlibro.html#trd'}, "[helpo]").
       a({target=>"_new", href=>'/revo/dok/dtd.html#trd'}, "[dtd]").
       br."\n",
@@ -1090,7 +1090,7 @@ via retadreso estas $ENV{REMOTE_ADDR}<br>
 EOD
 
 print p('<!-- svn versio: $Id$'.br.
-	'hg versio: $HgId: vokomail.pl 56:daa9dfe3da4c 2010/04/11 22:32:46 Wieland $ -->');
+	'hg versio: $HgId: vokomail.pl 57:c79bbafd77bb 2010/04/15 08:57:21 Wieland $ -->');
 
 print end_html();
 
