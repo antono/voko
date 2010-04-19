@@ -952,29 +952,33 @@ print "\n&nbsp;prilabori:\n".
       "-<a class=\"butono1\" onclick=\"nextTag(&#39;<drv&#39,1);return false\" href=\"#\">drv</a>\n".
       "&nbsp;&nbsp;<a onclick=\"showhide(&#39;ajx&#39;);return false\" href=\"#\">montru malpli</a><br>\n".
       "\n&nbsp;aldoni:\n".
-      " <a class=\"butono1\" onclick=\"var i=str_indent();insertTags(&#39;<drv mrk=\\&#34;$art.&#39;,&#39;\\&#34;>\\n&#39;+i+&#39;  <kap><tld/>...</kap>\\n&#39;+i+&#39;  <snc mrk=\\&#34;$art.\\&#34;>\\n&#39;+i+&#39;    <dif>\\n&#39;+i+&#39;      \\n&#39;+i+&#39;    </dif>\\n&#39;+i+&#39;    \\n&#39;+i+&#39;  </snc>\\n&#39;+i+&#39;</drv>&#39;,&#39;&#39;);return false\" href=\"#\">[drv]</a>\n",
-      " <a class=\"butono1\" onclick=\"var i=str_indent();insertTags(&#39;<dif>\\n&#39;+i+&#39;  &#39;,&#39;\\n&#39;+i+&#39;</dif>&#39;,&#39;&#39;);return false\" href=\"#\">[dif]</a>\n",
-      " <a class=\"butono1\" onclick=\"var i=str_indent();insertTags(&#39;<snc mrk=\\&#34;$art.&#39;,&#39;\\&#34;>\\n&#39;+i+&#39;  <dif>\\n&#39;+i+&#39;    \\n&#39;+i+&#39;  </dif>\\n&#39;+i+&#39;</snc>&#39;,&#39;&#39;);return false\" href=\"#\">[snc]</a>\n",
-      " <a class=\"butono1\" onclick=\"insertTags2(&#39;<ofc>&#39;,document.getElementById(&#34;ofc&#34;).value,&#39;</ofc>&#39;,&#39;&#39;,&#39;&#39;);return false\" href=\"#\">[ofc]</a>",
+      " <a class=\"butono1\" onclick=\"var i=str_indent();insertTags(&#39;<drv mrk=\\&#34;$art.&#39;,&#39;\\&#34;>\\n&#39;+i+&#39;  <kap><tld/>...</kap>\\n&#39;+i+&#39;  <snc mrk=\\&#34;$art.\\&#34;>\\n&#39;+i+&#39;    <dif>\\n&#39;+i+&#39;      \\n&#39;+i+&#39;    </dif>\\n&#39;+i+&#39;    \\n&#39;+i+&#39;  </snc>\\n&#39;+i+&#39;</drv>&#39;,&#39;&#39;);return false\" href=\"#\" title=\"Aldonu novan derivaĵon.\">[drv]</a>\n",
+      " <a class=\"butono1\" onclick=\"var i=str_indent();insertTags(&#39;<dif>\\n&#39;+i+&#39;  &#39;,&#39;\\n&#39;+i+&#39;</dif>&#39;,&#39;&#39;);return false\" href=\"#\" title=\"Aldonu novan difinon.\">[dif]</a>\n",
+      " <a class=\"butono1\" onclick=\"var i=str_indent();insertTags(&#39;<snc mrk=\\&#34;$art.&#39;,&#39;\\&#34;>\\n&#39;+i+&#39;  <dif>\\n&#39;+i+&#39;    \\n&#39;+i+&#39;  </dif>\\n&#39;+i+&#39;</snc>&#39;,&#39;&#39;);return false\" href=\"#\" title=\"Aldonu novan sencon.\">[snc]</a>\n",
+      " <a class=\"butono1\" onclick=\"insertTags2(&#39;<ofc>&#39;,document.getElementById(&#34;ofc&#34;).value,&#39;</ofc>&#39;,&#39;&#39;,&#39;&#39;);return false\" href=\"#\" title=\"Aldonu indikon pri oficialeco.\">[ofc]</a>",
       "=".popup_menu(-id=>'ofc',
 		    -name    => 'ofc',
-                    -values  => ['', '*', 1 .. 9],
+ 			-title   => "Elektu indikon pri oficialeco.",
+            -values  => ['', '*', 1 .. 9],
 		    -default => '',
       )."\n ",
-      " <a class=\"butono1\" onclick=\"insertTags2(&#39;<gra>&#39;,document.getElementById(&#34;gra&#34;).value,&#39;</gra>&#39;,&#39;&#39;,&#39;&#39;);return false\" href=\"#\">[gra]</a>",
+      " <a class=\"butono1\" onclick=\"insertTags2(&#39;<gra>&#39;,document.getElementById(&#34;gra&#34;).value,&#39;</gra>&#39;,&#39;&#39;,&#39;&#39;);return false\" href=\"#\" title=\"Aldonu indikon pri gramatiko.\">[gra]</a>",
       "=".popup_menu(-id=>'gra',
 		    -name    => 'gra',
-                    -values  => ['<vspec>tr</vspec>', '<vspec>ntr</vspec>'],
+ 			-title   => "Elektu indikon pri gramatiko.",
+            -values  => ['<vspec>tr</vspec>', '<vspec>ntr</vspec>'],
 		    -default => '',
 		    -labels  => {'<vspec>tr</vspec>' => 'v tr', '<vspec>ntr</vspec>' => 'v ntr'},
       )."\n ",
-      " <a class=\"butono1\" onclick=\"insertTags(&#39;<ref cel=\\&#34;\\&#34;>&#39;,&#39;</ref>&#39;,&#39;&#39;);return false\" href=\"#\">[ref]</a> ",
-      " <a class=\"butono1\" onclick=\"insertTags2(&#39;<ref tip=\\&#34;&#39;,document.getElementById(&#34;reftip&#34;).value,&#39;\\&#34; cel=\\&#34;\\&#34;>&#39;,&#39;</ref>&#39;,&#39;&#39;);return false\" href=\"#\">[ref tip]</a> ",
+#      " <a class=\"butono1\" onclick=\"var i=str_indent();insertTags(&#39;<refgrp cel=\\&#34;\\&#34;>&#39;,&#39;\\n&#39;+i+&#39;  <ref>&#39;,&#39;</ref>,\\n&#39;+i+&#39;  <ref></ref>\\n&#39;+i+&#39;</refgrp>&#39;,&#39;&#39;);return false\" href=\"#\" title=\"Aldonu grupon de refencoj.\">[refgrp tip]</a> ",
+      " <a class=\"butono1\" onclick=\"insertTags2(&#39;<ref tip=\\&#34;&#39;,document.getElementById(&#34;reftip&#34;).value,&#39;\\&#34; cel=\\&#34;\\&#34;>&#39;,&#39;</ref>&#39;,&#39;&#39;);return false\" href=\"#\" title=\"Aldonu unu referencon.\">[ref tip]</a> ",
+       " <a class=\"butono1\" onclick=\"var i=str_indent();insertTags(&#39;<refgrp tip=\\&#34;&#39;+document.getElementById(&#34;reftip&#34;).value+&#39;\\&#34;>\\n&#39;+i+&#39;  <ref cel=\\&#34;\\&#34;>&#39;,&#39;</ref>\\n&#39;+i+&#39;</refgrp>&#39;,&#39;&#39;);return false\" href=\"#\" title=\"Aldonu grupon de refencoj.\">[refgrp tip]</a> ",
       "\n tip=".popup_menu(-id=>'reftip',
-		    -name=>'reftip',
-            -values=>['', qw/vid hom dif sin ant super sub prt malprt ekz/],
-		    -default=>'',
-		    -labels=>{'vid'=>'vid-u',
+		    -name   => 'reftip',
+ 			-title  => "Elektu tipon de referenco.",
+            -values => ['', qw/vid hom dif sin ant super sub prt malprt ekz/],
+		    -default=> '',
+		    -labels =>{'vid'=>'vid-u',
                       'hom'=>'hom-onima',
                       'dif'=>'dif-ina',
                       'sin'=>'sin-onimo',
@@ -989,22 +993,25 @@ print "\n&nbsp;prilabori:\n".
 #                    -maxlength => 3,
 #                    -value=> cookie(-name=>'reftip') || '',
       )."\n ",
-      " <a class=\"butono1\" onclick=\"var i=str_indent();insertTags(&#39;<rim>\\n&#39;+i+&#39;  &#39;,&#39;\\n&#39;+i+&#39;</rim>&#39;,&#39;&#39;);return false\" href=\"#\">[rim]</a>\n",
+      " <a class=\"butono1\" onclick=\"insertTags(&#39;<ref cel=\\&#34;\\&#34;>&#39;,&#39;</ref>&#39;,&#39;&#39;);return false\" href=\"#\" title=\"Aldonu unu referencon al grupo (sen tipo).\">[ref]</a> ",
+      " <a class=\"butono1\" onclick=\"var i=str_indent();insertTags(&#39;<rim>\\n&#39;+i+&#39;  &#39;,&#39;\\n&#39;+i+&#39;</rim>&#39;,&#39;&#39;);return false\" href=\"#\" title=\"Aldonu rimarkon.\">[rim]</a>\n",
       "&nbsp; &nbsp; ".a({target=>"_new", href=>'/revo/dok/manlibro.html#drv'}, "[helpo]")."\n ".
       a({target=>"_new", href=>'/revo/dok/dtd.html#drv'}, "[dtd]")."\n".
       br.
       "\n&nbsp;uzo:\n".
-      " <a class=\"butono1\" onclick=\"insertTags2(&#39;<uzo tip=\\&#34;fak\\&#34;>&#39;,document.getElementById(&#34;uzofak&#34;).value,&#39;</uzo>&#39;,&#39;&#39;,&#39;&#39;);return false\" href=\"#\">[fak]</a>",
+      " <a class=\"butono1\" onclick=\"insertTags2(&#39;<uzo tip=\\&#34;fak\\&#34;>&#39;,document.getElementById(&#34;uzofak&#34;).value,&#39;</uzo>&#39;,&#39;&#39;,&#39;&#39;);return false\" href=\"#\" title=\"Aldonu fakon (elektu dekstre).\">[fak]</a>",
       "=".popup_menu(-id=>'uzofak',
 		    -name    => 'uzofak',
-                    -values  => \@fakoj,
+  			-title   => "Elektu uzofakon.",
+            -values  => \@fakoj,
 		    -default => '',
 		    -labels  => \%fak,
       )."\n ",
-      " <a class=\"butono1\" onclick=\"insertTags2(&#39;<uzo tip=\\&#34;stl\\&#34;>&#39;,document.getElementById(&#34;uzostl&#34;).value,&#39;</uzo>&#39;,&#39;&#39;,&#39;&#39;);return false\" href=\"#\">[stl]</a>",
+      " <a class=\"butono1\" onclick=\"insertTags2(&#39;<uzo tip=\\&#34;stl\\&#34;>&#39;,document.getElementById(&#34;uzostl&#34;).value,&#39;</uzo>&#39;,&#39;&#39;,&#39;&#39;);return false\" href=\"#\" title=\"Aldonu stilon (elektu dekstre).\">[stl]</a>",
       "=".popup_menu(-id=>'uzostl',
 		    -name    => 'uzostl',
-                    -values  => \@stiloj,
+  			-title   => "Elektu uzostilon.",
+            -values  => \@stiloj,
 		    -default => '',
 		    -labels  => \%stl,
       )."\n ",
@@ -1012,34 +1019,36 @@ print "\n&nbsp;prilabori:\n".
       a({target=>"_new", href=>'/revo/dok/dtd.html#uzo'}, "[dtd]")."\n".
       br.
       "\n&nbsp;ekzemplo:\n".
-      " <a class=\"butono1\" onclick=\"var i=str_indent();insertTags(&#39;<ekz>\\n&#39;+i+&#39;  &#39;,&#39;\\n&#39;+i+&#39;</ekz>&#39;,&#39;&#39;);return false\" href=\"#\">[ekz]</a>\n",
-      " <a class=\"butono1\" onclick=\"insertTags(&#39;<tld/>&#39;,&#39;&#39;,&#39;&#39;);return false\" href=\"#\">[tld]</a>\n",
-      " <a class=\"butono1\" onclick=\"var i=str_indent();insertTags(&#39;<fnt>\\n&#39;+i+&#39;  <aut>&#39;,&#39;</aut>,\\n&#39;+i+&#39;  <vrk><url ref=\\&#34;\\&#34;></url></vrk>,\\n&#39;+i+&#39;  <bib></bib>,\\n&#39;+i+&#39;  <lok></lok>\\n&#39;+i+&#39;</fnt>&#39;,&#39;&#39;);return false\" href=\"#\">[fnt]</a>\n ",
+      " <a class=\"butono1\" onclick=\"var i=str_indent();insertTags(&#39;<ekz>\\n&#39;+i+&#39;  &#39;,&#39;\\n&#39;+i+&#39;</ekz>&#39;,&#39;&#39;);return false\" href=\"#\" title=\"Aldonu ekzemplon.\">[ekz]</a>\n",
+      " <a class=\"butono1\" onclick=\"insertTags(&#39;<tld/>&#39;,&#39;&#39;,&#39;&#39;);return false\" href=\"#\" title=\"Aldonu tildon (anstataŭigas la radikon).\">[tld]</a>\n",
+      " <a class=\"butono1\" onclick=\"var i=str_indent();insertTags(&#39;<fnt>\\n&#39;+i+&#39;  <aut>&#39;,&#39;</aut>,\\n&#39;+i+&#39;  <vrk><url ref=\\&#34;\\&#34;></url></vrk>,\\n&#39;+i+&#39;  <bib></bib>,\\n&#39;+i+&#39;  <lok></lok>\\n&#39;+i+&#39;</fnt>&#39;,&#39;&#39;);return false\" href=\"#\" title=\"Aldonu fonton (kun kelkaj informoj).\">[fnt]</a>\n ",
       "&nbsp; &nbsp; ".a({target=>"_new", href=>'/revo/dok/manlibro.html#ekz'}, "[helpo]")."\n ".
       a({target=>"_new", href=>'/revo/dok/dtd.html#ekz'}, "[dtd]")."\n".
       br.
       "</div>".
-      "\n&nbsp;traduki: <a class=\"butono1\" accesskey=\"t\" onclick=\"insertTags2(&#39;<trd lng=\\&#34;&#39;,document.getElementById(&#34;trdlng&#34;).value,&#39;\\&#34;>&#39;,&#39;</trd>&#39;,&#39;&#39;);return false\" href=\"#\">[<u>t</u>rd lng]</a> ",
+      "\n&nbsp;traduki: <a class=\"butono1\" accesskey=\"t\" onclick=\"insertTags2(&#39;<trd lng=\\&#34;&#39;,document.getElementById(&#34;trdlng&#34;).value,&#39;\\&#34;>&#39;,&#39;</trd>&#39;,&#39;&#39;);return false\" href=\"#\" title=\"Aldonu unu tradukon.\">[<u>t</u>rd lng]</a> ",
 #      "\n&nbsp;<a onclick=\"var i=str_indent();insertTags(&#39;<trdgrp>\\n&#39;+i+&#39;  <trd>&#39;,&#39;</trd>\\n&#39;+i+&#39;</trdgrp>&#39;,&#39;&#39;);return false\" href=\"#\">[trdgrp]</a> ",
-      "\n&nbsp;<a class=\"butono1\" onclick=\"var i=str_indent();insertTags2(&#39;<trdgrp lng=\\&#34;&#39;,document.getElementById(&#34;trdlng&#34;).value,&#39;\\&#34;>\\n&#39;+i+&#39;  <trd>&#39;,&#39;</trd>,\\n&#39;+i+&#39;  <trd></trd>\\n&#39;+i+&#39;</trdgrp>&#39;,&#39;&#39;);return false\" href=\"#\">[trdgrp lng]</a> ",
+      "\n&nbsp;<a class=\"butono1\" onclick=\"var i=str_indent();insertTags2(&#39;<trdgrp lng=\\&#34;&#39;,document.getElementById(&#34;trdlng&#34;).value,&#39;\\&#34;>\\n&#39;+i+&#39;  <trd>&#39;,&#39;</trd>,\\n&#39;+i+&#39;  <trd></trd>\\n&#39;+i+&#39;</trdgrp>&#39;,&#39;&#39;);return false\" href=\"#\" title=\"Aldonu grupon de tradukoj.\">[trdgrp lng]</a> ",
       "\n lng=".textfield(-id=>'trdlng',
 		    -name=>'trdlng',
-                    -size => 2,
-                    -maxlength => 3,
-                    -value=> cookie(-name=>'trdlng') || '',
+ 			-title=> "Tajpu la lingvokodon por tradukoj ĉi tie.",
+            -size => 2,
+            -maxlength => 3,
+            -value=> cookie(-name=>'trdlng') || '',
       ),
-      "\n&nbsp;<a class=\"butono1\" onclick=\"insertTags(&#39;<trd>&#39;,&#39;</trd>&#39;,&#39;&#39;);return false\" href=\"#\">[trd]</a> ",
-      "\n&nbsp;<a class=\"butono1\" onclick=\"insertTags(&#39;<klr>&#39;,&#39;</klr>&#39;,&#39;&#39;);return false\" href=\"#\">[klr]</a> ",
-      "\n&nbsp;<a class=\"butono1\" onclick=\"insertTags2(&#39;<klr tip=\\&#34;&#39;,document.getElementById(&#34;klrtip&#34;).value,&#39;\\&#34;>&#39;,&#39;</klr>&#39;,&#39;&#39;);return false\" href=\"#\">[klr tip]</a> ",
+      "\n&nbsp;<a class=\"butono1\" onclick=\"insertTags(&#39;<trd>&#39;,&#39;</trd>&#39;,&#39;&#39;);return false\" href=\"#\" title=\"Aldonu unu tradukon al grupo (sen lingvo).\">[trd]</a> ",
+      "\n&nbsp;<a class=\"butono1\" onclick=\"insertTags(&#39;<klr>&#39;,&#39;</klr>&#39;,&#39;&#39;);return false\" href=\"#\" title=\"Aldonu klarigon sen tipo.\">[klr]</a> ",
+      "\n&nbsp;<a class=\"butono1\" onclick=\"insertTags2(&#39;<klr tip=\\&#34;&#39;,document.getElementById(&#34;klrtip&#34;).value,&#39;\\&#34;>&#39;,&#39;</klr>&#39;,&#39;&#39;);return false\" href=\"#\" title=\"Aldonu klarigon kun tipo.\">[klr tip]</a> ",
       "\n tip=".popup_menu(-id=>'klrtip',
 		    -name=>'klrtip',
-                    -values=>['', qw/ind amb/],
+ 			-title=> "Elektu la tipon de la klarigo.",
+            -values=>['', qw/ind amb/],
 		    -default=> cookie(-name=>'klrtip') || 'amb',
 		    -labels=>{'ind'=>'ind-ekso',
                               'amb'=>'amb-aux',
 		    },
       )."\n ",
-      "\n&nbsp;<a class=\"butono1\" onclick=\"insertTags(&#39;<ind>&#39;,&#39;</ind>&#39;,&#39;&#39;);return false\" href=\"#\">[ind]</a> ",
+      "\n&nbsp;<a class=\"butono1\" onclick=\"insertTags(&#39;<ind>&#39;,&#39;</ind>&#39;,&#39;&#39;);return false\" href=\"#\" title=\"Aldonu indikon por la indekso.\">[ind]</a> ",
       "&nbsp; &nbsp; ".a({target=>"_new", href=>'/revo/dok/manlibro.html#trd'}, "[helpo]").
       a({target=>"_new", href=>'/revo/dok/dtd.html#trd'}, "[dtd]").
       br."\n",
@@ -1090,7 +1099,7 @@ via retadreso estas $ENV{REMOTE_ADDR}<br>
 EOD
 
 print p('<!-- svn versio: $Id$'.br.
-	'hg versio: $HgId: vokomail.pl 57:c79bbafd77bb 2010/04/15 08:57:21 Wieland $ -->');
+	'hg versio: $HgId: vokomail.pl 58:b2c1818d78fa 2010/04/19 20:13:26 Wieland $ -->');
 
 print end_html();
 
