@@ -628,7 +628,7 @@ my $dbh = revodb::connect();
 
 #print pre('dbconnect'." size=".length($xml2)) if $debug;
 
-print pre('button='.param('button')."   ".(Encode::is_utf8(param('button')))."-".(Encode::is_utf8("antaŭrigardu"))) if $debug;
+#print pre('button='.param('button')."   ".(Encode::is_utf8(param('button')))."-".(Encode::is_utf8("antaŭrigardu"))) if $debug;
 if (param('button') eq "antaŭrigardu" or param('button') eq 'konservu') {
 
 print <<'EOD';
@@ -646,7 +646,7 @@ EOD
   my ($html, $err);
   revo::xml2html::konv($dbh, \$xml2, \$html, \$err, $debug);
 
-  if ($debug) {
+  if ($html and $debug) {
     open HTML, ">", "../art2/$art.html" or die "open write html";
 	print HTML $html;
     close HTML;
@@ -738,7 +738,7 @@ EOD
   while ($xml2 =~ /<(drv|snc) mrk="(.*?)">/gi) {
     my $mrk = $2;
     if ($mrk !~ /^$art\.[^.0]*0/) {
-      print "La marko \"$mrk\" ne komencas per \"$art.\" a&#365; poste ne havas 0.<br>\n";
+      print "La marko \"$mrk\" ne komenciĝas per \"$art.\" a&#365; poste ne havas 0.<br>\n";
       $ne_konservu = 5;
     }
   }
@@ -767,7 +767,7 @@ EOD
     $ne_konservu = 3;
   } elsif (!param('nova')) {
     if ($sxangxo and $sxangxo ne "klarigo de la sxangxo") {
-      print "teksto en ordo: $sxangxo".br."\n";
+      print "Ŝanĝoteksto en ordo: $sxangxo".br."\n";
     } else {
       print "Eraro: ŝanĝoteksto mankas: $sxangxo".br."\n";
       $ne_konservu = 4;
@@ -952,7 +952,7 @@ print "\n&nbsp;prilabori:\n".
       "-<a class=\"butono1\" onclick=\"nextTag(&#39;<drv&#39,1);return false\" href=\"#\">drv</a>\n".
       "&nbsp;&nbsp;<a onclick=\"showhide(&#39;ajx&#39;);return false\" href=\"#\">montru malpli</a><br>\n".
       "\n&nbsp;aldoni:\n".
-      " <a class=\"butono1\" onclick=\"var i=str_indent();insertTags(&#39;<drv mrk=\\&#34;$art.&#39;,&#39;\\&#34;>\\n&#39;+i+&#39;  <kap><tld/>...</kap>\\n&#39;+i+&#39;  <snc mrk=\\&#34;$art.\\&#34;>\\n&#39;+i+&#39;    <dif>\\n&#39;+i+&#39;      \\n&#39;+i+&#39;    </dif>\\n&#39;+i+&#39;    \\n&#39;+i+&#39;  </snc>\\n&#39;+i+&#39;</drv>&#39;,&#39;&#39;);return false\" href=\"#\" title=\"Aldonu novan derivaĵon.\">[drv]</a>\n",
+      " <a class=\"butono1\" onclick=\"var i=str_indent();insertTags(&#39;<drv mrk=\\&#34;$art.&#39;,&#39;\\&#34;>\\n&#39;+i+&#39;  <kap><tld/>...</kap>\\n&#39;+i+&#39;  <snc mrk=\\&#34;$art.\\&#34;>\\n&#39;+i+&#39;    <dif>\\n&#39;+i+&#39;      \\n&#39;+i+&#39;    </dif>\\n&#39;+i+&#39;  </snc>\\n&#39;+i+&#39;</drv>&#39;,&#39;&#39;);return false\" href=\"#\" title=\"Aldonu novan derivaĵon.\">[drv]</a>\n",
       " <a class=\"butono1\" onclick=\"var i=str_indent();insertTags(&#39;<dif>\\n&#39;+i+&#39;  &#39;,&#39;\\n&#39;+i+&#39;</dif>&#39;,&#39;&#39;);return false\" href=\"#\" title=\"Aldonu novan difinon.\">[dif]</a>\n",
       " <a class=\"butono1\" onclick=\"var i=str_indent();insertTags(&#39;<snc mrk=\\&#34;$art.&#39;,&#39;\\&#34;>\\n&#39;+i+&#39;  <dif>\\n&#39;+i+&#39;    \\n&#39;+i+&#39;  </dif>\\n&#39;+i+&#39;</snc>&#39;,&#39;&#39;);return false\" href=\"#\" title=\"Aldonu novan sencon.\">[snc]</a>\n",
       " <a class=\"butono1\" onclick=\"insertTags2(&#39;<ofc>&#39;,document.getElementById(&#34;ofc&#34;).value,&#39;</ofc>&#39;,&#39;&#39;,&#39;&#39;);return false\" href=\"#\" title=\"Aldonu indikon pri oficialeco.\">[ofc]</a>",
@@ -1099,7 +1099,7 @@ via retadreso estas $ENV{REMOTE_ADDR}<br>
 EOD
 
 print p('<!-- svn versio: $Id$'.br.
-	'hg versio: $HgId: vokomail.pl 58:b2c1818d78fa 2010/04/19 20:13:26 Wieland $ -->');
+	'hg versio: $HgId: vokomail.pl 59:dcbcc5c2628a 2010/04/19 22:04:25 Wieland $ -->');
 
 print end_html();
 
