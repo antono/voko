@@ -24,6 +24,8 @@ if (param('arts')) {
   print textarea(-name=>'arts',
                  -rows=>10,
                  -columns=>50),
+        hidden(-name=>'trunc',
+               -default=>param('trunc')),
         hidden(-name=>'verbose',
                -default=>param('verbose'));
   print br, submit(-name=>'button');
@@ -50,7 +52,8 @@ $ENV{'PATH'} = $ENV{'PATH'}.":$homedir/files/bin";
 use lib("/var/www/web277/files/perllib");
 use parseart;
 
-chdir("..");
+#chdir("..");
+chdir($xmldir);
 
 # Connect to the database.
 my $dbh = parseart::connect();
