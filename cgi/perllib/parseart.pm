@@ -28,6 +28,7 @@ sub trunc {
   $dbh->do("TRUNCATE TABLE var") or die "truncate var ne funkciis";
   $dbh->do("TRUNCATE TABLE snc") or die "truncate snc ne funkciis";
   $dbh->do("TRUNCATE TABLE trd") or die "truncate trd ne funkciis";
+  $dbh->do("TRUNCATE TABLE rim") or die "truncate rim ne funkciis";
 }
 
 ######################################################################
@@ -100,6 +101,9 @@ sub parse {
       print h2("Dauxro: ".(time() - $start_time)." sekundoj por $art_count artikoloj.") if $verbose;
       $dbh->do("DELETE FROM art WHERE art_id = ?", undef, $aid) or die "delete ne funkciis";
       print h2("Dauxro delete art: ".(time() - $start_time)." sekundoj.") if $verbose;
+
+      $dbh->do("DELETE FROM rim WHERE rim_art_id = ?", undef, $aid) or die "delete rim ne funkciis";
+      print h2("Dauxro delete rim: ".(time() - $start_time)." sekundoj.") if $verbose;
 
       $sth = $dbh->prepare("SELECT drv_id FROM drv WHERE drv_art_id = ?");
       $sth->execute($aid);
@@ -313,6 +317,18 @@ sub parse {
       print pre(escapeHTML("snc:\n$drv")) if $verbose;
       do_snc($dbh, $sorter, $did, "", undef, $drv, $verbose);
     };
+	
+	{
+	  open IN, "<", $pado;
+	  my $xml = join('', <IN>);
+	  close IN;
+#      print pre(escapeHTML("xml:\n$xml")) if $verbose;
+      while ($xml =~ /<rim\s+mrk="([^"]+)"/sgi) {
+	    print pre("rim mrk=$1")."\n";
+        $dbh->do("INSERT INTO rim (rim_art_id, rim_mrk) VALUES (?,?)",
+		undef, $aid, $1) or die "insert rim ne funkciis";
+	  }
+	}
     
     #print "$_";
     
