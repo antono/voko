@@ -700,7 +700,7 @@ EOD
   }
 
   my $sth = $dbh->prepare("SELECT count(*) FROM art WHERE art_amrk = ?");
-  my $sth2 = $dbh->prepare("SELECT drv_mrk FROM drv WHERE drv_mrk = ? union SELECT snc_mrk FROM snc WHERE snc_mrk = ?");
+  my $sth2 = $dbh->prepare("SELECT drv_mrk FROM drv WHERE drv_mrk = ? union SELECT snc_mrk FROM snc WHERE snc_mrk = ? union SELECT rim_mrk FROM rim WHERE rim_mrk = ?");
   while ($xml2 =~ /<ref [^>]*?cel="([^".]*)(\.)([^"]*?)">/gi) {
     my ($art, $mrk) = ($1, "$1$2$3");
     $sth->execute($art);
@@ -710,7 +710,7 @@ EOD
       print "Referenco celas al dosiero \"$art.xml\", kiu ne ekzistas.<br>\n";
 #      $ne_konservu = 7;
     } elsif ($2) {
-      $sth2->execute($mrk, $mrk);
+      $sth2->execute($mrk, $mrk, $mrk);
       my ($mrk_ekzistas) = $sth2->fetchrow_array();
       if (!$mrk_ekzistas) {
 #        print "ref: art=$art mrk=$mrk<br>\n" if $debug;
@@ -1099,7 +1099,7 @@ via retadreso estas $ENV{REMOTE_ADDR}<br>
 EOD
 
 print p('<!-- svn versio: $Id$'.br.
-	'hg versio: $HgId: vokomail.pl 59:dcbcc5c2628a 2010/04/19 22:04:25 Wieland $ -->');
+	'hg versio: $HgId: vokomail.pl 62:d81c22cbe76e 2010/04/21 17:24:51 Wieland $ -->');
 
 print end_html();
 
