@@ -13,6 +13,7 @@ use lib "$ENV{'VOKO'}/bin";
 use nls; read_minuskl_cfg("$ENV{'VOKO'}/cfg/minuskl.cfg");
 
 $debug=0;
+binmode STDOUT, "utf8" if $debug;
 $verbose = 1;
 $nur_indeksoj = 0; # por pli facila testado
 
@@ -50,12 +51,12 @@ unless ($nur_indeksoj) {
     unlink "$datfile"; 
 
     opendir DIR, $dir;
-    open INX,">$inxpref.inx" or die "Ne eblis malfermi \"$inxpref.inx\" por skribi\n";
+    open INX,">:utf8", "$inxpref.inx" or die "Ne eblis malfermi \"$inxpref.inx\" por skribi\n";
 
     my $n = 1;
 
     # output header info
-    open OUT,">$datfile";
+    open OUT,">:utf8", $datfile;
 
     foreach $h (keys %header) {
 	my $str = "$h\n ".$header{$h}."\n";
@@ -78,7 +79,7 @@ unless ($nur_indeksoj) {
 
 	    # konvertu XML->TXT kaj alpendigu al datumdosiero
 #	    `$xslbin $dir/$file.xml $xsl | lynx -nolist -dump -stdin >> $datfile`;
-	    `xsltproc $xsl $dir/$file.xml | lynx -nolist -dump -stdin >> $datfile`;
+	    `xsltproc $xsl $dir/$file.xml | lynx -nolist -dump -assume_local_charset=utf8 -display_charset=utf8 -stdin >> $datfile`;
 	    $len = (-s "$datfile") - $pos;
 	    	
 	    print "[$pos\t$len]\n" if ($verbose);
@@ -90,7 +91,7 @@ unless ($nur_indeksoj) {
     closedir DIR;
     close INX;
 
-    system("/usr/local/bin/dictzip $datfile");
+    system("dictzip $datfile");
 }
 
 
@@ -99,7 +100,7 @@ unless ($nur_indeksoj) {
 ###########           kaj fine skribu tiujn
 
 # relegu la pozicio-indekson
-open INX,"$inxpref.inx" or die "Ne eblis legi \"$inxpref.inx\"\n";
+open INX,"<:utf8", "$inxpref.inx" or die "Ne eblis legi \"$inxpref.inx\"\n";
 while (<INX>) {
     chomp;
     @entry=split("\t");
@@ -109,7 +110,7 @@ close INX;
 
 # enlegu indekso.xml
 $/ = '</art';    
-open INX, "$indekso" or die "Ne eblis legi la dosieron \"$indekso\"\n";
+open INX, "<:utf8", "$indekso" or die "Ne eblis legi la dosieron \"$indekso\"\n";
 print "Analizas $indekso...\n" if ($verbose);
 while (<INX>) {
     artikolo($_);
@@ -124,7 +125,7 @@ foreach $lng (@lingvoj) {
     print "$lng...\n" if ($verbose);
     $refs = $tradukoj{$lng};
 
-    open INX, ">$inxpref.$lng.inx";
+    open INX, ">:utf8", "$inxpref.$lng.inx";
 
     foreach $h (keys %header) {
 	$pos = $positions{$h};
@@ -300,15 +301,3 @@ sub normigu {
 
     return $txt;
 }
-
-
-
-
-
-
-
-
-
-
-
-
