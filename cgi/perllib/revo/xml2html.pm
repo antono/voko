@@ -9,7 +9,10 @@
 use strict;
 #use warnings;
 
-package revo::xml2html;
+package revo::xml2html232;
+
+use CGI qw(:standard);  # por trovi erarojn (escapeHTML)
+use Encode;
 
 ######################################################################
 sub konv {
@@ -29,8 +32,11 @@ sub konv {
                       "xsltproc ../xsl/revohtml.xsl -");
   print CHLD_IN $$xml;
   close CHLD_IN;
-  $$html = join('', <CHLD_OUT>);
+#  binmode CHLD_OUT, ":utf8";
+  my $enc = "utf-8";
+  $$html = Encode::decode($enc, join('', <CHLD_OUT>));
   close CHLD_OUT;
+#  print "<pre>html= ".escapeHTML($$html)."\n</pre>\n" if $debug;
   $$err = join('', <CHLD_ERR>);
   print "<pre>err=$$err</pre>\n" if $$err and $debug;
   close CHLD_ERR;
