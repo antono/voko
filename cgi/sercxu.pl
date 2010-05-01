@@ -267,8 +267,8 @@ if (scalar keys %trovitajPagxoj == 1 and $formato ne "txt") {
 #    print "open('/revo/art/" . $pagxo
 #      . ".html#$trovitajPagxoj{$pagxo}', 'precipa');\n";
 #    print "alert(parent.location.href);\n";
-    print "parent.precipa.location.href = parent.location.href + 'art/" . $pagxo
-      . ".html#$trovitajPagxoj{$pagxo}';\n";
+#    print "parent.precipa.location.href = parent.location.href + 'art/" . $pagxo
+#      . ".html#$trovitajPagxoj{$pagxo}';\n";
     print "parent.precipa.location.href = '/revo/art/" . $pagxo
       . ".html#$trovitajPagxoj{$pagxo}';\n";
     last;
