@@ -277,7 +277,7 @@ sub parse {
         my $offset = 0;
         foreach (@var) {
           if (/\(([^,]+)\)/) {
-             if ($`) {
+             if ($` or $') {
               print "prekrampoj = $`\n" if $verbose;
               print "krampoj = $1\n" if $verbose;
               print "postkrampoj = $'\n" if $verbose;
