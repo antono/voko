@@ -30,7 +30,7 @@ sub encode2 {
   my $flag = shift @_;
   my $verbose = shift @_;
   print pre("encode2") if $verbose;
-  $str = Encode::decode($enc, $str);
+  $str = Encode::decode($enc, $str) unless Encode::is_utf8($str);
 
   print pre(escapeHTML("encode ".Encode::encode($enc, $str)))."\n" if $verbose;
 #  print pre(escapeHTML("encode ".Encode::encode($enc, $str)))."\n" if $verbose;
