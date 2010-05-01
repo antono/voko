@@ -402,8 +402,10 @@ my $debugmsg;
 my $art = param('art');
 #$debugmsg .= "art = $art\n";
 my $xml;
+my $enc = "utf-8";
 my $xmlTxt = param('xmlTxt');
 if ($xmlTxt) {
+  $xmlTxt = Encode::decode($enc, $xmlTxt);
   $xmlTxt =~ s/\r\n/\n/g;
   $debugmsg .= "vor wrap -> $xmlTxt\n <- end wrap\n";
   my $id;
@@ -413,12 +415,12 @@ if ($xmlTxt) {
   }
   $xmlTxt = revo::wrap::wrap($xmlTxt);
   $xmlTxt =~ s/"\$Id:\$"/"\$$id\$"/ if $id;
-  $debugmsg .= "wrap -> $xmlTxt\n <- end wrap";
+#  $debugmsg .= "wrap -> $xmlTxt\n <- end wrap\n";
 }
 my $xml2 = revo::encode::encode2($xmlTxt, 20) if $xmlTxt;
+#$xml2 = Encode::decode($enc, $xml2);
 my $redaktanto = param('redaktanto') || cookie(-name=>'redaktanto') || 'via registrita retpo&#349;ta adreso';
 my $debug = $redaktanto eq 'wieland@wielandpusch.de';
-my $enc = "utf-8";
 
 #$debugmsg .= "xmlTxt = $xmlTxt\n";
 
@@ -463,6 +465,9 @@ EOD
 #  $xml = Encode::decode($enc, $xml);
 #  $debugmsg .= "xml=\n$xml" if $debug;
   $xml = revo::decode::rvdecode($xml);
+  $xml = Encode::decode($enc, $xml);
+#  $xml = Encode::decode($enc, $xml);
+#  $xml = Encode::encode($enc, $xml);
 #  $debugmsg .= "xml=\n$xml" if $debug;
 }
 my $sxangxo = Encode::decode($enc, param('sxangxo'));
@@ -561,6 +566,7 @@ a.butono1:hover {
 }
 EOD
 
+binmode STDOUT, ":utf8";
 print header(-charset=>'utf-8',
 			 -pragma => 'no-cache',
             '-cache-control' =>  'no-cache',
@@ -568,9 +574,10 @@ print header(-charset=>'utf-8',
       start_html(-style=>{-src=>'/revo/stl/indeksoj.css',
                           -code=>$mycss},
                  -title=>"redakti $art",
+				 -lang=>'eo', #'de',
 				 -encoding => 'UTF-8',
 				 -head => [ '<meta http-equiv="Cache-Control" content="no-cache">',
-				          ],
+						  ],
                  -script=>$JSCRIPT,
                  -onLoad=>"sf($pos, $line, $lastline)"
 );
@@ -645,9 +652,9 @@ EOD
   
   my ($html, $err);
   revo::xml2html::konv($dbh, \$xml2, \$html, \$err, $debug);
-
+#  $html = Encode::decode($enc, $html);
   if ($html and $debug) {
-    open HTML, ">", "../art2/$art.html" or die "open write html";
+    open HTML, ">:utf8", "../art2/$art.html" or die "open write html";
 	print HTML $html;
     close HTML;
   }
@@ -916,8 +923,9 @@ $dbh->disconnect() if $dbh;
 $xml =~ s/&lt;/&amp;lt;/g;
 $xml =~ s/&gt;/&amp;gt;/g;
 
+$xml = Encode::encode($enc, $xml) if $xml2;
 if (param('xmlTxt')) {
-  param(-name=>'xmlTxt', -value=>$xml);
+  param(-name=>'xmlTxt', -value => $xml);
 }
 
 #if ($debug) {
@@ -1099,7 +1107,7 @@ via retadreso estas $ENV{REMOTE_ADDR}<br>
 EOD
 
 print p('<!-- svn versio: $Id$'.br.
-	'hg versio: $HgId: vokomail.pl 62:d81c22cbe76e 2010/04/21 17:24:51 Wieland $ -->');
+	'hg versio: $HgId: vokomail.pl 70:a587888efe26 2010/05/01 23:12:24 Wieland $ -->');
 
 print end_html();
 
