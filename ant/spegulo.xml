@@ -233,6 +233,39 @@ ant -f voko/ant/spegulo.xml -Drevo.filename=revo-JJJJMMTT.tgz revo-upload
 
    </target>
 
+   <target name="revo-versioj"
+     description="listigas mankantajn au malaktualajn dosierojn sur la Revo-servilo">
+
+     <get src="${revo.versioj.url}" 
+       dest="${log}/revo_versioj.html" 
+       username="${revo.versioj.user}"
+       password="${revo.versioj.password}"/>
+
+     <echo>Tushandaj CVS-dosieroj lau ${log}/revo_versioj.html</echo>
+     <loadfile srcFile="${log}/revo_versioj.html" property="versionfile">
+       <filterchain>
+         <tokenfilter>
+           <stringtokenizer delims="&lt;" delimsaretokens="true"/>
+
+           <containsregex pattern="^.*CVS/([A-Za-z0-9_\.]+xml,v).*$" replace="\1" flags="g"/>
+           <replaceregex pattern="\.xml,v" replace="\.xml?v " flags="g"/>
+           <replaceregex pattern="&lt;" replace=" " flags="g"/>
+         </tokenfilter>
+         <striplinebreaks/> 
+       </filterchain>
+     </loadfile>
+  
+     <echo>
+       [${versionfile}]
+     </echo>
+
+     <fileset id="tushendaj_dosieroj" dir="${cvs.pado}" includes="${versionfile}"/>
+
+     <chmod perm="u+w"><fileset refid="tushendaj_dosieroj"/></chmod> 
+     <touch><fileset refid="tushendaj_dosieroj"/></touch>
+     <chmod perm="u-w"><fileset refid="tushendaj_dosieroj"/></chmod> 
+
+   </target>
 
 
 </project>
