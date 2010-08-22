@@ -46,7 +46,10 @@
  
 
   <xsl:copy>
-    <xsl:attribute name="mrk"><xsl:value-of select="@mrk"/></xsl:attribute>
+    <xsl:if test="@mrk">
+       <xsl:attribute name="mrk"><xsl:value-of select="@mrk"/></xsl:attribute>
+    </xsl:if>
+
     <xsl:if test="doc-available(concat($base,'/tez/',$tez-doc))">
 
 <xsl:if test="$verbose='true' or $debug='true'">
