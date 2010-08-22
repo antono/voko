@@ -12,7 +12,7 @@
 
 <!ENTITY sort-es " = '|' &lt; a,A,á,Á &lt; b,B &lt; c,C &lt; ch,cH,Ch,CH &lt; d,D &lt; e,E,é,É &lt; f,F &lt; g,G &lt; h,H &lt; i,I,í,Í &lt; j,J &lt; k,K &lt; l,L &lt; ll,lL,Ll,LL &lt; m,M &lt; n,N &lt; ñ,Ñ &lt; o,O,ó,Ó &lt; p,P &lt; q,Q &lt; r,R &lt; s,S &lt; t,T &lt; u,U,ú,Ú,ü,Ü &lt; v,V &lt; w,W &lt; x,X &lt; y,Y &lt; z,Z">
 
-<!ENTITY sort-fa " = '|' = '!' = '.' = ':' = '(' = ')' = '[' = ']' = … = ، = ؛ = ؟ = ـ = ' ' = ‌ = ‍ = َ = ِ = ُ = ً = ٍ = ٌ = ّ = ْ = ٓ = ٔ = ٕ = ٰ = ٖ &lt; ۰,٠ &lt; ۱,١ &lt; ۲,٢ &lt; ۳,٣ &lt; ۴,٤ &lt; ۵,٥ &lt; ۶,٦ &lt; ۷,٧ &lt; ۸,٨ &lt; ۹,٩ &lt; آ &lt; ا,ٱ &lt; ء,أ,إ,ؤ,ئ &lt; ب &lt; پ &lt; ت &lt; ث &lt; ج &lt; چ &lt; ح &lt; خ &lt; د &lt; ذ &lt; ر &lt; ز &lt; ژ &lt; س &lt; ش &lt; ص &lt; ض &lt; ط &lt; ظ &lt; ع &lt; غ &lt; ف &lt; ق &lt; ک,ك &lt; گ &lt; ل &lt; م &lt; ن &lt; و &lt; ه,ة &lt; ی,ى,ي &amp; آ = آ &amp; أ = أ &amp; ؤ = ؤ &amp; إ = إ &amp; ئ = ئ">
+<!ENTITY sort-fa " = '|' = '!' = '.' = ':' = '(' = ')' = '[' = ']' = … = ، = ؛ = ؟ = ـ = ‌ = ‍ = َ = ِ = ُ = ً = ٍ = ٌ = ّ = ْ = ٓ = ٔ = ٕ = ٰ = ٖ &lt; ' ' &lt; ۰,٠ &lt; ۱,١ &lt; ۲,٢ &lt; ۳,٣ &lt; ۴,٤ &lt; ۵,٥ &lt; ۶,٦ &lt; ۷,٧ &lt; ۸,٨ &lt; ۹,٩ &lt; آ &lt; ا,ٱ &lt; ء,أ,إ,ؤ,ئ &lt; ب &lt; پ &lt; ت &lt; ث &lt; ج &lt; چ &lt; ح &lt; خ &lt; د &lt; ذ &lt; ر &lt; ز &lt; ژ &lt; س &lt; ش &lt; ص &lt; ض &lt; ط &lt; ظ &lt; ع &lt; غ &lt; ف &lt; ق &lt; ک,ك &lt; گ &lt; ل &lt; م &lt; ن &lt; و &lt; ه,ة &lt; ی,ى,ي &amp; آ = آ &amp; أ = أ &amp; ؤ = ؤ &amp; إ = إ &amp; ئ = ئ">
 ]>
 <xsl:transform
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
