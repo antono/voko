@@ -52,7 +52,7 @@ my @error_unlink_ver = ();  # Fehlerliste zu löschende Verzeichnisse
 
 # Dateinamen:
 unless ($configdatei) {
-    $configdatei = $ENV{"HOME"}."/etc/mirror.cfg";   # Konfigurationsdatei
+    $configdatei = $ENV{"VOKO"}."/../etc/mirror.cfg";   # Konfigurationsdatei
 }
 
 readconfig($configdatei);

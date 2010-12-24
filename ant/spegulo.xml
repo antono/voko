@@ -5,10 +5,16 @@
 
  
    <!-- property file="etc -->
-   <property file="/home/revo/etc/spegulo-agordo-cvs" prefix="cvs."/>
-   <property file="/home/revo/etc/spegulo-tempo-cvs" prefix="cvs."/>
-   <property file="/home/revo/etc/spegulo-agordo-revo" prefix="revo."/>
-   <property file="/home/revo/etc/spegulo-tempo-revo" prefix="revo."/>
+   <property environment="ENV"/>
+   <property name="voko" value="${ENV.VOKO}"/>
+
+   <property file="${user.dir}/cfg/agordo" prefix="v."/>
+   <property name="etc" value="${v.etc}"/>
+
+   <property file="${etc}/spegulo-agordo-cvs" prefix="cvs."/>
+   <property file="${etc}/spegulo-tempo-cvs" prefix="cvs."/>
+   <property file="${etc}/spegulo-agordo-revo" prefix="revo."/>
+   <property file="${etc}/spegulo-tempo-revo" prefix="revo."/>
 
 
 <!-- ################### alshuto al CVS-servilo ############################ -->
@@ -27,18 +33,19 @@
 
    <!-- property file="/home/revo/etc/spegulo-agordo-tgz" prefix="tgz."/ -->
 
-   <property name="mirror" location="/home/revo/voko/bin/mirror.pl"/>
-   <property name="tmp" location="/home/revo/tmp"/>
-   <property name="log" location="/home/revo/log"/>
-   <property name="revo.tempoj" location="/home/revo/etc/spegulo-tempo-revo"/>
-   <property name="cvs.tempoj" location="/home/revo/etc/spegulo-tempo-cvs"/>
+   <property name="voko.bin" location="${voko}/bin"/>
+   <property name="mirror" location="${voko.bin}/mirror.pl"/>
+   <!-- property name="tmp" location="${v.tmp}"/ -->
+   <property name="log" location="${v.log}"/>
+   <property name="revo.tempoj" location="${etc}/spegulo-tempo-revo"/>
+   <property name="cvs.tempoj" location="${etc}/spegulo-tempo-cvs"/>
 
 
    <target name="cvs-preparo">
      <tstamp/>
      <echo message="tempo: ${DSTAMP} ${TSTAMP}"/>
      <property name="cvs.filename" value="revocvs-${DSTAMP}.tgz"/>
-     <available property="cvs-tar-file-exists" file="${tmp}/${cvs.filename}"/>
+     <available property="cvs-tar-file-exists" file="${cvs.tmpdir}/${cvs.filename}"/>
    </target>
 
 
@@ -65,7 +72,7 @@
         </tarfileset> 
      </tar>
 -->
-     <available property="cvs-tar-file-exists" file="${tmp}/${cvs.filename}"/>
+     <available property="cvs-tar-file-exists" file="${cvs.tmpdir}/${cvs.filename}"/>
    </target>
 
        <!-- por shargi pli malnovan tgz-dosieron, voku
@@ -82,7 +89,7 @@ ant -f voko/ant/spegulo.xml -Dcvs.filename=revocvs-JJJJMMTT.tgz cvs-upload
          passive="yes"
          verbose="yes">
 
-       <fileset file="${tmp}/${cvs.filename}"/>
+       <fileset file="${cvs.tmpdir}/${cvs.filename}"/>
      </ftp>
 
      <get src="${cvs.upload.url}${cvs.filename}" 
@@ -122,7 +129,7 @@ ant -f voko/ant/spegulo.xml -Dcvs.filename=revocvs-JJJJMMTT.tgz cvs-upload
      <echo message="tempo: ${DSTAMP} ${TSTAMP}"/>
  
      <property name="revo.filename" value="revo-${DSTAMP}.tgz"/>
-     <available property="revo-tar-file-exists" file="${tmp}/${revo.filename}"/>
+     <available property="revo-tar-file-exists" file="${revo.tmpdir}/${revo.filename}"/>
 
      <!-- se eco ne difinita per dosiero, iru 10 jarojn antaue -->
      <tstamp><format property="revo.lasta.dato"
@@ -173,7 +180,7 @@ ant -f voko/ant/spegulo.xml -Dcvs.filename=revocvs-JJJJMMTT.tgz cvs-upload
 
 -->
 
-     <available property="revo-tar-file-exists" file="${tmp}/${revo.filename}"/>
+     <available property="revo-tar-file-exists" file="${revo.tmpdir}/${revo.filename}"/>
    </target>
        
 <!-- por shargi pli malnovan tgz-dosieron, voku
@@ -189,7 +196,7 @@ ant -f voko/ant/spegulo.xml -Drevo.filename=revo-JJJJMMTT.tgz revo-upload
          passive="yes"
          verbose="yes">
 
-       <fileset file="${tmp}/${revo.filename}"/>
+       <fileset file="${revo.tmpdir}/${revo.filename}"/>
      </ftp>
 
      <get src="${revo.upload.url}${revo.filename}" 

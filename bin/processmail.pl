@@ -19,24 +19,30 @@ $verbose      = 1;
 $debug        = 0;
 
 # dosierujoj
-$revo_home    = "/home/revo";
-$tmp          = "$revo_home/tmp";
+$revo_home    = $ENV{"HOME"};
+$VOKO         = $ENV{"VOKO"};
+$tmp          = "$revo_home/private/revotmp";
+$log_mail     = "$revo_home/private/revolog";
+$revo_base    = "$revo_home/httpdocs/revo";
+$revo_etc     = "$revo_home/private/etc";
+
 $parts_dir    = "$revo_home/tmp";
 $mail_folder  = "/var/spool/mail/revo";
 $mail_error   = "$tmp/mailerr";
 $mail_send    = "$tmp/mailsend";
-$old_mail     = "$revo_home/oldmail";
-$err_mail     = "$revo_home/errmail";
-$log_mail     = "$revo_home/log";
+$xml_temp     = "$tmp/xml";
+$dtd_temp     = "$tmp/dtd";
 
-$revo_base    = "$revo_home/revo";
-$xml_dir      = "$revo_base/cvs/revo";
+$old_mail     = "$log_mail/oldmail";
+$err_mail     = "$log_mail/errmail";
+
+$xml_dir      = "$revo_base/xml";
 $dok_dir      = "$revo_base/dok";
 
 $mail_local   = "$tmp/mail";
 #$editor_file  = "$revo_home/etc/redaktoroj";
-$editor_file  = "$revo_home/etc/redaktantoj";
-$attachments  = "$tmp/atchm".$$."_";
+$editor_file  = "$revo_etc/redaktantoj";
+$attachments  = "$tmp/mailatt/attchm".$$."_";
 $vokomail_url = "http://www.reta-vortaro.de/cgi-bin/vokomail.pl";
 $revo_url     = "http://purl.oclc.org/NET/voko/revo";
 
@@ -51,7 +57,7 @@ $mail_begin   = '^From[^:]';
 $possible_keys= 'komando|teksto|shangho';
 $commands     = 'redakt[oui]|help[oui]|aldon[oui]'; # .'|dokumento|artikolo|historio|propono'
 $revoservo    = '[Revo-Servo]';
-$revo_mailaddr= 'revo@steloj.de';
+$revo_mailaddr= 'revo@h1838790.stratoserver.net';
 $revolist     = 'wolfram';
 $revo_from    = "Reta Vortaro <$revo_mailaddr>";
 $signature    = "--\nRevo-Servo $revo_mailaddr\n"
@@ -733,6 +739,10 @@ sub checkxml {
     my $teksto = shift;
     my $err;
 
+    # aldonu dtd symlink se ankorau mankas
+    symlink("$VOKO/dtd","$xml_temp/../dtd") ;
+#	|| warn "Ne povis ligi de $VOKO/dtd al $xml_temp/../dtd\n";
+
     # enmetu Log se ankorau mankas...
     unless ($teksto =~ /<!--\s+\044Log/s) {
 	$teksto =~ s/(<\/vortaro>)/\n<!--\n\044Log\044\n-->\n$1/s;
@@ -741,9 +751,9 @@ sub checkxml {
     # mallongigu Log al 20 linioj
     $teksto =~ s/(<!--\s+\044Log(?:[^\n]*\n){20})(?:[^\n]*\n)*(-->)/$1$2/s;
 
-    # skribu la dosieron provizore al ~/tmp
-    unless (open XML,">$tmp/xml.xml") {
-	warn "Ne povis malfermi $tmp/xml.xml: $!\n";
+    # skribu la dosieron provizore al tmp
+    unless (open XML,">$xml_temp/xml.xml") {
+	warn "Ne povis malfermi $xml_temp/xml.xml: $!\n";
 	return;
     }
 
@@ -751,20 +761,20 @@ sub checkxml {
     close XML;
 
     # kontrolu la sintakson de la XML-teksto
-    `$xmlcheck $tmp/xml.xml 2> $tmp/xml.err`;
+    `$xmlcheck $xml_temp/xml.xml 2> $xml_temp/xml.err`;
 
     # legu la erarojn
-    open ERR,"$tmp/xml.err";
+    open ERR,"$xml_temp/xml.err";
     $err=join('',<ERR>);
     close ERR;
-    unlink("$tmp/xml.err");
+    unlink("$xml_temp/xml.err");
 
     if ($err) {
-	$err .= "\nkunteksto:\n".xml_context($err,"$tmp/xml.xml");
+	$err .= "\nkunteksto:\n".xml_context($err,"$xml_temp/xml.xml");
 	print "XML-eraroj:\n$err" if ($verbose);
 
 	report("ERARO   : La XML-dosiero enhavas la sekvajn "
-	      ."sintakserarojn:\n$err","$tmp/xml.xml");
+	      ."sintakserarojn:\n$err","$xml_temp/xml.xml");
 	return;
     } else {
 	print "XML: en ordo\n" if ($debug);
@@ -825,13 +835,13 @@ sub checkin {
 	       ."ne bazighas sur la aktuala arkiva versio\n"
 	       ."($ark_id)\n"
 	       ."Bonvolu preni aktualan version el la TTT-ejo. "
-	       ."($vokomail_url?art=$art)\n","$tmp/xml.xml");
+	       ."($vokomail_url?art=$art)\n","$xml_temp/xml.xml");
 	return;
     }
 
     # checkin
     my $xmlfile="$art.xml";
-    `mv $tmp/xml.xml $xml_dir/$xmlfile`;
+    `mv $xml_temp/xml.xml $xml_dir/$xmlfile`;
     chdir($xml_dir);
     `$cvs ci -F $tmp/shanghoj.msg $xmlfile 1> $tmp/ci.log 2> $tmp/ci.err`;
 
@@ -948,7 +958,7 @@ sub checkinnew {
 
     # checkin
     my $xmlfile="$art.xml";
-    `mv $tmp/xml.xml $xml_dir/$xmlfile`;
+    `mv $xml_temp/xml.xml $xml_dir/$xmlfile`;
     chdir($xml_dir);
     `$cvs add $xmlfile 1> $tmp/ci.log 2> $tmp/ci.err`;
     `$cvs ci -F $tmp/shanghoj.msg $xmlfile 1>> $tmp/ci.log 2>> $tmp/ci.err`;

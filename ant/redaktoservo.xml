@@ -8,15 +8,17 @@
    <!-- property file="etc -->
    <!-- legu agorditajn variablojn el dosiero -->
    <property file="${user.dir}/cfg/agordo" prefix="v."/>
+   <property environment="ENV"/>
 
    <!-- donu valorojn al la variabloj, se ili ne jam aperis en la agordo-dosiero -->
-   <property name="v.voko" location="/home/revo/voko"/>
+   <property name="v.voko" location="${ENV.VOKO}"/>
    <property name="v.voko.ant" location="${v.voko}/ant"/>
    <property name="v.voko.bin" location="${v.voko}/bin"/>
    <property name="v.bazo" location="${user.dir}"/>
+   <property name="poshtprotokolo" location="${v.log}/processmail.log"/>
 
    <!-- speciala agordo por la redaktoservo -->
-   <property file="/home/revo/etc/redaktoservo-agordo" prefix="srv."/>
+   <property file="${v.etc}/redaktoservo-agordo" prefix="srv."/>
 
 
    <target name="srv-agordo" description="eligas la agordeblajn variablojn por kontrolo">
@@ -33,15 +35,15 @@
      </ant>
 
      <!-- tushu poshtservilon -->
-     <exec dir="${v.bazo}" executable="/bin/ping">
+     <exec dir="${v.bazo}" executable="${srv.ping}">
        <arg value="-qc5"/>
        <arg value="-i1"/>
        <arg value="${srv.poshtoservilo}"/>
      </exec>
 
      <!-- prenu retposhton kaj shovu al loka poshtfako -->
-     <exec dir="${v.bazo}" executable="/usr/bin/fetchmail"/>
-     <exec dir="${v.bazo}" executable="/usr/sbin/sendmail">
+     <exec dir="${v.bazo}" executable="${srv.fetchmail}"/>
+     <exec dir="${v.bazo}" executable="${srv.sendmail}">
        <arg value="-q"/>
      </exec>
 
@@ -54,7 +56,7 @@
         description="Traktas retposhton de la redaktantoj post preno">
       
       <exec dir="${v.bazo}" executable="${v.voko.bin}/processmail.pl"
-         output="${srv.poshtprotokolo}" append="true"/>
+         output="${poshtprotokolo}" append="true"/>
 <!-- 
       <loadfile srcFile="${srv.poshtprotokolo}" property="poshtprotokolo"/>
       <echo>
@@ -90,11 +92,11 @@
       description="Kuro de la tuta servo: preni kaj trakti poshton, refari vortaron, sendi dosierojn kaj respondojn">
 
       <!-- forsendi respondojn al redaktantoj, necesas poshtkontrolo antau forsendo pro legitimigo! -->
-      <exec dir="${v.bazo}" executable="/usr/bin/fetchmail">
+      <exec dir="${v.bazo}" executable="${srv.fetchmail}">
         <arg value="-c"/>
         <arg value="post.strato.de"/>
       </exec>
-      <exec dir="${v.bazo}" executable="/usr/sbin/sendmail">
+      <exec dir="${v.bazo}" executable="${srv.sendmail}">
         <arg value="-q"/>
       </exec>
 

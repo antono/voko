@@ -25,7 +25,8 @@
   <property file="${user.dir}/cfg/agordo" prefix="v."/>
 
   <!-- donu valorojn al la variabloj, se ili ne jam aperis en la agordo-dosiero -->
-  <property name="v.voko" location="/home/revo/voko"/>
+  <property environment="ENV"/>
+  <property name="v.voko" location="${ENV.VOKO}"/>
   <property name="v.voko.ant" location="${v.voko}/ant"/>
 
   <property name="v.bazo" location="${user.dir}"/>
