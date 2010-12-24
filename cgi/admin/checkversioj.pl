@@ -94,7 +94,7 @@ sub checkencode {
     close IN;
     
     my $vers;
-    if ($xml =~ m#<art mrk="\$Id: [^ ]+ ([0-9.]+) ([0-9/]+) ([0-9:]+) [^\$]+ \$">#sm) {
+    if ($xml =~ m#<art mrk=\s*"\$Id: [^ ]+ ([0-9.]+) ([0-9/]+) ([0-9:]+) [^\$]+ \$">#sm) {
 #        print "xml versio: $1 $2 $3".br."\n";
         $vers = "$1 $2 $3";
     } else {
@@ -153,31 +153,36 @@ sub checkencode {
       print "html mankas $a".br."\n" if !exists $v{$a}->{html};
       print "cvs mankas $a".br."\n" if !exists $v{$a}->{cvs};
       
+	  $v{$a}->{xml} =~ s/^1\.//;
+	  $v{$a}->{html} =~ s/^1\.//;
+	  $v{$a}->{cvs} =~ s/^1\.//;
       if ($v{$a}->{cvs} ne $v{$a}->{html}
           or $v{$a}->{cvs} ne $v{$a}->{xml}) {
               print "versioj malsamas $a".br."\nxml $v{$a}->{xml}"
               .br."\nhtml $v{$a}->{html}".br."\ncvs $v{$a}->{cvs}".br;
       }
 	  my $max = $v{$a}->{xml} + 0;
+#	  print "max=$max".br;
 	  $max = $v{$a}->{html} + 0 if $v{$a}->{html} + 0 > $max;
+#	  print "max=$max cvs=".($v{$a}->{cvs} + 0).br;
 	  $max = $v{$a}->{cvs} + 0 if $v{$a}->{cvs} + 0 > $max;
 #	  print "max=$max".br;
       if ($v{$a}->{xml} != $max) {
         print "xml mankas $a.xml".br;
-        $xml_mankas .= "$a.xml".br;
+        $xml_mankas .= "xml/$a.xml".br;
       }
       if ($v{$a}->{html} != $max) {
         print "html mankas $a.html".br;
-        $html_mankas .= "$a.html".br;
+        $html_mankas .= "art/$a.html".br;
       }
       if ($v{$a}->{cvs} != $max) {
         print "cvs mankas $a.xml,v".br;
-        $cvs_mankas .= "$a.xml,v".br;
+        $cvs_mankas .= "CVS/$a.xml,v".br;
       }
   }
-  print br."xml mankas:".br.$xml_mankas.br.br;
-  print "html mankas:".br.$html_mankas.br.br;
-  print "cvs mankas:".br.$cvs_mankas.br.br;
+  print br.$xml_mankas;
+  print $html_mankas;
+  print $cvs_mankas;
 
   return $num;
 };
