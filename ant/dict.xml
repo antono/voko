@@ -1,0 +1,97 @@
+<project name="Revo-Dict" default="test" basedir=".">
+    <description>
+       Reta Vortaro, reguloj por krei dict-version. 
+    </description>
+
+  <property environment="ENV"/>
+  <property name="v.voko" location="${ENV.VOKO}"/>
+  <property name="v.revo" location="${ENV.REVO}"/>
+
+  <property name="v.bazo" location="${user.dir}"/>
+  <property name="v.revo.xml" location="${v.revo}/xml"/>
+  <property name="v.voko.bin" location="${v.voko}/bin"/>
+  <property name="v.tgz" location="${v.revo}/../tgz"/>
+  <!-- property name="v.dict" location="${v.voko}/../dict"/ -->
+
+  <property name="dictd" location="/usr/sbin/dictd"/>
+  <property name="dictzip" location="/usr/bin/dictzip"/>
+
+  <target name="dict-preparo">
+  <!-- Create the time stamp -->
+    <tstamp>
+      <format pattern="yyyy-MM-dd" property="dato"/>
+    </tstamp>
+  </target>
+
+
+  <target name="dict-agordo" description="eligas la agordeblajn variablojn por kontrolo">
+    <echoproperties prefix="v."/>
+  </target>
+
+
+  <target name="dict-kompilo" depends="dict-preparo" description="kreas la vortaron">
+
+    <exec executable="${v.voko.bin}/dictfaru.pl">   
+       <arg value="${v.revo.xml}"/>
+    </exec>
+
+  </target>
+
+  <target name="dict-conf" depends="dict-preparo" description="kreas agordodosieron por dictd">
+    <echo file="${v.bazo}/dictd.conf">
+       database revo_eo {
+          data ${v.bazo}/revo.dat.dz
+          index ${v.bazo}/revo.eo.inx
+          name "Reta Vortaro, esperanta indekso"
+       }
+
+       database revo_en {
+          data ${v.bazo}/revo.dat.dz
+          index ${v.bazo}/revo.en.inx
+          name "Reta Vortaro, angla indekso"
+       }
+
+       database revo_de {
+          data ${v.bazo}/revo.dat.dz
+          index ${v.bazo}/revo.de.inx
+          name "Reta Vortaro, germana indekso"
+       }
+
+    </echo>
+  </target>
+
+
+  <target name="dict-test" depends="dict-preparo" 
+       description="testas la vortaron">
+  
+    <exec executable="${dictd}">   
+      <arg value="--config"/>
+      <arg value="dictd.conf"/>
+      <arg value="--test"/>
+      <arg value="abelo"/>
+      <arg value="--test-db"/>
+      <arg value="revo_eo"/>
+
+    </exec>
+
+  </target>
+
+  <target name="dict-zip" depends="dict-preparo"
+        description="kunpakas la vortaron">
+    <!--exec executable="${dictzip}">
+      <arg value="revo.dat"/>
+    </exec-->
+
+    <zip destfile="${v.tgz}/revodict_${dato}.zip" basedir="${v.bazo}" includes="revo.dat.dz revo.*.inx dictd.conf">
+    </zip>
+  </target>
+
+</project>
+
+
+
+
+
+
+
+

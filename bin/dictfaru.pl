@@ -1,4 +1,4 @@
-#!/usr/local/bin/perl
+#!/usr/bin/perl
 
 # uzo:
 #   dictfaru.pl <xml-dosierujo>
@@ -19,12 +19,13 @@ $nur_indeksoj = 0; # por pli facila testado
 
 @lingvoj=('eo','de','en','cs','la','fr','es','ru','tr');
 
-$xslbin = "/home/revo/voko/bin/xslt.sh";
-$xsl = "/home/revo/voko/xsl/revotxt.xsl";
-$tmp = "/home/revo/tmp";
-$datfile = "/home/revo/dict/revo.dat";
-$inxpref = "/home/revo/dict/revo";
-$indekso = "/home/revo/tmp/inx_tmp/indekso.xml";
+$VOKO = $ENV{"VOKO"};
+$xslbin = "$VOKO/bin/xslt.sh";
+$xsl = "$VOKO/xsl/revotxt.xsl";
+$tmp = $ENV{"HOME"}."/tmp";
+$datfile = "$VOKO/../dict/revo.dat";
+$inxpref = "$VOKO/../dict/revo";
+$indekso = "$VOKO/../revotmp/inx_tmp/indekso.xml";
 
 $b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
