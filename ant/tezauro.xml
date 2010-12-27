@@ -79,7 +79,10 @@
        filtering="true"/>
 
      <xslt in="${v.tmp}/tez_ret.xml" out="${v.tmp}/tez/.tempo"
-       style="${v.voko.xsl}/tez_html_${v.outputformat}.xsl~"/>
+       style="${v.voko.xsl}/tez_html_${v.outputformat}.xsl~">
+       <factory name="net.sf.saxon.TransformerFactoryImpl"/>
+       <!-- param name="verbose" expression="'true'"/-->
+     </xslt>
   </target>
 
 

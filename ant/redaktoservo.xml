@@ -92,10 +92,10 @@
       description="Kuro de la tuta servo: preni kaj trakti poshton, refari vortaron, sendi dosierojn kaj respondojn">
 
       <!-- forsendi respondojn al redaktantoj, necesas poshtkontrolo antau forsendo pro legitimigo! -->
-      <exec dir="${v.bazo}" executable="${srv.fetchmail}">
+      <!-- <exec dir="${v.bazo}" executable="${srv.fetchmail}">
         <arg value="-c"/>
         <arg value="post.strato.de"/>
-      </exec>
+      </exec> -->
       <exec dir="${v.bazo}" executable="${srv.sendmail}">
         <arg value="-q"/>
       </exec>
