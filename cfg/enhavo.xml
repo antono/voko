@@ -54,34 +54,16 @@
     <sekcio titolo="DICT-versio de Reta Vortaro">
       <ero titolo="DICT-Revo" ref="revodict">
         <alineo style="font-size: small; margin-top: 0.5em; margin-left: 2em; width: 70%">
-        Tio ebligas rapidan uzadon de la vortaro. Simple tajpante
-        ser&ccirc;atan vorton a&ubreve; parton de &gcirc;i en iu lingvo, vi ricevas
-        la koncernajn artikolojn.
-        Por utiligi &gcirc;in vi devas instali Dict-Servon "dictd"
-        (vd. <url ref="http://dict.org">dict.org</url>,
-        Tie haveblas anka&ubreve; Dict-klientoj. Vi povas uzi la
-        Dict-servon &ccirc;e Michiel (131.211.121.124) a&ubreve; &ccirc;e Radovan
-        (dict.dnp.fmph.uniba.sk) tra Interreto. Tiuokaze vi bezonas nur klienton.
-        </alineo>
-        <alineo style="font-size: small; margin-top: 0.5em; margin-left: 2em; width: 70%">
-        Se vi volas uzi Revon kun Stardict vi trovos la konvertilon dictd2dic
-         <url ref="http://stardict.sf.net">stardict.sf.net</url>.
+        Pri informoj kiel utiligi DICT a&ubreve; Stardict kun Revo vidu sur pa&gcirc;o <url ref="../revo/dok/operaciumoj.html">Kiel uzi Revon en diversaj sistemoj</url>.
         </alineo>
       </ero>
     </sekcio>
     <sekcio titolo="Revo por po&scirc;komputiloj">
       <ero titolo="Reveto kaj PRevo" ref="reveto">
-        <alineo style="font-size: small; margin-top: 0.5em; margin-left: 2em; width: 70%">
-        Tio estas aro da HTML-dosieroj, limigitaj al la esencaj informoj, kun
-        nur elektitaj lingvo-indeksoj kaj sen bildoj.
+	<alineo style="font-size: small; margin-top: 0.5em; margin-left: 2em; width: 70%">
+        Pri informoj kiel utiligi Revon en po&scirc;komputiloj vidu sur pa&gcirc;o <url ref="../revo/dok/operaciumoj.html">Kiel uzi Revon en diversaj sistemoj</url>.      
         Cetere vi povas anka&ubreve; ricevi Revon en bedic-formato.
         Skribu al la Revo-administranto, se vi bezonas.
-        </alineo>
-        <bildo loko="http://www.busydoingnothing.co.uk/prevo/prevo.png"/>
-        <alineo style="font-size: small; margin-top: 0.5em; margin-left: 2em; width: 70%">
-        Revo por po&scirc;komputilo Palm Pre preparita de Neil Roberts estas
-        trovebla sur la retpa&gcirc;o 
-        <url ref="http://www.busydoingnothing.co.uk/prevo/">http://www.busydoingnothing.co.uk/prevo/</url>.
         </alineo>
       </ero>
     </sekcio>
