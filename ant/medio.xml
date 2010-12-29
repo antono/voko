@@ -104,6 +104,7 @@ rezulto en:
     <copy todir="${v.bazo.dok}">
       <fileset dir="${v.voko.dok}" casesensitive="yes">
         <include name="*.xml"/>
+        <include name="*.png"/>
       </fileset>
     </copy>
 
