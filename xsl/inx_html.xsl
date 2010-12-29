@@ -21,9 +21,11 @@
 <xsl:output method="@format@" encoding="utf-8"/>
 <xsl:strip-space elements="t t1 k"/>
 
-<xsl:variable name="lingvoj">../cfg/lingvoj.xml</xsl:variable>
-<xsl:variable name="fakoj">../cfg/fakoj.xml</xsl:variable>
-<xsl:variable name="enhavo">../cfg/enhavo.xml</xsl:variable>
+<xsl:param name="agordo-pado"/>
+
+<xsl:variable name="lingvoj"><xsl:value-of select="concat($agordo-pado,'/lingvoj.xml')"/></xsl:variable>
+<xsl:variable name="fakoj"><xsl:value-of select="concat($agordo-pado,'/fakoj.xml')"/></xsl:variable>
+<xsl:variable name="enhavo"><xsl:value-of select="concat($agordo-pado,'/enhavo.xml')"/></xsl:variable>
 
 <xsl:key name="trd-oj" match="//trd-oj/litero/v" use="concat(../../@lng,'-',../@name,'-',t)"/>
 
