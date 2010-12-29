@@ -42,10 +42,21 @@
 
 
    <target name="cvs-preparo">
-     <tstamp/>
+     <tstamp>
+       <format property="DSTAMP" pattern="yyyyMMdd"/>
+     </tstamp>
+
+     <tstamp>
+       <format property="TSTAMP" pattern="hhmmss"/>
+     </tstamp>
+
      <echo message="tempo: ${DSTAMP} ${TSTAMP}"/>
      <property name="cvs.filename" value="revocvs-${DSTAMP}.tgz"/>
      <available property="cvs-tar-file-exists" file="${cvs.tmpdir}/${cvs.filename}"/>
+
+     <property name="cvs.tarlog" value="tar-revocvs-${DSTAMP}_${TSTAMP}.log"/>
+     <property name="cvs.uploadlog" value="revocvs-${DSTAMP}_${TSTAMP}-upload.html"/>
+
    </target>
 
 
@@ -125,11 +136,21 @@ ant -f voko/ant/spegulo.xml -Dcvs.filename=revocvs-JJJJMMTT.tgz cvs-upload
 
 
    <target name="revo-preparo">
-     <tstamp/>
-     <echo message="tempo: ${DSTAMP} ${TSTAMP}"/>
+     <tstamp>
+       <format property="DSTAMP" pattern="yyyyMMdd"/>
+     </tstamp>
+
+     <tstamp>
+       <format property="TSTAMP" pattern="hhmmss"/>
+     </tstamp>
+
+      <echo message="tempo: ${DSTAMP} ${TSTAMP}"/>
  
-     <property name="revo.filename" value="revo-${DSTAMP}.tgz"/>
+     <property name="revo.filename" value="revo-${DSTAMP}_${TSTAMP}.tgz"/>
      <available property="revo-tar-file-exists" file="${revo.tmpdir}/${revo.filename}"/>
+
+     <property name="revo.tarlog" value="tar-revo-${DSTAMP}_${TSTAMP}.log"/>
+     <property name="revo.uploadlog" value="revo-${DSTAMP}_${TSTAMP}-upload.html"/>
 
      <!-- se eco ne difinita per dosiero, iru 10 jarojn antaue -->
      <tstamp><format property="revo.lasta.dato"
@@ -147,7 +168,7 @@ ant -f voko/ant/spegulo.xml -Dcvs.filename=revocvs-JJJJMMTT.tgz cvs-upload
    <target name="revo-tar" unless="revo-tar-file-exists" depends="revo-preparo" 
        description="pakas shanghitajn Revo-dosieron en tar-dosieron">
 
-   <exec executable="${mirror}" output="${log}/tar-revo-${DSTAMP}.log">
+   <exec executable="${mirror}" output="${log}/${revo.tarlog}">
       <arg value="revo"/>
    </exec>
 
@@ -200,7 +221,7 @@ ant -f voko/ant/spegulo.xml -Drevo.filename=revo-JJJJMMTT.tgz revo-upload
      </ftp>
 
      <get src="${revo.upload.url}${revo.filename}" 
-       dest="${log}/revo_uploadlog.html" 
+       dest="${log}/${revo.uploadlog}" 
        username="${revo.upload.user}"
        password="${revo.upload.password}"/>
 <!-- tro grandighis tiu dosiero por la raporto....  
@@ -248,7 +269,7 @@ ant -f voko/ant/spegulo.xml -Drevo.filename=revo-JJJJMMTT.tgz revo-upload
        username="${revo.versioj.user}"
        password="${revo.versioj.password}"/>
 
-     <echo>Tushandaj CVS-dosieroj lau ${log}/revo_versioj.html</echo>
+     <echo>Tushendaj CVS-dosieroj lau ${log}/revo_versioj.html</echo>
      <loadfile srcFile="${log}/revo_versioj.html" property="versionfile">
        <filterchain>
          <tokenfilter>
