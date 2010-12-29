@@ -130,6 +130,17 @@ rezulto en:
 
   </target>
 
+  <target name="artikoloj" depends="preparo" 
+       description="shovas nur (re)kreitajn artikolojn el provizora dosierujo al la vortaro,
+         sed limigas al maks. 500 shanghitaj artikoloj">
+  
+    <ant antfile="${v.voko.ant}/artikoloj.xml" inheritAll="false">   
+       <property name="v.bazo" location="${v.bazo}"/>
+       <target name="art-agordo"/>
+       <target name="art-kvincent"/>
+    </ant>
+
+  </target>
 
   <target name="tuto" depends="preparo" 
        description="shovas (re)kreitajn indeksojn, tezauron kaj artikolojn el provizora dosierujo al la vortaro">

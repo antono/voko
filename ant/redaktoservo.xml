@@ -87,6 +87,32 @@
      
    </target>
 
+   <target name="srv-refari-nur-artikolojn" depends="srv-trakti-poshton"
+      if="user-mail-file-exists"
+      description = "refaras nur la redaktitajn artikolojn, ne la indeksojn post poshtotrakto">
+
+<!--unue adaptu uprevo.pl...
+
+     <ant antfile="${v.voko.ant}/spegulo.xml" inheritAll="false">
+        <property name="v.bazo" location="${v.bazo}"/>
+        <target name="cvs-tar"/>
+     </ant>
+-->
+
+     <ant antfile="${v.voko.ant}/vortaro.xml" inheritAll="false">
+        <property name="v.bazo" location="${v.bazo}"/>
+        <target name="artikoloj"/>
+     </ant>
+
+<!-- unue adaptu uprevo.pl ...
+     <ant antfile="${v.voko.ant}/spegulo.xml" inheritAll="false">
+        <property name="v.bazo" location="${v.bazo}"/>
+        <target name="revo-tar"/>
+     </ant>
+-->     
+   </target>
+
+
    <target name="srv-servo" depends="srv-agordo,srv-refari-vortaron"
       if="user-mail-file-exists"
       description="Kuro de la tuta servo: preni kaj trakti poshton, refari vortaron, sendi dosierojn kaj respondojn">
@@ -108,6 +134,31 @@
       </ant>
 
    </target> 
+
+   <target name="srv-servo-art" depends="srv-agordo,srv-refari-nur-artikolojn"
+      if="user-mail-file-exists"
+      description="Interkuro (nur artikoloj, ne indeksoj) de la servo: preni kaj trakti poshton, refari artikolojn, sendi dosierojn kaj respondojn">
+
+      <!-- forsendi respondojn al redaktantoj, necesas poshtkontrolo antau forsendo pro legitimigo! -->
+      <!-- <exec dir="${v.bazo}" executable="${srv.fetchmail}">
+        <arg value="-c"/>
+        <arg value="post.strato.de"/>
+      </exec> -->
+      <exec dir="${v.bazo}" executable="${srv.sendmail}">
+        <arg value="-q"/>
+      </exec>
+
+      <!-- sendi shanghojn de arhhivo al servilo -->
+<!-- unue adaptu uprevo.pl
+
+      <ant antfile="${v.voko.ant}/spegulo.xml" inheritAll="false">
+        <property name="v.bazo" location="${v.bazo}"/>
+        <target name="cvs-upload"/>
+        <target name="revo-upload"/>
+      </ant>
+-->
+   </target> 
+
 </project>
    
 
