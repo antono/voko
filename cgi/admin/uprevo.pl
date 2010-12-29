@@ -40,14 +40,14 @@ $ENV{'PATH'} = $ENV{'PATH'}.":$homedir/files/bin";
 #print h1("PATH = ".$ENV{'PATH'});
 
 print LOG "uprevo started at ".localtime()." with fname=$fname\n";
-unless ($fname =~ /^revo-\d\d\d\d\d\d\d\d\.tgz$/) {
+unless ($fname =~ /^revo-\d\d\d\d\d\d\d\d_\d\d\d\d\d\d\.tgz$/) {
   print LOG "Nevalidaj parametroj\n\n";
   print h1("Nevalidaj parametroj"), end_html;
   exit 1;
 }
 
 my $dbfname = $fname;
-$dbfname =~ s/^revo-(.*).tgz$/revodb-$1.sql.gz/;
+$dbfname =~ s/^revo-(.*)_\d\d\d\d\d\d\.tgz$/revodb-$1.sql.gz/;
 print LOG "dbfname -> $dbfname\n";
 
 my $ret;
