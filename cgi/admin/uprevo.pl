@@ -135,11 +135,16 @@ print pre($ret);
 
 print LOG "date: ".`date`."\n";
 
-my $dumpcmd = revodb::mysqldump;
-$ret = `$dumpcmd --skip-lock-tables | gzip >$htmldir/alveno/$dbfname`;
-print LOG "mysqldump -> \n$ret",
-      "date: ".`date`;
-
+my $dbtext = "";
+if (! -e "$htmldir/alveno/$dbfname") {
+  my $dumpcmd = revodb::mysqldump;
+  $ret = `$dumpcmd --skip-lock-tables | gzip >$htmldir/alveno/$dbfname`;
+  print LOG "mysqldump -> \n$ret",
+        "date: ".`date`;
+  my $dbsize = `du -h $htmldir/alveno/$dbfname`; $dbsize =~ s/\t.*$//; chomp $dbsize;
+  $dbtext = "Aktuala datumbazo estas en http://www.reta-vortaro.de/alveno/$dbfname ($dbsize)";
+}
+		
 if (0 and !$exitcode) {
   $ret = `rm alveno/$fname 2>&1`;
   $exitcode = $?;
@@ -170,7 +175,6 @@ $ret = `find $findargs | xargs rm`;
 print LOG "find rm -> \n$ret\n";
 
 my $fsize = `du -h $htmldir/alveno/$fname`; $fsize =~ s/\t.*$//; chomp $fsize;
-my $dbsize = `du -h $htmldir/alveno/$dbfname`; $dbsize =~ s/\t.*$//; chomp $dbsize;
 
 if (param('nomail')) {
   print h2("Ne sendas retmesagxon.")."\n";
@@ -190,7 +194,7 @@ Reply-To: $from
 Subject: $subject
 
 Novaj sxangxoj alvenis en http://www.reta-vortaro.de/alveno/$fname ($fsize)
-Aktuala datumbazo estas en http://www.reta-vortaro.de/alveno/$dbfname ($dbsize)
+$dbtext
 End_of_Mail
   close SENDMAIL;
 }
