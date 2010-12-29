@@ -35,7 +35,7 @@ sub write {
     my ($art) = ($1);
 #    print pre("art = $art");
 
-    open IN, "<", "$htmldir/revo/xml/$art.xml" or die "open";
+    open IN, "<", "$htmldir/revo/xml/$art.xml" or warn "error open xml/$art.xml";
     my $xml = join '', <IN>;
     close IN;
 
