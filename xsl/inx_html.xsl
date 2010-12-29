@@ -137,17 +137,24 @@
 
  
 <xsl:template match="ero[@ref]">
-  <a href="{@ref}">
-     <xsl:if test="@style">
+  <p>
+    <xsl:choose>
+      <xsl:when test="@style">
        <xsl:attribute name="style"><xsl:value-of select="@style"/></xsl:attribute>
-     </xsl:if>
-     <xsl:if test="ancestor-or-self::node()/@kadro">
-       <xsl:attribute name="target">
+     </xsl:when>
+     <xsl:otherwise>
+         <xsl:attribute name="style">margin-top: 0; margin-bottom: 0</xsl:attribute>
+     </xsl:otherwise>
+    </xsl:choose>
+    <a href="{@ref}">
+      <xsl:if test="ancestor-or-self::node()/@kadro">
+        <xsl:attribute name="target">
           <xsl:value-of select="(ancestor-or-self::node()/@kadro)[last()]"/>
-       </xsl:attribute>
-     </xsl:if>
-     <xsl:value-of select="@titolo"/>
-  </a><br/>
+        </xsl:attribute>
+      </xsl:if>
+      <xsl:value-of select="@titolo"/>
+    </a>
+  </p>
 </xsl:template>
 
 
@@ -307,17 +314,27 @@
  
 
 <xsl:template match="BLD-OJ">
-  <a href="bildoj.html"><xsl:value-of select="@titolo"/></a><br/>
+  <a href="bildoj.html" style="{@style}"><xsl:value-of select="@titolo"/></a><br/>
 </xsl:template>
 
 
 <xsl:template match="STAT">
-  <a href="statistiko.html"><xsl:value-of select="@titolo"/></a><br/>
+  <p>
+    <xsl:choose>
+      <xsl:when test="@style">
+       <xsl:attribute name="style"><xsl:value-of select="@style"/></xsl:attribute>
+     </xsl:when>
+     <xsl:otherwise>
+         <xsl:attribute name="style">margin-top: 0; margin-bottom: 0</xsl:attribute>
+     </xsl:otherwise>
+    </xsl:choose>
+    <a href="statistiko.html"><xsl:value-of select="@titolo"/></a><br/>
+  </p>
 </xsl:template>
 
 
 <xsl:template match="INV">
-  <a href="inv_{$root//inv/litero[v][1]/@name}.html"><xsl:value-of select="@titolo"/></a><br/>
+  <a href="inv_{$root//inv/litero[v][1]/@name}.html" style="{@style}"><xsl:value-of select="@titolo"/></a><br/>
 </xsl:template>
 
 

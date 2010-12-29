@@ -23,7 +23,7 @@
       la maldekstra kadro a&ubreve; uzi unu el la du supraj ser&ccirc;iloj.
     </alineo>
     <alineo style="font-size: small">
-      Se vi uzas Fajrovulpon de la versio 2 a&ubreve; similan retumilon, 
+      Se vi uzas Fajrovulpon post la versio 2 a&ubreve; similan retumilon, 
       vi povas aldoni la ser&ccirc;ilojn al la ser&ccirc;ilolisto de la retumilo,
       elektante tie la menueron por aldono a&ubreve; klakante sur la sekvajn
       ligilojn por 
@@ -65,7 +65,23 @@
         </alineo>
         <alineo style="font-size: small; margin-top: 0.5em; margin-left: 2em; width: 70%">
         Se vi volas uzi Revon kun Stardict vi trovos la konvertilon dictd2dic
-         <url ref="http://startdict.sf.net">startdict.sf.net</url>.
+         <url ref="http://stardict.sf.net">stardict.sf.net</url>.
+        </alineo>
+      </ero>
+    </sekcio>
+    <sekcio titolo="Revo por po&scirc;komputiloj">
+      <ero titolo="Reveto kaj PRevo" ref="reveto">
+        <alineo style="font-size: small; margin-top: 0.5em; margin-left: 2em; width: 70%">
+        Tio estas aro da HTML-dosieroj, limigitaj al la esencaj informoj, kun
+        nur elektitaj lingvo-indeksoj kaj sen bildoj.
+        Cetere vi povas anka&ubreve; ricevi Revon en bedic-formato.
+        Skribu al la Revo-administranto, se vi bezonas.
+        </alineo>
+        <bildo loko="http://www.busydoingnothing.co.uk/prevo/prevo.png"/>
+        <alineo style="font-size: small; margin-top: 0.5em; margin-left: 2em; width: 70%">
+        Revo por po&scirc;komputilo Palm Pre preparita de Neil Roberts estas
+        trovebla sur la retpa&gcirc;o 
+        <url ref="http://www.busydoingnothing.co.uk/prevo/">http://www.busydoingnothing.co.uk/prevo/</url>.
         </alineo>
       </ero>
     </sekcio>
@@ -76,14 +92,6 @@
         vortarojn la&ubreve; VoKo-teknologio. &Gcirc;i ne enhavas
         ekzemplovortaron (vi povus preni kelkajn artikolojn el ReVo).
         Aldone vi bezonas ilojn el la publika programaro (t.e. Java, ant, saxon k.a.).
-        </alineo>
-      </ero>
-      <ero titolo="Reveto - versio por po&scirc;komputiloj" ref="reveto">
-        <alineo style="font-size: small; margin-top: 0.5em; margin-left: 2em; width: 70%">
-        Tio estas aro da HTML-dosieroj, limigitaj al la esencaj informoj, kun
-        nur elektitaj lingvo-indeksoj kaj sen bildoj.
-        Cetere vi povas anka&ubreve; ricevi Revon en bedic-formato.
-        Skribu al la Revo-administranto, se vi bezonas.
         </alineo>
       </ero>
     </sekcio>
@@ -100,6 +108,8 @@
      <sekcio titolo="alfabeta indekso">
        <KAP-OJ/>
        <MLG-OJ titolo="mallongigoj" style="font-weight: bold"/>
+       <BLD-OJ titolo="bildoj" style="font-weight: bold"/>
+       <INV titolo="inversa indekso" style="font-weight: bold"/>
      </sekcio>
      <sekcio titolo="&ccirc;efaj nocioj">
        <TEZAURO/>
@@ -117,45 +127,44 @@
     </sekcio>
   </pagho>
   <pagho titolo="ktp." dosiero="_ktp.html">
-    <sekcio titolo="gravaj pa&gcirc;oj" kadro="precipa">
-      <ero ref="../titolo.html" titolo="titolpa&gcirc;o/ser&ccirc;o"/>
-      <ero ref="http://kono.be/vivo/" titolo="superser&ccirc;o per ViVo" kadro="_new"/>
-      <ero ref="/cgi-bin/hazarda_art.pl?senkadroj=2" titolo="iu ajn artikolo"/>
-      <!-- ero ref="../sercxo.html" titolo="ser&ccirc;o"/ -->
-      <ero ref="../dok/copying.txt" titolo="permesilo"/>
-      <ero ref="http://reta-vortaro.de/tgz/index.html" titolo="el&scirc;uti" kadro="_new"/>
-      <!-- ero ref="http://www.uni-leipzig.de/esperanto/voko" titolo="VoKo" kadro="_new"/ -->
+    <sekcio titolo="por uzantoj">
+      <ero ref="../titolo.html" titolo="Titolpa&gcirc;o kun ser&ccirc;o" kadro="precipa" />
+      <ero ref="http://kono.be/vivo/" titolo="Superser&ccirc;o per ViVo" kadro="_new"/>
+      <ero ref="../dok/mallongigoj.html" titolo="Vortaraj mallongigoj"/>
+
+      <ero ref="../dok/bibliogr.html" titolo="Bibliografio la&ubreve; mallongigoj" 
+	style="margin-top: 0.4em; margin-bottom: 0"/>
+      <ero ref="../dok/biblaut.html" titolo="Bibliografio la&ubreve; a&ubreve;toroj"/>
+      <ero ref="../dok/bibltit.html" titolo="Bibliografio la&ubreve; titoloj"/>
+
+      <STAT titolo="Statistiko" style="margin-top: 0.4em; margin-bottom: 0"/>
+      <ero ref="/cgi-bin/hazarda_art.pl?senkadroj=2" titolo="Iu ajn artikolo"/>
+      <ero ref="../dok/operaciumoj.html" titolo="Kiel uzi en diversaj sistemoj" kadro="precipa"/>
+      <ero ref="http://reta-vortaro.de/tgz/index.html" titolo="El&scirc;uti paka&jcirc;ojn" kadro="_new"/>
+      <ero ref="../dok/copying.txt" titolo="Permeso de uzado" kadro="_new"/>
     </sekcio>
-    <sekcio titolo="diversaj indeksoj">
-       <BLD-OJ titolo="listo de bildoj"/>
-       <MLG-OJ titolo="listo de mallongigoj"/>
-       <INV titolo="inversa indekso"/>
-       <ero ref="novaj.html" titolo="novaj artikoloj"/>
-       <ero ref="shanghoj.html" titolo="&scirc;an&gcirc;itaj artikoloj"/>
-       <ero ref="eraroj.html" titolo="eraro-raporto"/>
-       <!--ero ref="statistiko.html" titolo="statistiko"/ -->
-       <STAT titolo="statistiko"/>
-       <!-- ero ref="mankantaj.html" titolo="mankantaj tradukoj"/ -->
-       <MANKOJ titolo="kelkaj mankantaj tradukoj"/>
-       <ero ref="/cgi-bin/mx_trd.pl" titolo="&ccirc;iuj mankantaj tradukoj" kadro="precipa"/>
-       <ero ref="../dok/mallongigoj.html" titolo="vortaraj mallongigoj"/>
-       <ero ref="../dok/bibliogr.html" titolo="bibliografio la&ubreve; mallongigoj"/>
-       <ero ref="../dok/biblaut.html" titolo="bibliografio la&ubreve; a&ubreve;toroj"/>
-       <ero ref="../dok/bibltit.html" titolo="bibliografio la&ubreve; titoloj"/>
-    </sekcio>
-    <sekcio titolo="redaktado" kadro="precipa">
-       <ero ref="../dok/redinfo.html" titolo="fari&gcirc;i redaktanto"/>
-       <ero ref="../dok/revolist.html" titolo="dissendolisto"/>
-       <ero ref="../dok/revoserv.html" titolo="redaktoservo"/>
-       <ero ref="../dok/lingva_manlibro.html" titolo="lingva manlibro"/>
-       <ero ref="../dok/manlibro.html" titolo="te&hcirc;nika manlibro"/>
-       <ero ref="../dok/vindoza_manlibro.html" titolo="manlibro por Vindozo"/>
-       <ero ref="../dok/dtd.html" titolo="dokumenttipdifino"/>
-       <ero ref="../dok/ordigo.html" titolo="alfabetoj"/>
-       <ero ref="../dok/fakoj.html" titolo="mll. de fakoj"/>
-       <ero ref="../dok/lingvoj.html" titolo="mll. de lingvoj"/>
-       <ero ref="../dok/stiloj.html" titolo="mll. de stiloj"/>
-       <ero ref="../dok/sxablono.txt" titolo="&scirc;ablono"/>
+
+    <sekcio titolo="por redaktantoj">
+       <ero ref="novaj.html" titolo="Novaj artikoloj"/>
+       <ero ref="shanghoj.html" titolo="&Scirc;an&gcirc;itaj artikoloj"/>
+       <ero ref="eraroj.html" titolo="Eraro-raporto"/>
+       <MANKOJ titolo="Kelkaj mankantaj tradukoj"/>
+       <ero ref="/cgi-bin/mx_trd.pl" titolo="&Ccirc;iuj mankantaj tradukoj" kadro="precipa"/>
+
+       <ero ref="../dok/redinfo.html" titolo="Fari&gcirc;i redaktanto"  style="margin-top: 0.4em; margin-bottom: 0" kadro="precipa"/>
+       <ero ref="../dok/revolist.html" titolo="Dissendolisto" kadro="precipa"/>
+       <ero ref="../dok/revoserv.html" titolo="Redaktoservo" kadro="precipa"/>
+       <ero ref="../dok/lingva_manlibro.html" titolo="Lingva manlibro" kadro="precipa"/>
+       <ero ref="../dok/manlibro.html" titolo="Te&hcirc;nika manlibro" kadro="precipa"/>
+       <ero ref="../dok/vindoza_manlibro.html" titolo="Manlibro por Vindozo" kadro="precipa"/>
+       <ero ref="http://cyprych.neostrada.pl/tekstoj/komputiloj/vim_revo.html" titolo="Uzi redaktilon Vim" kadro="_new"/> 
+
+       <ero ref="../dok/dtd.html" titolo="Dokumenttipdifino" style="margin-top: 0.4em; margin-bottom: 0"/>
+       <ero ref="../dok/ordigo.html" titolo="Alfabetoj"/>
+       <ero ref="../dok/fakoj.html" titolo="List de fakoj"/>
+       <ero ref="../dok/lingvoj.html" titolo="Listo de lingvoj"/>
+       <ero ref="../dok/stiloj.html" titolo="Listo de stiloj"/>
+       <ero ref="../dok/sxablono.txt" titolo="&Scirc;ablono"/>
     </sekcio>
   </pagho>
 
@@ -163,6 +172,8 @@
      <sekcio titolo="alfabeta indekso">
        <KAP-OJ/>
        <MLG-OJ titolo="mallongigoj" style="font-weight: bold"/>
+       <BLD-OJ titolo="bildoj" style="font-weight: bold"/>
+       <INV titolo="inversa indekso" style="font-weight: bold"/>
      </sekcio>
      <sekcio titolo="&ccirc;efaj nocioj">
        <TEZAURO/>
@@ -174,44 +185,44 @@
     <sekcio titolo="fakindeksoj">
       <FAKOJ/>
     </sekcio>
-    <sekcio titolo="gravaj pa&gcirc;oj" kadro="precipa">
-      <ero ref="../titolo.html" titolo="titolpa&gcirc;o"/>
-      <ero ref="/cgi-bin/hazarda_art.pl?senkadroj=2" titolo="iu ajn artikolo"/>
-      <!-- ero ref="../sercxo.html" titolo="ser&ccirc;o"/ -->
-      <ero ref="../dok/copying.txt" titolo="permesilo"/>
-      <ero ref="http://reta-vortaro.de/tgz/index.html" titolo="el&scirc;uti" kadro="_new"/>
-      <!-- ero ref="http://www.uni-leipzig.de/esperanto/voko" titolo="VoKo"  kadro="_new"/ -->
+    <sekcio titolo="por uzantoj">
+      <ero ref="../titolo.html" titolo="Titolpa&gcirc;o kun ser&ccirc;o" kadro="precipa" />
+      <ero ref="http://kono.be/vivo/" titolo="Superser&ccirc;o per ViVo" kadro="_new"/>
+      <ero ref="../dok/mallongigoj.html" titolo="Vortaraj mallongigoj"/>
+
+      <ero ref="../dok/bibliogr.html" titolo="Bibliografio la&ubreve; mallongigoj" 
+	style="margin-top: 0.4em; margin-bottom: 0"/>
+      <ero ref="../dok/biblaut.html" titolo="Bibliografio la&ubreve; a&ubreve;toroj"/>
+      <ero ref="../dok/bibltit.html" titolo="Bibliografio la&ubreve; titoloj"/>
+
+      <STAT titolo="Statistiko" style="margin-top: 0.4em; margin-bottom: 0"/>
+      <ero ref="/cgi-bin/hazarda_art.pl?senkadroj=2" titolo="Iu ajn artikolo"/>
+      <ero ref="../dok/operaciumoj.html" titolo="Kiel uzi en diversaj sistemoj" kadro="precipa"/>
+      <ero ref="http://reta-vortaro.de/tgz/index.html" titolo="El&scirc;uti paka&jcirc;ojn" kadro="_new"/>
+      <ero ref="../dok/copying.txt" titolo="Permeso de uzado" kadro="_new"/>
     </sekcio>
-    <sekcio titolo="diversaj indeksoj">
-       <BLD-OJ titolo="listo de bildoj"/>
-       <MLG-OJ titolo="listo de mallongigoj"/>
-       <INV titolo="inversa indekso"/>
-       <ero ref="novaj.html" titolo="novaj artikoloj"/>
-       <ero ref="shanghoj.html" titolo="&scirc;an&gcirc;itaj artikoloj"/>
-       <ero ref="eraroj.html" titolo="eraro-raporto"/>
-       <!-- ero ref="statistiko.html" titolo="statistiko"/ -->
-       <STAT titolo="statistiko"/>
-       <!-- ero ref="mankantaj.html" titolo="mankantaj tradukoj"/ -->
-       <MANKOJ titolo="mankantaj tradukoj"/>
-       <ero ref="../dok/mallongigoj.html" titolo="vortaraj mallongigoj"/>
-       <ero ref="../dok/bibliogr.html" titolo="bibliografio la&ubreve; mallongigoj"/>
-       <ero ref="../dok/biblaut.html" titolo="bibliografio la&ubreve; a&ubreve;toroj"/>
-       <ero ref="../dok/bibltit.html" titolo="bibliografio la&ubreve; titoloj"/>
+
+    <sekcio titolo="por redaktantoj">
+       <ero ref="novaj.html" titolo="Novaj artikoloj"/>
+       <ero ref="shanghoj.html" titolo="&Scirc;an&gcirc;itaj artikoloj"/>
+       <ero ref="eraroj.html" titolo="Eraro-raporto"/>
+       <MANKOJ titolo="Kelkaj mankantaj tradukoj"/>
+       <ero ref="/cgi-bin/mx_trd.pl" titolo="&Ccirc;iuj mankantaj tradukoj" kadro="precipa"/>
+       <ero ref="../dok/redinfo.html" titolo="Fari&gcirc;i redaktanto"  style="margin-top: 0.4em; margin-bottom: 0" kadro="precipa"/>
+       <ero ref="../dok/revolist.html" titolo="Dissendolisto" kadro="precipa"/>
+       <ero ref="../dok/revoserv.html" titolo="Redaktoservo" kadro="precipa"/>
+       <ero ref="../dok/lingva_manlibro.html" titolo="Lingva manlibro" kadro="precipa"/>
+       <ero ref="../dok/manlibro.html" titolo="Te&hcirc;nika manlibro" kadro="precipa"/>
+       <ero ref="../dok/vindoza_manlibro.html" titolo="Manlibro por Vindozo" kadro="precipa"/>
+       <ero ref="http://cyprych.neostrada.pl/tekstoj/komputiloj/vim_revo.html" titolo="Uzi redaktilon Vim" kadro="_new"/> 
+       <ero ref="../dok/dtd.html" titolo="Dokumenttipdifino" style="margin-top: 0.4em; margin-bottom: 0"/>
+       <ero ref="../dok/ordigo.html" titolo="Alfabetoj"/>
+       <ero ref="../dok/fakoj.html" titolo="List de fakoj"/>
+       <ero ref="../dok/lingvoj.html" titolo="Listo de lingvoj"/>
+       <ero ref="../dok/stiloj.html" titolo="Listo de stiloj"/>
+       <ero ref="../dok/sxablono.txt" titolo="&Scirc;ablono"/>
     </sekcio>
-    <sekcio titolo="redaktado" kadro="precipa">
-       <ero ref="../dok/redinfo.html" titolo="fari&gcirc;i redaktanto"/>
-       <ero ref="../dok/revolist.html" titolo="dissendolisto"/>
-       <ero ref="../dok/revoserv.html" titolo="redaktoservo"/>
-       <ero ref="../dok/lingva_manlibro.html" titolo="lingva manlibro"/>
-       <ero ref="../dok/manlibro.html" titolo="te&hcirc;nika manlibro"/>
-       <ero ref="../dok/vindoza_manlibro.html" titolo="manlibro por Vindozo"/>
-       <ero ref="../dok/dtd.html" titolo="dokumenttipdifino"/>
-       <ero ref="../dok/ordigo.html" titolo="alfabetoj"/>
-       <ero ref="../dok/fakoj.html" titolo="mll. de fakoj"/>
-       <ero ref="../dok/lingvoj.html" titolo="mll. de lingvoj"/>
-       <ero ref="../dok/stiloj.html" titolo="mll. de stiloj"/>
-       <ero ref="../dok/sxablono.txt" titolo="&scirc;ablono"/>
-    </sekcio>
+
   </pagho>
 </enhavo> 
 

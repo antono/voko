@@ -113,6 +113,10 @@ rezulto en:
     <xslt in="${v.voko.dok}/lingva_manlibro.xml" out="${v.bazo.dok}/lingva_manlibro.html"
        style="${v.voko.xsl}/manlibro.xsl"/>
 
+    <xslt in="${v.voko.dok}/operaciumoj.xml" out="${v.bazo.dok}/operaciumoj.html"
+       style="${v.voko.xsl}/manlibro.xsl"/>
+
+
 <!--
     <exec dir="${revo}/dok" executable="perl">
        <arg file="${voko_bin}/dtd2html.pl"/>

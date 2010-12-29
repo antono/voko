@@ -67,7 +67,7 @@
     <dt><xsl:value-of select="@titolo"/></dt>
     <dd>
       <xsl:apply-templates select="$dosieroj/dir/file[starts-with(@name,$prefikso)]"/>
-      <xsl:apply-templates select="alineo"/>
+      <xsl:apply-templates select="alineo|bildo"/>
     </dd>
   </xsl:if>
 </xsl:template>
