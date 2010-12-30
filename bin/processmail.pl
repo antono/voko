@@ -35,6 +35,7 @@ $dtd_temp     = "$tmp/dtd";
 
 $old_mail     = "$log_mail/oldmail";
 $err_mail     = "$log_mail/errmail";
+$prc_mail     = "$log_mail/prcmail";
 
 $xml_dir      = "$revo_base/xml";
 $dok_dir      = "$revo_base/dok";
@@ -57,7 +58,7 @@ $mail_begin   = '^From[^:]';
 $possible_keys= 'komando|teksto|shangho';
 $commands     = 'redakt[oui]|help[oui]|aldon[oui]'; # .'|dokumento|artikolo|historio|propono'
 $revoservo    = '[Revo-Servo]';
-$revo_mailaddr= 'revo@h1838790.stratoserver.net';
+$revo_mailaddr= 'revo@reta-vortaro.de';
 $revolist     = 'wolfram';
 $revo_from    = "Reta Vortaro <$revo_mailaddr>";
 $signature    = "--\nRevo-Servo $revo_mailaddr\n"
@@ -156,7 +157,7 @@ if (-e $mail_error) {
 
 if (-e $mail_send) {
     print "shovas $mail_send al $log_mail/$filename\n" if ($verbose);
-    `mv $mail_send $log_mail/$filename`;
+    `mv $mail_send $prc_mail/$filename`;
 }  
 
 ###################### analizado de la mesaghoj ################

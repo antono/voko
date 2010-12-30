@@ -26,7 +26,7 @@
       <echoproperties prefix="srv."/>
    </target>
 
-   <target name="srv-preparo"
+   <target name="srv-preparo">
      <tstamp>
        <format property="TSTAMP" pattern="hhmmss"/>
      </tstamp>
@@ -71,7 +71,7 @@
 -->
    </target>
 
-   <target name="srv-refari-vortaron" depends="srv-trakti-poshton"
+   <target name="srv-refari-vortaron" depends="srv-preparo,srv-trakti-poshton"
       if="user-mail-file-exists"
       description = "refaras la vortaron post poshtotrakto">
 
@@ -94,7 +94,7 @@
      
    </target>
 
-   <target name="srv-refari-nur-artikolojn" depends="srv-trakti-poshton"
+   <target name="srv-refari-nur-artikolojn" depends="srv-preparo,srv-trakti-poshton"
       if="user-mail-file-exists"
       description = "refaras nur la redaktitajn artikolojn, ne la indeksojn post poshtotrakto">
 
@@ -117,7 +117,7 @@
    </target>
 
 
-   <target name="srv-servo" depends="srv-agordo,srv-refari-vortaron"
+   <target name="srv-servo" depends="srv-agordo,srv-preparo,srv-refari-vortaron"
       if="user-mail-file-exists"
       description="Kuro de la tuta servo: preni kaj trakti poshton, refari vortaron, sendi dosierojn kaj respondojn">
 
@@ -140,7 +140,7 @@
 
    </target> 
 
-   <target name="srv-servo-art" depends="srv-agordo,srv-refari-nur-artikolojn"
+   <target name="srv-servo-art" depends="srv-agordo,srv-preparo,srv-refari-nur-artikolojn"
       if="user-mail-file-exists"
       description="Interkuro (nur artikoloj, ne indeksoj) de la servo: preni kaj trakti poshton, refari artikolojn, sendi dosierojn kaj respondojn">
 
