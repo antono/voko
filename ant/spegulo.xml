@@ -51,7 +51,7 @@
      </tstamp>
 
      <echo message="tempo: ${DSTAMP} ${TSTAMP}"/>
-     <property name="cvs.filename" value="revocvs-${DSTAMP}.tgz"/>
+     <property name="cvs.filename" value="revocvs-${DSTAMP}_${TSTAMP}.tgz"/>
      <available property="cvs-tar-file-exists" file="${cvs.tmpdir}/${cvs.filename}"/>
 
      <property name="cvs.tarlog" value="tar-revocvs-${DSTAMP}_${TSTAMP}.log"/>
@@ -68,7 +68,7 @@
    <target name="cvs-tar" unless="cvs-tar-file-exists" depends="cvs-preparo" 
        description="pakas shanghitajn cvs-dosieron en tar-dosieron">
 
-     <exec executable="${mirror}" output="${log}/tar-revocvs-${DSTAMP}.log">
+     <exec executable="${mirror}" output="${log}/${cvs.tarlog}">
        <arg value="cvs"/>
      </exec>
 
@@ -104,11 +104,11 @@ ant -f voko/ant/spegulo.xml -Dcvs.filename=revocvs-JJJJMMTT.tgz cvs-upload
      </ftp>
 
      <get src="${cvs.upload.url}${cvs.filename}" 
-       dest="${log}/cvs_uploadlog.html" 
+       dest="${log}/${cvs.uploadlog}" 
        username="${cvs.upload.user}"
        password="${cvs.upload.password}"/>
 
-     <loadfile srcFile="${log}/cvs_uploadlog.html" property="cvslogfile">
+     <loadfile srcFile="${log}/${cvs.uploadlog}" property="cvslogfile">
        <filterchain>
          <tokenfilter>
            <replaceregex pattern="&lt;[^&gt;]+&gt;" replace="" flags="g"/>
@@ -225,7 +225,7 @@ ant -f voko/ant/spegulo.xml -Drevo.filename=revo-JJJJMMTT.tgz revo-upload
        username="${revo.upload.user}"
        password="${revo.upload.password}"/>
 <!-- tro grandighis tiu dosiero por la raporto....  
-     <loadfile srcFile="${log}/revo_uploadlog.html" property="revologfile">
+     <loadfile srcFile="${log}/${revo.uploadlog}" property="revologfile">
        <filterchain>
          <tokenfilter>
            <replaceregex pattern="&lt;[^&gt;]+&gt;" replace=" " flags="g"/>
