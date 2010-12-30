@@ -26,6 +26,12 @@
       <echoproperties prefix="srv."/>
    </target>
 
+   <target name="srv-preparo"
+     <tstamp>
+       <format property="TSTAMP" pattern="hhmmss"/>
+     </tstamp>
+   </target>
+
    <target name="srv-preni-poshton" description="Prenas la retposhton de la redaktantoj ">
 
      <!-- prenu liston de redaktantoj -->
@@ -82,6 +88,7 @@
 
      <ant antfile="${v.voko.ant}/spegulo.xml" inheritAll="false">
         <property name="v.bazo" location="${v.bazo}"/>
+        <property name="TSTAMP" value="${TSTAMP}"/> <!-- uzata en la dosiernomo de la arkivo, do devas koincidi en revo-tar kaj revo-upload -->
         <target name="revo-tar"/>
      </ant>
      
@@ -91,25 +98,22 @@
       if="user-mail-file-exists"
       description = "refaras nur la redaktitajn artikolojn, ne la indeksojn post poshtotrakto">
 
-<!--unue adaptu uprevo.pl...
-
      <ant antfile="${v.voko.ant}/spegulo.xml" inheritAll="false">
         <property name="v.bazo" location="${v.bazo}"/>
         <target name="cvs-tar"/>
      </ant>
--->
 
      <ant antfile="${v.voko.ant}/vortaro.xml" inheritAll="false">
         <property name="v.bazo" location="${v.bazo}"/>
         <target name="artikoloj"/>
      </ant>
 
-<!-- unue adaptu uprevo.pl ...
      <ant antfile="${v.voko.ant}/spegulo.xml" inheritAll="false">
         <property name="v.bazo" location="${v.bazo}"/>
+        <property name="TSTAMP" value="${TSTAMP}"/> <!-- uzata en la dosiernomo de la arkivo, do devas koincidi en revo-tar kaj revo-upload -->
+
         <target name="revo-tar"/>
      </ant>
--->     
    </target>
 
 
@@ -129,6 +133,7 @@
       <!-- sendi shanghojn de arhhivo al servilo -->
       <ant antfile="${v.voko.ant}/spegulo.xml" inheritAll="false">
         <property name="v.bazo" location="${v.bazo}"/>
+        <property name="TSTAMP" value="${TSTAMP}"/> 
         <target name="cvs-upload"/>
         <target name="revo-upload"/>
       </ant>
@@ -149,14 +154,12 @@
       </exec>
 
       <!-- sendi shanghojn de arhhivo al servilo -->
-<!-- unue adaptu uprevo.pl
-
       <ant antfile="${v.voko.ant}/spegulo.xml" inheritAll="false">
         <property name="v.bazo" location="${v.bazo}"/>
+        <property name="TSTAMP" value="${TSTAMP}"/> 
         <target name="cvs-upload"/>
         <target name="revo-upload"/>
       </ant>
--->
    </target> 
 
 </project>

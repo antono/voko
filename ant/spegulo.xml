@@ -93,6 +93,9 @@ ant -f voko/ant/spegulo.xml -Dcvs.filename=revocvs-JJJJMMTT.tgz cvs-upload
 
    <target name="cvs-upload" depends="cvs-tar" if="cvs-tar-file-exists" 
      description="transportas la tar-dosieron al la cvs-servilo">
+
+     <echo>sendas ${cvs.tmpdir}/${cvs.filename} al ${cvs.servilo.host}/${cvs.servilo.dir}</echo>
+
      <ftp server="${cvs.servilo.host}"
          remotedir="${cvs.servilo.dir}"
          userid="${cvs.servilo.user}"
@@ -102,6 +105,8 @@ ant -f voko/ant/spegulo.xml -Dcvs.filename=revocvs-JJJJMMTT.tgz cvs-upload
 
        <fileset file="${cvs.tmpdir}/${cvs.filename}"/>
      </ftp>
+
+     <echo>malpakas la arhhivon, protokolo en ${log}/${cvs.uploadlog}</echo>
 
      <get src="${cvs.upload.url}${cvs.filename}" 
        dest="${log}/${cvs.uploadlog}" 
@@ -210,6 +215,9 @@ ant -f voko/ant/spegulo.xml -Drevo.filename=revo-JJJJMMTT.tgz revo-upload
 
    <target name="revo-upload" depends="revo-tar, revo-tempo" if="revo-tar-file-exists" 
      description="transportas la tar-dosieron al la Revo-servilo">
+
+     <echo>sendas ${revo.tmpdir}/${revo.filename} al ${revo.servilo.host}/${revo.servilo.dir}</echo>
+
      <ftp server="${revo.servilo.host}"
          remotedir="${revo.servilo.dir}"
          userid="${revo.servilo.user}"
@@ -219,6 +227,8 @@ ant -f voko/ant/spegulo.xml -Drevo.filename=revo-JJJJMMTT.tgz revo-upload
 
        <fileset file="${revo.tmpdir}/${revo.filename}"/>
      </ftp>
+
+     <echo>malpakas la arhhivon, protokolo en ${log}/${revo.uploadlog}</echo>
 
      <get src="${revo.upload.url}${revo.filename}" 
        dest="${log}/${revo.uploadlog}" 
