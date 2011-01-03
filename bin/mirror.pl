@@ -18,6 +18,7 @@ package main;
 
 my $stop = 0;
 my $configdatei = '';
+my $tarname = '';
 my $site = '';
 
 while (@ARGV) {
@@ -28,6 +29,9 @@ while (@ARGV) {
     } elsif ($ARGV[0] eq '-c') {
 	shift @ARGV;
 	$configdatei = shift @ARGV;
+    } elsif ($ARGV[0] eq '-t') {
+	shift @ARGV;
+	$tarname = shift @ARGV;
     } else {
 	$site = shift @ARGV;
 	last;
@@ -72,10 +76,22 @@ my $include = $config{"include"};
 my $tar_dir = $config{"LocalDir"};
 my $tar_cmd = "tar -C $tar_dir -h -rf ";
 my $zip_cmd = 'gzip';
-my @now = gmtime(time());
-my $now_str = sprintf('%4d%02d%02d',$now[5]+1900,$now[4]+1,$now[3]);
-my $tar_file = $config{'TarFilePrefix'}.$now_str.".tar";
-my $tgz_file = $config{'TarFilePrefix'}.$now_str.".tgz";
+
+my @now =();
+my $now_str = '';
+my $tar_file = '';
+
+unless ($tarname) {
+  @now = gmtime(time());
+  $now_str = sprintf('%4d%02d%02d',$now[5]+1900,$now[4]+1,$now[3]);
+  $tarname = $config{'TarFilePrefix'}.$now_str;
+} elsif ($tarname =~ /^(.*)\.t..$/) {
+  $tarname = $1;
+}
+
+my $tar_file = $tarname.".tar";
+my $tgz_file = $tarname.".tgz";
+
 my $ren_tar_tgz = "mv $tar_file.gz $tgz_file";
 $tar_cmd .= "$tar_file ";
 my $del_file = $config{TarDelFile};

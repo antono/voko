@@ -27,8 +27,11 @@
    </target>
 
    <target name="srv-preparo">
+    <tstamp>
+       <format property="v.dato" pattern="yyyyMMdd"/>
+     </tstamp>
      <tstamp>
-       <format property="TSTAMP" pattern="hhmmss"/>
+       <format property="v.tempo" pattern="hhmmss"/>
      </tstamp>
    </target>
 
@@ -77,6 +80,8 @@
 
      <ant antfile="${v.voko.ant}/spegulo.xml" inheritAll="false">
         <property name="v.bazo" location="${v.bazo}"/>
+        <property name="cvs.dato" value="${v.dato}"/>
+        <property name="cvs.tempo" value="${v.tempo}"/>
         <target name="cvs-tar"/>
      </ant>
 
@@ -88,7 +93,8 @@
 
      <ant antfile="${v.voko.ant}/spegulo.xml" inheritAll="false">
         <property name="v.bazo" location="${v.bazo}"/>
-        <property name="TSTAMP" value="${TSTAMP}"/> <!-- uzata en la dosiernomo de la arkivo, do devas koincidi en revo-tar kaj revo-upload -->
+        <property name="revo.dato" value="${v.dato}"/>
+        <property name="revo.tempo" value="${v.tempo}"/> <!-- uzata en la dosiernomo de la arkivo, do devas koincidi en revo-tar kaj revo-upload -->
         <target name="revo-tar"/>
      </ant>
      
@@ -100,6 +106,8 @@
 
      <ant antfile="${v.voko.ant}/spegulo.xml" inheritAll="false">
         <property name="v.bazo" location="${v.bazo}"/>
+        <property name="cvs.dato" value="${v.dato}"/>
+        <property name="cvs.tempo" value="${v.tempo}"/>
         <target name="cvs-tar"/>
      </ant>
 
@@ -110,56 +118,46 @@
 
      <ant antfile="${v.voko.ant}/spegulo.xml" inheritAll="false">
         <property name="v.bazo" location="${v.bazo}"/>
-        <property name="TSTAMP" value="${TSTAMP}"/> <!-- uzata en la dosiernomo de la arkivo, do devas koincidi en revo-tar kaj revo-upload -->
+        <property name="revo.dato" value="${v.dato}"/>
+        <property name="revo.tempo" value="${v.tempo}"/> <!-- uzata en la dosiernomo de la arkivo, do devas koincidi en revo-tar kaj revo-upload -->
 
         <target name="revo-tar"/>
      </ant>
    </target>
 
+   <target name="srv-upload">
+     <!-- forsendi respondojn al redaktantoj, necesas poshtkontrolo antau forsendo pro legitimigo! -->
+      <!-- <exec dir="${v.bazo}" executable="${srv.fetchmail}">
+        <arg value="-c"/>
+        <arg value="post.strato.de"/>
+      </exec> -->
+      <exec dir="${v.bazo}" executable="${srv.sendmail}">
+        <arg value="-q"/>
+      </exec>
 
-   <target name="srv-servo" depends="srv-agordo,srv-preparo,srv-refari-vortaron"
+      <!-- sendi shanghojn de arhhivo al servilo -->
+      <ant antfile="${v.voko.ant}/spegulo.xml" inheritAll="false">
+        <property name="v.bazo" location="${v.bazo}"/>
+        <property name="revo.dato" value="${v.dato}"/>
+        <property name="revo.tempo" value="${v.tempo}"/>
+        <property name="cvs.dato" value="${v.dato}"/>
+        <property name="cvs.tempo" value="${v.tempo}"/>
+        <target name="cvs-upload"/>
+        <target name="revo-upload"/>
+      </ant>
+   </target>
+
+
+   <target name="srv-servo" depends="srv-agordo,srv-preparo,srv-refari-vortaron,srv-upload"
       if="user-mail-file-exists"
       description="Kuro de la tuta servo: preni kaj trakti poshton, refari vortaron, sendi dosierojn kaj respondojn">
 
-      <!-- forsendi respondojn al redaktantoj, necesas poshtkontrolo antau forsendo pro legitimigo! -->
-      <!-- <exec dir="${v.bazo}" executable="${srv.fetchmail}">
-        <arg value="-c"/>
-        <arg value="post.strato.de"/>
-      </exec> -->
-      <exec dir="${v.bazo}" executable="${srv.sendmail}">
-        <arg value="-q"/>
-      </exec>
-
-      <!-- sendi shanghojn de arhhivo al servilo -->
-      <ant antfile="${v.voko.ant}/spegulo.xml" inheritAll="false">
-        <property name="v.bazo" location="${v.bazo}"/>
-        <property name="TSTAMP" value="${TSTAMP}"/> 
-        <target name="cvs-upload"/>
-        <target name="revo-upload"/>
-      </ant>
-
    </target> 
 
-   <target name="srv-servo-art" depends="srv-agordo,srv-preparo,srv-refari-nur-artikolojn"
+   <target name="srv-servo-art" depends="srv-agordo,srv-preparo,srv-refari-nur-artikolojn,srv-upload"
       if="user-mail-file-exists"
       description="Interkuro (nur artikoloj, ne indeksoj) de la servo: preni kaj trakti poshton, refari artikolojn, sendi dosierojn kaj respondojn">
 
-      <!-- forsendi respondojn al redaktantoj, necesas poshtkontrolo antau forsendo pro legitimigo! -->
-      <!-- <exec dir="${v.bazo}" executable="${srv.fetchmail}">
-        <arg value="-c"/>
-        <arg value="post.strato.de"/>
-      </exec> -->
-      <exec dir="${v.bazo}" executable="${srv.sendmail}">
-        <arg value="-q"/>
-      </exec>
-
-      <!-- sendi shanghojn de arhhivo al servilo -->
-      <ant antfile="${v.voko.ant}/spegulo.xml" inheritAll="false">
-        <property name="v.bazo" location="${v.bazo}"/>
-        <property name="TSTAMP" value="${TSTAMP}"/> 
-        <target name="cvs-upload"/>
-        <target name="revo-upload"/>
-      </ant>
    </target> 
 
 </project>

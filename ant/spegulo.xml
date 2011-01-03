@@ -43,19 +43,19 @@
 
    <target name="cvs-preparo">
      <tstamp>
-       <format property="DSTAMP" pattern="yyyyMMdd"/>
+       <format property="cvs.dato" pattern="yyyyMMdd"/>
      </tstamp>
 
      <tstamp>
-       <format property="TSTAMP" pattern="hhmmss"/>
+       <format property="cvs.tempo" pattern="hhmmss"/>
      </tstamp>
 
-     <echo message="tempo: ${DSTAMP} ${TSTAMP}"/>
-     <property name="cvs.filename" value="revocvs-${DSTAMP}_${TSTAMP}.tgz"/>
+     <echo message="tempo: ${cvs.dato} ${cvs.tempo}"/>
+     <property name="cvs.filename" value="revocvs-${cvs.dato}_${cvs.tempo}.tgz"/>
      <available property="cvs-tar-file-exists" file="${cvs.tmpdir}/${cvs.filename}"/>
 
-     <property name="cvs.tarlog" value="tar-revocvs-${DSTAMP}_${TSTAMP}.log"/>
-     <property name="cvs.uploadlog" value="revocvs-${DSTAMP}_${TSTAMP}-upload.html"/>
+     <property name="cvs.tarlog" value="tar-revocvs-${cvs.dato}_${cvs.tempo}.log"/>
+     <property name="cvs.uploadlog" value="revocvs-${cgvs.dato}_${cvs.tempo}-upload.html"/>
 
    </target>
 
@@ -69,6 +69,8 @@
        description="pakas shanghitajn cvs-dosieron en tar-dosieron">
 
      <exec executable="${mirror}" output="${log}/${cvs.tarlog}">
+       <arg value="-t"/>
+       <arg value="${cvs.filename}"/>
        <arg value="cvs"/>
      </exec>
 
@@ -142,20 +144,20 @@ ant -f voko/ant/spegulo.xml -Dcvs.filename=revocvs-JJJJMMTT.tgz cvs-upload
 
    <target name="revo-preparo">
      <tstamp>
-       <format property="DSTAMP" pattern="yyyyMMdd"/>
+       <format property="revo.dato" pattern="yyyyMMdd"/>
      </tstamp>
 
      <tstamp>
-       <format property="TSTAMP" pattern="hhmmss"/>
+       <format property="revo.tempo" pattern="hhmmss"/>
      </tstamp>
 
-      <echo message="tempo: ${DSTAMP} ${TSTAMP}"/>
+      <echo message="tempo: ${revo.dato} ${revo.tempo}"/>
  
-     <property name="revo.filename" value="revo-${DSTAMP}_${TSTAMP}.tgz"/>
+     <property name="revo.filename" value="revo-${revo.dato}_${revo.tempo}.tgz"/>
      <available property="revo-tar-file-exists" file="${revo.tmpdir}/${revo.filename}"/>
 
-     <property name="revo.tarlog" value="tar-revo-${DSTAMP}_${TSTAMP}.log"/>
-     <property name="revo.uploadlog" value="revo-${DSTAMP}_${TSTAMP}-upload.html"/>
+     <property name="revo.tarlog" value="tar-revo-${revo.dato}_${revo.tempo}.log"/>
+     <property name="revo.uploadlog" value="revo-${revo.dato}_${revo.tempo}-upload.html"/>
 
      <!-- se eco ne difinita per dosiero, iru 10 jarojn antaue -->
      <tstamp><format property="revo.lasta.dato"
@@ -174,7 +176,9 @@ ant -f voko/ant/spegulo.xml -Dcvs.filename=revocvs-JJJJMMTT.tgz cvs-upload
        description="pakas shanghitajn Revo-dosieron en tar-dosieron">
 
    <exec executable="${mirror}" output="${log}/${revo.tarlog}">
-      <arg value="revo"/>
+     <arg value="-t"/>
+     <arg value="${revo.filename}"/>
+     <arg value="revo"/>
    </exec>
 
 <!-- 
