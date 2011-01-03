@@ -7,6 +7,7 @@
 
 # wd 3.6.2003: umgestellt von ftp auf sftp mit Batchdatei
 # wd 26.01.2007 umgestellt auf tar-Archiv als Ziel
+# wd 3.1.2011 umgestellt auf mehrmal tägliche ErstellungTar-Archiv
 
 $| = 1;
 
@@ -38,7 +39,7 @@ while (@ARGV) {
     }
 }
 
-my $version = "0.7";
+my $version = "0.8";
 my $stand = "12.06.2003";
 
 my %config = ();    # Inhalt der Konfigurationsdatei
@@ -65,7 +66,7 @@ my $srDatei = $config{"SrFile"};           # zu ersetzende Zeichenketten
 my $tempdatei = "/tmp/tmp.tmp";	  # temporäre Konvertierungsdatei
 my $mirrordat = $config{"MirrorDat"}."/mirror.dat";     # Sicherung, Zustaende der Dateien
 my $mirrortmp = $config{"MirrorDat"}."/mirror.tmp"; # Neuerstellung der mirrordat
-my $logdatei = $config{"LogDir"}."/smirror.log";     # Übertragungs-Logdatei
+###my $logdatei = $config{"LogDir"}."/smirror.log";     # Übertragungs-Logdatei
 
 my $batchfile =  $config{"MirrorDat"}."/mirror.batch"; # Batchdatei für sftp
 my $max_tries = 1;
@@ -77,13 +78,10 @@ my $tar_dir = $config{"LocalDir"};
 my $tar_cmd = "tar -C $tar_dir -h -rf ";
 my $zip_cmd = 'gzip';
 
-my @now =();
-my $now_str = '';
 my $tar_file = '';
-
 unless ($tarname) {
-  @now = gmtime(time());
-  $now_str = sprintf('%4d%02d%02d',$now[5]+1900,$now[4]+1,$now[3]);
+  my @now = gmtime(time());
+  my $now_str = sprintf('%4d%02d%02d',$now[5]+1900,$now[4]+1,$now[3]);
   $tarname = $config{'TarFilePrefix'}.$now_str;
 } elsif ($tarname =~ /^(.*)\.t..$/) {
   $tarname = $1;
@@ -341,26 +339,8 @@ sub mirror {
   @error_unlink_ver = ();
 
   # Log-Datei öffnen:
-  open(LOG, ">> $logdatei") 
-    || die "\nkann Logdatei $logdatei nicht oeffnen";
-
-#  print LOG "-" x 10, "Start um ", `date`, "-" x 10;
-
-  # ISDN-Leitung aufmachen
-#  `ping -qc5 -i1 $config{'RemoteServer'}`; 
-
-  # beim ftp-Server anmelden:
-#  print "\nkontaktiere $config{'RemoteServer'} ...";
-#  if( &ftp::open( $config{'RemoteServer'}, 
-#		  $ftp_port, $retry_call, $attempts ) != 1 ) {
-#    print "\nkann $config{'RemoteServer'} nicht erreichen";
-#    return 0;
-#  }
-#  print "\nuser login...";
-#  if( ! &ftp::login( $config{'UserID'}, $config{'Passwd'} ) ) {
-#    print "\nLogin fehlgeschlagen";
-#    return 0;
-#  }
+##  open(LOG, ">> $logdatei") 
+##    || die "\nkann Logdatei $logdatei nicht oeffnen";
 
   # Batchdatei öffnen
   open BATCH,">$batchfile" or die "Kann $batchfile nicht öffnen: $!\n";
@@ -380,13 +360,6 @@ sub mirror {
       $rem_file = "$verzeichnis/$name";
       print "\n".$n++."/".($#unlink+1)." - $rem_file";
       
-#      if( ! &ftp::delete( $rem_file ) ) {
-#	print " - kann Datei nicht loeschen";
-#	push (@error_unlink, $_);
-#      } else {
-#      	print LOG "unlink $config{'RemoteServer'}$rem_file\n";
-#      }
-
       print BATCH "rm $rem_file\n";
 
     }
@@ -404,13 +377,6 @@ sub mirror {
       $name = Name($_);
       $rem_dir = "$verzeichnis/$name";
       print "\n".$n++."/".($#unlink_ver+1)." - $rem_dir";
-
-#      if( ! &ftp::deldir( $rem_dir ) ) {
-#	print " - kann Verzeichnis nicht loeschen";
-#	push (@error_unlink_ver, $_);
-#      } else {
-#      	print LOG "rmdir $config{'RemoteServer'}$rem_dir\n";
-#      }
 
       print BATCH "rmdir $rem_dir\n";
 
@@ -430,13 +396,6 @@ sub mirror {
       $rem_dir = "$verzeichnis/$name";
       print "\n".$n++."/".($#mirror_ver+1)." - $rem_dir";
       
-#      if( ! &ftp::mkdir( $rem_dir ) ) {
-#	print " - kann Verzeichnis nicht erstellen";
-#	push (@error_mirror_ver, $_);
-#      } else {
-#      	print LOG "mkdir $config{'RemoteServer'}$rem_dir\n";
-#      }
-
       print BATCH "mkdir $rem_dir\n";
 
     }
@@ -485,55 +444,24 @@ sub mirror {
 	$text_mode = 0;
       }
       
-#      &ftp::type( $text_mode ? 'A' : 'I' );
-#      if( ! &ftp::put( $put_file, $rem_file ) ) {
-#	print " - kann Datei nicht uebertragen";
-#	push (@error_mirror, $_);
-#      } else {
-#      	# Logdatei ergänzen:
-#      	print LOG "put ";
-#      	print LOG "with search&replace " if ($replace == 1);
-#      	print LOG "$local_file -> $config{'RemoteServer'}/$rem_file";
-
 
       print BATCH "put $put_file $rem_file\n";
 
-      	# Rechte setzen, falls es ein CGI-Script war:
-      	if ( substr(Verzeichnis($local_file),0,
-		    length($config{'cgi-bin'})) eq $config{'cgi-bin'})
-	  {
-	    print "\nsetze Zugriffsrechte fuer $rem_file...";
-
-#	    if( ! &ftp::chmod( $rem_file, 457 ) ) {	# chmod 711
-#	      print " - Zugriffsrechte konnten nicht gesetzt werden";
-#	      print LOG " - konnte Zugriffsrechte nicht setzten";
-#	      push (@error_mirror, $_);
-#	    } else {
-#	      print LOG " - Zugriffsrecht auf Ausfuehrbar gesetzt";
-#	      print " - o.k.";
-#	    }
-
-	    print BATCH "chmod 711 $rem_file\n";
-	  }
-#      	print LOG "\n";
-#      }
+      # Rechte setzen, falls es ein CGI-Script war:
+      if ( substr(Verzeichnis($local_file),0,
+		  length($config{'cgi-bin'})) eq $config{'cgi-bin'})
+	{
+	  print "\nsetze Zugriffsrechte fuer $rem_file...";
+	  print BATCH "chmod 711 $rem_file\n";
+	}
     }
   } else {
     print "\n\nkeine Dateien zu uebertragen";
   }
 
-# &ftp::close();
   close BATCH;
 
   print "\n";
-
-  # Dateien per sftp übertragen
-#  if (-s $batchfile) {	
-#    open LOG1,"sftp -b $batchfile ".$config{'UserID'}."@".
-#      $config{'RemoteServer'}."|";
-#    while (<LOG1>) { print; };
-#    close LOG1;
-#  }
 
   # Dateien in tar-Archiv speichern
   if (-s $batchfile) {
@@ -569,26 +497,15 @@ sub mirror {
       close BATCH;
   }
 
-  print LOG "-" x 10, "Ende um ", `date`, "-" x 10;  
-  close (LOG);
-#  if (($#error_mirror != -1) 
-#      || ($#error_mirror_ver != -1) 
-#      || ($#error_unlink != -1) 
-#      || ($#error_unlink_ver != -1) ) {
-#    print "\nEs sind bei der Uebertragung Fehler aufgetreten!";
-#    @mirror     = @error_mirror;
-#    @mirror_ver = @error_mirror_ver;
-#    @unlink     = @error_unlink;
-#    @unlink_ver = @error_unlink_ver;
-#    return (0);
-#  } else {
-    return (1);
-#  }
+###  print LOG "-" x 10, "Ende um ", `date`, "-" x 10;  
+###  close (LOG);
+
+  return (1);
 }
 
 
 #***************************************************
-# Suchen und erstzen in der zu übertragenden Datei *
+# Suchen und ersetzen in der zu übertragenden Datei *
 #***************************************************
 sub s_r(@_) {
   my ($quelldatei) = @_;
