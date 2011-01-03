@@ -31,7 +31,7 @@
        <format property="v.dato" pattern="yyyyMMdd"/>
      </tstamp>
      <tstamp>
-       <format property="v.tempo" pattern="hhmmss"/>
+       <format property="v.tempo" pattern="HHmmss"/>
      </tstamp>
    </target>
 

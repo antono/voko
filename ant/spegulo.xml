@@ -47,7 +47,7 @@
      </tstamp>
 
      <tstamp>
-       <format property="cvs.tempo" pattern="hhmmss"/>
+       <format property="cvs.tempo" pattern="HHmmss"/>
      </tstamp>
 
      <echo message="tempo: ${cvs.dato} ${cvs.tempo}"/>
@@ -55,7 +55,7 @@
      <available property="cvs-tar-file-exists" file="${cvs.tmpdir}/${cvs.filename}"/>
 
      <property name="cvs.tarlog" value="tar-revocvs-${cvs.dato}_${cvs.tempo}.log"/>
-     <property name="cvs.uploadlog" value="revocvs-${cgvs.dato}_${cvs.tempo}-upload.html"/>
+     <property name="cvs.uploadlog" value="revocvs-${cvs.dato}_${cvs.tempo}-upload.html"/>
 
    </target>
 
@@ -67,6 +67,9 @@
 
    <target name="cvs-tar" unless="cvs-tar-file-exists" depends="cvs-preparo" 
        description="pakas shanghitajn cvs-dosieron en tar-dosieron">
+
+     <echo>enpakas shanghojn en ${cvs.tmpdir}/${cvs.filename},
+           protokolo en  ${cvs.logdir}/${cvs.tarlog}</echo>
 
      <exec executable="${mirror}" output="${cvs.logdir}/${cvs.tarlog}">
        <arg value="-t"/>
@@ -97,7 +100,8 @@ ant -f voko/ant/spegulo.xml -Dcvs.filename=revocvs-JJJJMMTT.tgz cvs-upload
      if="cvs-tar-file-exists"
      description="transportas la tar-dosieron al la cvs-servilo">
 
-     <echo>sendas ${cvs.tmpdir}/${cvs.filename} al ${cvs.servilo.host}/${cvs.servilo.dir}</echo>
+     <echo>sendas ${cvs.tmpdir}/${cvs.filename} 
+           al ${cvs.servilo.host}/${cvs.servilo.dir}</echo>
 
      <ftp server="${cvs.servilo.host}"
          remotedir="${cvs.servilo.dir}"
@@ -176,11 +180,14 @@ ant -f voko/ant/spegulo.xml -Dcvs.filename=revocvs-JJJJMMTT.tgz cvs-upload
    <target name="revo-tar" unless="revo-tar-file-exists" depends="revo-preparo" 
        description="pakas shanghitajn Revo-dosieron en tar-dosieron">
 
-   <exec executable="${mirror}" output="${revo.logdir}/${revo.tarlog}">
-     <arg value="-t"/>
-     <arg value="${revo.filename}"/>
-     <arg value="revo"/>
-   </exec>
+     <echo>enpakas shanghojn en ${revo.tmpdir}/${revo.filename}, 
+         protokolo en  ${revo.logdir}/${revo.tarlog}</echo>
+
+     <exec executable="${mirror}" output="${revo.logdir}/${revo.tarlog}">
+       <arg value="-t"/>
+       <arg value="${revo.filename}"/>
+       <arg value="revo"/>
+     </exec>
 
 <!-- 
    <tstamp><format property="revo.nun.dato"
@@ -222,7 +229,8 @@ ant -f voko/ant/spegulo.xml -Drevo.filename=revo-JJJJMMTT.tgz revo-upload
      if="revo-tar-file-exists"
      description="transportas la tar-dosieron al la Revo-servilo">
 
-     <echo>sendas ${revo.tmpdir}/${revo.filename} al ${revo.servilo.host}/${revo.servilo.dir}</echo>
+     <echo>sendas ${revo.tmpdir}/${revo.filename} 
+           al ${revo.servilo.host}/${revo.servilo.dir}</echo>
 
      <ftp server="${revo.servilo.host}"
          remotedir="${revo.servilo.dir}"
