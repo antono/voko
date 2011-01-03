@@ -82,9 +82,9 @@ my $tar_file = '';
 unless ($tarname) {
   my @now = gmtime(time());
   my $now_str = sprintf('%4d%02d%02d',$now[5]+1900,$now[4]+1,$now[3]);
-  $tarname = $config{'TarFilePrefix'}.$now_str;
+  $tarname = $config{'TarFileDir'}."/".$now_str;
 } elsif ($tarname =~ /^(.*)\.t..$/) {
-  $tarname = $1;
+  $tarname = $config{'TarFileDir'}."/".$1;
 }
 
 my $tar_file = $tarname.".tar";
