@@ -31,6 +31,7 @@ rezulto en:
   <property name="v.voko.ant" location="${v.voko}/ant"/>
   <property name="v.bazo" location="${user.dir}"/>
   <property name="v.bazo.dok" location="${v.bazo}/dok"/>
+  <property name="v.bazo.xsl" location="${v.bazo}/xsl"/>
   <property name="v.bazo.cfg" location="${v.bazo}/cfg"/>
   <property name="v.bazo.dtd" location="${v.bazo}/dtd"/>
   <property name="v.bazo.stl" location="${v.bazo}/stl"/>
@@ -63,6 +64,7 @@ rezulto en:
     <mkdir dir="${v.bazo.stl}" />
     <mkdir dir="${v.bazo.smb}" />
     <mkdir dir="${v.bazo.xml}" />
+    <mkdir dir="${v.bazo.xsl}" />
   </target>
 
 
@@ -185,9 +187,20 @@ rezulto en:
 
   </target>
 
+  <target name="med-xsl" depends="med-preparo"
+       description="kopias transformregulojn (xsl) el voko">
 
-  <target name="med-medio" depends="med-preparo,med-kadro,med-bib,med-dok,med-dtd,med-stl,med-smb"
-     description="(re)kreas la medion por la vortaro, dosierujoj cfg,dok,dtd,stl,smb kun enhavo"/>
+    <copy todir="${v.bazo.xsl}">
+      <fileset dir="${v.voko.xsl}" casesensitive="yes">
+        <include name="*.*"/>
+      </fileset>
+    </copy>
+
+  </target>
+
+
+  <target name="med-medio" depends="med-preparo,med-kadro,med-bib,med-dok,med-dtd,med-stl,med-smb,med-xsl"
+     description="(re)kreas la medion por la vortaro, dosierujoj cfg,dok,dtd,stl,smb,xsl kun enhavo"/>
 
 
 

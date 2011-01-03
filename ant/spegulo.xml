@@ -93,7 +93,8 @@ ant -f voko/ant/spegulo.xml -Dcvs.filename=revocvs-JJJJMMTT.tgz cvs-upload
 -->
 
 
-   <target name="cvs-upload" 
+   <target name="cvs-upload" depends="cvs-preparo"
+     if="cvs-tar-file-exists"
      description="transportas la tar-dosieron al la cvs-servilo">
 
      <echo>sendas ${cvs.tmpdir}/${cvs.filename} al ${cvs.servilo.host}/${cvs.servilo.dir}</echo>
@@ -217,7 +218,8 @@ ant -f voko/ant/spegulo.xml -Dcvs.filename=revocvs-JJJJMMTT.tgz cvs-upload
 ant -f voko/ant/spegulo.xml -Drevo.filename=revo-JJJJMMTT.tgz revo-upload
 -->
 
-   <target name="revo-upload" depends="revo-tempo"  
+   <target name="revo-upload" depends="revo-tempo, revo-preparo" 
+     if="revo-tar-file-exists"
      description="transportas la tar-dosieron al la Revo-servilo">
 
      <echo>sendas ${revo.tmpdir}/${revo.filename} al ${revo.servilo.host}/${revo.servilo.dir}</echo>
