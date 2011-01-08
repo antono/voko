@@ -20,10 +20,25 @@
    <!-- speciala agordo por la redaktoservo -->
    <property file="${v.etc}/redaktoservo-agordo" prefix="srv."/>
 
+   <!-- vi povas doni alian dosieron en la readktoserv-agordo -->
+   <property name="srv.seruro" location="${v.tmp}/redaktoservo-laboranta-do-shlosita"/>
 
    <target name="srv-agordo" description="eligas la agordeblajn variablojn por kontrolo">
       <echoproperties prefix="v."/>
       <echoproperties prefix="srv."/>
+   </target>
+
+   <target name="srv-shlosu" description="shlosas la servon dum ghi laboras por eviti konkurencajn procedojn">
+     <fail message="La redaktoservo estas shlosita. Atendu ghis ghi finighis. Esceptokaze vi povas forigi ${srv.seruro}.">
+       <condition>
+         <available file="${srv.seruro}"/>
+       </condition>
+     </fail>
+     <touch file="${srv.seruro}"/>
+   </target>
+
+   <target name="srv-malshlosu" description="malshlosas la servon post la laboro kaj permesas rekomencadon">
+     <delete file="${srv.seruro}" verbose="true"/>
    </target>
 
    <target name="srv-preparo">
@@ -148,13 +163,13 @@
    </target>
 
 
-   <target name="srv-servo" depends="srv-agordo,srv-preparo,srv-refari-vortaron,srv-upload"
+   <target name="srv-servo" depends="srv-agordo,srv-shlosu,srv-preparo,srv-refari-vortaron,srv-upload,srv-malshlosu"
       if="user-mail-file-exists"
       description="Kuro de la tuta servo: preni kaj trakti poshton, refari vortaron, sendi dosierojn kaj respondojn">
 
    </target> 
 
-   <target name="srv-servo-art" depends="srv-agordo,srv-preparo,srv-refari-nur-artikolojn,srv-upload"
+   <target name="srv-servo-art" depends="srv-agordo,srv-shlosu,srv-preparo,srv-refari-nur-artikolojn,srv-upload,srv-malshlosu"
       if="user-mail-file-exists"
       description="Interkuro (nur artikoloj, ne indeksoj) de la servo: preni kaj trakti poshton, refari artikolojn, sendi dosierojn kaj respondojn">
 
