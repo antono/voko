@@ -22,6 +22,8 @@
 
    <!-- vi povas doni alian dosieron en la readktoserv-agordo -->
    <property name="srv.seruro" location="${v.tmp}/redaktoservo-laboranta-do-shlosita"/>
+   <property name="bash" location="/bin/bash"/>
+   <property name="grep" location="/usr/bin/grep"/>
 
    <target name="srv-agordo" description="eligas la agordeblajn variablojn por kontrolo">
       <echoproperties prefix="v."/>
@@ -174,6 +176,39 @@
       description="Interkuro (nur artikoloj, ne indeksoj) de la servo: preni kaj trakti poshton, refari artikolojn, sendi dosierojn kaj respondojn">
 
    </target> 
+
+   <target name="srv-resumo" depends="srv-preparo">
+
+     <path id="logfiles">
+       <fileset dir="${v.log}"> 
+         <filename name="redsrv*.log" />
+       </fileset>
+     </path>
+
+     <pathconvert property="logfiles" refid="logfiles" pathsep=" "/>
+     <!-- echo message="files: ${logfiles}"/ -->
+
+     <echo>
+PROBLEMOJ ESTIS:
+----------------
+</echo>
+
+     <exec dir="${v.log}" executable="${grep}">
+       <arg line='-i -E -n10 "failed" ${logfiles}'/>
+     </exec>
+ 
+     <echo>
+
+
+DAUROJ DE LA SERVO:
+-------------------
+</echo>
+
+     <exec dir="${v.log}" executable="${grep}">
+       <arg line='-i -E "total time" ${logfiles}'/>
+     </exec>
+
+   </target>
 
 </project>
    
