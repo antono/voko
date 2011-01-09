@@ -142,7 +142,10 @@
      </ant>
    </target>
 
-   <target name="srv-upload">
+   <target name="srv-upload"
+      if="user-mail-file-exists"
+      description="alshutas kaj malpakas la antauefaritajn tar-dosierojn che reta-vortaro.de">
+
      <!-- forsendi respondojn al redaktantoj, necesas poshtkontrolo antau forsendo pro legitimigo! -->
       <!-- <exec dir="${v.bazo}" executable="${srv.fetchmail}">
         <arg value="-c"/>
@@ -200,12 +203,12 @@ PROBLEMOJ ESTIS:
      <echo>
 
 
-DAUROJ DE LA SERVO:
+KUROJ DE LA SERVO:
 -------------------
 </echo>
 
      <exec dir="${v.log}" executable="${grep}">
-       <arg line='-i -E "total time" ${logfiles}'/>
+       <arg line='-i -E "copy|total" ${logfiles}'/>
      </exec>
 
    </target>
