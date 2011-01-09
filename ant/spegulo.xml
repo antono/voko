@@ -88,7 +88,11 @@
         </tarfileset> 
      </tar>
 -->
-     <available property="cvs-tar-file-exists" file="${cvs.tmpdir}/${cvs.filename}"/>
+
+     <available property="cvs-tar-file-exists" file="${revo.tmpdir}/${cvs.filename}"/>
+     <length property="cvs-tar-file-size" file="${cvs.filename}"/> 
+     <!-- echoproperties regex="cvs-tar-file-.*"/ -->
+
    </target>
 
        <!-- por shargi pli malnovan tgz-dosieron, voku
@@ -219,6 +223,9 @@ ant -f voko/ant/spegulo.xml -Dcvs.filename=revocvs-JJJJMMTT.tgz cvs-upload
 -->
 
      <available property="revo-tar-file-exists" file="${revo.tmpdir}/${revo.filename}"/>
+     <length property="revo-tar-file-size" file="${revo.filename}"/> 
+     <!-- echoproperties prefix="revo-tar-file"/ -->
+
    </target>
        
 <!-- por shargi pli malnovan tgz-dosieron, voku
@@ -285,7 +292,7 @@ ant -f voko/ant/spegulo.xml -Drevo.filename=revo-JJJJMMTT.tgz revo-upload
 
    </target>
 
-   <target name="revo-versioj"
+   <target name="revo-kontrolu-versiojn"
      description="listigas mankantajn au malaktualajn dosierojn sur la Revo-servilo">
 
      <get src="${revo.versioj.url}" 
@@ -310,6 +317,10 @@ ant -f voko/ant/spegulo.xml -Drevo.filename=revo-JJJJMMTT.tgz revo-upload
      <echo>
        [${versionfile}]
      </echo>
+  </target>
+
+  <target name="revo-korektu-versiojn" depends="revo-kontrolu-versiojn"
+     description="tushas mankantajn au malaktualajn dosierojn por resendi al Revo-servilo">
 
      <fileset id="tushendaj_dosieroj" dir="${cvs.pado}" includes="${versionfile}"/>
 

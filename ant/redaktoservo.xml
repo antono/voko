@@ -50,6 +50,9 @@
      <tstamp>
        <format property="v.tempo" pattern="HHmmss"/>
      </tstamp>
+     <tstamp>
+       <format property="v.hierau" pattern="yyyyMMdd" offset="-1" unit="day"/>
+     </tstamp>
    </target>
 
    <target name="srv-preni-poshton" description="Prenas la retposhton de la redaktantoj ">
@@ -184,7 +187,8 @@
 
      <path id="logfiles">
        <fileset dir="${v.log}"> 
-         <filename name="redsrv*.log" />
+         <include name="redsrv-${v.dato}*.log" />
+         <include name="redsrv-${v.hierau}*.log" />
        </fileset>
      </path>
 
@@ -196,22 +200,34 @@ PROBLEMOJ ESTIS:
 ----------------
 </echo>
 
-     <exec dir="${v.log}" executable="${grep}">
-       <arg line='-i -E -n10 "failed" ${logfiles}'/>
+     <exec dir="${v.log}" executable="${grep}" osfamily="Unix">
+       <arg line='-i -E -H -n10 "failed" ${logfiles}'/>
      </exec>
  
      <echo>
-
 
 KUROJ DE LA SERVO:
 -------------------
 </echo>
 
-     <exec dir="${v.log}" executable="${grep}">
-       <arg line='-i -E "copy|total" ${logfiles}'/>
+     <exec dir="${v.log}" osfamily="Unix" executable="${grep}">
+       <arg line='-i -E -H "messages|no mail|copy|length|ftp|get|total" ${logfiles}'/>
      </exec>
 
    </target>
+
+   <echo>
+
+VERSIO-KONTROLO:
+----------------
+</echo>
+
+   <ant antfile="${v.voko.ant}/spegulo.xml" inheritAll="false">
+        <property name="v.bazo" location="${v.bazo}"/>
+        <property name="revo.dato" value="${v.dato}"/>
+        <property name="revo.tempo" value="${v.tempo}"/> 
+        <target name="revo-kontrolu-versiojn"/>
+   </ant>
 
 </project>
    
