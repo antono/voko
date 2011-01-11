@@ -89,8 +89,8 @@
      </tar>
 -->
 
-     <available property="cvs-tar-file-exists" file="${revo.tmpdir}/${cvs.filename}"/>
-     <length property="cvs-tar-file-size" file="${cvs.filename}"/> 
+     <available property="cvs-tar-file-exists" file="${cvs.tmpdir}/${cvs.filename}"/>
+     <length property="cvs-tar-file-size" file="${cvs.tmpdir}/${cvs.filename}"/> 
      <!-- echoproperties regex="cvs-tar-file-.*"/ -->
 
    </target>
@@ -223,7 +223,7 @@ ant -f voko/ant/spegulo.xml -Dcvs.filename=revocvs-JJJJMMTT.tgz cvs-upload
 -->
 
      <available property="revo-tar-file-exists" file="${revo.tmpdir}/${revo.filename}"/>
-     <length property="revo-tar-file-size" file="${revo.filename}"/> 
+     <length property="revo-tar-file-size" file="${revo.tmpdir}/${revo.filename}"/> 
      <!-- echoproperties prefix="revo-tar-file"/ -->
 
    </target>
