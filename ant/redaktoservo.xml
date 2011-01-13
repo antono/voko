@@ -185,15 +185,27 @@
 
    <target name="srv-resumo" depends="srv-preparo">
 
-     <path id="logfiles">
+     <path id="logfiles-hodiau">
        <fileset dir="${v.log}"> 
          <include name="redsrv-${v.dato}*.log" />
+       </fileset>
+     </path>
+
+     <path id="logfiles-hierau">
+       <fileset dir="${v.log}"> 
          <include name="redsrv-${v.hierau}*.log" />
        </fileset>
      </path>
 
-     <pathconvert property="logfiles" refid="logfiles" pathsep=" "/>
-     <!-- echo message="files: ${logfiles}"/ -->
+     <pathconvert property="logfiles-hodiau" refid="logfiles-hodiau" pathsep=" ">
+       <map from="${v.log}/" to=""/>
+     </pathconvert>
+
+     <pathconvert property="logfiles-hierau" refid="logfiles-hierau" pathsep=" ">
+       <map from="${v.log}/" to=""/>
+     </pathconvert>
+
+     <!-- echo message="files: ${logfiles-hodiau}"/ -->
 
      <echo>
 PROBLEMOJ ESTIS:
@@ -201,19 +213,55 @@ PROBLEMOJ ESTIS:
 </echo>
 
      <exec dir="${v.log}" executable="${grep}" osfamily="Unix">
-       <arg line='-i -E -H -n10 "failed" ${logfiles}'/>
+       <arg line='-i -E -H -n10 "failed" ${logfiles-hodiau} ${logfiles-hierau}'/>
      </exec>
  
      <echo>
 
 KUROJ DE LA SERVO:
 -------------------
-</echo>
+(hodiau)
+     </echo>
 
      <exec dir="${v.log}" osfamily="Unix" executable="${grep}">
-       <arg line='-i -E -H "messages|no mail|copy|length|ftp|get|total" ${logfiles}'/>
+       <arg line='-i -E -H "messages|no mail|copy|length|ftp|get|total" ${logfiles-hodiau}'/>
+       <redirector>
+         <outputfilterchain>
+            <replacestring from="redsrv-" to=".."/>
+            <replacestring from="Total time:" to=" &gt;&gt;"/>
+            <replacestring from="minutes" to="min"/>
+            <replacestring from="minute" to="min"/>
+            <replacestring from="seconds" to="s &lt;&lt;"/>
+            <replacestring from="second" to="s &lt;&lt;"/>
+            <replacestring from="[exec]" to=" [exc]"/>
+            <replacestring from="[copy]" to=" [cpy]"/>
+            <replacestring from="[length]" to="   [len]"/>
+            <replacestring from="/srv/www/vhosts/h1838790.stratoserver.net/" to=""/>
+         </outputfilterchain>
+       </redirector>
      </exec>
 
+     <echo>
+
+(hierau)
+     </echo>
+     <exec dir="${v.log}" osfamily="Unix" executable="${grep}">
+       <arg line='-i -E -H "messages|no mail|copy|length|ftp|get|total" ${logfiles-hierau}'/>
+       <redirector>
+         <outputfilterchain>
+            <replacestring from="redsrv-" to=".."/>
+            <replacestring from="Total time:" to=" &gt;&gt;"/>
+            <replacestring from="minutes" to="min"/>
+            <replacestring from="minute" to="min"/>
+            <replacestring from="seconds" to="s &lt;&lt;"/>
+            <replacestring from="second" to="s &lt;&lt;"/>
+            <replacestring from="[exec]" to=" [exc]"/>
+            <replacestring from="[copy]" to=" [cpy]"/>
+            <replacestring from="[length]" to="   [len]"/>
+            <replacestring from="/srv/www/vhosts/h1838790.stratoserver.net/" to=""/>
+         </outputfilterchain>
+       </redirector>
+     </exec>
    <echo>
 
 VERSIO-KONTROLO:
@@ -226,6 +274,7 @@ VERSIO-KONTROLO:
         <property name="revo.tempo" value="${v.tempo}"/> 
         <target name="revo-kontrolu-versiojn"/>
       </ant>
+
    </target>
 
 </project>
