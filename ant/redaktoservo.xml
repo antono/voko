@@ -24,6 +24,7 @@
    <property name="srv.seruro" location="${v.tmp}/redaktoservo-laboranta-do-shlosita"/>
    <property name="bash" location="/bin/bash"/>
    <property name="grep" location="/usr/bin/grep"/>
+   <property name="resumo-filtro" value="1 message|messages|no mail|copy|tar-file-size|length|ftp|get|failed|total"/>
 
    <target name="srv-agordo" description="eligas la agordeblajn variablojn por kontrolo">
       <echoproperties prefix="v."/>
@@ -224,7 +225,7 @@ KUROJ DE LA SERVO:
      </echo>
 
      <exec dir="${v.log}" osfamily="Unix" executable="${grep}">
-       <arg line='-i -E -H "1 message|messages|no mail|copy|length|ftp|get|failed|total" ${logfiles-hodiau}'/>
+       <arg line='-i -E -H "${resumo-filtro}" ${logfiles-hodiau}'/>
        <redirector>
          <outputfilterchain>
             <replacestring from="redsrv-" to=".."/>
@@ -236,6 +237,7 @@ KUROJ DE LA SERVO:
             <replacestring from="[exec]" to=" [exc]"/>
             <replacestring from="[copy]" to=" [cpy]"/>
             <replacestring from="[length]" to="   [len]"/>
+            <replacestring from="[echoproperties]" to="      [len]"/>
             <replacestring from="/srv/www/vhosts/h1838790.stratoserver.net/" to=""/>
          </outputfilterchain>
        </redirector>
@@ -246,7 +248,7 @@ KUROJ DE LA SERVO:
 (hierau)
      </echo>
      <exec dir="${v.log}" osfamily="Unix" executable="${grep}">
-       <arg line='-i -E -H "1 message|messages|no mail|copy|length|ftp|get|failed|total" ${logfiles-hierau}'/>
+       <arg line='-i -E -H "${resumo-filtro}" ${logfiles-hierau}'/>
        <redirector>
          <outputfilterchain>
             <replacestring from="redsrv-" to=".."/>
@@ -258,6 +260,7 @@ KUROJ DE LA SERVO:
             <replacestring from="[exec]" to=" [exc]"/>
             <replacestring from="[copy]" to=" [cpy]"/>
             <replacestring from="[length]" to="   [len]"/>
+            <replacestring from="[echoproperties]" to="      [len]"/>
             <replacestring from="/srv/www/vhosts/h1838790.stratoserver.net/" to=""/>
          </outputfilterchain>
        </redirector>
