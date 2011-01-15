@@ -294,7 +294,7 @@ VERSIO-KONTROLO:
        <format property="srv.antaujaro" pattern="yyyyMM" offset="-12" unit="month"/>
      </tstamp>
 
-     <tarfileset id="srv.oldlog" dir="${v.log}" includes="**/*.*" excludes="**/*.tgz">
+     <tarfileset id="srv.oldlog" dir="${v.log}" includes="**/*.* **/*" excludes="**/*.tgz">
         <date when="before" datetime="${srv.nunamonato}" pattern="yyyyMM"/>
      </tarfileset> 
 
