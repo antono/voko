@@ -280,6 +280,54 @@ VERSIO-KONTROLO:
 
    </target>
 
+
+   <target name="srv-purigu" description="forigas malnovajn arhhivojn kaj protokolojn"
+       depends="srv-preparo">
+
+     <tstamp>
+       <format property="srv.antauamonato" pattern="yyyyMM" offset="-1" unit="month"/>
+     </tstamp>
+     <tstamp>
+       <format property="srv.nunamonato" pattern="yyyyMM"/>
+     </tstamp>
+     <tstamp>
+       <format property="srv.antaujaro" pattern="yyyyMM" offset="-12" unit="month"/>
+     </tstamp>
+
+     <tarfileset id="srv.oldlog" dir="${v.log}" includes="**/*.*" excludes="**/*.tgz">
+        <date when="before" datetime="${srv.nunamonato}" pattern="yyyyMM"/>
+     </tarfileset> 
+
+
+     <!-- paku kaj forigu dosierojn en log de antau la nuna monato -->
+     <property name="srv.oldlogtar" value="log-${srv.antauamonato}.tgz"/>
+     <tar destfile="${v.log}/${srv.oldlogtar}" 
+        compression="gzip">
+        <tarfileset refid="srv.oldlog"/>
+     </tar>
+
+     <delete verbose="true">
+        <tarfileset refid="srv.oldlog"/>
+     </delete>
+
+
+     <!-- forigu arhhivojn en log de antau 12 monatoj -->
+     <delete verbose="true">
+       <fileset dir="${v.log}" includes="*.tgz">
+         <date when="before" datetime="${srv.antaujaro}" pattern="yyyyMM"/>
+       </fileset> 
+     </delete>
+
+
+     <!-- forigu dosierojn en tmp de antau 2 monatoj -->
+     <delete verbose="true"> 
+       <fileset dir="${v.tmp}/.." includes="mirror/*/*.* mailatt/*">
+         <date when="before" datetime="${srv.antauamonato}" pattern="yyyyMM"/>
+       </fileset> 
+     </delete>
+
+   </target>
+
 </project>
    
 

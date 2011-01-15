@@ -330,7 +330,6 @@ ant -f voko/ant/spegulo.xml -Drevo.filename=revo-JJJJMMTT.tgz revo-upload
 
    </target>
 
-
 </project>
    
 
