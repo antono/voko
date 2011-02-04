@@ -254,7 +254,7 @@
     <i class="griza">specoj</i><br/>
     <xsl:call-template name="refs">
        <xsl:with-param name="smb" select="'sub.gif'"/>
-       <xsl:with-param name="alt" select="'&#x2199;'"/>
+       <xsl:with-param name="alt" select="'&#x2198;'"/>
     </xsl:call-template>
   </xsl:if>
 </xsl:template>

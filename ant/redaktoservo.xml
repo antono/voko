@@ -24,7 +24,7 @@
    <property name="srv.seruro" location="${v.tmp}/redaktoservo-laboranta-do-shlosita"/>
    <property name="bash" location="/bin/bash"/>
    <property name="grep" location="/usr/bin/grep"/>
-   <property name="resumo-filtro" value="1 message|messages|no mail|copy|tar-file-size|length|ftp|get|failed|total"/>
+   <property name="resumo-filtro" value="1 message|messages|no mail|copy|tar-file-size|length|ftp|get|failed|total|dauxro"/>
 
    <target name="srv-agordo" description="eligas la agordeblajn variablojn por kontrolo">
       <echoproperties prefix="v."/>

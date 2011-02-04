@@ -4,8 +4,8 @@ XTPATH=/home/revo/xt-20020426a-src
 CLASSPATH=$XTPATH/xt.jar:$XTPATH/lib/xp.jar:$XTPATH/lib/xml-apis.jar
 export CLASSPATH
 
-JAVA_HOME=/usr/lib/java
-/usr/lib/java/bin/java com.jclark.xsl.sax.Driver $1 $2
+export JAVA_HOME=/opt/JavaEE5/java
+$JAVA_HOME/bin/java com.jclark.xsl.sax.Driver $1 $2
 
 # problemo: xsltproc ne ordigas lau Eo, do
 # chehha traduko venas nur fine

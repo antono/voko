@@ -319,6 +319,31 @@ ant -f voko/ant/spegulo.xml -Drevo.filename=revo-JJJJMMTT.tgz revo-upload
      </echo>
   </target>
 
+
+  <target name="revo-viki-ligoj"
+     description="vokas upviki en la publika servilo por aktualigi Viki-ligilojn">
+
+     <get src="${revo.vikio.url}"
+       dest="${revo.logdir}/revo_vikiligoj.html"
+       username="${revo.vikio.user}"
+       password="${revo.vikio.password}"/>
+
+     <loadfile srcFile="${revo.logdir}/revo_vikiligoj.html" property="vikifile">
+       <filterchain>
+         <tokenfilter>
+           <stringtokenizer delims="&gt;" delimsaretokens="true"/>
+	   <containsstring contains="dauxro"/>
+           <replaceregex pattern="&lt;[^&gt;]+&gt;?" replace=" " flags="g"/>
+         </tokenfilter>
+       </filterchain>
+     </loadfile>
+
+     <echo>
+       [${vikifile}]
+     </echo>
+  </target>
+
+
   <target name="revo-korektu-versiojn" depends="revo-kontrolu-versiojn"
      description="tushas mankantajn au malaktualajn dosierojn por resendi al Revo-servilo">
 
