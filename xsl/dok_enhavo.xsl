@@ -200,7 +200,7 @@ aperas "c _x_" anstata "c_x_" -->
    <a href="jsaverto.html">
      <xsl:attribute name="onclick">
         <xsl:text>window.external.AddSearchProvider('</xsl:text>
-        <xsl:value-of select="ancestor::bonveno/sercho[@tipo=current()/@tipo]/@opensearch"/>
+        <xsl:value-of select="ancestor::bonveno/sercho[@tipo=current()/@tipo]/@ref"/>
         <xsl:text>');return false;</xsl:text>
      </xsl:attribute>
      <xsl:apply-templates/>
