@@ -152,7 +152,7 @@ aperas "c _x_" anstata "c_x_" -->
 
 <xsl:template match="sercho[@tipo='google']">
    <div align="center">
-     <form method="get" action="http://www.google.be/search" style="text-align: center">
+     <form method="get" action="http://www.google.be/search" style="text-align: center" target="_parent">
      <p>
        Per <img src="http://www.google.com/logos/Logo_25wht.gif" border="0" alt="Google" align="absmiddle"/>
        <input type="text" id="q" name="q" onKeyUp="xAlUtf8(this.value,'q')" size="31" maxlength="255" value=""/>
