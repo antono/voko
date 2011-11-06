@@ -194,7 +194,7 @@
  <l name="z">z,Z</l>
 </lingvo>
 
-<!-- chehha -->
+<!-- ĉeĥa -->
 <lingvo lng="cs">
  <l name="a">aAáÁ</l>
  <l name="b">bB</l>
@@ -800,6 +800,38 @@
  <l name="wo">&#x3092;</l>
  <l name="n">&#x3093;</l>
  <l name="vu">&#x3094;</l>
+</lingvo>
+
+<!-- kekĉia -->
+<lingvo lng="kek">
+ <l name="a">aA</l>
+ <l name="bx" n="2">b&#x0315;B&#x0315;</l>
+ <l name="c" n="2">chCh</l>
+ <l name="cx" n="3">ch&#x0315;Ch&#x0315;</l>
+ <l name="e">eE</l>
+ <l name="h">hH</l>
+ <l name="i">iI</l>
+ <l name="j">jJ</l>
+ <l name="k">kK</l>
+ <l name="kx" n="2">k&#x0315;K&#x0315;</l>
+ <l name="l">lL</l>
+ <l name="m">mM</l>
+ <l name="n">nN</l>
+ <l name="o">oO</l>
+ <l name="p">pP</l>
+ <l name="q">qQ</l>
+ <l name="qx" n="2">q&#x0315;Q&#x0315;</l>
+ <l name="r">rR</l>
+ <l name="s">sS</l>
+ <l name="t">tT</l>
+ <l name="tx" n="2">t&#x0315;T&#x0315;</l>
+ <l name="tz" n="2">tzTz</l>
+ <l name="ty" n="3">tz&#x0315;Tz&#x0315;</l>
+ <l name="u">uU</l>
+ <l name="w">wW</l>
+ <l name="x">xX</l>
+ <l name="y">yY</l>
+ <l name="sl">&#x02bc;</l>
 </lingvo>
 
 <!-- latino -->
