@@ -96,7 +96,7 @@
    </target>
 
        <!-- por shargi pli malnovan tgz-dosieron, voku
-ant -f voko/ant/spegulo.xml -Dcvs.filename=revocvs-JJJJMMTT.tgz cvs-upload
+ant -f voko/ant/spegulo.xml -Dcvs-tar-file-exists=true -Dcvs.filename=revocvs-JJJJMMTT_HHMMSS.tgz cvs-upload
 -->
 
 
@@ -229,7 +229,7 @@ ant -f voko/ant/spegulo.xml -Dcvs.filename=revocvs-JJJJMMTT.tgz cvs-upload
    </target>
        
 <!-- por shargi pli malnovan tgz-dosieron, voku
-ant -f voko/ant/spegulo.xml -Drevo.filename=revo-JJJJMMTT.tgz revo-upload
+ant -f voko/ant/spegulo.xml -Drevo-tar-file-exists=true -Drevo.filename=revo-JJJJMMTT_HHMMSS.tgz revo-upload
 -->
 
    <target name="revo-upload" depends="revo-tempo, revo-preparo" 
