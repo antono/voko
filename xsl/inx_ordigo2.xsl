@@ -2,14 +2,13 @@
 
 <xsl:transform
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  xmlns:xs="http://www.w3.org/2001/XMLSchema"
   xmlns:saxon="http://saxon.sf.net/"
   version="2.0"
   extension-element-prefixes="saxon" 
 >
 
 
-<!-- (c) 2006 che Wolfram Diestel
+<!-- (c) 2006-2012 che Wolfram Diestel
      licenco GPL 2.0
 -->
 
