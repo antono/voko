@@ -123,7 +123,7 @@
 
 <xsl:template match="kap">
    <xsl:variable name="kap"><xsl:apply-templates select="text()|rad|tld"/></xsl:variable>
-   <xsl:value-of select="translate(normalize-space($kap),'/','')"/>
+   <xsl:value-of select="translate(normalize-space($kap),'/,','')"/>
 </xsl:template>
 
 

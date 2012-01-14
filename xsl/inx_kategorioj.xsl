@@ -256,12 +256,12 @@
 
 <xsl:template name="kap-komparo">
    <xsl:variable name="kap"><xsl:apply-templates select="text()|rad|tld"/></xsl:variable>
-   <xsl:value-of select="translate(normalize-space($kap),'/','')"/>
+   <xsl:value-of select="translate(normalize-space($kap),'/,','')"/>
 </xsl:template>
 
 <xsl:template name="kap-kap">
    <xsl:variable name="kap"><xsl:apply-templates select="text()|rad|tld"/></xsl:variable>
-   <xsl:value-of select="translate(normalize-space($kap),'/','')"/>
+   <xsl:value-of select="translate(normalize-space($kap),'/,','')"/>
 </xsl:template>
 
 <xsl:template name="kap-inv">
@@ -284,7 +284,7 @@
 </xsl:template>
 
 <!-- xsl:template match="kap/text()">
-  <xsl:value-of select="translate(normalize-space(.),'/','')"/>
+  <xsl:value-of select="translate(normalize-space(.),'/,','')"/>
 </xsl:template -->
 
 <!-- xsl:template match="kap/text()" mode="inv">
