@@ -2,7 +2,6 @@
 
 <xsl:transform
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  xmlns:xs="http://www.w3.org/2001/XMLSchema"
   xmlns:saxon="http://saxon.sf.net/"
   version="2.0"
   extension-element-prefixes="saxon" 
@@ -14,13 +13,27 @@
     extension-element-prefixes="redirect" -->
 
 
-<!-- (c) 2006 che Wolfram Diestel
+<!-- (c) 2006-2012 che Wolfram Diestel
      licenco GPL 2.0
+
+
+     klarigoj de strukturiloj:
+
+     k = kapvorto
+     r = referenco
+     @c = celo
+
+     La tezaŭro konsistas el nodoj, kiuj respondas al sencoj de la vortoj.
+     El ĉiu nodo iras referencoj al aliaj nodoj. Ĉiu referenco havas tipon kiel sinonimo, supernocio k.s.
+     El ĉiu nodo kreiĝas unu HTML-dosiero 
 -->
 
 
 <xsl:output method="@format@" encoding="utf-8"/>
 <xsl:strip-space elements="k"/>
+
+<xsl:include href="inx_ordigo2.inc"/>
+<xsl:template name="v"/> <!-- referencita de inx_ordigo2.inc, sed ne bezonata tie ĉi -->
 
 <xsl:param name="verbose" select="'false'"/>
 <xsl:param name="warn-about-dead-refs" select="'false'"/>
@@ -275,6 +288,8 @@
   <xsl:param name="smb"/>
   <xsl:param name="alt"/>
   <xsl:for-each select="r">
+    <xsl:sort lang="eo" collation="eo" select="translate(//tez/nod[@mrk=current()/@c or @mrk2=current()/@c]/k,'-( )','')"/>
+
     <xsl:if test="not(following-sibling::r[@c=current()/@c])"> <!-- evitu duoblajhojn -->
 
       <xsl:variable name="nod" select="//tez/nod[@mrk=current()/@c or @mrk2=current()/@c]"/>
