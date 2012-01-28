@@ -240,9 +240,21 @@
   <xsl:if test="@n"><sup><xsl:value-of select="@n"/></sup></xsl:if>
 </xsl:template>
 
+
+<xsl:template match="dif">
+  <xsl:if test="r">
+    <h3 class="griza">difino</h3>
+    <xsl:call-template name="refs">
+       <xsl:with-param name="smb" select="'dif.gif'"/>
+       <xsl:with-param name="alt" select="'='"/>
+    </xsl:call-template>
+  </xsl:if>
+</xsl:template>
+
+
 <xsl:template match="sin">
   <xsl:if test="r">
-    <i class="griza">sinonimoj</i><br/>
+    <h3 class="griza">sinonimoj</h3>
     <xsl:call-template name="refs">
        <xsl:with-param name="smb" select="'sin.gif'"/>
        <xsl:with-param name="alt" select="'&#x21d2;'"/>
@@ -251,9 +263,20 @@
 </xsl:template>
 
 
+<xsl:template match="ant">
+  <xsl:if test="r">
+    <h3 class="griza">antonimoj</h3>
+    <xsl:call-template name="refs">
+       <xsl:with-param name="smb" select="'ant.gif'"/>
+       <xsl:with-param name="alt" select="'&#x21cf;'"/>
+    </xsl:call-template>
+  </xsl:if>
+</xsl:template>
+
+
 <xsl:template match="super">
   <xsl:if test="r">
-    <i class="griza">speco de</i><br/>
+    <h3 class="griza">speco de</h3>
     <xsl:call-template name="refs">
        <xsl:with-param name="smb" select="'super.gif'"/>
        <xsl:with-param name="alt" select="'&#x2197;'"/>
@@ -264,7 +287,7 @@
 
 <xsl:template match="sub">
   <xsl:if test="r">
-    <i class="griza">specoj</i><br/>
+    <h3 class="griza">specoj</h3>
     <xsl:call-template name="refs">
        <xsl:with-param name="smb" select="'sub.gif'"/>
        <xsl:with-param name="alt" select="'&#x2198;'"/>
@@ -273,12 +296,56 @@
 </xsl:template>
 
 
+<xsl:template match="malprt">
+  <xsl:if test="r">
+    <h3 class="griza">parto de</h3>
+    <xsl:call-template name="refs">
+       <xsl:with-param name="smb" select="'malprt.gif'"/>
+       <xsl:with-param name="alt" select="'&#x2197;'"/>
+    </xsl:call-template>
+  </xsl:if>
+</xsl:template>
+
+
+<xsl:template match="prt">
+  <xsl:if test="r">
+    <h3 class="griza">partoj</h3>
+    <xsl:call-template name="refs">
+       <xsl:with-param name="smb" select="'prt.gif'"/>
+       <xsl:with-param name="alt" select="'&#x2199;'"/>
+    </xsl:call-template>
+  </xsl:if>
+</xsl:template>
+
+
+<xsl:template match="lst">
+  <xsl:if test="r">
+    <h3 class="griza">listoj</h3>
+    <xsl:call-template name="refs">
+       <xsl:with-param name="smb" select="'lst.gif'"/>
+       <xsl:with-param name="alt" select="'&#x2199;'"/>
+    </xsl:call-template>
+  </xsl:if>
+</xsl:template>
+
+
 <xsl:template match="vid">
   <xsl:if test="r">
-    <i class="griza">vidu</i><br/>
+    <h3 class="griza">vidu</h3>
     <xsl:call-template name="refs">
        <xsl:with-param name="smb" select="'vid.gif'"/>
        <xsl:with-param name="alt" select="'&#x2192;'"/>
+    </xsl:call-template>
+  </xsl:if>
+</xsl:template>
+
+
+<xsl:template match="ekz">
+  <xsl:if test="r">
+    <h3 class="griza">ekzemploj</h3>
+    <xsl:call-template name="refs">
+       <xsl:with-param name="smb" select="'ekz.gif'"/>
+       <xsl:with-param name="alt" select="'-'"/>
     </xsl:call-template>
   </xsl:if>
 </xsl:template>

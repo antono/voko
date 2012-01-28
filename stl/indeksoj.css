@@ -3,6 +3,8 @@ BODY {background: #F5F5D5;
 H1 {font-size: large; color: #404040}
 H2 {font-size: medium; color: #404040}
 
+H3.griza {font-style: italic; color: #404040; font-size: medium}
+
 HR {border-style: dotted; border-color: black; 
   border-top-width: 2px;
   border-bottom-width: 0px;
