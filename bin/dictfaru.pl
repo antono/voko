@@ -21,11 +21,12 @@ $nur_indeksoj = 0; # por pli facila testado
 
 $VOKO = $ENV{"VOKO"};
 $xslbin = "$VOKO/bin/xslt.sh";
+$xsltproc = "/usr/bin/xsltproc";
 $xsl = "$VOKO/xsl/revotxt.xsl";
-$tmp = $ENV{"HOME"}."/tmp";
-$datfile = "$VOKO/../dict/revo.dat";
-$inxpref = "$VOKO/../dict/revo";
-$indekso = "$VOKO/../revotmp/inx_tmp/indekso.xml";
+$tmp = $ENV{"HOME"}."/private/revotmp";
+$datfile = "$tmp/dict/revo.dat";
+$inxpref = "$tmp/dict/revo";
+$indekso = "$tmp/inx_tmp/indekso.xml";
 
 $b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
@@ -34,7 +35,7 @@ $b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 	   "00-database-utf8" => "",
 	   "00-database-url" => "http://purl.org/net/voko/revo/",
 	   "00-database-short" => "Reta Vortaro",
-           "00-database-info" => "Dosiero estas kreita el la fontoj de la Reta Vortaro je ".`date`);
+           "00-database-info" => "La dosiero estas kreita el la fontoj de la Reta Vortaro je ".`date`);
 
 ######### 1a pasho: chiujn XML-artikolojn skribu en grandan tekstdosieron
 #########           kaj skribu la pozicion kaj longon de la artikoloj en
@@ -80,7 +81,7 @@ unless ($nur_indeksoj) {
 
 	    # konvertu XML->TXT kaj alpendigu al datumdosiero
 #	    `$xslbin $dir/$file.xml $xsl | lynx -nolist -dump -stdin >> $datfile`;
-	    `xsltproc $xsl $dir/$file.xml | lynx -nolist -dump -assume_local_charset=utf8 -display_charset=utf8 -stdin >> $datfile`;
+	    `$xsltproc $xsl $dir/$file.xml | lynx -nolist -dump -assume_local_charset=utf8 -display_charset=utf8 -stdin >> $datfile`;
 	    $len = (-s "$datfile") - $pos;
 	    	
 	    print "[$pos\t$len]\n" if ($verbose);
