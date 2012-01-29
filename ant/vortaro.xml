@@ -111,7 +111,7 @@ rezulto en:
     <ant antfile="${v.voko.ant}/tezauro.xml" inheritAll="false">   
        <property name="v.bazo" location="${v.bazo}"/>
        <target name="tez-agordo"/>
-       <target name="tez-mil"/>
+       <target name="tez-mil"/> 
     </ant>
 
     <ant antfile="${v.voko.ant}/indeksoj.xml" inheritAll="false">   

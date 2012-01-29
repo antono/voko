@@ -117,6 +117,7 @@
         <property name="revo.dato" value="${v.dato}"/>
         <property name="revo.tempo" value="${v.tempo}"/> <!-- uzata en la dosiernomo de la arkivo, do devas koincidi en revo-tar kaj revo-upload -->
         <target name="revo-tar"/>
+        <target name="revo-viki-ligoj"/>
      </ant>
      
    </target>

@@ -17,7 +17,7 @@ binmode STDOUT, "utf8" if $debug;
 $verbose = 1;
 $nur_indeksoj = 0; # por pli facila testado
 
-@lingvoj=('eo','de','en','cs','la','fr','es','ru','tr');
+@lingvoj=('eo','be','cs','de','en','es','fr','hu','la','nl','pl','pt','ru');
 
 $VOKO = $ENV{"VOKO"};
 $xslbin = "$VOKO/bin/xslt.sh";

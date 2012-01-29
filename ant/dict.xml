@@ -45,16 +45,70 @@
           name "Reta Vortaro, esperanta indekso"
        }
 
-       database revo_en {
+       database revo_be {
           data ${v.bazo}/revo.dat.dz
-          index ${v.bazo}/revo.en.inx
-          name "Reta Vortaro, angla indekso"
+          index ${v.bazo}/revo.be.inx
+          name "Reta Vortaro, belorusa indekso"
+       }
+
+       database revo_cs {
+          data ${v.bazo}/revo.dat.dz
+          index ${v.bazo}/revo.cs.inx
+          name "Reta Vortaro, ĉeĥa indekso"
        }
 
        database revo_de {
           data ${v.bazo}/revo.dat.dz
           index ${v.bazo}/revo.de.inx
           name "Reta Vortaro, germana indekso"
+       }
+
+       database revo_en {
+          data ${v.bazo}/revo.dat.dz
+          index ${v.bazo}/revo.en.inx
+          name "Reta Vortaro, angla indekso"
+       }
+
+       database revo_es {
+          data ${v.bazo}/revo.dat.dz
+          index ${v.bazo}/revo.es.inx
+          name "Reta Vortaro, hispana indekso"
+       }
+
+       database revo_fr {
+          data ${v.bazo}/revo.dat.dz
+          index ${v.bazo}/revo.fr.inx
+          name "Reta Vortaro, franca indekso"
+       }
+
+       database revo_hu {
+          data ${v.bazo}/revo.dat.dz
+          index ${v.bazo}/revo.hu.inx
+          name "Reta Vortaro, hungara indekso"
+       }
+
+       database revo_la {
+          data ${v.bazo}/revo.dat.dz
+          index ${v.bazo}/revo.la.inx
+          name "Reta Vortaro, latinscienca indekso"
+       }
+
+       database revo_nl {
+          data ${v.bazo}/revo.dat.dz
+          index ${v.bazo}/revo.nl.inx
+          name "Reta Vortaro, nederlanda indekso"
+       }
+
+       database revo_pl {
+          data ${v.bazo}/revo.dat.dz
+          index ${v.bazo}/revo.pl.inx
+          name "Reta Vortaro, pola indekso"
+       }
+
+       database revo_pt {
+          data ${v.bazo}/revo.dat.dz
+          index ${v.bazo}/revo.pt.inx
+          name "Reta Vortaro, portugala indekso"
        }
 
     </echo>
