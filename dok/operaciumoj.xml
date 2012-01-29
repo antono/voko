@@ -54,10 +54,18 @@ Se vi volas uzi la vortaron sen retkonekto vi povas konsideri la sekvajn eblecoj
 <h4>Stardict</h4>
 <p>
 Per la programo <tt>dictd2dic</tt> vi povas krei vortaron por
-<a href="http://stardict.sf.net">Startdict</a> el la datumbazo por DICT-servo. Stardict estas uzebla en Vindozo, Makinto&scirc;o kaj Linuksoj sambone.
+<a href="http://stardict.sf.net">StarDict</a> el la datumbazo por DICT-servo. Stardict estas uzebla en Vindozo, Makinto&scirc;o kaj Linuksoj sambone.
 </p>
 <p>
 <img src="stardict.png" style="border: 2px solid gray"/>
+</p>
+
+<h4>GoldenDict</h4>
+<p>
+<a href="http://goldendict.org">GoldenDict</a> estas pluevoluo de ne plu flegata StarDict kaj kapablas legi kaj ties formaton kaj dosierojn en la formato de DICT. Do estas plej oportune uzi la DICT-version de Revo kun ĝi.
+</p>
+<p>
+GoldenDict ankaŭ ofertas version por poŝkomputiloj kun Android-sistemo.
 </p>
 
 <h4>Revo2go</h4>
@@ -117,6 +125,12 @@ Por Debian kaj Ubuntu Antono Vasiljev preparis tujinstaleblan paka&jcirc;on kun 
 
 <h2 id="posxo">Po&scirc;komputiloj</h2>
 
+<h3>Android</h3>
+<p>
+Ekzistas vortaro-programo de <a href="http://goldendict.org">GoldenDict</a> uzebla en po&scirc;komputiloj kun Android-sistemo. &Gcirc;i povas legi i.a. la DICT-formaton.
+</p>
+
+<h3>TomeRaider</h3>
 <p>
 Sergio Pokrovskij proponis version por TomeRaider, kiu estas havebla por diversaj sistemoj:
 Pocket PC, PalmOS, EPOC/Symbian_OS kaj MS Windows, intertempe anka&ubreve; por Android.
@@ -125,6 +139,7 @@ Jen <a href="http://tech.groups.yahoo.com/group/revuloj/message/5681">diskuto</a
 pri la temo.
 </p>
 
+<h3>HTML</h3>
 <p>
 En po&scirc;komputiloj, kiuj kapablas legi HTML eble anka&ubreve; <a href="http://purl.org/net/voko/revo/../tgz/">Reveto</a> estus ebleco. Jen iom
 da <a href="http://tech.groups.yahoo.com/group/revuloj/message/5815">priprensoj</a>.
@@ -133,6 +148,20 @@ da <a href="http://tech.groups.yahoo.com/group/revuloj/message/5815">priprensoj<
 <p>
 Se via aparato permesas retkonekton vi anka&ubreve; povas uzi Revon per la 
 <a href="http://purl.org/net/voko/revo/inx/_plena.html">senkadra aliro</a>.
+</p>
+
+<h3>EPUB- kaj MOBI-formato</h3>
+<p>
+Mi iom eksperimentis pri EPUB kaj MOBI-formatoj. Oni povas ekstrakti parton de Revo, ekz. tradukojn de elektita(j) lingvo(j), kaj transformi al elektronika libro en EPUB-formato. De EPUB-formato oni povas transformi al MOBI-formato per <a href="http://calibre-ebook.com/">Calibre</a>.
+</p>
+<p>
+En EPUB ne eblas marki vortojn por indeksoj. Do nur eblas plenteksta ser&ccirc;o en la vortaro. Fine de 2011 formi&gcirc;is <a href="http://idpf.org/dictionaries-wg-charter">laborgrupoj</a> por aldoni necesajn ecojn por krei indeksojn kaj vortarojn.
+</p>
+<p>
+En MOBI-formato, kiu legeblas de pluraj po&scirc;komputiloj kaj Kindle-legiloj oni povas krei vortarojn. Sed la kreiloj haveblas nur por Vindozo. Mi provis uzi la programon <tt>kindlegen</tt> en mia Linukssistemo kaj &gcirc;i rifuzis kaj traduki verkon en la lingvo "eo" kaj akcepti XSL-transformregulojn, kiuj necesas por krei vortaron kun indeksoj.
+</p>
+<p>
+Mi povus provi uzi WINE, kiu estas Vindoz-simulilo por Linukso, a&ubreve; krei la indeksojn plentekste kun ligoj al la unuopaj artikoletoj a&ubreve; atendi progreson de EPUB-rimedoj.
 </p>
 
 <h3>OPIE (Linux/QT embedded)</h3>
@@ -155,7 +184,7 @@ Vi povas uzi la vortaron rete per Safari. &Gcirc;enas, ke la kadro por la indeks
 Do la <a href="http://purl.org/net/voko/revo/inx/_plena.html">senkadra versio</a> ver&scirc;ajne estas preferinda.
 </p>
 <p>
-Momente mi ne konas eblecon kiel uzi la vortaron a&ubreve;tonome en tiuj aparatoj. Pripensinda estas, &ccirc;u kiel EPub-libro Reta Vortaro estus sufi&ccirc;e uzebla.
+Vidu sub EPUB/MOBI pri alia ebleco, kiu &gcirc;is nun prezentis al mi tro &gcirc;enajn obstaklojn, kvankam ekzistas legprogramoj por amba&ubreve; formatoj (iBooks App, Kindle App). La programo iBooks cetere estas iom malrapida, do tuta Revo ver&scirc;ajne estus tro peza por &gcirc;i, eltira&jcirc;o certe eblas. 
 </p>
 
 </manlibro>
