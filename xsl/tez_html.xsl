@@ -301,7 +301,7 @@
     <h3 class="griza">parto de</h3>
     <xsl:call-template name="refs">
        <xsl:with-param name="smb" select="'malprt.gif'"/>
-       <xsl:with-param name="alt" select="'&#x2197;'"/>
+       <xsl:with-param name="alt" select="'&#x2191;'"/>
     </xsl:call-template>
   </xsl:if>
 </xsl:template>
@@ -312,7 +312,7 @@
     <h3 class="griza">partoj</h3>
     <xsl:call-template name="refs">
        <xsl:with-param name="smb" select="'prt.gif'"/>
-       <xsl:with-param name="alt" select="'&#x2199;'"/>
+       <xsl:with-param name="alt" select="'&#x2193;'"/>
     </xsl:call-template>
   </xsl:if>
 </xsl:template>
@@ -323,7 +323,7 @@
     <h3 class="griza">listoj</h3>
     <xsl:call-template name="refs">
        <xsl:with-param name="smb" select="'lst.gif'"/>
-       <xsl:with-param name="alt" select="'&#x2199;'"/>
+       <xsl:with-param name="alt" select="'&#x21c9;'"/>
     </xsl:call-template>
   </xsl:if>
 </xsl:template>
